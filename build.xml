@@ -1,0 +1,90 @@
+<project name="OrthoMCLWebsite" default="Installation" basedir=".">
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <target name="OrthoMCLWebsite-ChildCheckout">
+  </target>
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo    Update    oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <target name="OrthoMCLWebsite-ChildUpdate">
+  </target>
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebsite/Site-Installation">
+    <ant target="defaultProjectInstall"/>
+  </target>  
+
+  <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
+
+  <target name="OrthoMCLWebsite-Installation-postprocess">
+    <echo message="Postprocessing the OrthoMCLData installation"/>
+
+    <replace dir="${targetDir}/bin" 
+             propertyFile="${targetDir}/config/replacements.prop" >
+      <include name="**/*" />
+      <replacefilter token="@perl@" property="perl"/>
+    </replace>
+  </target>
+
+
+  <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
+
+  <target name="OrthoMCLWebsite/Site-Installation" depends="ProjectTree">
+    <ant target="defaultComponentInstall">
+      <property name="project" value="OrthoMCLWebsite"/>
+      <property name="component" value="Site"/>
+    </ant>
+  </target>  
+
+
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebsite-Installation,
+                                                          OrthoMCLWebsite/Site-WebInstallation">
+  </target>
+
+  <target name="OrthoMCLWebsite/Site-WebInstallation">
+    <ant target="defaultWebComponentInstall">
+      <property name="project" value="OrthoMCLWebsite"/>
+      <property name="component" value="Site"/>
+    </ant>
+
+  </target>
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  Distributable  ooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="OrthoMCLWebsite-Distributable" depends="ProjectTree">
+
+    <copy todir="${targetDir}">
+      <fileset dir="${projectsDir}" >
+        <exclude name="**/.svn/*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooo  ProjectTree  ooooooooooooooooooooooooooo -->
+  <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+  <target name="ProjectTree" if="${checkout}">
+    <ant target="projectCheckOut"/>
+  </target>  
+
+</project>
+
+

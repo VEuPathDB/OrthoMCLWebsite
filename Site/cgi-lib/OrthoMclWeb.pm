@@ -24,7 +24,7 @@ sub cgiapp_init {
 	$self->param(config => $config);
 
 	$self->dbh_config('orthomcl', 
-					  [ "dbi:mysql:$config->{database}", 
+					  [ $config->{database}, 
 						$config->{user}, 
 						$config->{password},{RaiseError => 1, PrintWarn => 1, PrintError => 1}
 					  ]);
@@ -32,7 +32,7 @@ sub cgiapp_init {
 
 	# Configure the session
 	$self->session_config(
-	   CGI_SESSION_OPTIONS => [ "driver:MySQL", $self->query, {Handle=>$self->dbh()} ],
+	   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
 	   SEND_COOKIE         => 1,
 	);
 }

@@ -1,0 +1,31 @@
+<html>
+<head>
+  <base href="<TMPL_VAR BASEHREF>/">
+  <link rel="stylesheet" href="css/orthomcl.css" type="text/css" />
+
+  <script language="JavaScript1.2">dqm__codebase = "js/tdqm/"</script>
+  <script language="JavaScript1.2" src="js/tdqm/header_menu.js"></script>
+  <script language="JavaScript1.2" src="js/tdqm/tdqm_loader.js"></script>
+  <script language="JavaScript1.2" src="js/checkallbox.js"></script>
+  <TMPL_VAR NAME="PAGER_JAVASCRIPT">
+
+  <title><TMPL_VAR PAGETITLE></title>
+</head>
+
+<body>
+<div align="center">
+<table border=0 align="center">
+  <tr>
+    <td align="center" colspan="2"><TMPL_INCLUDE banner.tmpl></td>
+  </tr>
+<TMPL_IF LEFTNAV>
+  <tr>
+    <td width=22% bgcolor="#eeeeee"><TMPL_INCLUDE leftnav.tmpl></td>
+    <td>
+<TMPL_ELSE>
+  <tr>
+    <td colspan="2">
+</TMPL_IF>
+
+
+

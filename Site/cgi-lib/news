@@ -1,0 +1,4 @@
+<b>Apr 24, 2006</b>: We just recovered our OrthoMCL-DB server from a hack-in that happened a week ago.
+<b>Jan 18, 2006</b>: A new feature is added to the history function: group queries and sequence queries can be transformed to each other, which allows much more flexible queries (e.g. all protein kinases that have a specific phyletic pattern).
+<b>Jan 1, 2006</b>: The paper describing OrthoMCL-DB is published at Nucleic Acids Research. <a href="http://nar.oxfordjournals.org/cgi/content/full/34/suppl_1/D363">Link to the paper</a>. 
+<b>Sep 23, 2005</b>: We added interactive SVG (Scalable Vector Graphics) graphs for BioLayout. By using this tool, you can navigate the sequence relationships within ortholog groups (group size <= 100): reciprocal best hits across species; reciprocal better hits within species; and other general edge relationships! Please forward any suggestion/bug report to Feng Chen at orthomcl@pcbi.upenn.edu. Thanks.

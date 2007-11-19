@@ -1,0 +1,243 @@
+
+<TMPL_INCLUDE header.tmpl>
+
+<!-- BEGIN CONTENT -->
+
+<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+
+
+<!-- DEBUG CONTENT BEGIN -->
+  <TMPL_IF NAME="LOOP_DEBUG">
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr><td><strong><font color="red">DEBUG INFORMATION</font></strong></td></tr>
+  <TMPL_LOOP NAME="LOOP_DEBUG">
+     <tr><td colspan="2"><TMPL_VAR NAME="DEBUG"></td></tr>
+  </TMPL_LOOP>
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+  </TMPL_IF>
+<!-- DEBUG CONTENT END-->
+
+<!-- ERROR MESSAGE BEGIN -->
+  <TMPL_IF NAME="LOOP_ERROR">
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr><td><strong><font color="red">ERROR MESSAGE</font></strong></td></tr>
+  <TMPL_LOOP NAME="LOOP_ERROR">
+     <tr><td colspan="2"><TMPL_VAR NAME="ERROR"></td></tr>
+  </TMPL_LOOP>
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+  </TMPL_IF>
+<!-- ERROR MESSAGE END-->
+
+<!-- GROUP SUMMARY START -->
+  <TMPL_IF NAME="GROUP">
+     <tr>
+       <td colspan="2"><br><H3>Group Summary (<font color="red"><TMPL_VAR NAME="GROUP_ACCESSION"></font>)</H3></td>
+     </tr>
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr>
+        <td colspan="2" align="center"><br><table bgcolor="#ffffff"><tr>
+	    <td width="205" align="center">
+		<table border="0" cellpadding="0" cellspacing="0" bgcolor="#003399" width="195">
+			<tr><td style="padding-left:3px;padding-right:3px;" align="left"><font color="#ffffff" face="arial,helvetica,sans-serif" style="color:#ffffff;font-family:arial,helvetica,sans-serif;font-size:11px;"><b>Links to <TMPL_VAR GROUP_ACCESSION></b></font></td></tr>
+			<tr><td>
+			  <table border="0" cellpadding="3" cellspacing="1" width="100%">
+			    <tr><td bgcolor="#e6ecff" style="text-align:center;padding:3px;" align="center"><font color="#000066" face="arial,helvetica,sans-serif" style="color:#000066;font-family:arial,helvetica,sans-serif;font-size:11px;font-weight:normal;">
+			      <table><tr><td align="center"></td></tr><tr><td align="center"><font size="2"><a href="<TMPL_VAR DOMARCH_LINK>">Pfam Domain Architecture</a></font></td></tr><TMPL_IF BIOLAYOUT_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR BIOLAYOUT_LINK>">BioLayout Graph</a></font></td></tr></TMPL_IF><TMPL_IF MSA_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR MSA_LINK>">Multiple Sequence Alignment</a></font></td></tr></TMPL_IF><tr><td align="center"><font size="2"><a href="<TMPL_VAR SEQUENCE_LINK>">Get Sequences (FASTA)</a></font></td></tr></table>
+			    </font></td></tr>
+			  </table>
+			</td></tr>
+		</table>
+	    </td>
+	    <td>
+		<table border="1">
+		  <tr>
+		    <td bgcolor="#ffeeee" align="center"># Sequences</td>
+		    <td bgcolor="#ffeeee" align="center"># Taxa</td>
+		    <td bgcolor="#eeffff" align="center"># Match Pairs (%)</td>
+		    <td bgcolor="#eeffff" align="center">Ave E-Value</td>
+		    <td bgcolor="#eeffff" align="center">Ave % Coverage</td>
+		    <td bgcolor="#eeffff" align="center">Ave % Identity</td>
+<!--		    <td bgcolor="#eeffff" align="center">Ave DCS</td>
+-->
+		  </tr>
+		  <tr>
+		    <td bgcolor="#ffeeee" align="center"><TMPL_VAR NAME="NO_SEQUENCES"></td>
+		    <td bgcolor="#ffeeee" align="center"><TMPL_VAR NAME="NO_TAXA"></td>
+		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="NO_MATCH_PAIRS"> (<TMPL_VAR NAME="PERC_MATCH_PAIRS">%)</td>
+		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="AVE_EVAL"></td>
+		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="AVE_PM"></td>
+		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="AVE_PI"></td>
+<!--		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="AVE_DCS"></td>
+-->
+		  </tr>
+		  <tr>
+		    <td colspan="7" align="center">Phyletic Pattern</td>
+		  </tr>
+		  <tr>
+  		    <td colspan="7">
+		      <!-- BEGIN PHYLETIC PATTERN BLOCK -->
+		      <table bgcolor="#eeeeee">
+		      <TMPL_LOOP NAME="LOOP_CATEGORY">
+			<tr>
+			  <td><font size="2" color="#5555cc"><TMPL_VAR NAME="CATEGORY_ID"></font></td>
+			<TMPL_LOOP NAME="LOOP_TAXON">
+			<TMPL_IF NAME="NO_GENES">
+			  <td width=20 bgcolor="#000000" align="center"><font size="1" color="#ffffff"><TMPL_VAR NAME="TAXON_ID"><br><TMPL_VAR NAME="NO_GENES"></font></td>
+			<TMPL_ELSE>
+			  <td width=20 bgcolor="#ffffff" align="center"><font size="1" color="#000000"><TMPL_VAR NAME="TAXON_ID"><br><TMPL_VAR NAME="NO_GENES"></font></td>
+			</TMPL_IF>
+			</TMPL_LOOP>
+			</tr>
+		      </TMPL_LOOP>
+		      </table>
+		      <!-- END PHYLETIC PATTERN BLOCK -->
+		    </td>
+
+		  </tr>
+
+		</table>
+	    </td>
+        </tr></table></td>
+
+     <tr>
+       <td colspan="2"><br><H3>List of Protein Sequences</strong><H3></td>
+     </tr>
+
+  </TMPL_IF>
+<!-- GROUP SUMMARY END -->
+
+<!-- SEQUENCE PAGER START -->
+  <TMPL_UNLESS NAME="GROUP">
+     <tr height="30">
+       <td colspan="2"><H3> Sequence Query Result</H3></td>
+     </tr>
+     <tr height="30">
+       <td colspan="2"> Your Query is : <strong><TMPL_VAR NAME="QUERY_CODE"></strong> (<TMPL_VAR NAME="QUERY_TYPE">)</td>
+     </tr>
+     <tr height="30">
+       <td colspan="2"> Sequence Search Result : <strong><TMPL_VAR NAME="NUM_SEQUENCES"></strong> Protein Sequences</td>
+     </tr>
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+
+    <FORM action="cgi-bin/OrthoMclWeb.cgi?">
+         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+           <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
+         </td></tr>
+         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <TMPL_UNLESS ONEPAGE>
+            <TMPL_VAR PAGER_PREV>
+            <TMPL_VAR PAGER_JUMP>
+            <TMPL_VAR PAGER_NEXT>
+            <INPUT TYPE="hidden" NAME="rm" VALUE="sequenceList"> 
+            Jump to page:<INPUT TYPE="text" SIZE="4" NAME="PAGE_JUMP_BOTTOM"> / <TMPL_VAR NAME="NUM_PAGES"> <INPUT TYPE="button" VALUE="Go!" onClick="PAGER_set_offset_and_submit((parseInt(this.form['PAGE_JUMP_BOTTOM'].value) - 1) * <TMPL_VAR ROWSPERPAGE>);">
+            <TMPL_VAR NAME="PAGER_HIDDEN">
+         </TMPL_UNLESS>
+         </td></tr>
+    </FORM>
+  </TMPL_UNLESS>
+<!-- SEQUENCE PAGER END -->
+
+
+
+<!-- LIST OF PROTEIN SEQUENCES START -->
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr>
+       <td width="800">
+       <br>
+       <table border="1">
+       <tr bgcolor="#aaaaaa">
+         <th width="5%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Number</th>
+         <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Accession</th>
+	 <TMPL_UNLESS NO_GROUPAC>
+	 <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"\>Group</th>
+	 </TMPL_UNLESS>
+         <th width="25%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Taxon</th>
+         <th width="6%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Length</th>
+         <th width="44%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Accession & Description</th>
+       </tr>
+
+<TMPL_LOOP NAME="PAGER_DATA_LIST">
+  <TMPL_IF NAME="__ODD__">
+       <tr bgcolor="#ddeeee">
+  </TMPL_IF>
+  <TMPL_IF NAME="__EVEN__">
+       <tr bgcolor="#eeeedd">
+  </TMPL_IF>
+         <td align="center"><TMPL_VAR SEQUENCE_NUMBER></td>
+         <td align="center"><a href="<TMPL_VAR SEQUENCE_LINK>" onmouseover="return escape('This is OrthoMCL-DB internal sequence accession (varying across versions). Please use the original sequence accession for reference.')"><TMPL_VAR SEQUENCE_ACCESSION></a></td>
+	<TMPL_IF GROUP_ACCESSION>
+	 <td align="center">
+	 <TMPL_IF GROUP_LINK><a href="<TMPL_VAR GROUP_LINK>"></TMPL_IF>
+	 <TMPL_VAR GROUP_ACCESSION>
+	 <TMPL_IF GROUP_LINK></a></TMPL_IF>
+	 </td>
+        </TMPL_IF>
+         <td align="center"><i><TMPL_VAR SEQUENCE_TAXON></i></td>
+         <td align="center"><TMPL_VAR SEQUENCE_LENGTH></td>
+         <td align="center">
+	   <TMPL_IF XREF>
+		<TMPL_IF XREF_LINK><a href="javascript:window.open('<TMPL_VAR XREF_LINK>');void(0)"></TMPL_IF>
+	     <font size="1"><TMPL_VAR XREF></font>
+		<TMPL_IF XREF_LINK></a></TMPL_IF>
+	     <br>
+	   </TMPL_IF>
+	   <TMPL_VAR SEQUENCE_DESCRIPTION>
+	 </td>
+      </tr>
+</TMPL_LOOP>
+     </table></td></tr>
+<!-- LIST OF PROTEIN SEQUENCES END -->
+
+     <tr>
+       <td colspan="2"><br></td>
+     </tr>
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+
+<!-- SEQUENCE PAGER START -->
+  <TMPL_UNLESS NAME="GROUP">
+    <FORM action="cgi-bin/OrthoMclWeb.cgi?">
+         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+           <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
+         </td></tr>
+         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <TMPL_UNLESS ONEPAGE>
+            <TMPL_VAR PAGER_PREV>
+            <TMPL_VAR PAGER_JUMP>
+            <TMPL_VAR PAGER_NEXT>
+            <INPUT TYPE="hidden" NAME="rm" VALUE="sequenceList"> 
+            Jump to page:<INPUT TYPE="text" SIZE="4" NAME="PAGE_JUMP"> / <TMPL_VAR NAME="NUM_PAGES"> <INPUT TYPE="button" VALUE="Go!" onClick="PAGER_set_offset_and_submit((parseInt(this.form['PAGE_JUMP'].value) - 1) * <TMPL_VAR ROWSPERPAGE>);">
+            <TMPL_VAR NAME="PAGER_HIDDEN">
+         </TMPL_UNLESS>
+         </td></tr>
+    </FORM>
+  </TMPL_UNLESS>
+<!-- SEQUENCE PAGER END -->
+     <tr>
+       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr>
+       <td colspan="2"><br></td>
+     </tr>
+
+
+</TABLE>
+
+<!-- END CONTENT -->
+
+<TMPL_INCLUDE footer.tmpl>

@@ -1,0 +1,134 @@
+
+<TMPL_INCLUDE header.tmpl>
+
+<!-- BEGIN CONTENT -->
+<tr>
+  <td>
+<table width="700" height="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr><td><br><H3>About OrthoMCL <H2></td></tr>
+    <tr><td bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td></tr>
+    <tr><td>
+     <br>
+     <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Background"><FONT COLOR="#ffffff">Background</FONT></a></th>
+      </tr>
+     </table>
+     <p>Orthologs, as one type of homologs, are proteins which come from speciation events, as contrasted with 
+    paralogs, another type of homologs, which derive from duplication events. Detection of orthologs is becoming
+    much more important as the rapid progress in genome sequencing. 
+    <p>OrthoMCL is a genome-scale algorithm for grouping ortholog protein sequences. It provides not only groups
+    shared by two or more species/genomes, but also groups representing species-specific gene expansion families.
+    So it serves as an important utility for automated eukaryotic genome annotation. OrthoMCL starts from looking
+    for reciprocal best hits within each genome as putative in-paralog/recent paralog pairs, reciprocal better hits
+    across any two genomes as putative ortholog pairs. As a result, related proteins are interlinked in a similarity
+    graph. Then MCL (Markov Clustering algorithm,Van Dongen 2000; http://micans.org/mcl/) was invoked to split 
+    mega-clusters as an analogous process of manual review in COG construction. However, MCL clustering is based on
+    weights between each pair of proteins, so to correct for differences in evolutionary distance the weights are 
+    normalized before running MCL.
+    <p>OrthoMCL performs similarly with the INPARANOID algorithm(Remm, Storm et al. 2001), but can be extended 
+    to cluster orthologs from multiple species. OrthoMCL clusters are coherent with groups identified by EGO
+    (Lee, Sultana et al. 2002), but the analysis using EC number suggests a high degree of reliability(Li, 
+    Stoeckert et al. 2003). 
+    <p></td></tr>
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Software"><FONT COLOR="#ffffff">Software</FONT></a></th>
+      </tr>
+    </table>
+    <p>OrthoMCL was originally designed as a database-based pipeline by Li Li: all the data used by OrthoMCL was 
+    stored in the GUS relational database(Genomic Unified Schema; (Davidson, Crabtree et al. 2001)). Lots of MySQL
+    queries were used to retrieve BLAST data. To satisfy the request to run ortholog clustering without depositing 
+    data into GUS database, the Stand-alone version of OrthoMCL was developed as a stand-alone PERL package,
+    which is available at <a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL/">http://orthomcl.cbil.upenn.edu/ORTHOMCL/</a>.
+    <p>Stand-alone OrthoMCL requires protein FASTA files for each genomes, and it calls for an all-against-all BLAST 
+    analysis. Alternatively, OrthoMCL can start analysis by reading a BPO file (Blast Parsing Out) which describes 
+    genes paired by BLAST matches, the E-value, and the identity percentage and the related HSP information.
+    <p>As a perl package stand-alone OrthoMCL doesn't need compilation. However it requires some softwares and perl 
+    modules to run: 
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Softwares:      1. BLAST (NCBI-BLAST, WU-BLAST, etc.)
+                2. MCL (Markov Clustering algorithm), available at <a href="http://micans.org/mcl/">http://micans.org/mcl/</a>;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perl Modules:   1. Bio::SearchIO (part of BioPerl, <a href="http://bioperl.org">http://bioperl.org</a>)
+                2. Storable
+    <p>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Download"><FONT COLOR="#ffffff">Database Download</FONT></a></th>
+      </tr>
+    </table>
+    <p> The clustering data of this release (55 genomes) is available at <a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/">http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/</a>
+    <p> Currently, we are updating the database with Pfam data and BioLayout graphs for OrthoMCL Groups. 
+        So these data are unavailable.
+    <p>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="FAQ"><FONT COLOR="#ffffff">Frequently Asked Questions</FONT></a></th>
+      </tr>
+    </table>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>Which softwares were used to generate MSA (multiple sequence alignment) and BioLayout graph?</i>
+    <p>MUSCLE (3.52), and a special version of BioLayout (from Leon Goldovsky, EBI) which can generate PNG figures.
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>Why some groups don't have links to MSA (multiple sequence alignment) or BioLayout graph?</i>
+    <p>For big groups (size>100), we don't provide them because there are difficulties running MSA and BioLayout softwares for big groups. However, you can still download fasta sequences from our database and run alignment by yourself. As for BioLayout graph, you can contact us at OrthoMCL@pcbi.upenn.edu to request for BioLayout input files.
+    <p>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Publication"><FONT COLOR="#ffffff">Publication</FONT></a></th>
+      </tr>
+    </table>
+    <p>&nbsp;&nbsp;1. Li Li, Christian J. Stoeckert, Jr., and David S. Roos <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrthoMCL: Identification of Ortholog Groups for Eukaryotic Genomes <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Genome Res. 2003 13: 2178-2189. <a href="http://www.genome.org/cgi/content/abstract/13/9/2178">[Abstract]</a>
+    <a href="http://www.genome.org/cgi/content/full/13/9/2178">[Full Text]</a>
+    <p>&nbsp;&nbsp;2. Feng Chen, Aaron J. Mackey, Christian J. Stoeckert, Jr., and David S. Roos <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrthoMCL-DB: querying a comprehensive multi-species collection of ortholog groups <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nucleic Acids Res. 2006 34: D363-8. <a href="http://nar.oxfordjournals.org/cgi/content/full/34/suppl_1/D363">[Full Text]</a>
+    <p>
+  </td>
+</tr>
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Acknowledgement"\><FONT COLOR="#ffffff">Acknowledgement</FONT></a></th>
+      </tr>
+    </table>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp; This project has been funded in whole or in part with Federal funds from the National Institute of Allergy and Infectious Diseseases, National Institutes of Health, Department of Health and Human Services, under Contract No. HHSN266200400037C.<br>
+    <p>
+  </td>
+</tr>
+
+
+<tr>
+  <td>
+    <table cellpadding="2" cellspacing="0" border="0" width="100%">
+      <tr>
+        <th width="100%" align="center" bgcolor="#444488"><a name="Contact"><FONT COLOR="#ffffff">Contact</FONT></a></th>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+</td></tr>
+
+<!-- END CONTENT -->
+
+<TMPL_INCLUDE footer.tmpl>

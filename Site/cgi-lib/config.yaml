@@ -1,0 +1,25 @@
+database: orthomcl
+user: orthomcl
+password: orthomcl
+
+basehref: http://orthomcl.cbil.upenn.edu
+
+NEWS_file: /home/fengchen/www/orthomcl-web/cgi-lib/news
+
+ORTHOMCL_url: /orthomcl/
+ODBDATA_url: /OrthoMCL_DB_Data/
+MSA_dir: /home/fengchen/www/orthomcl-web/html/MSA/
+BL_dir: /home/fengchen/www/orthomcl-web/html/BLGRAPH/
+BL_url: /BLGRAPH/
+BLSVG_dir: /home/fengchen/www/orthomcl-web/html/BLGRAPH_SVG/
+BLSVG_url: /BLGRAPH_SVG/
+DOMARCH_url: /images/png/
+
+BLASTMAT: /usr/local/blast/blast-2.2.13/data
+BLAST: /usr/local/blast/blast-2.2.13/bin/blastall
+
+FA_file: /home/fengchen/www/orthomcl-web/data/fasta/BAE_all.fa
+FAIDX_file: /home/fengchen/www/orthomcl-web/data/fasta/BAE_all.fa.idx
+
+PFAM_link: http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?
+

@@ -1,0 +1,53 @@
+
+<TMPL_INCLUDE header.tmpl>
+
+<!-- BEGIN CONTENT -->
+
+  <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+       <td width=5%></td>
+       <td width=60%>&nbsp;</td>
+       <td width=35%></td>
+     </tr>
+     <tr>
+       <td></td>
+       <td>
+       <H2>Welcome to OrthoMCL DB</H2>
+       </td>
+       <td></td>
+     </tr>
+     <tr>
+       <td></td>
+       <td bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+     </tr>
+     <tr height=15>
+       <td colspan="3"></td>
+     </tr>
+     <tr>
+       <td></td>
+       <td align="center">
+	<p><p>
+	&nbsp;&nbsp;&nbsp;Ortholog Grouping for Protein Sequences from Multiple Genomes!
+	<br>&nbsp;&nbsp;&nbsp;Current Release:
+	<br>&nbsp;&nbsp;&nbsp;Version: <font color=red><a href="/cgi-bin/OrthoMclWeb.cgi?rm=genome&type=summary">1.0</a></font>
+	<br>&nbsp;&nbsp;&nbsp;Number of Genomes: <font color=red><a href="cgi-bin/OrthoMclWeb.cgi?rm=genome"><TMPL_VAR NAME="NUM_TAXA"></a></font>
+	<br>&nbsp;&nbsp;&nbsp;Number of Protein Sequences: <font color=red><TMPL_VAR NAME="NUM_SEQUENCES"></font>
+	<br>&nbsp;&nbsp;&nbsp;Number of Ortholog Groups: <font color=red><TMPL_VAR NAME="NUM_GROUPS"></font>
+	<br><br>
+        <TMPL_IF NAME="LOOP_NEWS">
+          <table>
+          <tr><td><b>NEWS</b></td><td></td>
+          <TMPL_LOOP NAME="LOOP_NEWS">
+          <tr align="left"><td colspan="2"><TMPL_VAR NAME="NEWS"></td></tr>
+          </TMPL_LOOP>
+          </table>
+        </TMPL_IF>
+       </td>
+       <td></td>
+  </table>
+
+
+<!-- END CONTENT -->
+
+<TMPL_INCLUDE footer.tmpl>

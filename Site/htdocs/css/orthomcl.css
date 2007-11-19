@@ -1,0 +1,25 @@
+
+H1 {
+   font-style : normal; 
+   font-weight : bold; 
+   font-size : 14pt; 
+   font-family : lucida sans unicode, lucida, Verdana, Tahoma, Arial, helvetica, sans-serif; 
+   color : #326495; 
+   text-align : left; 
+   margin-top : 0.5cm; 
+   margin-bottom : 0.1cm; 
+   margin-left : 0.5cm;
+   margin-right : 1cm;
+}
+
+A.nocolor_b:link {
+   text-decoration : none; color: black;
+}
+
+A.nocolor:link {
+   text-decoration : none; color: black;
+}
+
+A.nocolor_w:link {
+   text-decoration : none; color: white;
+}

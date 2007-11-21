@@ -24,9 +24,10 @@ sub cgiapp_init {
 	$self->param(config => $config);
 
 	$self->dbh_config('orthomcl', 
-					  [ $config->{database}, 
-						$config->{user}, 
-						$config->{password},{RaiseError => 1, PrintWarn => 1, PrintError => 1}
+                          [ $config->{database}, 
+                            $config->{user}, 
+                            $config->{password},
+                            {RaiseError => 1, PrintWarn => 1, PrintError => 1}
 					  ]);
 	$self->dbh_default_name("orthomcl");
 
@@ -43,16 +44,15 @@ sub setup {
 	$self->tmpl_path('./tmpl');
 	$self->start_mode('index');
 	$self->run_modes([qw(index
-						 groupQueryForm sequenceQueryForm
-						 groupList sequenceList
-						 domarchList
-						 sequence blast genome
-						 groupQueryHistory sequenceQueryHistory
-						 orthomcl
-						 MSA BLGraph getSeq
-						 querySave queryTransform
-						)
-					 ]);
+	                     groupQueryForm sequenceQueryForm
+			     groupList sequenceList
+			     domarchList
+			     sequence blast genome
+			     groupQueryHistory sequenceQueryHistory
+			     orthomcl
+			     MSA BLGraph getSeq
+			     querySave queryTransform)
+			   ]);
 }
 
 sub index {
@@ -65,17 +65,20 @@ sub index {
   my %para;
   my @tmp;
 
-  my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
+  # my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
+  my $query_num_taxa = $dbh->prepare('SELECT count(*) FROM (SELECT DISTINCT external_database_release_id FROM DoTS.ExternalAaSequence) f');
   $query_num_taxa->execute();
   @tmp = $query_num_taxa->fetchrow_array();
   $para{NUM_TAXA}=$tmp[0];
 
-  my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
+  # my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
+  my $query_num_sequences = $dbh->prepare('SELECT count(*) FROM DoTS.ExternalAaSequence');
   $query_num_sequences->execute();
   @tmp = $query_num_sequences->fetchrow_array();
   $para{NUM_SEQUENCES}=$tmp[0];
 
-  my $query_num_groups = $dbh->prepare('SELECT COUNT(*) FROM orthogroup');
+  # my $query_num_groups = $dbh->prepare('SELECT COUNT(*) FROM orthogroup');
+  my $query_num_groups = $dbh->prepare('SELECT count(*) FROM ApiDB.OrthologGroup');
   $query_num_groups->execute();
   @tmp = $query_num_groups->fetchrow_array();
   $para{NUM_GROUPS}=$tmp[0];

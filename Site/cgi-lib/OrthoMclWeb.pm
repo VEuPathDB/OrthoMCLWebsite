@@ -125,7 +125,8 @@ sub groupQueryForm {
 		$tmpl->param(PPEXPRESSION => 1);
 
 		my %para;
-		my $query_taxon = $dbh->prepare('SELECT abbrev, name FROM taxon');
+		# my $query_taxon = $dbh->prepare('SELECT abbrev, name FROM taxon');
+		my $query_taxon = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, tn.unique_name_variant AS name FROM sres.TaxonName tn, dots.ExternalAaSequence eas WHERE tn.taxon_id = eas.taxon_id');
 		$query_taxon->execute();
 		my $count=0;
 		my @prev_data;
@@ -196,10 +197,18 @@ sub querySave {
 		my $query_ids_history;
 		if ($type eq 'sequence') {
 			$query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-			$query_accession_string = 'SELECT sequence.name,orthogroup.accession,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) LEFT JOIN orthogroup USING (orthogroup_id) WHERE sequence_id = ?';
+			# $query_accession_string = 'SELECT sequence.name,orthogroup.accession,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) LEFT JOIN orthogroup USING (orthogroup_id) WHERE sequence_id = ?';
+			$query_accession_string = 'SELECT DISTINCT eas.source_id, og.name, tn.unique_name_variant 
+			                           FROM dots.ExternalAaSequence eas, apidb.OrthologGroup og, 
+			                                apidb.OrthologGroupAaSequence ogs, sres.TaxonName tn 
+			                           WHERE tn.taxon_id = eas.taxon_id 
+			                             AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+			                             AND ogs.ortholog_group_id = og.ortholog_group_id
+			                             AND eas.aa_sequence_id = ?';
 		} elsif ($type eq 'group') {
 			$query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
-			$query_accession_string = 'SELECT accession FROM orthogroup WHERE orthogroup_id = ?';
+			# $query_accession_string = 'SELECT accession FROM orthogroup WHERE orthogroup_id = ?';
+			$query_accession_string = 'SELECT og.name FROM apidb.OrthologGroup of WHERE ortholog_group_id = ?';
 		}
 		my $query_accession = $dbh->prepare($query_accession_string);
 		foreach my $id (@{$query_ids_history->[$querynumber-1]}) {

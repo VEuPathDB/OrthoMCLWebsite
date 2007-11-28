@@ -1416,7 +1416,20 @@ sub getSequenceRows {
 
 	my @rows;
 
-	my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref,orthogroup.accession,orthogroup.orthogroup_id FROM orthogroup RIGHT JOIN sequence USING (orthogroup_id) INNER JOIN taxon USING (taxon_id) WHERE sequence.sequence_id = ?');
+	# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref,orthogroup.accession,orthogroup.orthogroup_id FROM orthogroup RIGHT JOIN sequence USING (orthogroup_id) INNER JOIN taxon USING (taxon_id) WHERE sequence.sequence_id = ?');
+	my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.secondary_identifier, 
+	                                           eas.description, eas.length, tn.unique_name_variant,
+	                                           edr.id_url, og.name, og.ortholog_group_id 
+	                                           FROM dots.ExternalAaSequence eas,
+	                                                sres.ExternalDatabaseRelease edr,
+	                                                sres.TaxonName tn,
+	                                                apidb.OrthologGroup og,
+	                                                apidb.OrthologGroupAaSequence ogs
+	                                           WHERE eas.external_database_release_id = edr.external_database_release_id
+	                                             AND eas.taxon_id = tn.taxon_id
+	                                             AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+	                                             AND ogs.ortholog_group_id = og.ortholog_group_id(+) 
+	                                             AND eas.aa_sequence_id = ?');
 
 	my $count=0;
 

@@ -126,7 +126,10 @@ sub groupQueryForm {
 
 		my %para;
 		# my $query_taxon = $dbh->prepare('SELECT abbrev, name FROM taxon');
-		my $query_taxon = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, tn.unique_name_variant AS name FROM sres.TaxonName tn, dots.ExternalAaSequence eas WHERE tn.taxon_id = eas.taxon_id');
+		my $query_taxon = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, 
+		                                        tn.unique_name_variant AS name 
+		                                 FROM sres.TaxonName tn, dots.ExternalAaSequence eas 
+		                                 WHERE tn.taxon_id = eas.taxon_id');
 		$query_taxon->execute();
 		my $count=0;
 		my @prev_data;
@@ -203,7 +206,7 @@ sub querySave {
 			                                apidb.OrthologGroupAaSequence ogs, sres.TaxonName tn 
 			                           WHERE tn.taxon_id = eas.taxon_id 
 			                             AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
-			                             AND ogs.ortholog_group_id = og.ortholog_group_id
+			                             AND ogs.ortholog_group_id = og.ortholog_group_id(+)
 			                             AND eas.aa_sequence_id = ?';
 		} elsif ($type eq 'group') {
 			$query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
@@ -230,12 +233,13 @@ sub queryTransform {
 	my $self = shift;
 	my $dbh = $self->dbh();
 	my $q = $self->query();
+	my $config = $self->param("config");
 	my @select=$q->param("select");
 	my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
 	my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
 
 	if (($q->param("from") eq 'sequence') && ($q->param("to") eq 'group')) {
-		my $new_url = "http://orthomcl.cbil.upenn.edu/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory";
+		my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory";
 		$self->header_type('redirect');
 		$self->header_props(-url=>$new_url);
 
@@ -246,7 +250,9 @@ sub queryTransform {
 			}
 		}
 		my %group_ids;
-		my $query_group = $dbh->prepare("SELECT orthogroup_id FROM sequence WHERE sequence_id = ?");
+		my $query_group = $dbh->prepare("SELECT ogs.ortholog_group_id 
+		                                 FROM apidb.OrthologGroupAaSequence ogs 
+		                                 WHERE ogs.aa_sequence_id = ?");
 		foreach (keys %sequence_ids) {
 			$query_group->execute($_);
 			my @data = $query_group->fetchrow_array();
@@ -254,8 +260,12 @@ sub queryTransform {
 			$group_ids{$data[0]}=1;
 		}
 		my (@result_ids)=sort {$a<=>$b} keys %group_ids;
+		
 		# insert into group history as a new query
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array(); my $time=$data[0];
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @data = $query_time->fetchrow_array(); 
+		my $time=$data[0];
 
 		my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY");
 		my $action_description = 'from sequence query #'.join(",#",@select);
@@ -270,7 +280,7 @@ sub queryTransform {
 		$self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
 		return "Redirecting to Group Query History";
 	} elsif (($q->param("from") eq 'group') && ($q->param("to") eq 'sequence')) {
-		my $new_url = "http://orthomcl.cbil.upenn.edu/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
+		my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
 		$self->header_type('redirect');
 		$self->header_props(-url=>$new_url);
 
@@ -281,7 +291,9 @@ sub queryTransform {
 			}
 		}
 		my %sequence_ids;
-		my $query_sequence = $dbh->prepare("SELECT sequence_id FROM sequence WHERE orthogroup_id = ?");
+		my $query_sequence = $dbh->prepare("SELECT ogs.aa_sequence_id 
+		                                    FROM apidb.OrthologGroupAaSequence ogs 
+		                                    WHERE ortholog_group_id = ?");
 		foreach (keys %group_ids) {
 			next if ($_==0); # (groupid is zero) means not clustered
 			$query_sequence->execute($_);
@@ -291,7 +303,10 @@ sub queryTransform {
 		}
 		my (@result_ids)=sort {$a<=>$b} keys %sequence_ids;
 		# insert into group history as a new query
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array(); my $time=$data[0];
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @data = $query_time->fetchrow_array(); 
+		my $time=$data[0];
 
 		my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
 		my $action_description = 'from group query #'.join(",#",@select);
@@ -313,9 +328,10 @@ sub groupQueryHistory {
 	my $dbh = $self->dbh();
 	my $q = $self->query();
 	my @select=$q->param("select");
+	my $config = $self->param("config");
 
 	if (my $transform=$q->param("transform")) {
-		my $new_url = "http://orthomcl.cbil.upenn.edu/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=group&to=sequence";
+		my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=group&to=sequence";
 		foreach (@select) {
 			$new_url.="&select=$_";
 		}
@@ -392,7 +408,9 @@ sub groupQueryHistory {
 		}
 
 		# insert into history as a new query
-			my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array();
+			my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+			$query_time->execute();
+			my @data = $query_time->fetchrow_array();
 			push(@{$group_query_history},{	CODE   =>$action_description,
 											TYPE   =>'Query Action',
 											TIME   =>$data[0],
@@ -410,7 +428,9 @@ sub groupQueryHistory {
 #	    $q->clear("file");#otherwise, there will be errors generated like "Do not know how to reconstitute blessed object of base type GLOB"
 	    $filename=~s/.*[\/\\](.*)/$1/g;
 		my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
-		my $query_orthogroupid = $dbh->prepare('SELECT orthogroup_id FROM orthogroup WHERE accession = ?');
+		my $query_orthogroupid = $dbh->prepare('SELECT og.ortholog_group_id 
+		                                        FROM apidb.OrthologGroup og 
+		                                        WHERE og.name = ?');
 		my @result_ids;
 		while (<$filehandle>) {
 			$_=~s/\r|\n//g;
@@ -426,7 +446,9 @@ sub groupQueryHistory {
 			}
 		}
 		# insert into history as a new query
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array();
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @data = $query_time->fetchrow_array();
 		push(@{$group_query_history},{	CODE   =>$filename,
 										TYPE   =>'Retrieve Groups From File',
 										TIME   =>$data[0],
@@ -481,7 +503,10 @@ sub groupList {
 
 	if (my $querytype = $q->param('type')) {   # initiate a new query
 		#dealing with query time
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @tmp = $query_time->fetchrow_array();my $time=$tmp[0];
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @tmp = $query_time->fetchrow_array();
+		my $time=$tmp[0];
 		if ($querytype eq 'ppexpression') {
 			if ($querycode = $q->param("q")) {
 				($orthogroup_ids_ref,$debug_info)=CommandQueryPhyPat::query_phy_pat($querycode,$dbh);
@@ -498,7 +523,9 @@ sub groupList {
 				if ($in eq 'Accession') {
 					my @qc=split(" ",$querycode);
 					foreach (@qc) {
-						my $query_orthogroup = $dbh->prepare('SELECT orthogroup_id FROM orthogroup WHERE accession = ?');
+						my $query_orthogroup = $dbh->prepare('SELECT og.ortholog_group_id 
+						                                      FROM apidb.OrthologGroup og 
+						                                      WHERE og.name = ?');
 						$query_orthogroup->execute($_);
 						while (my @data = $query_orthogroup->fetchrow_array()) {
 							push(@{$orthogroup_ids_ref},$data[0]);
@@ -508,13 +535,55 @@ sub groupList {
 				    my $query_string;
 				    if ($in eq 'Keyword') {
 #					my $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND sequence.description LIKE '%".$querycode."%' GROUP BY orthogroup.orthogroup_id";
-					$query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (sequence.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (sequence.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					$query_string = "SELECT ogs.ortholog_group_id 
+					                 FROM apidb.OrthologGroupAaSequence ogs, 
+					                      dots.ExternalAaSequence eas
+					                 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+					                   AND ogs.ortholog_group_id != 0 
+					                   AND (eas.description LIKE '%".$querycode."%'
+					                        OR eas.source_id LIKE '%".$querycode."%'
+					                        OR eas.name LIKE '%".$querycode."%') 
+					                 GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Accession') {
-					$query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.accession = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
+					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.accession = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
+					$query_string = "SELECT ogs.ortholog_group_id 
+					                 FROM apidb.OrthologGroupAaSequence ogs,
+					                      dots.DomainFeature df, 
+					                      dots.DbRefAaFeature dbaf,
+					                      sres.DbRef db
+					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                   AND df.aa_feature_id = dbaf.aa_feature_id
+					                   AND dbaf.db_ref_id = db.db_ref_id
+					                   AND ogs.ortholog_group_id != 0 
+					                   AND db.primary_identifier LIKE '%".$querycode."%'
+					                 GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Name') {
-					$query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.name = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
+					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.name = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
+					$query_string = "SELECT ogs.ortholog_group_id 
+					                 FROM apidb.OrthologGroupAaSequence ogs,
+					                      dots.DomainFeature df, 
+					                      dots.DbRefAaFeature dbaf,
+					                      sres.DbRef db
+					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                   AND df.aa_feature_id = dbaf.aa_feature_id
+					                   AND dbaf.db_ref_id = db.db_ref_id
+					                   AND ogs.ortholog_group_id != 0 
+					                   AND db.secondary_identifier LIKE '%".$querycode."%'
+					                 GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Keyword') {
-					$query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					$query_string = "SELECT ogs.ortholog_group_id 
+					                 FROM apidb.OrthologGroupAaSequence ogs,
+					                      dots.DomainFeature df, 
+					                      dots.DbRefAaFeature dbaf,
+					                      sres.DbRef db
+					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                   AND df.aa_feature_id = dbaf.aa_feature_id
+					                   AND dbaf.db_ref_id = db.db_ref_id
+					                   AND ogs.ortholog_group_id != 0 
+					                   AND db.remark LIKE '%".$querycode."%'
+					                 GROUP BY ogs.ortholog_group_id";
 				    }
 				    my $query_orthogroup = $dbh->prepare($query_string);
 				    $query_orthogroup->execute();
@@ -534,10 +603,21 @@ sub groupList {
 			if ((my $sizeof = $q->param("sizeof")) && (my $number = $q->param("number"))) {
 				my $query_orthogroup;
 				if ($sizeof eq 'Sequences') {
-					my $query_string = "SELECT orthogroup_id FROM sequence WHERE orthogroup_id <> 0 GROUP BY orthogroup_id HAVING COUNT(DISTINCT(sequence_id)) $number";
+					# my $query_string = "SELECT orthogroup_id FROM sequence WHERE orthogroup_id <> 0 GROUP BY orthogroup_id HAVING COUNT(DISTINCT(sequence_id)) $number";
+					my $query_string = "SELECT og.ortholog_group_id 
+					                    FROM apidb.OrthologGroup og
+					                    WHERE og.ortholog_group_id != 0 
+					                      AND og.number_of_members $number";
 					$query_orthogroup=$dbh->prepare($query_string);
 				} elsif ($sizeof eq 'Genomes') {
-					my $query_string = "SELECT orthogroup_id FROM sequence WHERE orthogroup_id <> 0 GROUP BY orthogroup_id HAVING COUNT(DISTINCT(taxon_id)) $number";
+					# my $query_string = "SELECT orthogroup_id FROM sequence WHERE orthogroup_id <> 0 GROUP BY orthogroup_id HAVING COUNT(DISTINCT(taxon_id)) $number";
+					my $query_string = "SELECT ogs.ortholog_group_id 
+					                    FROM apidb.OrthologGroupAaSequence ogs,
+					                         dots.ExternalAaSequence eas
+					                    WHERE ogs.ortholog_group_id != 0
+					                      AND ogs.aa_sequence_id = eas.aa_sequence_id
+					                    GROUP BY ogs.ortholog_group_id
+					                      HAVING count(DISTINCT(eas.taxon_id)) $number";
 					$query_orthogroup=$dbh->prepare($query_string);
 				}
 				$query_orthogroup->execute();
@@ -555,19 +635,26 @@ sub groupList {
 			} elsif ((my $prop = $q->param("prop")) && ($number = $q->param("number"))) {
 				my ($querystring,$query_orthogroup);
 				if ($prop=~/Pairs/) {
-					my $querystring="SELECT orthogroup.orthogroup_id, orthogroup.num_match_pairs AS matchpair FROM sequence INNER JOIN orthogroup USING (orthogroup_id) GROUP BY orthogroup_id HAVING 100 * matchpair * 2 / (COUNT(*) * (COUNT(*) - 1)) $number";
+					# my $querystring="SELECT orthogroup.orthogroup_id, orthogroup.num_match_pairs AS matchpair FROM sequence INNER JOIN orthogroup USING (orthogroup_id) GROUP BY orthogroup_id HAVING 100 * matchpair * 2 / (COUNT(*) * (COUNT(*) - 1)) $number";
+					my $querystring="SELECT og.ortholog_group_id, og.number_of_match_pairs AS matchpair 
+					                 FROM apidb.OrthologGroup og
+					                 WHERE 100 * og.number_of_match_pairs * 2 / (og.number_of_members * (og.number_of_members - 1)) $number";
 					$query_orthogroup=$dbh->prepare($querystring);
-				} elsif ($prop=~/DCS/) {
-					my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
-					$query_orthogroup=$dbh->prepare($querystring);
+				# } elsif ($prop=~/DCS/) {
+				# 	my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
+				# 	$query_orthogroup=$dbh->prepare($querystring);
 				} elsif ($prop=~/Identity/) {
-					my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_pi $number";
+					# my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_pi $number";
+					my $querystring="SELECT ortholog_group_id FROM apidb.OrthologGroup WHERE avg_percent_identity $number";
 					$query_orthogroup=$dbh->prepare($querystring);
 				} elsif ($prop=~/Match/) {
-					my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_pm $number";
+					# my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_pm $number";
+					my $querystring="SELECT ortholog_group_id FROM apidb.OrthologGroup WHERE avg_percent_match $number";
 					$query_orthogroup=$dbh->prepare($querystring);
 				} elsif ($prop=~/BLAST/) {
-					my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_eval $number";
+					# my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_eval $number";
+					my $querystring="SELECT ortholog_group_id FROM apidb.OrthologGroup 
+					                 WHERE avg_evalue_mant * power(10, avg_evalue_exp) $number";
 					$query_orthogroup=$dbh->prepare($querystring);
 				}
 
@@ -671,7 +758,10 @@ sub getGroupRows {
 			push(@{$taxaclass{$c}},$t);
 		}
 	my %taxaname;
-	my $query_taxonname = $dbh->prepare('SELECT abbrev, name FROM taxon');
+	# my $query_taxonname = $dbh->prepare('SELECT abbrev, name FROM taxon');
+	my $query_taxonname = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, tn.unique_name_variant AS name 
+	                                     FROM sres.TaxonName tn, dots.ExternalAaSequence eas 
+	                                     WHERE tn.taxon_id = eas.taxon_id');
 	$query_taxonname->execute();
 	while (my @data = $query_taxonname->fetchrow_array()) {
 		$taxaname{$data[0]}=$data[1];
@@ -679,13 +769,42 @@ sub getGroupRows {
 
 
 
-	my $query_orthogroup = $dbh->prepare('SELECT * FROM orthogroup where orthogroup_id = ?');
-	my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
-	my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
-	my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM sequence WHERE orthogroup_id = ?');
-	my $query_sdescription_by_o = $dbh->prepare('SELECT description FROM sequence WHERE orthogroup_id = ?'); # used for summarizing keyword
-	my $query_domain_by_o = $dbh->prepare('SELECT sequence2domain.sequence_id, sequence2domain.domain_id FROM sequence2domain INNER JOIN sequence USING (sequence_id) WHERE sequence.orthogroup_id = ?');
-	my $query_ddescription_by_d = $dbh->prepare('SELECT description FROM domain WHERE domain_id = ?');
+	# my $query_orthogroup = $dbh->prepare('SELECT * FROM orthogroup where orthogroup_id = ?');
+	my $query_orthogroup = $dbh->prepare('SELECT * FROM apidb.OrthologGroup where ortholog_group_id = ?');
+	
+	# my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
+	my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) 
+	                                        FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                        WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                          AND ogs.ortholog_group_id = ?
+	                                          AND eas.taxon_id IN (SELECT taxon_id FROM sres.TaxonName WHERE unique_name_variant = ?)');
+
+	# my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
+	my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM apidb.OrthologGroupAaSequence WHERE ortholog_group_id = ?');
+
+	# my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM sequence WHERE orthogroup_id = ?');
+	my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT eas.taxon_id)  
+	                                       FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                       WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                         AND ogs.ortholog_group_id = ?');
+	
+	# my $query_sdescription_by_o = $dbh->prepare('SELECT description FROM sequence WHERE orthogroup_id = ?'); # used for summarizing keyword
+	my $query_sdescription_by_o = $dbh->prepare('SELECT eas.description  
+	                                             FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                             WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                               AND ogs.ortholog_group_id = ?'); # used for summarizing keyword
+	
+	# my $query_domain_by_o = $dbh->prepare('SELECT sequence2domain.sequence_id, sequence2domain.domain_id FROM sequence2domain INNER JOIN sequence USING (sequence_id) WHERE sequence.orthogroup_id = ?');
+	my $query_domain_by_o = $dbh->prepare('SELECT ogs.aa_sequence_id, dbaf.db_ref_id 
+	                                       FROM apidb.OrthologGroupAaSequence ogs, 
+	                                            dots.DomainFeature df,
+	                                            dots.DbRefAaFeature dbaf
+	                                       WHERE ogs.aa_sequence_id = df.aa_sequence_id
+	                                         AND df.aa_feature_id = dbaf.aa_feature_id
+	                                         AND ogs.ortholog_group_id = ?');
+
+	# my $query_ddescription_by_d = $dbh->prepare('SELECT description FROM domain WHERE domain_id = ?');
+	my $query_ddescription_by_d = $dbh->prepare('SELECT remark FROM sres.DbRef WHERE db_ref_id = ?');
 	my $count=0;
 
 	for (my $x = 0; $x < $rows; $x++) {
@@ -801,9 +920,10 @@ sub sequenceQueryHistory {
 	my $dbh = $self->dbh();
 	my $q = $self->query();
 	my @select=$q->param("select");
+	my $config = $self->param("config");
 
 	if (my $transform=$q->param("transform")) {
-		my $new_url = "http://orthomcl.cbil.upenn.edu/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=sequence&to=group";
+		my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=sequence&to=group";
 		foreach (@select) {
 			$new_url.="&select=$_";
 		}
@@ -882,7 +1002,10 @@ sub sequenceQueryHistory {
 			}
 
 			# insert into history as a new query
-			my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array(); my $time=$data[0];
+			my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+			$query_time->execute();
+			my @data = $query_time->fetchrow_array(); 
+			my $time=$data[0];
 			push(@{$sequence_query_history},{	CODE   =>$action_description,
 											TYPE   =>'Query Action',
 											TIME   =>$time,
@@ -897,7 +1020,7 @@ sub sequenceQueryHistory {
 		my $filename=$q->param("file");
 		$filename=~s/.*[\/\\](.*)/$1/g;
 		my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-		my $query_sequenceid = $dbh->prepare('SELECT sequence_id FROM sequence WHERE name = ?');
+		my $query_sequenceid = $dbh->prepare('SELECT aa_sequence_id FROM dots.ExternalAaSequence WHERE source_id = ?');
 		my @result_ids;
 		while (<$filehandle>) {
 			$_=~s/\r|\n//g;
@@ -913,7 +1036,9 @@ sub sequenceQueryHistory {
 			}
 		}
 		# insert into history as a new query
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @data = $query_time->fetchrow_array();
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @data = $query_time->fetchrow_array();
 		push(@{$sequence_query_history},{	CODE   =>$filename,
 										TYPE   =>'Retrieve Sequences From File',
 										TIME   =>$data[0],
@@ -967,7 +1092,8 @@ sub sequenceList {
 
 	    my ($orthogroup_id,$orthogroup_ac);
 	    if ($orthogroup_ac = $q->param("groupac")) {
-		my $query_orthogroupid = $dbh->prepare('SELECT orthogroup_id FROM orthogroup WHERE accession = ?');
+		# my $query_orthogroupid = $dbh->prepare('SELECT orthogroup_id FROM orthogroup WHERE accession = ?');
+		my $query_orthogroupid = $dbh->prepare('SELECT ortholog_group_id FROM apidb.OrthologGroup WHERE name = ?');
 		$query_orthogroupid->execute($orthogroup_ac);
 		my @tmp = $query_orthogroupid->fetchrow_array();
 		$orthogroup_id = $tmp[0];
@@ -991,10 +1117,26 @@ sub sequenceList {
 			push(@{$taxaclass{$c}},$t);
 		}
 
-		my $query_orthogroup = $dbh->prepare('SELECT * FROM orthogroup where orthogroup_id = ?');
-		my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
-		my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
-		my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM sequence WHERE orthogroup_id = ?');
+		#my $query_orthogroup = $dbh->prepare('SELECT * FROM orthogroup where orthogroup_id = ?');
+		my $query_orthogroup = $dbh->prepare('SELECT * FROM apidb.OrthologGroup where ortholog_group_id = ?');
+		
+		#my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
+		my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) 
+	                                            FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                            WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                              AND ogs.ortholog_group_id = ?
+	                                              AND eas.taxon_id IN (SELECT taxon_id 
+	                                                                   FROM sres.TaxonName 
+	                                                                   WHERE unique_name_variant = ?)');
+		
+		#my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
+		my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM apidb.OrthologGroupAaSequence WHERE ortholog_group_id = ?');
+		
+		# my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM sequence WHERE orthogroup_id = ?');
+		my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT eas.taxon_id)  
+	                                           FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                           WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                             AND ogs.ortholog_group_id = ?');
 
 
 		my @tmp;
@@ -1046,7 +1188,17 @@ sub sequenceList {
 
 
 		# Prepare Sequence List Part #
-		my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
+		# my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
+		my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.name, eas.description,
+		                                                      eas.length, tn.unique_name_variant, edr.id_url 
+		                                               FROM apidb.OrthologGroupAaSequence ogs,
+		                                                    dots.ExternalAaSequence eas,
+		                                                    sres.ExternalDatabaseRelease edr,
+		                                                    sres.TaxonName tn
+		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+		                                                 AND eas.external_database_release_id = edr.external_database_release_id
+		                                                 AND eas.taxon_id = tn.taxon_id
+		                                                 AND ogs.ortholog_group_id = ?');
 		$query_sequence_by_groupid->execute($orthogroup_id);
 
 		my $count=0;
@@ -1085,7 +1237,10 @@ sub sequenceList {
 		my $querynumber;
 
 		# Prepare Sequence List Part #
-		my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @tmp = $query_time->fetchrow_array();my $time=$tmp[0];
+		my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+		$query_time->execute();
+		my @tmp = $query_time->fetchrow_array();
+		my $time=$tmp[0];
 
 		if ($in eq "blast") {
 		  use File::Temp qw(tempfile);
@@ -1094,7 +1249,8 @@ sub sequenceList {
 		  close($fh);
 		  $ENV{BLASTMAT} = $config->{BLASTMAT};
 		  open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
-		  my $query_sequence = $dbh->prepare('SELECT sequence_id FROM sequence WHERE accession = ?');
+		  # my $query_sequence = $dbh->prepare('SELECT sequence_id FROM sequence WHERE accession = ?');
+		  my $query_sequence = $dbh->prepare('SELECT aa_sequence_id FROM dots.ExternalAaSequence WHERE source_id = ?');
 		  while (<BLAST>) {
 		    if (m/Sequences producing significant alignments/) {
 		      <BLAST>; # empty line
@@ -1113,7 +1269,8 @@ sub sequenceList {
 		  unlink($tempfile);
 		} elsif ($in eq 'Accession') {
 			my @qc = split(" ",$querycode);
-			my $query_sequence = $dbh->prepare('SELECT sequence_id FROM sequence WHERE name = ?');
+			# my $query_sequence = $dbh->prepare('SELECT sequence_id FROM sequence WHERE name = ?');
+			my $query_sequence = $dbh->prepare('SELECT aa_sequence_id FROM dots.ExternalAaSequence WHERE name = ?');
 			foreach (@qc) {
 				$query_sequence->execute($_);
 				while (my @data = $query_sequence->fetchrow_array()) {
@@ -1123,18 +1280,57 @@ sub sequenceList {
 		} else {
 			my $query_string;
 			if ($in eq 'All') {
-				$query_string = "SELECT sequence_id FROM sequence WHERE accession LIKE '%".$querycode."%' OR description LIKE '%".$querycode."%'";
+				# $query_string = "SELECT sequence_id FROM sequence WHERE accession LIKE '%".$querycode."%' OR description LIKE '%".$querycode."%'";
+				$query_string = "SELECT aa_sequence_id 
+				                 FROM dots.ExternalAaSequence 
+				                 WHERE source_id LIKE '%".$querycode."%' 
+				                    OR description LIKE '%".$querycode."%'";
 			} elsif ($in eq 'Keyword') {
 #				$query_string = "SELECT sequence_id FROM sequence WHERE description LIKE '%".$querycode."%'";
-			    $query_string = "SELECT sequence_id FROM sequence WHERE MATCH (description) AGAINST ('".$querycode."' IN BOOLEAN MODE)";
+			    # $query_string = "SELECT sequence_id FROM sequence WHERE MATCH (description) AGAINST ('".$querycode."' IN BOOLEAN MODE)";
+			    $query_string = "SELECT aa_sequence_id 
+				                 FROM dots.ExternalAaSequence 
+				                 WHERE description LIKE '%".$querycode."%'";
 			} elsif ($in eq 'Taxon_Abbreviation') {
-				$query_string = "SELECT sequence.sequence_id FROM sequence INNER JOIN taxon USING (taxon_id) WHERE taxon.abbrev = '".$querycode."'";
+				# $query_string = "SELECT sequence.sequence_id FROM sequence INNER JOIN taxon USING (taxon_id) WHERE taxon.abbrev = '".$querycode."'";
+				$query_string = "SELECT DISTINCT aa_sequence_id 
+				                 FROM dots.ExternalAaSequence 
+				                 WHERE taxon_id IN (SELECT taxon_id 
+				                                    FROM sres.TaxonName 
+				                                    WHERE unique_name_variant = '".$querycode."')";
 			} elsif ($in eq 'Pfam_Accession') {
-				$query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.accession = '".$querycode."'";
+				# $query_string = "SELECT DISTINCT sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.accession = '".$querycode."'";
+				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				                 FROM dots.ExternalAaSequence eas,
+				                      dots.DomainFeature df,
+				                      dots.DbRefAaFeature dbaf,
+				                      sres.DbRef db
+				                 WHERE eas.aa_sequence_id = df.aa_sequence_id
+				                   AND df.aa_feature_id = dbaf.aa_feature_id
+				                   AND dbaf.db_ref_id = db.db_ref_id
+				                   AND db.primary_identifier = '".$querycode."'";
 			} elsif ($in eq 'Pfam_Name') {
-				$query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.name = '".$querycode."'";
+				# $query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.name = '".$querycode."'";
+				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				                 FROM dots.ExternalAaSequence eas,
+				                      dots.DomainFeature df,
+				                      dots.DbRefAaFeature dbaf,
+				                      sres.DbRef db
+				                 WHERE eas.aa_sequence_id = df.aa_sequence_id
+				                   AND df.aa_feature_id = dbaf.aa_feature_id
+				                   AND dbaf.db_ref_id = db.db_ref_id
+				                   AND db.secondary_identifier = '".$querycode."'";
 			} elsif ($in eq 'Pfam_Keyword') {
-				$query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE)";
+				# $query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE)";
+				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				                 FROM dots.ExternalAaSequence eas,
+				                      dots.DomainFeature df,
+				                      dots.DbRefAaFeature dbaf,
+				                      sres.DbRef db
+				                 WHERE eas.aa_sequence_id = df.aa_sequence_id
+				                   AND df.aa_feature_id = dbaf.aa_feature_id
+				                   AND dbaf.db_ref_id = db.db_ref_id
+				                   AND db.remark = '".$querycode."'";
 			}
 
 			if ($debug) {

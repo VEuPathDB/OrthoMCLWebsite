@@ -1601,9 +1601,21 @@ sub sequence {
 	
 	# prepare data to fill out sequence page
 	# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,taxon.name,sequence.orthogroup_id,sequence.description,sequence.length,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE sequence.accession = ?');
-	my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,taxon.name,sequence.orthogroup_id,sequence.description,sequence.length,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE sequence.accession = ?');
+	my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.name, 
+	                                           tn.unique_name_variant, ogs.ortholog_group_id,
+	                                           eas.description, eas.length, edr.id_url 
+	                                    FROM dots.ExternalAaSequence eas,
+	                                         sres.TaxonName tn,
+	                                         sres.ExternalDatabaseRelease edr,
+	                                         apidb.OrthologGroupAaSequence ogs
+	                                    WHERE eas.taxon_id = tn.taxon_id
+	                                      AND eas.external_database_release_id = edr.external_database_release_id
+	                                      AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+	                                      AND eas.source_id = ?');
 
-	my $query_orthogroup = $dbh->prepare('SELECT accession FROM orthogroup WHERE orthogroup_id = ?');
+	# my $query_orthogroup = $dbh->prepare('SELECT accession FROM orthogroup WHERE orthogroup_id = ?');
+	my $query_orthogroup = $dbh->prepare('SELECT name FROM apidb.OrthologGroup WHERE ortholog_group_id = ?');
+
 	$query_sequence->execute($sequence_accession);
 	my @data = $query_sequence->fetchrow_array();
 	$para{ACCESSION}=$data[0];
@@ -1654,7 +1666,19 @@ sub sequence {
 		$para{SCALE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_scale.PNG';
 		$para{SEQUENCE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/".$para{ACCESSION}.'.PNG';
 	}
-	my $query_domarch_by_ac = $dbh->prepare('SELECT sequence2domain.start,sequence2domain.end,domain.accession,domain.name,domain.description FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE sequence.accession = ?');
+	# my $query_domarch_by_ac = $dbh->prepare('SELECT sequence2domain.start,sequence2domain.end,domain.accession,domain.name,domain.description FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE sequence.accession = ?');
+	my $query_domarch_by_ac = $dbh->prepare('SELECT al.start_min, al.end_max, db.primary_identifier, 
+	                                                db.secondary_identifier, db.remark 
+	                                         FROM dots.ExternalAaSequence eas,
+	                                              dots.DomainFeature df,
+	                                              dots.AaLocation al,
+	                                              dots.DbRefAaFeature dbaf,
+	                                              sres.DbRef db
+	                                         WHERE eas.aa_sequence_id = df.aa_sequence_id
+	                                           AND df.aa_feature_id = al.aa_feature_id
+	                                           AND df.aa_feature_id = dbaf.aa_feature_id
+	                                           AND dbaf.db_ref_id = db.db_ref_id
+	                                           AND eas.source_id = ?');
 	$query_domarch_by_ac->execute($sequence_accession);
 	while (@data = $query_domarch_by_ac->fetchrow_array()) {
 		my %domain;
@@ -1681,12 +1705,14 @@ sub genome {
 	my %para;
 	$para{PAGETITLE}="Release Summary";
 
-	my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
+	# my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
+	my $query_num_taxa = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM dots.ExternalAASequence');
 	$query_num_taxa->execute();
 	my @tmp = $query_num_taxa->fetchrow_array();
 	$para{NUM_TAXA}=$tmp[0];
 
-	my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
+	# my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
+	my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM dots.ExternalAASequence');
 	$query_num_sequences->execute();
 	@tmp = $query_num_sequences->fetchrow_array();
 	$para{NUM_SEQUENCES}=$tmp[0];
@@ -1717,10 +1743,25 @@ sub genome {
 		$para{FLAG_DESCRIPTION}=1;
 	}
 	
-	my $query_taxon = $dbh->prepare('SELECT * FROM taxon');
-	my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE taxon_id = ?');
-	my $query_numseqclustered = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN orthogroup USING (orthogroup_id) WHERE taxon_id = ?');
-	my $query_numgroup = $dbh->prepare('SELECT COUNT(DISTINCT(sequence.orthogroup_id)) FROM sequence INNER JOIN orthogroup USING (orthogroup_id) WHERE taxon_id = ?');
+	# my $query_taxon = $dbh->prepare('SELECT * FROM taxon');
+	my $query_taxon = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM dots.ExternalAASequence');
+
+	# my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE taxon_id = ?');
+	my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM dots.ExternalAASequence WHERE taxon_id = ?');
+
+	# my $query_numseqclustered = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN orthogroup USING (orthogroup_id) WHERE taxon_id = ?');
+	my $query_numseqclustered = $dbh->prepare('SELECT COUNT(ogs.aa_sequence_id) 
+	                                           FROM dots.ExternalAASequence eas,
+	                                                apidb.OrthologGroupAaSequence ogs
+	                                           WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+	                                             AND eas.taxon_id = ?');
+	
+	# my $query_numgroup = $dbh->prepare('SELECT COUNT(DISTINCT(sequence.orthogroup_id)) FROM sequence INNER JOIN orthogroup USING (orthogroup_id) WHERE taxon_id = ?');
+	my $query_numgroup = $dbh->prepare('SELECT COUNT(DISTINCT(ogs.ortholog_group_id)) 
+	                                           FROM dots.ExternalAASequence eas,
+	                                                apidb.OrthologGroupAaSequence ogs
+	                                           WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+	                                             AND eas.taxon_id = ?');
 	$query_taxon->execute();
 	my $count=0;
 	while (my @data = $query_taxon->fetchrow_array()) {
@@ -1845,11 +1886,30 @@ sub getSeq {
 		my $query_sequence;
 		if (my $groupac = $q->param("groupac")) {
 			$para{PAGETITLE}="FASTA Sequences for $groupac";
-			$query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
+			# $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
+			$query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
+			                                        tn.unique_name_variant 
+			                                 FROM apidb.OrthologGroup og,
+			                                      apidb.OrthologGroupAaSequence ogs,
+			                                      dots.ExternalAaSequence eas,
+			                                      sres.TaxonName tn
+			                                 WHERE og.ortholog_group_id = ogs.ortholog_group_id
+			                                   AND ogs.aa_sequence_id = eas.aa_sequence_id
+			                                   AND eas.taxon_id = tn.taxon_id
+			                                   AND og.name = ?');
+
 			$para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
 			$query_sequence->execute($groupac);
 		} elsif (my $groupid = $q->param("groupid")) {
-			$query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.orthogroup_id = ?');
+			# $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.orthogroup_id = ?');
+			$query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
+			                                        tn.unique_name_variant 
+			                                 FROM apidb.OrthologGroupAaSequence ogs,
+			                                      dots.ExternalAaSequence eas,
+			                                      sres.TaxonName tn
+			                                 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+			                                   AND eas.taxon_id = tn.taxon_id
+			                                   AND ogs.ortholog_group_id = ?');
 			$query_sequence->execute($groupid);
 		}
 
@@ -1875,7 +1935,13 @@ sub getSeq {
 	} elsif (my $querynumber = $q->param("querynumber")) {
 		my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
 		my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-		my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.sequence_id = ?');
+		# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.sequence_id = ?');
+		my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
+			                                        tn.unique_name_variant 
+			                                 FROM dots.ExternalAaSequence eas,
+			                                      sres.TaxonName tn
+			                                 WHERE eas.taxon_id = tn.taxon_id
+			                                   AND eas.aa_sequence_id = ?');
 
 		my $file_content;
 		foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
@@ -1926,7 +1992,10 @@ sub blast {
 	$para{PAGETITLE}="BLASTP Result for $fasta_name";
 
       $para{T}="BLASTP result for <font color=\"red\">$fasta_name</font>";
-      my $query_time = $dbh->prepare('SELECT CURTIME()');$query_time->execute();my @tmp = $query_time->fetchrow_array();my $time=$tmp[0];
+      my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+      $query_time->execute();
+      my @tmp = $query_time->fetchrow_array();
+      my $time=$tmp[0];
 
 	use File::Temp qw(tempfile);
 	my ($fh, $tempfile) = tempfile(DIR => "/tmp");
@@ -1934,8 +2003,16 @@ sub blast {
 	close($fh);
 	$ENV{BLASTMAT} = $config->{BLASTMAT};
 	open(BLAST, $config->{BLAST}." -p blastp -i $tempfile -d ".$config->{FA_file}." -e 1e-5 |") or die $!;
-	my $query_sequence = $dbh->prepare('SELECT sequence_id, orthogroup_id FROM sequence WHERE sequence.accession = ?');
-	my $query_orthogroup = $dbh->prepare('SELECT accession FROM orthogroup WHERE orthogroup_id = ?');
+	
+	# my $query_sequence = $dbh->prepare('SELECT sequence_id, orthogroup_id FROM sequence WHERE sequence.accession = ?');
+	my $query_sequence = $dbh->prepare('SELECT ogs.aa_sequence_id, ogs.ortholog_group_id 
+	                                    FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                    WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+	                                      AND eas.source_id = ?');
+
+	# my $query_orthogroup = $dbh->prepare('SELECT accession FROM orthogroup WHERE orthogroup_id = ?');
+	my $query_orthogroup = $dbh->prepare('SELECT name FROM apidb.OrthologGroup WHERE ortholog_group_id = ?');
+	
 	while (<BLAST>) {
 	    $_=~s/\r|\n//g;
 	    if (/Sequences producing significant alignments/) {
@@ -1981,9 +2058,9 @@ sub blast {
 		    while (my @data = $query_orthogroup->fetchrow_array()) {
 			$orthogroup_ac = $data[0];
 		    }
-		    $para{CONTENT}.="><a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> <a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id\">$orthogroup_ac</a>\n";
+		    $para{CONTENT}.="><a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> <a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id'>$orthogroup_ac</a>\n";
 		} elsif ($sequence_id ne '') {
-		    $para{CONTENT}.="><a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>\n";
+		    $para{CONTENT}.="><a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
 		} else {
 		    $para{CONTENT}.=">$1\n";
 		}

@@ -1807,17 +1807,29 @@ sub MSA {
 	$para{CONTENT}="<pre>";
 	if (my $ac = $q->param("groupac")) {
 		$para{PAGETITLE}="MSA $ac";
-		my $old_ac = transformOGAC($ac);
-		my $file=$config->{MSA_dir}."$old_ac.clw";
-		if (-e $file) {
+		
+		# in order to read clobs correctly
+        $dbh->{LongTruncOk} = 0;
+        $dbh->{LongReadLen} = 100000000;
+		
+		my $query_msa = $dbh->prepare('SELECT multiple_sequence_alignment FROM apidb.OrthologGroup WHERE name = ?');
+	    $query_msa->execute($ac);
+    	if (my @data = $query_msa->fetchrow_array()) {
 			$para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
-			open(F,$file);
-			while (<F>) {
-				$para{CONTENT}.=$_;
-			}
-			close(F);
+			$para{CONTENT}.=$data[0];
+		
+		#my $old_ac = transformOGAC($ac);
+		#my $file=$config->{MSA_dir}."$old_ac.clw";
+		#if (-e $file) {
+		#	$para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
+		#	open(F,$file);
+		#	while (<F>) {
+		#		$para{CONTENT}.=$_;
+		#	}
+		#	close(F);
 		} else {
-			$para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
+			# $para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
+			$para{ERROR}="The MSA result doesn't exist. Please check it later because we are updating data currently."
 		}
 	}
 

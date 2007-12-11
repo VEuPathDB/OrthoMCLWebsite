@@ -8,12 +8,14 @@ BEGIN {
 
 use base 'CGI::Application';
 use DBI;     # Needed for OrthoMCL database connection
+use CGI;
 use CGI::Application::Plugin::DBH qw(dbh_config dbh dbh_default_name);
 use CGI::Application::Plugin::Session;
 use File::Spec ();
 use YAML qw(LoadFile);
 use CommandQueryPhyPat;
 use FunKeyword;
+use GD;
 
 my $debug=0;
 our $config;
@@ -54,7 +56,7 @@ sub setup {
 			     domarchList
 			     sequence blast genome
 			     groupQueryHistory sequenceQueryHistory
-			     orthomcl
+			     orthomcl drawScale drawDomain drawGene
 			     MSA BLGraph getSeq
 			     querySave queryTransform)
 			   ]);
@@ -1514,21 +1516,24 @@ sub domarchList {
 
 	$para{GROUP_ACCESSION}=$orthogroup_ac;
 
-	my $orthogroup_old_ac = transformOGAC($orthogroup_ac);
+	#my $orthogroup_old_ac = transformOGAC($orthogroup_ac);
 
-# this part is used to locate the image files
-		my ($dd)=$para{GROUP_ACCESSION}=~/(\d{2})$/;
-		unless ($dd) {
-		    ($dd)=$para{GROUP_ACCESSION}=~/(\d)$/;
-		    $dd="0$dd";
-		}
-		my ($a,$b)=split("",$dd);
 
-		$para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-		# Prepare Sequence (with domain architecture) List Part #
-		#my $query_sequence_by_groupac = $dbh->prepare('SELECT sequence.sequence_id,sequence.accession,sequence.description,sequence.length,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
-		# my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence_id,accession,description,length,taxon.name FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
-		my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.aa_sequence_id, 
+        # BEGIN this part is used to locate the image files
+	#my ($dd)=$para{GROUP_ACCESSION}=~/(\d{2})$/;
+	#unless ($dd) {
+	#    ($dd)=$para{GROUP_ACCESSION}=~/(\d)$/;
+	#    $dd="0$dd";
+	#}
+	#my ($a,$b)=split("",$dd);
+	# END
+	
+
+	$para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
+	# Prepare Sequence (with domain architecture) List Part #
+	#my $query_sequence_by_groupac = $dbh->prepare('SELECT sequence.sequence_id,sequence.accession,sequence.description,sequence.length,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
+	# my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence_id,accession,description,length,taxon.name FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
+	my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.aa_sequence_id, 
 		                                                      eas.source_id, eas.description, 
 		                                                      eas.length, tn.unique_name_variant 
 		                                               FROM apidb.OrthologGroupAaSequence ogs,
@@ -1537,55 +1542,75 @@ sub domarchList {
 		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 		                                                 AND eas.taxon_id = tn.taxon_id
 		                                                 AND ogs.ortholog_group_id = ?');
+	
+	$query_sequence_by_groupid->execute($orthogroup_id);
+	
+	my @sequence_ids;
+	while (my @data = $query_sequence_by_groupid->fetchrow_array()) {
+	    push(@sequence_ids,$data[0]);
+	    my %sequence;
+	    $sequence{SEQUENCE_ACCESSION}=$data[1];
+	    $sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
+	    $sequence{SEQUENCE_LENGTH}=$data[3];
+	    $sequence{SEQUENCE_TAXON}=$data[4];
+	    
 
-		$query_sequence_by_groupid->execute($orthogroup_id);
+            # BEGIN includes sequence image file in page
+	    # TODO:  Need to change this to a cgi call, add args
+	    $sequence{SEQUENCE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawGene";
+	    # END
+	    
 
-		my @sequence_ids;
-		while (my @data = $query_sequence_by_groupid->fetchrow_array()) {
-			push(@sequence_ids,$data[0]);
-			my %sequence;
-			$sequence{SEQUENCE_ACCESSION}=$data[1];
-			$sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-			$sequence{SEQUENCE_LENGTH}=$data[3];
-			$sequence{SEQUENCE_TAXON}=$data[4];
-
-			$sequence{SEQUENCE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/".$sequence{SEQUENCE_ACCESSION}.'.PNG';
-			push(@{$para{LOOP_DOMARCH}},\%sequence);
-		}
-
-		# Prepare Domain List
-		# my $sql_line = "SELECT domain.accession,domain.name,domain.description FROM sequence2domain INNER JOIN domain USING (domain_id) WHERE sequence_id in ('".join("','",@sequence_ids)."') GROUP BY domain.accession";
-		my $sql_line = "SELECT DISTINCT db.primary_identifier, 
+	    push(@{$para{LOOP_DOMARCH}},\%sequence);
+	}
+	
+	# Prepare Domain List
+	# my $sql_line = "SELECT domain.accession,domain.name,domain.description FROM sequence2domain INNER JOIN domain USING (domain_id) WHERE sequence_id in ('".join("','",@sequence_ids)."') GROUP BY domain.accession";
+	my $sql_line = "SELECT DISTINCT db.primary_identifier, 
 		                       db.secondary_identifier, db.remark 
 		                FROM dots.DomainFeature df, dots.DbRefAaFeature dbaf, sres.DbRef db
 		                WHERE db.db_ref_id = dbaf.db_ref_id
 		                  AND dbaf.aa_feature_id = df.aa_feature_id
 		                  AND df.aa_sequence_id IN (".join(", ",@sequence_ids).")";
-		my $query_domain_by_seq_ids = $dbh->prepare($sql_line);
-		$query_domain_by_seq_ids->execute();
+	my $query_domain_by_seq_ids = $dbh->prepare($sql_line);
+	$query_domain_by_seq_ids->execute();
+	
+	my $pfam_domain_count=0;
+	while (my @data = $query_domain_by_seq_ids->fetchrow_array()) {
+	    my %domain;
+	    $domain{DOMAIN_ACCESSION}=$data[0];
+	    $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+	    $domain{DOMAIN_NAME}=$data[1];
+	    $domain{DOMAIN_DESCRIPTION}=$data[2];
+	    
+	    # BEGIN includes domain image in page (for the legend)
+	    # TODO:  Need to change to cgi call, add args
+	    $domain{DOMAIN_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawDomain";
+	    # END
 
-		my $pfam_domain_count=0;
-		while (my @data = $query_domain_by_seq_ids->fetchrow_array()) {
-			my %domain;
-			$domain{DOMAIN_ACCESSION}=$data[0];
-			$domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-			$domain{DOMAIN_NAME}=$data[1];
-			$domain{DOMAIN_DESCRIPTION}=$data[2];
-			$domain{DOMAIN_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_'.$domain{DOMAIN_ACCESSION}.'.PNG';
-			push(@{$para{LOOP_DOMAIN}},\%domain);
-			$pfam_domain_count++;
-		}
-		$para{SCALE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_scale2.PNG';
+	    push(@{$para{LOOP_DOMAIN}},\%domain);
+	    $pfam_domain_count++;
+	}
+	
 
-		unless ($pfam_domain_count) {
-			$para{NOPFAM}=1;
-		}
+	#my $scale_color = GD::colorAllocate(0,0,0);
+	# BEGIN includes scale image in page  (the heading for the column w/sequence images
+	# TODO:  Unsure what needs to be done here;  deal w/ the others first.
+	#$para{SCALE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_scale2.PNG';
+	#$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=$scale_color";
+	$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=620&margin_x=10&scale_factor=0.6&length_max=1000&tick_step=50";
+        # END
 
+
+	unless ($pfam_domain_count) {
+	    $para{NOPFAM}=1;
+	}
+	
 	my $tmpl = $self->load_tmpl('domarch_listing.tmpl');
 	$self->defaults($tmpl);
 	$tmpl->param(\%para);
 	return $self->done($tmpl);
-}
+    }
 
 
 sub sequence {
@@ -2110,6 +2135,42 @@ sub blast {
 
     $tmpl->param(\%para);
     return $self->done($tmpl);
+}
+
+sub drawDomain {
+}
+
+sub drawGene {
+}
+
+sub drawScale {
+    my $self = shift;
+    my $q = $self->query();
+
+    my $size_x = $q->param("size_x"); # need to get this somehow
+    my $margin_x = $q->param("margin_x"); # need to get this somehow
+    my $scale_factor = $q->param("scale_factor"); # need to get this somehow
+    my $length_max = $q->param("length_max"); # need to get this somehow
+    my $tick_step = $q->param("tick_step"); # need to get this somehow
+    #my $scale_color = $q->param("scale_color"); # need to get this somehow
+
+    
+    #cluster scale image  # with white/grey line and string # used in OrthoMCL DB
+    my $scale_image = new GD::Image($size_x,20);
+    my $scale_white = $scale_image->colorAllocate(255,255,255);
+    my $scale_color = $scale_image->colorAllocate(230,230,230);
+    $scale_image->transparent($scale_white);
+    $scale_image->line($margin_x,4,$margin_x+$length_max*$scale_factor,4,$scale_color);
+    my $tick_len=4;
+    for (my $i=0;$i<=$length_max;$i+=$tick_step) {
+	$scale_image->line($margin_x+$i*$scale_factor,4,$margin_x+$i*$scale_factor,4+$tick_len,$scale_color);
+	if ($tick_len==4) {
+	    $scale_image->string(gdTinyFont,$margin_x+$i*$scale_factor-1.5-(length($i)-1)*5/2,4+5,$i,$scale_color);
+	    $tick_len=2;
+	    }
+	else {$tick_len=4;}
+    }
+    print CGI::header('image/png'), $scale_image->png;
 }
 
 sub transformOGAC {

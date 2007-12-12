@@ -1,17 +1,23 @@
 package PpeProcessor;
 
+
 sub processPpe {
-  my ($ppe) = @_;
-  
+  my ($ppe, $cladeTreeFile) = @_;
+
   my $validTaxonAbbrevs = &getValidTaxonAbbrevs();
   my $ppe = &parsePpeExpression($ppeExpression, $validTaxonAbbrevs);
-  my $whereClause = &convertPpeToSqlWhereClause($ppe, $cladeTree);
+  my $whereClause = &parsePpe($ppe, $cladeTree);
   my $sql = "
 SELECT group_id
 FROM PpeMatrixTable
 $whereClause
 ORDER BY group_id
 ";
+
+}
+
+sub getCladeTree {
+  my ($cladeTreeFile) = @_;
 
 }
 

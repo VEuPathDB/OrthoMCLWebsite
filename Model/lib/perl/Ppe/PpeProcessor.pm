@@ -1,8 +1,26 @@
-package PpeProcessor;
+package OrthoMCLWebsite::Model::Ppe:PpeProcessor;
 
+@ISA = qw( ApiCommonWebsite::View::CgiApp );
+
+use strict;
+use ApiCommonWebsite::View::CgiApp;
+
+sub run {
+  my ($self, $cgi) = @_;
+
+  my $dbh = $self->getQueryHandle($cgi);
+
+  print $cgi->header('text/plain');
+
+  $self->processParams($cgi, $dbh);
+
+  $self->processPpe();
+
+  exit();
+}
 
 sub processPpe {
-  my ($ppe, $cladeTreeFile) = @_;
+  my ($self, $ppeExpression, $cladeTreeFile) = @_;
 
   my $validTaxonAbbrevs = &getValidTaxonAbbrevs();
   my $ppe = &parsePpeExpression($ppeExpression, $validTaxonAbbrevs);

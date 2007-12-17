@@ -20,6 +20,87 @@ use GD;
 my $debug=0;
 our $config;
 
+my %colors = (# "Web Colors" Set #1
+	      'red', [255,0,0],
+	      'green', [0,255,0],
+	      'blue', [0,0,255],
+	      # "Web Colors" Set #2
+	      'yellow', [255,255,0],
+	      'magenta', [255,0,255],
+	      'cyan', [0,255,255],
+	      # "Web Colors" Set #3
+	      'maroon', [128,0,0],
+	      'green', [0,128,0],
+	      'navy', [0,0,128],
+	      # "Web Colors" Set #4
+	      'olive', [128,128,0],
+	      'purple', [128,0,128],
+	      'teal', [0,128,128],
+	      # Non-Web Set #1
+	      'brown', [153,51,51],
+	      'green2', [51,153,51],
+	      'blue2', [51,51,153],
+	      # Non-Web Set #2
+	      'pink', [255,20,147],
+	      'blue3', [20,147,255],
+	      'green3', [147,255,20],
+	      # Non-Web Set #3
+	      'goldenrod', [255,153,51],
+	      'purple', [153,51,255],
+	      'green4', [51,255,153],
+	      # Non-Web Set #4
+	      'blue4', [123,104,238],
+	      'orange', [255,204,102],
+	      'purple2', [204,102,255],
+	      # Non-Web Set #5
+	      'purple3', [204,174,255],
+	      'green5', [204,255,165],
+	      'gold', [255,228,165],
+	      # Non-Web Set #6
+	      'green6', [192,192,75],
+	      'magenta2', [192,75,192],
+	      'aquamarine', [75,192,192],
+	      # Non-Web Set #7
+	      'green7', [0,255,102],
+	      'purple4', [102,0,255],
+	      'orange2', [255,102,0],
+	      # Non-Web Set #8
+	      'orange3', [255,51,51],
+	      'green8', [51,255,51],
+	      'blue5', [51,51,255],
+	      # Non-Web Set #9
+	      'eggplant', [102,0,102],
+	      'green9', [0,102,102],
+	      'orange4', [102,102,0],
+	      # Non-Web Set #10
+	      'orange5', [153,0,51],
+	      'purple5', [51,0,153],
+	      'green10', [0,153,51],
+	      # Non-Web Set #11
+	      'purple6', [153,102,204],
+	      'green11', [102,204,153],
+	      'orange6', [204,153,102],
+	      # Non-Web Set #12
+	      'green12', [204,204,0],
+	      'purple7', [204,0,204],
+	      'aquamarine2', [0,204,204],
+	      # Non-Web Set #13
+	      'rust', [204,51,0],
+	      'green13', [0,204,51],
+	      'blue6', [51,0,204],
+	      # Non-Web Set #14
+	      'orange6', [255,51,51],
+	      'green14', [51,255,51],
+	      'blue7', [51,51,255],
+	      # Non-Web Set #15
+	      'orange7', [255,204,102],
+	      'blue8', [102,204,255],
+	      'purple8', [204,102,255],
+	      # "Web Colors" Reserved
+	      'white', [255,255,255],
+	      'gray', [102,102,102],
+	      'black', [0,0,0]);
+
 sub cgiapp_init {
 	my $self = shift;
 
@@ -56,7 +137,7 @@ sub setup {
 			     domarchList
 			     sequence blast genome
 			     groupQueryHistory sequenceQueryHistory
-			     orthomcl drawScale drawDomain drawGene
+			     orthomcl drawScale drawDomain drawProtein
 			     MSA BLGraph getSeq
 			     querySave queryTransform)
 			   ]);
@@ -1516,23 +1597,7 @@ sub domarchList {
 
 	$para{GROUP_ACCESSION}=$orthogroup_ac;
 
-	#my $orthogroup_old_ac = transformOGAC($orthogroup_ac);
-
-
-        # BEGIN this part is used to locate the image files
-	#my ($dd)=$para{GROUP_ACCESSION}=~/(\d{2})$/;
-	#unless ($dd) {
-	#    ($dd)=$para{GROUP_ACCESSION}=~/(\d)$/;
-	#    $dd="0$dd";
-	#}
-	#my ($a,$b)=split("",$dd);
-	# END
-	
-
 	$para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-	# Prepare Sequence (with domain architecture) List Part #
-	#my $query_sequence_by_groupac = $dbh->prepare('SELECT sequence.sequence_id,sequence.accession,sequence.description,sequence.length,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
-	# my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence_id,accession,description,length,taxon.name FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
 	my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.aa_sequence_id, 
 		                                                      eas.source_id, eas.description, 
 		                                                      eas.length, tn.unique_name_variant 
@@ -1542,67 +1607,103 @@ sub domarchList {
 		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 		                                                 AND eas.taxon_id = tn.taxon_id
 		                                                 AND ogs.ortholog_group_id = ?');
+
+	my $query_max_length_by_groupid = $dbh->prepare('SELECT MAX(eas.length)
+		                                               FROM apidb.OrthologGroupAaSequence ogs,
+		                                                    dots.ExternalAaSequence eas,
+		                                                    sres.TaxonName tn
+		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+		                                                 AND eas.taxon_id = tn.taxon_id
+		                                                 AND ogs.ortholog_group_id = ?');
 	
+	my $query_domains_by_sequenceid = $dbh->prepare('SELECT eas.source_id, db.primary_identifier,
+                                                              db.secondary_identifier, db.remark,
+                                                              al.start_min, al.end_max
+                                                       FROM dots.ExternalAaSequence eas,
+                                                            dots.DomainFeature df,
+                                                            dots.DbRefAaFeature dbaf,
+                                                            dots.AaLocation al,
+                                                            sres.DbRef db
+                                                       WHERE eas.aa_sequence_id = df.aa_sequence_id
+                                                         AND df.aa_feature_id = al.aa_feature_id
+                                                         AND df.aa_feature_id = dbaf.aa_feature_id
+                                                         AND dbaf.db_ref_id = db.db_ref_id
+                                                         AND eas.aa_sequence_id = ?');
+
+	# Fetch max length, set params needed in order to generate images
+	$query_max_length_by_groupid->execute($orthogroup_id);
+	my @length_data=$query_max_length_by_groupid->fetchrow_array();
+	my $length_max=$length_data[0];
+	my $dom_height=10;
+	my $spacer_height=15;
+	my $margin_x = 10;
+	my $margin_y = 40;
+	my $scale_factor=0.6;
+	my $tick_step=50; # generally 50 is used, but when $length_max is too big, ...
+	if ($length_max>=2000) {
+	    $tick_step = int($length_max/2000)*100;
+	}
+	if ($length_max>1000) {
+	    $scale_factor = $scale_factor*(1000/$length_max);
+	}
+	my $size_x = $length_max*$scale_factor+2*$margin_x;
+	my $size_y = $margin_y + $dom_height + $spacer_height;
+	my $pos_y = $margin_y + $spacer_height + $dom_height/2;
+
+	# Fetch sequences
 	$query_sequence_by_groupid->execute($orthogroup_id);
-	
+
 	my @sequence_ids;
-	while (my @data = $query_sequence_by_groupid->fetchrow_array()) {
-	    push(@sequence_ids,$data[0]);
+	my %domain_colors;
+	my @color_names = sort keys(%colors);
+	while (my @sequence_data = $query_sequence_by_groupid->fetchrow_array()) {
+	    push(@sequence_ids,$sequence_data[0]);
 	    my %sequence;
-	    $sequence{SEQUENCE_ACCESSION}=$data[1];
+	    $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
 	    $sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-	    $sequence{SEQUENCE_LENGTH}=$data[3];
-	    $sequence{SEQUENCE_TAXON}=$data[4];
+	    $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
+	    $sequence{SEQUENCE_TAXON}=$sequence_data[4];
 	    
+	    my $sequence_image="cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
-            # BEGIN includes sequence image file in page
-	    # TODO:  Need to change this to a cgi call, add args
-	    $sequence{SEQUENCE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawGene";
-	    # END
+	    #Fetch domains for sequence
+	    $query_domains_by_sequenceid->execute($sequence_data[0]);
+
+	    my $num_dom_in_sequence=0;
+	    while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
+		if (!exists $domain_colors{$domain_data[1]}) {
+		    my %domain;
+		    $domain{DOMAIN_ACCESSION}=$domain_data[1];
+		    $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+		    $domain{DOMAIN_NAME}=$domain_data[2];
+		    $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
 	    
+		    my $from = $domain_data[4];
+		    my $to = $domain_data[5];
+		    my $length=$to-$from;
+		    my $color_name = shift(@color_names);
+		    $domain{DOMAIN_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=$length&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&dom_height=$dom_height&domain_color=$color_name";
+		    
+		    push(@{$para{LOOP_DOMAIN}},\%domain);
+		    $domain_colors{$domain_data[1]}=$color_name;
+		}
 
+		$sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_color".$num_dom_in_sequence."=".$domain_colors{$domain_data[1]};
+		$num_dom_in_sequence++;
+	    }
+
+	    $sequence_image = $sequence_image."&num_domains=".$num_dom_in_sequence;
+		
+		
+	    $sequence{SEQUENCE_IMAGE}=$sequence_image;
+	   
 	    push(@{$para{LOOP_DOMARCH}},\%sequence);
 	}
 	
-	# Prepare Domain List
-	# my $sql_line = "SELECT domain.accession,domain.name,domain.description FROM sequence2domain INNER JOIN domain USING (domain_id) WHERE sequence_id in ('".join("','",@sequence_ids)."') GROUP BY domain.accession";
-	my $sql_line = "SELECT DISTINCT db.primary_identifier, 
-		                       db.secondary_identifier, db.remark 
-		                FROM dots.DomainFeature df, dots.DbRefAaFeature dbaf, sres.DbRef db
-		                WHERE db.db_ref_id = dbaf.db_ref_id
-		                  AND dbaf.aa_feature_id = df.aa_feature_id
-		                  AND df.aa_sequence_id IN (".join(", ",@sequence_ids).")";
-	my $query_domain_by_seq_ids = $dbh->prepare($sql_line);
-	$query_domain_by_seq_ids->execute();
-	
-	my $pfam_domain_count=0;
-	while (my @data = $query_domain_by_seq_ids->fetchrow_array()) {
-	    my %domain;
-	    $domain{DOMAIN_ACCESSION}=$data[0];
-	    $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-	    $domain{DOMAIN_NAME}=$data[1];
-	    $domain{DOMAIN_DESCRIPTION}=$data[2];
-	    
-	    # BEGIN includes domain image in page (for the legend)
-	    # TODO:  Need to change to cgi call, add args
-	    $domain{DOMAIN_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawDomain";
-	    # END
+       	# includes scale image in page  (the heading for the column w/sequence images
+	$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
 
-	    push(@{$para{LOOP_DOMAIN}},\%domain);
-	    $pfam_domain_count++;
-	}
-	
-
-	#my $scale_color = GD::colorAllocate(0,0,0);
-	# BEGIN includes scale image in page  (the heading for the column w/sequence images
-	# TODO:  Unsure what needs to be done here;  deal w/ the others first.
-	#$para{SCALE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_scale2.PNG';
-	#$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=$scale_color";
-	$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=620&margin_x=10&scale_factor=0.6&length_max=1000&tick_step=50";
-        # END
-
-
-	unless ($pfam_domain_count) {
+	unless (keys(%domain_colors)) {
 	    $para{NOPFAM}=1;
 	}
 	
@@ -1610,8 +1711,7 @@ sub domarchList {
 	$self->defaults($tmpl);
 	$tmpl->param(\%para);
 	return $self->done($tmpl);
-    }
-
+}
 
 sub sequence {
 	my $self = shift;
@@ -1688,7 +1788,7 @@ sub sequence {
 		}
 		my ($a,$b)=split("",$dd);
 
-		$para{SCALE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/$orthogroup_old_ac".'_scale.PNG';
+		$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=620&margin_x=10&scale_factor=0.6&length_max=1000&tick_step=50&scale_color=black";
 		$para{SEQUENCE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/".$para{ACCESSION}.'.PNG';
 	}
 	# my $query_domarch_by_ac = $dbh->prepare('SELECT sequence2domain.start,sequence2domain.end,domain.accession,domain.name,domain.description FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE sequence.accession = ?');
@@ -2137,40 +2237,133 @@ sub blast {
     return $self->done($tmpl);
 }
 
+#drawDomain works for test values
 sub drawDomain {
+    my $self = shift;
+    my $q = $self->query();
+
+    my $length = $q->param("length");
+    my $domain_red = $q->param("domain_red");
+    my $domain_blue = $q->param("domain_blue");
+    my $domain_green = $q->param("domain_green");
+    my $domain_color_name = $q->param("domain_color");
+    my $margin_x = $q->param("margin_x");
+    my $scale_factor = $q->param("scale_factor");
+    my $pos_y = $q->param("pos_y");
+    my $dom_height = $q->param("dom_height");
+    my $dom_xsize = $length*$scale_factor+1;
+    my $dom_ysize = $dom_height+1;
+
+
+    # domain image
+    my $domain_image = new GD::Image($dom_xsize,$dom_ysize);
+    my $domain_bg = $domain_image->colorAllocate(1,1,1);
+    my $domain_black = $domain_image->colorAllocate(0,0,0);
+    my $domain_color = $domain_image->colorAllocate($colors{$domain_color_name}[0],$colors{$domain_color_name}[1],$colors{$domain_color_name}[2]);
+
+    $domain_image->transparent($domain_bg);
+    $domain_image->filledRectangle(0,0,$margin_x+$length*$scale_factor,$dom_height,$domain_color);
+    $domain_image->rectangle(0,0,$dom_xsize-1,$dom_ysize-1,$domain_black);
+
+    print CGI::header("image/png"), $domain_image->png(9);
 }
 
-sub drawGene {
+#drawProtein returns image, but has no domains drawn
+sub drawProtein {
+    my $self = shift;
+    my $q = $self->query();
+    
+    # need to find another way to pass in hashtables of 'key'->[values]
+    my $margin_x = $q->param("margin_x");
+    my $scale_factor = $q->param("scale_factor");
+    my $pos_y = $q->param("pos_y");
+    my $size_x = $q->param("size_x");
+    my $size_y = $q->param("size_y");
+    my $dom_height = $q->param("dom_height");
+    my $length = $q->param("length");
+    my $length_max = $q->param("length_max");
+    my $tick_step = $q->param("tick_step");
+    my $margin_y = $q->param("margin_y");
+    my $spacer_height = $q->param("spacer_height");
+    my $num_domains = $q->param("num_domains");
+
+    my @domain_info;
+    #pass in to, from, r, g, b
+    #or is it easier to pass in: to, from...
+    #and then r,g,b...
+
+    # or pass in as string, to,from,r,g,b,...
+    # and then split string on ,
+    # and then iterate over?
+    #for (my $i=0;$i<$num_domains;$i++) {
+	#my @cur_domain;
+
+	#push(@cur_domain,$q->param("domain_from$i"));
+	#push(@cur_domain,$q->param("domain_to$i"));
+	#push(@cur_domain,$q->param("domain_red$i"));
+	#push(@cur_domain,$q->param("domain_green$i"));
+	#push(@cur_domain,$q->param("domain_blue$i"));
+
+	#push (@domain_info, @cur_domain);
+    #}
+
+    my $image = new GD::Image($size_x,$dom_height+1);
+
+    my $image_bg = $image->colorAllocate(1,1,1);
+    my $image_black = $image->colorAllocate(0,0,0);
+    my $image_gray = $image->colorAllocate(153,153,153);
+
+    $image->transparent($image_bg);
+
+    my $tick_len=4;
+    for (my $i=0;$i<=$length_max;$i+=$tick_step) {
+	$image->line($margin_x+$i*$scale_factor,0,$margin_x+$i*$scale_factor,$dom_height,$image_gray);
+    }
+
+    $image->filledRectangle($margin_x+1,3,$margin_x+$length*$scale_factor,7,$image_gray);
+     
+   for (my $i=0;$i<$num_domains;$i++) {
+	my $from = $q->param("domain_from$i");
+	my $to = $q->param("domain_to$i");
+	my $color = $q->param("domain_color$i");
+	my $domain_color = $image->colorAllocate($colors{$color}[0],$colors{$color}[1],$colors{$color}[2]);
+
+	$image->filledRectangle($margin_x+$from*$scale_factor,0,$margin_x+$to*$scale_factor,$dom_height,$domain_color);
+	$image->rectangle($margin_x+$from*$scale_factor,0,$margin_x+$to*$scale_factor,$dom_height,$image_black);
+    }
+    
+    print CGI::header("image/png"), $image->png(9);
 }
 
+#drawScale works for test values
 sub drawScale {
     my $self = shift;
     my $q = $self->query();
 
-    my $size_x = $q->param("size_x"); # need to get this somehow
-    my $margin_x = $q->param("margin_x"); # need to get this somehow
-    my $scale_factor = $q->param("scale_factor"); # need to get this somehow
-    my $length_max = $q->param("length_max"); # need to get this somehow
-    my $tick_step = $q->param("tick_step"); # need to get this somehow
-    #my $scale_color = $q->param("scale_color"); # need to get this somehow
+    my $size_x = $q->param("size_x");
+    my $margin_x = $q->param("margin_x");
+    my $scale_factor = $q->param("scale_factor");
+    my $length_max = $q->param("length_max");
+    my $tick_step = $q->param("tick_step");
+    my $scale_color = $q->param("scale_color");
 
     
     #cluster scale image  # with white/grey line and string # used in OrthoMCL DB
-    my $scale_image = new GD::Image($size_x,20);
-    my $scale_white = $scale_image->colorAllocate(255,255,255);
-    my $scale_color = $scale_image->colorAllocate(230,230,230);
-    $scale_image->transparent($scale_white);
-    $scale_image->line($margin_x,4,$margin_x+$length_max*$scale_factor,4,$scale_color);
+    my $image = new GD::Image($size_x,20);
+    my $image_bg = $image->colorAllocate(1,1,1);
+    my $image_color = $image->colorAllocate($colors{$scale_color}[0],$colors{$scale_color}[1],$colors{$scale_color}[2]);
+    $image->transparent($image_bg);
+    $image->line($margin_x,4,$margin_x+$length_max*$scale_factor,4,$image_color);
     my $tick_len=4;
     for (my $i=0;$i<=$length_max;$i+=$tick_step) {
-	$scale_image->line($margin_x+$i*$scale_factor,4,$margin_x+$i*$scale_factor,4+$tick_len,$scale_color);
+	$image->line($margin_x+$i*$scale_factor,4,$margin_x+$i*$scale_factor,4+$tick_len,$image_color);
 	if ($tick_len==4) {
-	    $scale_image->string(gdTinyFont,$margin_x+$i*$scale_factor-1.5-(length($i)-1)*5/2,4+5,$i,$scale_color);
+	    $image->string(gdTinyFont,$margin_x+$i*$scale_factor-1.5-(length($i)-1)*5/2,4+5,$i,$image_color);
 	    $tick_len=2;
 	    }
 	else {$tick_len=4;}
     }
-    print CGI::header('image/png'), $scale_image->png;
+    print CGI::header('image/png'), $image->png(9);
 }
 
 sub transformOGAC {

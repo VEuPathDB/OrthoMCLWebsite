@@ -2,8 +2,9 @@ package PpeOther;
 
 sub new {
     my ($class, 
-	$relation, # 'eq', 'lt', 'gt', 'lte', 'gte'
-	$value)    # numeric value
+	$comparator, # 'eq', 'lt', 'gt', 'lte', 'gte'
+	$value,      # numeric value 
+	$proteinOrTaxonFlag # 'P' or 'T'
 	= @_;
 
     my $self = {};

@@ -1,18 +1,19 @@
-package PpeBoolean;
+package PpeExpression;
 
 sub new {
     my ($class, 
-	$operands, # one or more PpeSums or PpeBooleans
-	$operator, # 'AND' or 'OR'
-	$other)    # undef or a PpeOther
+	$head, # a Comparison, Other or Boolean
+	$tail, # a recursive list of Booleans or undef
+        $type) # 'AND' or 'OR'
 	= @_;
 
     my $self = {};
 
     bless($class,$self);
-    $self->{operator} = $operator;
-    $self->{operands} = $operand;
-    $self->{other} = $other;
+    $self->{head} = $head;
+    $self->{tail} = $tail;
+    $self->{type} = $type;
+
     return $self;
 }
 
@@ -21,9 +22,14 @@ sub toString {
 
     print "(";
     my @operandsAsStrings = map {$_->toString()} @{$self->{operands}};
-    push(@operandsAsStrings, $other->toString($self->getUsedSpeciesAndClades())) if $other;
+    push(@operandsAsStrings, $other->toString($self->getIncludedSpeciesAndClades())) if $other;
     print join(" $operator ", @operandsAsStrings);
     print ")";
+}
+
+sub toSqlString {
+    my ($self) = @_;
+    $self->toString();
 }
 
 sub getIncludedSpeciesAndClades {
@@ -38,7 +44,3 @@ sub getIncludedSpeciesAndClades {
     return keys
 }
 
-
-#############################################
-insert into apidb.grouptaxonmatrix 
-    values ();

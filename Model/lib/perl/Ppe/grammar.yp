@@ -1,0 +1,57 @@
+# example PPE expressions:
+# aaa + bbb + ccc > 5T
+# aaa + EUK < 2 AND ccc + ddd + MAM < 3T AND OTHER > 4
+# ((aaa + bbb < 5 AND ccc + ddd < 3T) OR (ggg < 2 AND fff >= 15)) AND iii < 2
+
+boolean:  comparison moreBooleans    { Boolean->new($_[1], @$_[2]) }
+|         '(' expr ')' moreBooleans  { Boolean->new($_[1], @$_[2]) }
+;
+
+moreBooleans: AND boolean            { ['AND', $_[2]] }
+|             OR  boolean            { ['OR', $_[2]] }
+|                                    { [undef] }
+;
+
+comparison: taxa COMPARATOR VALUE  { Comparison->new($_[1], $_[2], @$_[3]) }
+|           OTHER COMPARATOR VALUE { Other->new($_[2], $_[3]) }
+;
+
+taxa:       TAXON moreTaxa;         { [$_[1], @$_[2]] } 
+
+moreTaxa:  '+' taxa                 { [@$_[1]] }
+|
+;
+
+sub _Lexer {
+    my $P = shift;
+
+    my @Rv;
+
+    my $yyd = $P->{YYData};
+
+    if ($yyd->{INPUT} =~ s/^([a-z]{3})//) {
+          @Rv = ('TAXON', $1);
+       }
+    elsif ($yyd->{INPUT} =~ s/^([A-Z]{3})//) {
+          @Rv = ('TAXON', $1);
+       }
+    elsif ($yyd->{INPUT} =~ s/^(/[\>\<]?\=)//) {
+          @Rv = ('COMPARATOR', $1);
+       }
+
+    elsif ($yyd->{INPUT} =~ s/^OTHER//) {
+          @Rv = ('OTHER', undef);
+       }
+
+    elsif ($yyd->{INPUT} =~ s/^(\d+)T//) {
+          @Rv = ('VALUE', [$1,'T']);
+       }
+
+    elsif ($yyd->{INPUT} =~ s/^(\d+)//) {
+          @Rv = ('VALUE', [$1,'P']);
+       }
+    else {
+    }
+
+    return @Rv;
+} 

@@ -1,9 +1,9 @@
-package Comparison;
+package Ppe::Comparison;
 
 sub new {
     my ($class,
 	$operands,   # one or more species or clades
-	$comparator, # 'eq', 'lt', 'gt', 'lte', 'gte'
+	$comparator, # '=', '<', '>', '>=', '<='
 	$value,      # numeric value 
 	$proteinOrTaxonFlag # 'P' or 'T'
 	= @_;

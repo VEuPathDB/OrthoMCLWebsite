@@ -1,19 +1,25 @@
+%{
+   require OrthoMCLWebsite::Model::Ppe::Boolean;
+   require OrthoMCLWebsite::Model::Ppe::Comparison;
+   require OrthoMCLWebsite::Model::Ppe::Other;
+}
+
 # example PPE expressions:
 # aaa + bbb + ccc > 5T
 # aaa + EUK < 2 AND ccc + ddd + MAM < 3T AND OTHER > 4
 # ((aaa + bbb < 5 AND ccc + ddd < 3T) OR (ggg < 2 AND fff >= 15)) AND iii < 2
 
-boolean:  comparison moreBooleans    { Boolean->new($_[1], @$_[2]) }
-|         '(' expr ')' moreBooleans  { Boolean->new($_[1], @$_[2]) }
+boolean:  comparison moreBooleans    { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[1], @$_[2]) }
+|         '(' expr ')' moreBooleans  { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[1], @$_[2]) }
 ;
 
-moreBooleans: AND boolean            { ['AND', $_[2]] }
-|             OR  boolean            { ['OR', $_[2]] }
+moreBooleans: AND boolean            { [$_[2], 'AND'] }
+|             OR  boolean            { [$_[2], 'OR'] }
 |                                    { [undef] }
 ;
 
-comparison: taxa COMPARATOR VALUE  { Comparison->new($_[1], $_[2], @$_[3]) }
-|           OTHER COMPARATOR VALUE { Other->new($_[2], $_[3]) }
+comparison: taxa COMPARATOR VALUE  { OrthoMCLWebsite::Model::Ppe::Comparison->new($_[1], $_[2], @$_[3]) }
+|           OTHER COMPARATOR VALUE { OrthoMCLWebsite::Model::Ppe::Other->new($_[2], $_[3]) }
 ;
 
 taxa:       TAXON moreTaxa;         { [$_[1], @$_[2]] } 

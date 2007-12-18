@@ -1,4 +1,4 @@
-package OrthoMCLWebsite::Model::Ppe:PpeProcessor;
+package OrthoMCLWebsite::Model::Ppe::Processor;
 
 @ISA = qw( ApiCommonWebsite::View::CgiApp );
 

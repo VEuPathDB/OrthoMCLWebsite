@@ -1,8 +1,8 @@
-package PpeOther;
+package Ppe::Other;
 
 sub new {
     my ($class, 
-	$comparator, # 'eq', 'lt', 'gt', 'lte', 'gte'
+	$comparator, # '=', '<', '>', '>=', '<='
 	$value,      # numeric value 
 	$proteinOrTaxonFlag # 'P' or 'T'
 	= @_;

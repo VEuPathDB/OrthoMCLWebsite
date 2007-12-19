@@ -1,6 +1,7 @@
 package OrthoMCLWebsite::Model::Ppe::Comparison;
 
 use strict;
+use Data::Dumper;
 
 sub new {
     my ($class,
@@ -12,18 +13,20 @@ sub new {
 
     my $self = {};
 
-    bless($class,$self);
-    $self->{taxa} = $taxa; 
+    bless($self,$class);
+    $self->{taxa} = $taxa;
     $self->{comparator} = $comparator;
     $self->{value} = $value;
     $self->{proteinOrTaxonFlag} = $proteinOrTaxonFlag;
+    print STDERR Dumper($self);
+
     return $self;
 }
 
 sub toString {
     my ($self) = @_;
 
-    my @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @$self->{taxa};
+    my @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @{$self->{taxa}};
     my $taxaString = join(" + ", @typedTaxa);
     return "($taxaString $self->{comparator} $self->{value})";
 }
@@ -31,7 +34,7 @@ sub toString {
 sub toSqlString {
     my ($self, $columnMgr) = @_;
 
-    my @columns = map { $columnMgr->getColumn($_ . "_$self->{proteinOrTaxonFlag}") } @$self->{taxa};
+    my @columns = map { $columnMgr->getColumnName($_ . "_$self->{proteinOrTaxonFlag}") } @{$self->{taxa}};
     my $taxaString = join(" + ", @columns);
     return "($taxaString $self->{comparator} $self->{value})";
 }

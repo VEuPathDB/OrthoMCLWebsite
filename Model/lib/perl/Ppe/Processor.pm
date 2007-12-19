@@ -25,7 +25,7 @@ sub processPpe {
   my $dbh = $self->getQueryHandle();
   my $columnMgr = OrthoMCLWebsite::Model::Ppe::ColumnManager->new($dbh);
   my $boolean = $self->parsePpeExpression($ppeExpression);
-  my $whereClause = $boolean->printToSql($columnMgr);
+  my $whereClause = $boolean->toSqlString($columnMgr);
   my $sql = "
 SELECT group_id
 FROM PpeMatrixTable
@@ -48,7 +48,8 @@ sub parsePpeExpression {
     $expression = "abc + def = 4";
     $parser->YYData()->{INPUT} = $expression;
     return $parser->YYParse(yylex => \&OrthoMCLWebsite::Model::Ppe::Parser::Lexer,
-			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error);
+			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error,
+			    yydebug => 0x1f);
 }
 
 sub error {

@@ -11,24 +11,24 @@ use OrthoMCLWebsite::Model::Ppe::Other;
 # aaa + EUK < 2 AND ccc + ddd + MAM < 3T AND OTHER > 4
 # ((aaa + bbb < 5 AND ccc + ddd < 3T) OR (ggg < 2 AND fff >= 15)) AND iii < 2
 
-boolean:  comparison moreBooleans    { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[1], @$_[2]) }
-|         '(' expr ')' moreBooleans  { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[1], @$_[2]) }
+boolean:  comparison moreBooleans    { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[1], @{$_[2]}) }
+|         '(' expr ')' moreBooleans  { OrthoMCLWebsite::Model::Ppe::Boolean->new($_[2], @{$_[4]}) }
 ;
 
-moreBooleans: AND boolean            { [$_[2], 'AND'] }
-|             OR  boolean            { [$_[2], 'OR'] }
-|                                    { [undef, undef] }
+moreBooleans: 'AND' boolean            { [$_[2], 'AND'] }
+|             'OR'  boolean            { [$_[2], 'OR'] }
+|                                      { [] }
 ;
 
-comparison: taxa COMPARATOR VALUE  { OrthoMCLWebsite::Model::Ppe::Comparison->new($_[1], $_[2], @$_[3]) }
-|           OTHER COMPARATOR VALUE { OrthoMCLWebsite::Model::Ppe::Other->new($_[2], $_[3]) }
+comparison: taxa COMPARATOR VALUE  { OrthoMCLWebsite::Model::Ppe::Comparison->new($_[1], $_[2], @{$_[3]}) }
+|           'OTHER' COMPARATOR VALUE { OrthoMCLWebsite::Model::Ppe::Other->new($_[2], $_[3]) }
 ;
 
-taxa:       TAXON moreTaxa         { [$_[1], @$_[2]] } 
+taxa:       TAXON moreTaxa         { [$_[1], @{$_[2]}] } 
 ;
 
-moreTaxa:  '+' taxa                 { [@$_[1]] }
-|
+moreTaxa:  '+' taxa                 { [@{$_[2]}] }
+|                                   { [] }
 ;
 
 %%
@@ -37,6 +37,10 @@ sub Lexer {
     my ($parser) = @_;
 
     my @tokenDescriptor;
+
+    print STDERR $parser->YYData()->{INPUT}."\n";
+
+    return ('', undef ) if (length($parser->YYData()->{INPUT}) == 0);
 
     if ($parser->YYData()->{INPUT} =~ s/^([a-z]{3})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
@@ -57,7 +61,13 @@ sub Lexer {
           @tokenDescriptor = ('COMPARATOR', $1);
 
     } elsif ($parser->YYData()->{INPUT} =~ s/^OTHER\s*//) {
-          @tokenDescriptor = ('OTHER', undef);
+          @tokenDescriptor = ('OTHER', 'OTHER');
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^AND\s*//) {
+          @tokenDescriptor = ('AND', 'AND');
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^OR\s*//) {
+          @tokenDescriptor = ('OR', 'OR');
 
     } elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)T\s*//) {
           @tokenDescriptor = ('VALUE', [$1,'T']);

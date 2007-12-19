@@ -1,0 +1,10 @@
+#!/usr/bin/perl 
+
+use strict;
+
+use lib "@targetDir@/lib/perl";
+$ENV{GUS_HOME} = '@targetDir@';
+
+use OrthoMCLWebsite::Model::Ppe::Processor;
+
+OrthoMCLWebsite::Model::Ppe::Processor->new()->go();

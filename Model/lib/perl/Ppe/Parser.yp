@@ -40,26 +40,32 @@ sub Lexer {
 
     if ($parser->YYData()->{INPUT} =~ s/^([a-z]{3})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
-       }
-    elsif ($parser->YYData()->{INPUT} =~ s/^([A-Z]{3})\s*//) {
+       
+    } elsif ($parser->YYData()->{INPUT} =~ s/^([A-Z]{3})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
-       }
-    elsif ($parser->YYData()->{INPUT} =~ s/^([\>\<]?\=)\s*//) {
+       
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\+)\s*//) {
+          @tokenDescriptor = ('+', '+');
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\()\s*//) {
+          @tokenDescriptor = ('(', '(');
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\))\s*//) {
+          @tokenDescriptor = (')', ')');
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^([\>\<]?\=)\s*//) {
           @tokenDescriptor = ('COMPARATOR', $1);
-       }
 
-    elsif ($parser->YYData()->{INPUT} =~ s/^OTHER\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^OTHER\s*//) {
           @tokenDescriptor = ('OTHER', undef);
-       }
 
-    elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)T\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)T\s*//) {
           @tokenDescriptor = ('VALUE', [$1,'T']);
-       }
 
-    elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)\s*//) {
           @tokenDescriptor = ('VALUE', [$1,'P']);
-       }
-    else {
+
+    } else {
 	my $input = $parser->YYData()->{INPUT};
     	 die("can't recognize token at head of '$input'");
     }

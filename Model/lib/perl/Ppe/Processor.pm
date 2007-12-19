@@ -4,7 +4,8 @@ package OrthoMCLWebsite::Model::Ppe::Processor;
 
 use strict;
 use ApiCommonWebsite::View::CgiApp;
-use OrthoMCLWebsite::Model::Ppe::PpeColumnManager;
+use OrthoMCLWebsite::Model::Ppe::ColumnManager;
+use OrthoMCLWebsite::Model::Ppe::Parser;
 
 sub run {
   my ($self, $cgi) = @_;
@@ -16,14 +17,13 @@ sub run {
   exit();
 }
 
-
 sub processPpe {
   my ($self, $ppeExpression) = @_;
 
   my $dbh = $self->getQueryHandle();
-  my $columnMgr = OrthoMCLWebsite::Model::Ppe::PpeColumnManager->new($dbh);
-  my $ppe = $self->parsePpeExpression($ppeExpression, $columnMgr);
-  my $whereClause = $ppe->printToSql($columnMgr);
+  my $columnMgr = OrthoMCLWebsite::Model::Ppe::ColumnManager->new($dbh);
+  my $boolean = $self->parsePpeExpression($ppeExpression);
+  my $whereClause = $boolean->printToSql($columnMgr);
   my $sql = "
 SELECT group_id
 FROM PpeMatrixTable
@@ -38,4 +38,15 @@ ORDER BY group_id
   }
   return $groupIds;
 }
+
+sub parsePpeExpression {
+    my($self, $expression) = @_;
+    
+    my $parser = OrthoMCLWebsite::Model::Ppe::Parser->new();
+    $parser->YYData->{INPUT} = $expression; 
+    return $parser->YYParse(yylex => \&OrthoMCLWebsite::Model::Ppe::Parser::Lexer,
+			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error);
+}
+
+
 

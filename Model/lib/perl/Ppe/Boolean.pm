@@ -1,4 +1,6 @@
-package Ppe::Boolean;
+package OrthoMCLWebsite::Model::Ppe::Boolean;
+
+use strict;
 
 sub new {
     my ($class, 
@@ -33,8 +35,15 @@ sub toString {
 }
 
 sub toSqlString {
-    my ($self) = @_;
-    $self->toString();
+    my ($self,$columnMgr) = @_;
+
+    my $s = $self->{head}->toSqlString($columnMgr);
+    $s = "($s)" if ref($self->{head}) eq 'Boolean';
+
+    if ($self->{tail}) {
+	$s = "$s $self->{type} " . $self->{tail}->toSqlString($columnMgr);
+    }
+    return $s;
 }
 
 # call getOtherAndTaxa 
@@ -48,24 +57,37 @@ sub setOtherTaxa {
 
 # recurse through my peer boolean elements and collect the list of
 # all taxa.  also find the Other if any
-# (if more than one Other, 
+# (if more than one Other, the headmost wins)
 sub getOtherAndTaxa {
     my ($self) = @_;
 
     my ($headTaxa, $tailTaxa, $other);
-    if (ref($self->{head}) eq 'OtherComparison') {
+
+    # if my head is an Other, set $other (and don't collect taxa
+    # because Others don't have any)
+    if (ref($self->{head}) eq 'OrthoMCLWebsite::Model::Ppe::Other') {
 	$other = $self->{head};
-    } else {
+    } 
+    # otherwise, remember taxa found in head
+    else {
 	($headTaxa) = $self->{head}->getOtherAndTaxa();
     }
 
-    if (ref($self->{head}) eq 'Boolean') {
+    # if head is Boolean, then it is its own root tree.
+    # all root trees can have an other, which needs to be initialized
+    if (ref($self->{head}) eq 'OrthoMCLWebsite::Model::Ppe::Boolean') {
 	$self->{head}->setOtherTaxa();
     }
 
+    # if we have a tail, collect its taxa
+    # if we don't already have an Other and there is one in the tail
+    # use it.  (if we have both, error).
     if ($tail) {
 	my $other2;
 	($tailTaxa, $other2) = $self->{tail}->getOtherAndTaxa();
+	if ($other && $other2) {
+	    die "clashing OTHERs: [" . $other->toString . "] and [" . $other2->toString() . "]";
+	}
 	$other = $other2 unless $other;
     }
 

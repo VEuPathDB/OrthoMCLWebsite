@@ -1,36 +1,38 @@
-package Ppe::Comparison;
+package OrthoMCLWebsite::Model::Ppe::Comparison;
+
+use strict;
 
 sub new {
     my ($class,
-	$operands,   # one or more species or clades
+	$taxa,   # one or more species or clades
 	$comparator, # '=', '<', '>', '>=', '<='
 	$value,      # numeric value 
-	$proteinOrTaxonFlag # 'P' or 'T'
+	$proteinOrTaxonFlag) # 'P' or 'T'
 	= @_;
 
     my $self = {};
 
     bless($class,$self);
-    $self->{operands} = $operands; 
+    $self->{taxa} = $taxa; 
     $self->{comparator} = $comparator;
     $self->{value} = $value;
     $self->{proteinOrTaxonFlag} = $proteinOrTaxonFlag;
-   return $self;
+    return $self;
 }
 
 sub toString {
     my ($self) = @_;
 
-    @typedOperands = map {$_ . "_$self->{proteinOrTaxonFlag}" } @$self->{operands};
-    $operandsString = join(" + ", $typedOperands);
-    print "($operandsString $comparator $value)";
+    @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @$self->{taxa};
+    my $taxaString = join(" + ", $typedTaxa);
+    return "($taxaString $self->{comparator} $self->{value})";
 }
 
 sub toSqlString {
     my ($self, $columnMgr) = @_;
 
-    @typedOperands = map {$columnMgr->getColumn($_, _$self->{proteinOrTaxonFlag}) } @$self->{operands};
-    $operandsString = join(" + ", $typedOperands);
-    print "($operandsString $comparator $value)";
+    my @columns = map { $columnMgr->getColumn($_ . "_$self->{proteinOrTaxonFlag}") } @$self->{taxa};
+    my $taxaString = join(" + ", $colmns);
+    return "($taxaString $self->{comparator} $self->{value})";
 }
 

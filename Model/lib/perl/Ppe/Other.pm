@@ -1,4 +1,8 @@
-package Ppe::Other;
+package OrthoMCLWebsite::Model::Ppe::Other;
+
+@ISA = (OrthoMCLWebsite::Model::Ppe::Comparison);
+
+use strict;
 
 sub new {
     my ($class, 
@@ -10,13 +14,13 @@ sub new {
     my $self = {};
 
     bless($class,$self);
-    $self->{relation} = $relation;
+    $self->{comparator} = $relation;
     $self->{value} = $value;
     return $self;
 }
 
-sub toString {
-    $operandsString = join(" + ", $self->{operands});
-    print "($operandsString $relation $result)";
+sub setTaxa {
+    my ($self, $taxa) = @_;
+    $self->{taxa} = $taxa;
 }
 

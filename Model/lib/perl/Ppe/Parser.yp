@@ -15,7 +15,7 @@ boolean:  comparison moreBooleans    { OrthoMCLWebsite::Model::Ppe::Boolean->new
 
 moreBooleans: AND boolean            { [$_[2], 'AND'] }
 |             OR  boolean            { [$_[2], 'OR'] }
-|                                    { [undef] }
+|                                    { [undef, undef] }
 ;
 
 comparison: taxa COMPARATOR VALUE  { OrthoMCLWebsite::Model::Ppe::Comparison->new($_[1], $_[2], @$_[3]) }
@@ -28,36 +28,44 @@ moreTaxa:  '+' taxa                 { [@$_[1]] }
 |
 ;
 
-sub _Lexer {
-    my $P = shift;
+sub Lexer {
+    my ($parser) = @_;
 
-    my @Rv;
+    my @tokenDescriptor;
 
-    my $yyd = $P->{YYData};
-
-    if ($yyd->{INPUT} =~ s/^([a-z]{3})//) {
-          @Rv = ('TAXON', $1);
+    if ($parser->{YYData}->{INPUT} =~ s/^([a-z]{3})//) {
+          @tokenDescriptor = ('TAXON', $1);
        }
-    elsif ($yyd->{INPUT} =~ s/^([A-Z]{3})//) {
-          @Rv = ('TAXON', $1);
+    elsif ($parser->{YYData}->{INPUT} =~ s/^([A-Z]{3})//) {
+          @tokenDescriptor = ('TAXON', $1);
        }
-    elsif ($yyd->{INPUT} =~ s/^(/[\>\<]?\=)//) {
-          @Rv = ('COMPARATOR', $1);
+    elsif ($parser->{YYData}->{INPUT} =~ s/^(/[\>\<]?\=)//) {
+          @tokenDescriptor = ('COMPARATOR', $1);
        }
 
-    elsif ($yyd->{INPUT} =~ s/^OTHER//) {
-          @Rv = ('OTHER', undef);
+    elsif ($parser->{YYData}->{INPUT} =~ s/^OTHER//) {
+          @tokenDescriptor = ('OTHER', undef);
        }
 
-    elsif ($yyd->{INPUT} =~ s/^(\d+)T//) {
-          @Rv = ('VALUE', [$1,'T']);
+    elsif ($parser->{YYData}->{INPUT} =~ s/^(\d+)T//) {
+          @tokenDescriptor = ('VALUE', [$1,'T']);
        }
 
-    elsif ($yyd->{INPUT} =~ s/^(\d+)//) {
-          @Rv = ('VALUE', [$1,'P']);
+    elsif ($parser->{YYData}->{INPUT} =~ s/^(\d+)//) {
+          @tokenDescriptor = ('VALUE', [$1,'P']);
        }
     else {
+    	 die("can't recognize token at head of '$parser->{YYData}->{INPUT}'");
     }
 
-    return @Rv;
+    return @tokenDescriptor;
 } 
+
+sub Error {
+    my ($parser) = @_;
+
+    if (exists $P->YYData->{ERRMSG}) {
+    	print  STDERR $P->YYData->{ERRMSG};
+    	delete $P->YYData->{ERRMSG};
+    }
+}

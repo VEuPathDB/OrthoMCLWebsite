@@ -3,7 +3,7 @@ package OrthoMCLWebsite::Model::Ppe::Boolean;
 use strict;
 
 sub new {
-    my ($class, 
+    my ($class,
 	$head, # a Comparison, OtherComparison or Boolean
 	$tail, # a recursive list of Booleans or undef
         $type) # 'AND' or 'OR'
@@ -11,7 +11,7 @@ sub new {
 
     my $self = {};
 
-    bless($class,$self);
+    bless($self, $class);
     $self->{head} = $head;
     $self->{tail} = $tail;
     $self->{type} = $type;
@@ -82,7 +82,7 @@ sub getOtherAndTaxa {
     # if we have a tail, collect its taxa
     # if we don't already have an Other and there is one in the tail
     # use it.  (if we have both, error).
-    if ($tail) {
+    if ($self->{tail}) {
 	my $other2;
 	($tailTaxa, $other2) = $self->{tail}->getOtherAndTaxa();
 	if ($other && $other2) {
@@ -98,14 +98,15 @@ sub hashUnion {
     my ($hash1, $hash2) = @_;
 
     my $hash3;
-    foreach my $key (keys($hash1)) {
+    foreach my $key (keys(%$hash1)) {
 	$hash3->{key} = 0 unless $hash3->{key};
 	$hash3->{key} += $hash1->{key};
     }
-    foreach my $key (keys($hash2)) {
+    foreach my $key (keys(%$hash2)) {
 	$hash3->{key} = 0 unless $hash3->{key};
 	$hash3->{key} += $hash2->{key};
     }
     return $hash3;
 }
 
+1;

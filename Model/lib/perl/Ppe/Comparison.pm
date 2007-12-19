@@ -23,8 +23,8 @@ sub new {
 sub toString {
     my ($self) = @_;
 
-    @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @$self->{taxa};
-    my $taxaString = join(" + ", $typedTaxa);
+    my @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @$self->{taxa};
+    my $taxaString = join(" + ", @typedTaxa);
     return "($taxaString $self->{comparator} $self->{value})";
 }
 
@@ -32,7 +32,8 @@ sub toSqlString {
     my ($self, $columnMgr) = @_;
 
     my @columns = map { $columnMgr->getColumn($_ . "_$self->{proteinOrTaxonFlag}") } @$self->{taxa};
-    my $taxaString = join(" + ", $colmns);
+    my $taxaString = join(" + ", @columns);
     return "($taxaString $self->{comparator} $self->{value})";
 }
 
+1;

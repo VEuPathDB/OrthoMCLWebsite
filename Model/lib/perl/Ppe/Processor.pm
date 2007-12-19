@@ -12,7 +12,9 @@ sub run {
 
   print $cgi->header('text/plain');
 
-  my $groupIds = $self->processPpe($cgi->param('expression'));
+  my $expression = $cgi->param('expression');
+  &error("missing 'expression' param") unless $expression;
+  my $groupIds = $self->processPpe($expression);
 
   exit();
 }
@@ -43,10 +45,17 @@ sub parsePpeExpression {
     my($self, $expression) = @_;
     
     my $parser = OrthoMCLWebsite::Model::Ppe::Parser->new();
-    $parser->YYData->{INPUT} = $expression; 
+    $expression = "abc + def = 4";
+    $parser->YYData()->{INPUT} = $expression;
     return $parser->YYParse(yylex => \&OrthoMCLWebsite::Model::Ppe::Parser::Lexer,
 			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error);
 }
 
+sub error {
+  my ($msg) = @_;
+
+  print "ERROR: $msg\n\n";
+  exit(1);
+}
 
 

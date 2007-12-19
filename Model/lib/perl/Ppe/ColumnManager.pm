@@ -1,4 +1,4 @@
-package OrthoMCLWebsite::Model::Ppe:PpeColumnManager;
+package OrthoMCLWebsite::Model::Ppe::ColumnManager;
 
 use strict;
 
@@ -8,8 +8,8 @@ sub new {
 
     my $self = {};
 
-    bless($class,$self);
-    $self->{dbh} = $dbh; 
+    bless($self, $class);
+    $self->{dbh} = $dbh;
     return $self;
 }
 
@@ -19,7 +19,7 @@ sub new {
 # to get column number, double the index.  if taxon count desired, add 1.
 sub getColumnName {
     my ($self, $taxonAbbrev, $proteinOrTaxonFlag) = @_;
-    
+
     return "column" . $self->getValidTaxonAbbrevs()->{$taxonAbbrev} * 2
 	+ ($proteinOrTaxonFlag eq 'T'? 1 : 0);
 }
@@ -35,18 +35,21 @@ sub getValidTaxonAbbrevs {
     my ($self) = @_;
 
     if (!$self->{validTaxonAbbrevs}) {
-	my $sql = "
+      $self->{validTaxonAbbrevs} = {};
+      my $sql = "
 select three_letter_abbrev
 from apidb.orthomcltaxon
 order by three_letter_abbrev
 ";
-	my $stmt = $self->{dbh}->prepare($sql);
-	my $orderedTaxonAbbrevs;
-	my $validTaxonAbbrevs;
-	my $order = 1;
-	while (my $row = $stmt->fetchRowHashRef()) {
-	    $validTaxonAbbrevs{$row->{three_letter_abbrev}} = $order++;
-	}
+      my $stmt = $self->{dbh}->prepare($sql);
+      my $orderedTaxonAbbrevs;
+      my $validTaxonAbbrevs;
+      my $order = 1;
+      while (my $row = $stmt->fetchRowHashRef()) {
+	$self->{validTaxonAbbrevs}->{$row->{three_letter_abbrev}} = $order++;
+      }
     }
     return $self->{validTaxonAbbrevs};
 }
+
+1;

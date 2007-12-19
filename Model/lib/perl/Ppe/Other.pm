@@ -1,20 +1,22 @@
 package OrthoMCLWebsite::Model::Ppe::Other;
 
-@ISA = (OrthoMCLWebsite::Model::Ppe::Comparison);
+use OrthoMCLWebsite::Model::Ppe::Comparison;
+
+@ISA = qw( OrthoMCLWebsite::Model::Ppe::Comparison );
 
 use strict;
 
 sub new {
-    my ($class, 
+    my ($class,
 	$comparator, # '=', '<', '>', '>=', '<='
 	$value,      # numeric value 
-	$proteinOrTaxonFlag # 'P' or 'T'
+	$proteinOrTaxonFlag) # 'P' or 'T'
 	= @_;
 
     my $self = {};
 
-    bless($class,$self);
-    $self->{comparator} = $relation;
+    bless($self, $class);
+    $self->{comparator} = $comparator;
     $self->{value} = $value;
     return $self;
 }
@@ -24,3 +26,4 @@ sub setTaxa {
     $self->{taxa} = $taxa;
 }
 
+1;

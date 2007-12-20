@@ -154,7 +154,7 @@ sub index {
   my @tmp;
 
   # my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
-  my $query_num_taxa = $dbh->prepare('SELECT count(*) FROM (SELECT DISTINCT external_database_release_id FROM DoTS.ExternalAaSequence) f');
+  my $query_num_taxa = $dbh->prepare('SELECT count(*) FROM apidb.OrthomclTaxon WHERE is_species = 1');
   $query_num_taxa->execute();
   @tmp = $query_num_taxa->fetchrow_array();
   $para{NUM_TAXA}=$tmp[0];
@@ -1970,36 +1970,54 @@ sub BLGraph {
 	my $dbh = $self->dbh();
 	my $q = $self->query();
 
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
+
+    my $ac = $q->param("groupac");
+    my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
 	my %para;
-	my $ac;
-	if (($ac = $q->param("groupac")) && ($q->param("svg"))) {
+	if ($q->param("svg")) {
 	    $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
-	    my $old_ac = transformOGAC($ac);
-	    my $file=$config->{BLSVG_dir}."$old_ac.bl.svg";
-	    my $blsvg_src = $config->{BLSVG_url}."$old_ac.bl.svg";
-	    if (-e $file) {
-		open(TMPFILE,$file) or $para{ERROR}="The file '$file' can't be opened.";
-		my $size;
-		while (<TMPFILE>) {
-		    last if (defined $size);
-		    if (/\<svg (.*) xml\:xlink/) {$size=$1;}
-		}
 		$para{T} = "BioLayout Graph (SVG) for Group <font color=\"red\">$ac</font>";
-		$para{CONTENT}="<embed src=\"$blsvg_src\" $size type=\"image/svg+xml\"></embed><p>Notes: In this graph, nodes represent proteins (species are color-coded); edges stand for three edge relationships: <font color=\"red\">reciprocal best hit across species</font>, <font color=\"green\">reciprocal better hit within species</font>, and <font color=\"#888888\">general edges</font>. You can switch these edges on and off by clicking the text in \"EDGES CONTROL\" box. Due to the large number of general edges, by default they are not shown until you switch them on. When you move your mouse over a certain node (or edge), associated information will be displayed in the \"INFORMATION\" box, the nodes from the same species will also be highlighted.";
-	    } else {
-		$para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
-	    }
-	} elsif ($ac = $q->param("groupac")) {
+		$para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
+		                       height=\"800\" type=\"image/svg+xml\"></embed>
+		                <p>Notes: In this graph, nodes represent proteins (species are 
+		                   color-coded); edges stand for three edge relationships: 
+		                   <font color=\"red\">Ortholog edges</font>, 
+		                   <font color=\"green\">Inparalog edges</font>, 
+		                   and <font color=\"#888888\">Co-ortholog edges</font>. You can 
+		                   switch these edges on and off by clicking the text in 
+		                   \"EDGES CONTROL\" box. Due to the large number of general 
+		                   edges, by default they are not shown until you switch them 
+		                   on. When you move your mouse over a certain node (or edge), 
+		                   associated information will be displayed in the \"INFORMATION\" 
+		                   box, the nodes from the same species will also be highlighted.</p>";
+	} elsif ($q->param("svgdata")) {
+	    # read the content of the svg
+	    my $query_content = $dbh->prepare('SELECT svg_content FROM apidb.OrthologGroup WHERE name = ?');
+		$query_content->execute($ac);
+		my ($svg_content) = $query_content->fetchrow();
+			
+	    $self->header_props(-type=>'image/svg+xml');
+	    return $svg_content;
+	} elsif ($q->param("image")) {
+	    # read the image of biolayout
+	    my $query_image = $dbh->prepare('SELECT biolayout_image FROM apidb.OrthologGroup WHERE name = ?');
+		$query_image->execute($ac);
+		my ($bl_image) = $query_image->fetchrow();
+			
+	    binmode STDOUT;
+        print CGI::header("image/png");
+        print $bl_image;
+        return;
+	} else {
 	    $para{PAGETITLE}="BioLayout Graph for $ac";
-	    my $old_ac = transformOGAC($ac);
-	    my $file=$config->{BL_dir}."$old_ac.bl.png";
-	    my $bl_src = $config->{BL_url}."$old_ac.bl.png";
-	    if (-e $file) {
-	    	$para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
-			$para{CONTENT}="Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\"><b>Interactive Graph (SVG)</b></a></font> <font size=\"1\">.    You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">Scalable Vector Graphics Viewer</a></font>.<p><img src=\"$bl_src\">";
-		} else {
-			$para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
-		}
+	    $para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
+		$para{CONTENT}="Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
+		                <b>Interactive Graph (SVG)</b></a></font> <font size=\"1\">.    
+		                You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">
+		                Scalable Vector Graphics Viewer</a></font>.
+		                <p><img src=\"$bl_src&image=1\"><p>";
 	}
 
 	my $tmpl = $self->load_tmpl('empty.tmpl');

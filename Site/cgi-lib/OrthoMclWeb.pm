@@ -160,7 +160,11 @@ sub index {
   $para{NUM_TAXA}=$tmp[0];
 
   # my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
-  my $query_num_sequences = $dbh->prepare('SELECT count(*) FROM DoTS.ExternalAaSequence');
+  my $query_num_sequences = $dbh->prepare('SELECT count(*) 
+                                           FROM DoTS.ExternalAaSequence 
+                                           WHERE taxon_id IN (SELECT taxon_id 
+                                                              FROM apidb.OrthomclTaxon 
+                                                              WHERE is_species = 1)');
   $query_num_sequences->execute();
   @tmp = $query_num_sequences->fetchrow_array();
   $para{NUM_SEQUENCES}=$tmp[0];
@@ -214,10 +218,7 @@ sub groupQueryForm {
 
 		my %para;
 		# my $query_taxon = $dbh->prepare('SELECT abbrev, name FROM taxon');
-		my $query_taxon = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, 
-		                                        tn.unique_name_variant AS name 
-		                                 FROM sres.TaxonName tn, dots.ExternalAaSequence eas 
-		                                 WHERE tn.taxon_id = eas.taxon_id');
+		my $query_taxon = $dbh->prepare('SELECT three_letter_abbrev, name FROM apidb.OrthomclTaxon');
 		$query_taxon->execute();
 		my $count=0;
 		my @prev_data;
@@ -236,16 +237,6 @@ sub groupQueryForm {
 					{ABBREV=>$prev_data[0],NAME=>$prev_data[1]}
 				]});
 		}
-
-		push(@{$para{LOOP_GROUPTR}},
-			{LOOP_GROUPTD=>[{ABBREV=>'API',NAME=>'all apicomplexan genomes'}]},
-			{LOOP_GROUPTD=>[{ABBREV=>'BAC',NAME=>'all Bacterial genomes'}]},
-			{LOOP_GROUPTD=>[{ABBREV=>'ARC',NAME=>'all Archaeal genomes'}]},
-			{LOOP_GROUPTD=>[{ABBREV=>'EUK',NAME=>'all Eukaryotic genomes'}]},
-			{LOOP_GROUPTD=>[{ABBREV=>'OTHER',NAME=>'genomes not specified in the expression'}]},
-			);
-	
-		
 
 		$tmpl->param(\%para);
 	}
@@ -289,10 +280,12 @@ sub querySave {
 		if ($type eq 'sequence') {
 			$query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
 			# $query_accession_string = 'SELECT sequence.name,orthogroup.accession,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) LEFT JOIN orthogroup USING (orthogroup_id) WHERE sequence_id = ?';
-			$query_accession_string = 'SELECT DISTINCT eas.source_id, og.name, tn.unique_name_variant 
-			                           FROM dots.ExternalAaSequence eas, apidb.OrthologGroup og, 
-			                                apidb.OrthologGroupAaSequence ogs, sres.TaxonName tn 
-			                           WHERE tn.taxon_id = eas.taxon_id 
+			$query_accession_string = 'SELECT eas.source_id, og.name, ot.name 
+			                           FROM dots.ExternalAaSequence eas, 
+			                                apidb.OrthologGroup og, 
+			                                apidb.OrthologGroupAaSequence ogs, 
+			                                apidb.OrthomclTaxon ot 
+			                           WHERE ot.taxon_id = eas.taxon_id 
 			                             AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 			                             AND ogs.ortholog_group_id = og.ortholog_group_id(+)
 			                             AND eas.aa_sequence_id = ?';
@@ -573,6 +566,7 @@ sub groupList {
 	my $self = shift;
 	my $q = $self->query();
 	my $dbh = $self->dbh();
+	my $config = $self->param("config");
 
 	my $tmpl = $self->load_tmpl('group_listing.tmpl');  # loading template
 	$self->defaults($tmpl);
@@ -629,9 +623,7 @@ sub groupList {
 					                      dots.ExternalAaSequence eas
 					                 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 					                   AND ogs.ortholog_group_id != 0 
-					                   AND (eas.description LIKE '%".$querycode."%'
-					                        OR eas.source_id LIKE '%".$querycode."%'
-					                        OR eas.name LIKE '%".$querycode."%') 
+					                   AND eas.description LIKE '%".$querycode."%' 
 					                 GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Accession') {
 					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.accession = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
@@ -809,7 +801,7 @@ sub groupList {
 	my $pager = HTML::Pager->new( query => $self->query,
 				template => $tmpl,
 				get_data_callback => [ \&getGroupRows,
-										$orthogroup_ids_ref, $dbh, $tmpl
+										$orthogroup_ids_ref, $dbh, $tmpl, $config
 									],
 				rows => scalar(@{$orthogroup_ids_ref}),
 				page_size => 10,
@@ -819,7 +811,8 @@ sub groupList {
 }
 
 sub getGroupRows {
-	my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl) = @_;
+	my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config) = @_;
+
 
 	$tmpl->param(ROWSPERPAGE => $rows);
 	$tmpl->param(GROUP_NUM_S => $offset+1);
@@ -847,9 +840,7 @@ sub getGroupRows {
 		}
 	my %taxaname;
 	# my $query_taxonname = $dbh->prepare('SELECT abbrev, name FROM taxon');
-	my $query_taxonname = $dbh->prepare('SELECT DISTINCT tn.unique_name_variant AS abbrev, tn.unique_name_variant AS name 
-	                                     FROM sres.TaxonName tn, dots.ExternalAaSequence eas 
-	                                     WHERE tn.taxon_id = eas.taxon_id');
+	my $query_taxonname = $dbh->prepare('SELECT three_letter_abbrev, name FROM apidb.OrthomclTaxon');
 	$query_taxonname->execute();
 	while (my @data = $query_taxonname->fetchrow_array()) {
 		$taxaname{$data[0]}=$data[1];
@@ -883,7 +874,8 @@ sub getGroupRows {
 	
 	# my $query_sdescription_by_o = $dbh->prepare('SELECT description FROM sequence WHERE orthogroup_id = ?'); # used for summarizing keyword
 	my $query_sdescription_by_o = $dbh->prepare('SELECT eas.description  
-	                                             FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	                                             FROM apidb.OrthologGroupAaSequence ogs, 
+	                                                  dots.ExternalAaSequence eas
 	                                             WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 	                                               AND ogs.ortholog_group_id = ?'); # used for summarizing keyword
 	
@@ -917,9 +909,9 @@ sub getGroupRows {
 		}
 
 		$group{GROUP_NUMBER}=$offset+$x+1;
-		$group{GROUP_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
-		$group{DOMARCH_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
-		$group{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
+		$group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
+		$group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
+		$group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
 
 
 		my @tmp;
@@ -928,8 +920,8 @@ sub getGroupRows {
 		$group{NO_SEQUENCES}=$tmp[0];
 
 		if (($tmp[0]<=100) && ($tmp[0]>=2)) {
-			$group{BIOLAYOUT_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
-			$group{MSA_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
+			$group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
+			$group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
 		}
 
 		$query_notaxa_by_o->execute($orthogroup_id);
@@ -1219,13 +1211,14 @@ sub sequenceList {
 	                                          WHERE ortholog_group_id = ?');
 		
 		#my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
-		my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) 
-	                                            FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+		my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(ogs.aa_sequence_id) 
+	                                            FROM apidb.OrthologGroupAaSequence ogs, 
+	                                                 dots.ExternalAaSequence eas,
+	                                                 apidb.OrthomclTaxon ot
 	                                            WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 	                                              AND ogs.ortholog_group_id = ?
-	                                              AND eas.taxon_id IN (SELECT taxon_id 
-	                                                                   FROM sres.TaxonName 
-	                                                                   WHERE unique_name_variant = ?)');
+	                                              AND eas.taxon_id = ot.taxon_id
+	                                              AND ot.three_letter_abbrev = ?');
 		
 		#my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
 		my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM apidb.OrthologGroupAaSequence WHERE ortholog_group_id = ?');
@@ -1256,11 +1249,11 @@ sub sequenceList {
 		$para{AVE_PI}=$data[3];
 #		$para{AVE_DCS}=$data[2];
 
-		$para{DOMARCH_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=".$para{GROUP_ACCESSION};
-		$para{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=".$para{GROUP_ACCESSION};
+		$para{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=".$para{GROUP_ACCESSION};
+		$para{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=".$para{GROUP_ACCESSION};
 		if (($para{NO_SEQUENCES}<=100) && ($para{NO_SEQUENCES}>=2)) {
-		    $para{BIOLAYOUT_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=".$para{GROUP_ACCESSION};
-		    $para{MSA_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
+		    $para{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=".$para{GROUP_ACCESSION};
+		    $para{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
 		}
 
 		foreach my $c (@class) {
@@ -1287,15 +1280,15 @@ sub sequenceList {
 
 		# Prepare Sequence List Part #
 		# my $query_sequence_by_groupid = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ?');
-		my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.name, eas.description,
-		                                                      eas.length, tn.unique_name_variant, edr.id_url 
+		my $query_sequence_by_groupid = $dbh->prepare('SELECT eas.source_id, eas.name, eas.description,
+		                                                      eas.length, ot.name, edr.id_url 
 		                                               FROM apidb.OrthologGroupAaSequence ogs,
 		                                                    dots.ExternalAaSequence eas,
 		                                                    sres.ExternalDatabaseRelease edr,
-		                                                    sres.TaxonName tn
+		                                                    apidb.OrthomclTaxon ot
 		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 		                                                 AND eas.external_database_release_id = edr.external_database_release_id
-		                                                 AND eas.taxon_id = tn.taxon_id
+		                                                 AND eas.taxon_id = ot.taxon_id
 		                                                 AND ogs.ortholog_group_id = ?');
 		$query_sequence_by_groupid->execute($orthogroup_id);
 
@@ -1309,7 +1302,7 @@ sub sequenceList {
 				$sequence{__EVEN__}=1;
 			}
 			$sequence{SEQUENCE_NUMBER}=$count;
-			$sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+			$sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
 			$sequence{SEQUENCE_ACCESSION}=$data[0];
 			$sequence{XREF}=$data[1];
 			if (defined $data[5]) {
@@ -1368,7 +1361,7 @@ sub sequenceList {
 		} elsif ($in eq 'Accession') {
 			my @qc = split(" ",$querycode);
 			# my $query_sequence = $dbh->prepare('SELECT sequence_id FROM sequence WHERE name = ?');
-			my $query_sequence = $dbh->prepare('SELECT aa_sequence_id FROM dots.ExternalAaSequence WHERE name = ?');
+			my $query_sequence = $dbh->prepare('SELECT aa_sequence_id FROM dots.ExternalAaSequence WHERE source_id = ?');
 			foreach (@qc) {
 				$query_sequence->execute($_);
 				while (my @data = $query_sequence->fetchrow_array()) {
@@ -1391,14 +1384,14 @@ sub sequenceList {
 				                 WHERE description LIKE '%".$querycode."%'";
 			} elsif ($in eq 'Taxon_Abbreviation') {
 				# $query_string = "SELECT sequence.sequence_id FROM sequence INNER JOIN taxon USING (taxon_id) WHERE taxon.abbrev = '".$querycode."'";
-				$query_string = "SELECT DISTINCT aa_sequence_id 
-				                 FROM dots.ExternalAaSequence 
-				                 WHERE taxon_id IN (SELECT taxon_id 
-				                                    FROM sres.TaxonName 
-				                                    WHERE unique_name_variant = '".$querycode."')";
+				$query_string = "SELECT eas.aa_sequence_id 
+				                 FROM dots.ExternalAaSequence eas,
+				                      apidb.OrthomclTaxon ot
+				                 WHERE eas.taxon_id = ot.taxon_id 
+				                   AND ot.three_letter_abbrev = '".$querycode."')";
 			} elsif ($in eq 'Pfam_Accession') {
 				# $query_string = "SELECT DISTINCT sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.accession = '".$querycode."'";
-				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				$query_string = "SELECT eas.aa_sequence_id 
 				                 FROM dots.ExternalAaSequence eas,
 				                      dots.DomainFeature df,
 				                      dots.DbRefAaFeature dbaf,
@@ -1409,7 +1402,7 @@ sub sequenceList {
 				                   AND db.primary_identifier = '".$querycode."'";
 			} elsif ($in eq 'Pfam_Name') {
 				# $query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE domain.name = '".$querycode."'";
-				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				$query_string = "SELECT eas.aa_sequence_id 
 				                 FROM dots.ExternalAaSequence eas,
 				                      dots.DomainFeature df,
 				                      dots.DbRefAaFeature dbaf,
@@ -1420,7 +1413,7 @@ sub sequenceList {
 				                   AND db.secondary_identifier = '".$querycode."'";
 			} elsif ($in eq 'Pfam_Keyword') {
 				# $query_string = "SELECT DISTINCT(sequence.sequence_id) FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE)";
-				$query_string = "SELECT DISTINCT eas.aa_sequence_id 
+				$query_string = "SELECT eas.aa_sequence_id 
 				                 FROM dots.ExternalAaSequence eas,
 				                      dots.DomainFeature df,
 				                      dots.DbRefAaFeature dbaf,
@@ -1493,7 +1486,7 @@ sub sequenceList {
 	my $pager = HTML::Pager->new( query => $self->query,
 				template => $tmpl,
 				get_data_callback => [ \&getSequenceRows,
-										$sequence_ids_ref, $dbh, $tmpl
+										$sequence_ids_ref, $dbh, $tmpl, $config
 									],
 				rows => scalar(@{$sequence_ids_ref}),
 				page_size => 50,
@@ -1502,7 +1495,7 @@ sub sequenceList {
 }
 
 sub getSequenceRows {
-	my ($offset, $rows, $sequence_ids_ref, $dbh, $tmpl) = @_;
+	my ($offset, $rows, $sequence_ids_ref, $dbh, $tmpl, $config) = @_;
 
 	$tmpl->param(ROWSPERPAGE => $rows);
 	$tmpl->param(SEQUENCE_NUM_S => $offset+1);
@@ -1515,16 +1508,16 @@ sub getSequenceRows {
 	my @rows;
 
 	# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,sequence.description,sequence.length,taxon.name,taxon.xref,orthogroup.accession,orthogroup.orthogroup_id FROM orthogroup RIGHT JOIN sequence USING (orthogroup_id) INNER JOIN taxon USING (taxon_id) WHERE sequence.sequence_id = ?');
-	my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.secondary_identifier, 
-	                                           eas.description, eas.length, tn.unique_name_variant,
+	my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.secondary_identifier, 
+	                                           eas.description, eas.length, ot.name,
 	                                           edr.id_url, og.name, og.ortholog_group_id 
 	                                           FROM dots.ExternalAaSequence eas,
 	                                                sres.ExternalDatabaseRelease edr,
-	                                                sres.TaxonName tn,
+	                                                apidb.OrthomclTaxon ot,
 	                                                apidb.OrthologGroup og,
 	                                                apidb.OrthologGroupAaSequence ogs
 	                                           WHERE eas.external_database_release_id = edr.external_database_release_id
-	                                             AND eas.taxon_id = tn.taxon_id
+	                                             AND eas.taxon_id = ot.taxon_id
 	                                             AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 	                                             AND ogs.ortholog_group_id = og.ortholog_group_id(+) 
 	                                             AND eas.aa_sequence_id = ?');
@@ -1547,7 +1540,7 @@ sub getSequenceRows {
 		}
 
 		$sequence{SEQUENCE_NUMBER}=$offset+$x+1;;
-		$sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+		$sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
 		$sequence{SEQUENCE_ACCESSION}=$data[0];
 		$sequence{XREF}=$data[1];
 		if (defined $data[5]) {
@@ -1559,7 +1552,7 @@ sub getSequenceRows {
 		$sequence{SEQUENCE_LENGTH}=$data[3];
 		$sequence{SEQUENCE_TAXON}=$data[4];
 		if (defined $data[6]) {
-		    $sequence{GROUP_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[7]";
+		    $sequence{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[7]";
 		    $sequence{GROUP_ACCESSION}=$data[6];
 		} else {
 		    $sequence{GROUP_ACCESSION}='not clustered';
@@ -1598,22 +1591,22 @@ sub domarchList {
 	$para{GROUP_ACCESSION}=$orthogroup_ac;
 
 	$para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-	my $query_sequence_by_groupid = $dbh->prepare('SELECT DISTINCT eas.aa_sequence_id, 
+	my $query_sequence_by_groupid = $dbh->prepare('SELECT eas.aa_sequence_id, 
 		                                                      eas.source_id, eas.description, 
-		                                                      eas.length, tn.unique_name_variant 
+		                                                      eas.length, ot.three_letter_abbrev 
 		                                               FROM apidb.OrthologGroupAaSequence ogs,
 		                                                    dots.ExternalAaSequence eas,
-		                                                    sres.TaxonName tn
+		                                                    apidb.OrthomclTaxon ot
 		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-		                                                 AND eas.taxon_id = tn.taxon_id
+		                                                 AND eas.taxon_id = ot.taxon_id
 		                                                 AND ogs.ortholog_group_id = ?');
 
 	my $query_max_length_by_groupid = $dbh->prepare('SELECT MAX(eas.length)
 		                                               FROM apidb.OrthologGroupAaSequence ogs,
 		                                                    dots.ExternalAaSequence eas,
-		                                                    sres.TaxonName tn
+		                                                    apidb.OrthomclTaxon ot
 		                                               WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-		                                                 AND eas.taxon_id = tn.taxon_id
+		                                                 AND eas.taxon_id = ot.taxon_id
 		                                                 AND ogs.ortholog_group_id = ?');
 	
 	my $query_domains_by_sequenceid = $dbh->prepare('SELECT eas.source_id, db.primary_identifier,
@@ -1660,11 +1653,11 @@ sub domarchList {
 	    push(@sequence_ids,$sequence_data[0]);
 	    my %sequence;
 	    $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
-	    $sequence{SEQUENCE_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
+	    $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
 	    $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
 	    $sequence{SEQUENCE_TAXON}=$sequence_data[4];
 	    
-	    my $sequence_image="cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
+	    my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
 	    #Fetch domains for sequence
 	    $query_domains_by_sequenceid->execute($sequence_data[0]);
@@ -1682,7 +1675,7 @@ sub domarchList {
 		    my $to = $domain_data[5];
 		    my $length=$to-$from;
 		    my $color_name = shift(@color_names);
-		    $domain{DOMAIN_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=$length&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&dom_height=$dom_height&domain_color=$color_name";
+		    $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=$length&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&dom_height=$dom_height&domain_color=$color_name";
 		    
 		    push(@{$para{LOOP_DOMAIN}},\%domain);
 		    $domain_colors{$domain_data[1]}=$color_name;
@@ -1701,7 +1694,7 @@ sub domarchList {
 	}
 	
        	# includes scale image in page  (the heading for the column w/sequence images
-	$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
+	$para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
 
 	unless (keys(%domain_colors)) {
 	    $para{NOPFAM}=1;
@@ -1726,14 +1719,14 @@ sub sequence {
 	
 	# prepare data to fill out sequence page
 	# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,taxon.name,sequence.orthogroup_id,sequence.description,sequence.length,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE sequence.accession = ?');
-	my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.name, 
-	                                           tn.unique_name_variant, ogs.ortholog_group_id,
+	my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.name, 
+	                                           ot.name, ogs.ortholog_group_id,
 	                                           eas.description, eas.length, edr.id_url 
 	                                    FROM dots.ExternalAaSequence eas,
-	                                         sres.TaxonName tn,
+	                                         apidb.OrthomclTaxon ot,
 	                                         sres.ExternalDatabaseRelease edr,
 	                                         apidb.OrthologGroupAaSequence ogs
-	                                    WHERE eas.taxon_id = tn.taxon_id
+	                                    WHERE eas.taxon_id = ot.taxon_id
 	                                      AND eas.external_database_release_id = edr.external_database_release_id
 	                                      AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 	                                      AND eas.source_id = ?');
@@ -1753,7 +1746,7 @@ sub sequence {
 	    $query_orthogroup->execute($data[3]);
 	    my @data2 = $query_orthogroup->fetchrow_array();
 	    $para{GROUP_ACCESSION}=$data2[0];
-	    $para{GROUP_LINK}="cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
+	    $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
 	    $orthogroup_old_ac = transformOGAC($para{GROUP_ACCESSION});
 	}
 	my @desc_info = split(" ",$data[4]);
@@ -1788,7 +1781,7 @@ sub sequence {
 		}
 		my ($a,$b)=split("",$dd);
 
-		$para{SCALE_IMAGE}="cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=620&margin_x=10&scale_factor=0.6&length_max=1000&tick_step=50&scale_color=black";
+		$para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=620&margin_x=10&scale_factor=0.6&length_max=1000&tick_step=50&scale_color=black";
 		$para{SEQUENCE_IMAGE}=$config->{DOMARCH_url}."$a/$b/$orthogroup_old_ac/".$para{ACCESSION}.'.PNG';
 	}
 	# my $query_domarch_by_ac = $dbh->prepare('SELECT sequence2domain.start,sequence2domain.end,domain.accession,domain.name,domain.description FROM sequence INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE sequence.accession = ?');
@@ -1831,13 +1824,16 @@ sub genome {
 	$para{PAGETITLE}="Release Summary";
 
 	# my $query_num_taxa = $dbh->prepare('SELECT COUNT(*) FROM taxon');
-	my $query_num_taxa = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM dots.ExternalAASequence');
+	my $query_num_taxa = $dbh->prepare('SELECT COUNT(taxon_id) FROM apidb.OrthomclTaxon WHERE is_species = 1');
 	$query_num_taxa->execute();
 	my @tmp = $query_num_taxa->fetchrow_array();
 	$para{NUM_TAXA}=$tmp[0];
 
 	# my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
-	my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM dots.ExternalAASequence');
+	my $query_num_sequences = $dbh->prepare('SELECT COUNT(eas.aa_sequence_id) 
+	                                         FROM dots.ExternalAASequence eas,
+	                                              apidb.OrthomclTaxon ot
+	                                         WHERE eas.taxon_id = ot.taxon_id');
 	$query_num_sequences->execute();
 	@tmp = $query_num_sequences->fetchrow_array();
 	$para{NUM_SEQUENCES}=$tmp[0];
@@ -1869,7 +1865,7 @@ sub genome {
 	}
 	
 	# my $query_taxon = $dbh->prepare('SELECT * FROM taxon');
-	my $query_taxon = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM dots.ExternalAASequence');
+	my $query_taxon = $dbh->prepare('SELECT COUNT(taxon_id) FROM apidb.OrthomclTaxon WHERE is_species = 1');
 
 	# my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE taxon_id = ?');
 	my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM dots.ExternalAASequence WHERE taxon_id = ?');
@@ -1942,16 +1938,6 @@ sub MSA {
     	if (my @data = $query_msa->fetchrow_array()) {
 			$para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
 			$para{CONTENT}.=$data[0];
-		
-		#my $old_ac = transformOGAC($ac);
-		#my $file=$config->{MSA_dir}."$old_ac.clw";
-		#if (-e $file) {
-		#	$para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
-		#	open(F,$file);
-		#	while (<F>) {
-		#		$para{CONTENT}.=$_;
-		#	}
-		#	close(F);
 		} else {
 			# $para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
 			$para{ERROR}="The MSA result doesn't exist. Please check it later because we are updating data currently."
@@ -2042,28 +2028,26 @@ sub getSeq {
 		if (my $groupac = $q->param("groupac")) {
 			$para{PAGETITLE}="FASTA Sequences for $groupac";
 			# $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
-			$query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
-			                                        tn.unique_name_variant 
+			$query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
 			                                 FROM apidb.OrthologGroup og,
 			                                      apidb.OrthologGroupAaSequence ogs,
 			                                      dots.ExternalAaSequence eas,
-			                                      sres.TaxonName tn
+			                                      apidb.OrthomclTaxon ot
 			                                 WHERE og.ortholog_group_id = ogs.ortholog_group_id
 			                                   AND ogs.aa_sequence_id = eas.aa_sequence_id
-			                                   AND eas.taxon_id = tn.taxon_id
+			                                   AND eas.taxon_id = ot.taxon_id
 			                                   AND og.name = ?');
 
 			$para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
 			$query_sequence->execute($groupac);
 		} elsif (my $groupid = $q->param("groupid")) {
 			# $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.orthogroup_id = ?');
-			$query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
-			                                        tn.unique_name_variant 
+			$query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
 			                                 FROM apidb.OrthologGroupAaSequence ogs,
 			                                      dots.ExternalAaSequence eas,
-			                                      sres.TaxonName tn
+			                                      apidb.OrthomclTaxon ot
 			                                 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-			                                   AND eas.taxon_id = tn.taxon_id
+			                                   AND eas.taxon_id = ot.taxon_id
 			                                   AND ogs.ortholog_group_id = ?');
 			$query_sequence->execute($groupid);
 		}
@@ -2091,11 +2075,10 @@ sub getSeq {
 		my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
 		my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
 		# my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.sequence_id = ?');
-		my $query_sequence = $dbh->prepare('SELECT DISTINCT eas.source_id, eas.description, 
-			                                        tn.unique_name_variant 
+		my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
 			                                 FROM dots.ExternalAaSequence eas,
-			                                      sres.TaxonName tn
-			                                 WHERE eas.taxon_id = tn.taxon_id
+			                                      apidb.OrthomclTaxon ot
+			                                 WHERE eas.taxon_id = ot.taxon_id
 			                                   AND eas.aa_sequence_id = ?');
 
 		my $file_content;
@@ -2189,13 +2172,14 @@ sub blast {
 				$orthogroup_ac = $data[0];
 			    }
 			    push(@{$sequence_ids_ref},$sequence_id);
-			    $para{CONTENT}.="<a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> <a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id\">$orthogroup_ac</a>";
+			    $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> 
+			                     <a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id\">$orthogroup_ac</a>";
 			    for (my $i=1;$i<=length($2)-length($orthogroup_ac)-1;$i++) {
 				$para{CONTENT}.=' ';
 			    }
 			    $para{CONTENT}.="$3\n";
 			} elsif ($sequence_id ne '') {
-			    $para{CONTENT}.="<a href=\"/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>$2$3\n";
+			    $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>$2$3\n";
 			} else {
 			    $para{CONTENT}.="$1$2$3\n";
 			}
@@ -2213,9 +2197,10 @@ sub blast {
 		    while (my @data = $query_orthogroup->fetchrow_array()) {
 			$orthogroup_ac = $data[0];
 		    }
-		    $para{CONTENT}.="><a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> <a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id'>$orthogroup_ac</a>\n";
+		    $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> 
+		                      <a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id'>$orthogroup_ac</a>\n";
 		} elsif ($sequence_id ne '') {
-		    $para{CONTENT}.="><a href='/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
+		    $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
 		} else {
 		    $para{CONTENT}.=">$1\n";
 		}

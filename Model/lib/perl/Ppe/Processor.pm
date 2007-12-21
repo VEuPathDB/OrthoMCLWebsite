@@ -4,7 +4,7 @@ package OrthoMCLWebsite::Model::Ppe::Processor;
 
 use strict;
 use ApiCommonWebsite::View::CgiApp;
-use OrthoMCLWebsite::Model::Ppe::ColumnManager;
+use OrthoMCLData::Load::MatrixColumnManager;
 use OrthoMCLWebsite::Model::Ppe::Parser;
 
 sub run {

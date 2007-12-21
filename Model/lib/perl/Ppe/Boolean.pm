@@ -26,7 +26,8 @@ sub toString {
     my ($self) = @_;
 
     my $s = $self->{head}->toString();
-    $s = "($s)" if ref($self->{head}) eq 'Boolean';
+
+    $s = "($s)" if ref($self->{head}) =~ /Boolean/;
 
     if ($self->{tail}) {
 	$s = "$s $self->{type} " . $self->{tail}->toString();
@@ -38,7 +39,7 @@ sub toSqlString {
     my ($self,$columnMgr) = @_;
 
     my $s = $self->{head}->toSqlString($columnMgr);
-    $s = "($s)" if ref($self->{head}) eq 'Boolean';
+    $s = "($s)" if ref($self->{head}) =~ /Boolean/;
 
     if ($self->{tail}) {
 	$s = "$s $self->{type} " . $self->{tail}->toSqlString($columnMgr);
@@ -65,7 +66,7 @@ sub getOtherAndTaxa {
 
     # if my head is an Other, set $other (and don't collect taxa
     # because Others don't have any)
-    if (ref($self->{head}) eq 'OrthoMCLWebsite::Model::Ppe::Other') {
+    if (ref($self->{head}) =~ /Other/) {
 	$other = $self->{head};
     } 
     # otherwise, remember taxa found in head
@@ -99,12 +100,12 @@ sub hashUnion {
 
     my $hash3;
     foreach my $key (keys(%$hash1)) {
-	$hash3->{key} = 0 unless $hash3->{key};
-	$hash3->{key} += $hash1->{key};
+#	$hash3->{$key} = 0 unless $hash3->{$key};
+	$hash3->{$key} += $hash1->{$key};
     }
     foreach my $key (keys(%$hash2)) {
-	$hash3->{key} = 0 unless $hash3->{key};
-	$hash3->{key} += $hash2->{key};
+#	$hash3->{$key} = 0 unless $hash3->{$key};
+	$hash3->{$key} += $hash2->{$key};
     }
     return $hash3;
 }

@@ -25,31 +25,34 @@ sub processPpe {
   my $dbh = $self->getQueryHandle();
   my $columnMgr = OrthoMCLWebsite::Model::Ppe::ColumnManager->new($dbh);
   my $boolean = $self->parsePpeExpression($ppeExpression);
+  $boolean->setOtherTaxa();
   my $whereClause = $boolean->toSqlString($columnMgr);
   my $sql = "
-SELECT group_id
-FROM PpeMatrixTable
+SELECT ortholog_group_id
+FROM apidb.GroupTaxonMatrix
 WHERE $whereClause
-ORDER BY group_id
+ORDER BY ortholog_group_id
 ";
   my $stmt = $dbh->prepare($sql);
   $stmt->execute();
   my $groupIds;
-  while (my $id = $stmt->fetchRowArray) {
+  while (my ($id) = $stmt->fetchrow_array) {
       push(@$groupIds, $id);
   }
+  print STDERR "$whereClause\n";
   return $groupIds;
 }
 
 sub parsePpeExpression {
     my($self, $expression) = @_;
+    $expression =~ s/plus/\+/g;
     
     my $parser = OrthoMCLWebsite::Model::Ppe::Parser->new();
-    $expression = "abc + def = 4";
+
     $parser->YYData()->{INPUT} = $expression;
     return $parser->YYParse(yylex => \&OrthoMCLWebsite::Model::Ppe::Parser::Lexer,
 			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error,
-			    yydebug => 0x1f);
+			    yydebug => 0);  # set to 0x01 for lexer debug
 }
 
 sub error {

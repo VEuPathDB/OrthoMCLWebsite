@@ -14,29 +14,34 @@ sub new {
     my $self = {};
 
     bless($self,$class);
-    $self->{taxa} = $taxa;
+    $self->{taxa} = {};
+    map {$self->{taxa}->{$_} = 1} @$taxa; # convert from list to hash
     $self->{comparator} = $comparator;
     $self->{value} = $value;
     $self->{proteinOrTaxonFlag} = $proteinOrTaxonFlag;
-    print STDERR Dumper($self);
 
     return $self;
 }
 
-sub toString {
+sub getOtherAndTaxa {
     my ($self) = @_;
 
-    my @typedTaxa = map { $_ . "_$self->{proteinOrTaxonFlag}" } @{$self->{taxa}};
-    my $taxaString = join(" + ", @typedTaxa);
-    return "($taxaString $self->{comparator} $self->{value})";
+    return $self->{taxa};
 }
 
 sub toSqlString {
     my ($self, $columnMgr) = @_;
 
-    my @columns = map { $columnMgr->getColumnName($_ . "_$self->{proteinOrTaxonFlag}") } @{$self->{taxa}};
+    my $taxaString = $self->getTaxaString($columnMgr);
+    return "$taxaString $self->{comparator} $self->{value}";
+}
+
+sub getTaxaString {
+    my ($self, $columnMgr) = @_;
+
+    my @columns = map { $columnMgr->getColumnName($_, $self->{proteinOrTaxonFlag}) } keys(%{$self->{taxa}});
     my $taxaString = join(" + ", @columns);
-    return "($taxaString $self->{comparator} $self->{value})";
+
 }
 
 1;

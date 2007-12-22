@@ -20,7 +20,8 @@
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebsite/Site-Installation">
+  <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebsite/Site-Installation,
+                                                       OrthoMCLWebsite/Model-Installation">
     <ant target="defaultProjectInstall"/>
   </target>  
 
@@ -39,14 +40,19 @@
 
   <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
 
+  <target name="OrthoMCLWebsite/Model-Installation">
+    <ant target="defaultComponentInstall">
+      <property name="project" value="OrthoMCLWebsite"/>
+      <property name="component" value="Model"/>
+    </ant>
+  </target>
+
   <target name="OrthoMCLWebsite/Site-Installation" depends="ProjectTree">
     <ant target="defaultComponentInstall">
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
     </ant>
   </target>  
-
-
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->

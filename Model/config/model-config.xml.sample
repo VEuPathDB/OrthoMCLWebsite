@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<modelConfig
+        login="your_database_login"
+        password="your_database_password"
+        connectionUrl="your_jdbc_connection_string">
+</modelConfig>
+

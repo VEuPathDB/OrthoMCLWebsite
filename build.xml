@@ -3,39 +3,74 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
+
+  <target name="ApiCommonWebsite-Installation">
+    <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite-Installation">
+      <property name="project" value="ApiCommonWebsite"/>
+      <property name="version" value="2.0"/>
+    </ant>
+  </target>  
+
+  <target name="OrthoMCLData/Load-Installation">
+    <ant antfile="../OrthoMCLData/build.xml" target="OrthoMCLData/Load-Installation">
+      <property name="project" value="OrthoMCLData"/>
+      <property name="version" value="2.0"/>
+    </ant>
+  </target>
+  
+     
+  <target name="ApiCommonWebsite-Checkout" unless="ApiCommonWebsite.present"> 
+    <ant target="defaultProjectCheckout" inheritAll="false">
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/ApiCommonWebsite"/>
+      <property name="project" value="ApiCommonWebsite"/>
+      <property name="version" value="dec-2007"/>
+    </ant>
+  </target>
+    
+  <target name="OrthoMCLData-Checkout" unless="OrthoMCLData.present"> 
+    <ant target="defaultProjectCheckout" inheritAll="false">
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLData"/>
+      <property name="project" value="OrthoMCLData"/>
+      <property name="version" value="2.0"/>
+      <property name="excludeChildren" value="true"/>
+    </ant>
+  </target>
   
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildCheckout">
+    <available file="../ApiCommonWebsite" type="dir"  property="ApiCommonWebsite.present" />
+    <available file="../OrthoMCLData" type="dir"  property="OrthoMCLData.present" />
+    <antcall target="ApiCommonWebsite-Checkout"/>
+    <antcall target="OrthoMCLData-Checkout"/>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Update    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildUpdate">
+    <ant target="defaultProjectUpdate">
+      <property name="project" value="ApiCommonWebsite"/>
+    </ant>
+    <ant target="defaultProjectUpdate">
+      <property name="project" value="OrthoMCLData"/>
+    </ant>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebsite/Site-Installation,
+  <target name="OrthoMCLWebsite-Installation" depends="ApiCommonWebsite-Installation,
+                                                       OrthoMCLData/Load-Installation,
+                                                       OrthoMCLWebsite/Site-Installation,
                                                        OrthoMCLWebsite/Model-Installation">
     <ant target="defaultProjectInstall"/>
   </target>  
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
-
-  <target name="OrthoMCLWebsite-Installation-postprocess">
-    <echo message="Postprocessing the OrthoMCLData installation"/>
-
-    <replace dir="${targetDir}/bin" 
-             propertyFile="${targetDir}/config/replacements.prop" >
-      <include name="**/*" />
-      <replacefilter token="@perl@" property="perl"/>
-    </replace>
-  </target>
 
 
   <!-- ooooooooooooooooooooooo  Install Components  ooooooooooooooooooooooo -->
@@ -45,9 +80,25 @@
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Model"/>
     </ant>
+
+    <replace dir="${targetDir}/bin" 
+             propertyFile="${targetDir}/config/gus.config" >
+      <include name="**/*" />
+      <replacefilter token="@perl@" property="perl"/>
+      <replacefilter token="@targetDir@" value="${targetDir}"/>
+    </replace>
+    
+    <!-- run YAPP to generate the parser -->
+    <exec executable="yapp" failonerror="true">
+        <arg value="-m" />
+        <arg value="OrthoMCLWebsite::Model::Ppe::Parser" />
+        <arg value="-o" />
+        <arg value="${targetDir}/lib/perl/OrthoMCLWebsite/Model/Ppe/Parser.pm" />
+        <arg value="${targetDir}/lib/perl/OrthoMCLWebsite/Model/Ppe/Parser.yp" />
+    </exec>
   </target>
 
-  <target name="OrthoMCLWebsite/Site-Installation" depends="ProjectTree">
+  <target name="OrthoMCLWebsite/Site-Installation">
     <ant target="defaultComponentInstall">
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
@@ -67,6 +118,13 @@
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
     </ant>
+
+    <replace dir="${cgibinTargetDir}" 
+             propertyFile="${targetDir}/config/gus.config" >
+      <include name="**/*" />
+      <replacefilter token="@perl@" property="perl"/>
+      <replacefilter token="@targetDir@" property="${targetDir}"/>
+    </replace>
 
   </target>
 

@@ -23,7 +23,7 @@ sub processPpe {
   my ($self, $ppeExpression) = @_;
 
   my $dbh = $self->getQueryHandle();
-  my $columnMgr = OrthoMCLWebsite::Model::Ppe::ColumnManager->new($dbh);
+  my $columnMgr = OrthoMCLWebsite::Model::Ppe::MatrixColumnManager->new($dbh);
   my $boolean = $self->parsePpeExpression($ppeExpression);
   $boolean->setOtherTaxa();
   my $whereClause = $boolean->toSqlString($columnMgr);

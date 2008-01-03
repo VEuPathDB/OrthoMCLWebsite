@@ -23,3 +23,20 @@ A.nocolor:link {
 A.nocolor_w:link {
    text-decoration : none; color: white;
 }
+.node-highlight {
+    font-weight: bold;
+}
+
+.node-normal {
+    font-weight: none;
+}
+
+.node-region {
+    text-align: left;
+    background-color: #CCCCCC;
+}
+
+.node-indent {
+    margin-left: 20px;
+    display: block;
+}

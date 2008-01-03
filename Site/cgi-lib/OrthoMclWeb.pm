@@ -132,6 +132,23 @@ sub groupQueryForm {
 	} elsif ($type eq 'ppform') {
 		$tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Phyletic Pattern Form");
 		$tmpl->param(PPFORM => 1);
+		
+		my $query_taxon = $dbh->prepare('SELECT orthomcl_taxon_id AS taxon_id, 
+		                                        nvl(parent_id, orthomcl_taxon_id) AS parent_id, 
+		                                        three_letter_abbrev AS abbrev, 
+		                                        name 
+		                                 FROM apidb.OrthomclTaxon');
+		$query_taxon->execute();
+		my %para;
+		while (my @data = $query_taxon->fetchrow_array()) {
+		    push(@{$para{TAXONS}}, { TAXON_ID=>$data[0],
+		                             PARENT_ID=>$data[1],
+		                             ABBREV=>$data[2],
+		                             NAME=>$data[3], 
+		                           }
+		        );
+		}
+		$tmpl->param(\%para);
 	} elsif ($type eq 'property') {
 		$tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Group Properties");
 		$tmpl->param(PROPERTY => 1);

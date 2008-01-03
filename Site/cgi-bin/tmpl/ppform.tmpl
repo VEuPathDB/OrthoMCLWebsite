@@ -1,216 +1,70 @@
 <script type="text/javascript" lang="JavaScript">
 <!-- //
-var state = new Array();
-var urls = new Array("dc.gif", "yes.gif", "no.gif", "yes.gif", "unk.gif");
-var children = new Array();
-var parent = new Array();
-var abbrev = new Array();
 
-for (var i = 0 ; i <= 82 ; i++) {
-  state[i] = 0;
-  children[i] = new Array();
-  parent[i] = null;
+var urls = new Array("dc.gif", "yes.gif", "no.gif", "yes.gif", "unk.gif");var taxons = { };
+var roots = [];
+
+<TMPL_LOOP NAME=TAXONS>
+taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id:"<TMPL_VAR NAME=TAXON_ID>",
+                                       parent_id:"<TMPL_VAR NAME=PARENT_ID>",
+                                       abbrev:"<TMPL_VAR NAME=ABBREV>",
+                                       name:"<TMPL_VAR NAME=NAME>",
+                                       state:0,
+                                       children:[],
+                                     };
+</TMPL_LOOP>
+
+initial();
+
+function initial() {
+    // resolve the children of each node
+    for (var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        if (taxon_id != taxon.parent_id) {
+            var parent = taxons[taxon.parent_id];
+            parent.children.push(taxon);
+        } else { 
+            roots.push(taxon); 
+        };
+    }
 }
 
-abbrev.splice( 0,  1, "ALL");
-abbrev.splice( 1,  3, "ARC", "BAC", "EUK");
-abbrev.splice( 4,  4, "hal", "mja", "sso", "neq");
-abbrev.splice( 8,  2, "OTH", "PRO");
-abbrev.splice(10,  5, "OTH", "VIR", "ALV", "FUN", "MET");
-abbrev.splice(15, 11, "aae", "tma", "det", "dra", "tpa", "cte", "rba", "cpn", "syn", "mtu", "ban");
-abbrev.splice(26,  5, "wsu", "gsu", "atu", "rso", "eco");
-abbrev.splice(31,  2, "ehi", "ddi");
-abbrev.splice(33,  4, "cme", "tps", "ath", "osa");
-abbrev.splice(37,  2, "OTH", "API");
-abbrev.splice(39, 10, "sce", "spo", "yli", "kla", "dha", "cgl", "ecu", "cne", "ago", "ncr");
-abbrev.splice(49,  3, "OTH", "ART", "DEU");
-abbrev.splice(52,  1, "thi");
-abbrev.splice(53,  3, "OTH", "COC", "HAE");
-abbrev.splice(56,  2, "cel", "cbr");
-abbrev.splice(58,  2, "dme", "aga");
-abbrev.splice(60,  3, "OTH", "BON", "TET");
-abbrev.splice(63,  1, "the");
-abbrev.splice(64,  3, "tgo", "cpa", "cho");
-abbrev.splice(67,  4, "pfa", "pyo", "pvi", "pkn");
-abbrev.splice(71,  1, "cin");
-abbrev.splice(72,  3, "fru", "tni", "dre");
-abbrev.splice(75,  2, "OTH", "MAM");
-abbrev.splice(77,  1, "gga");
-abbrev.splice(78,  2, "OTH", "PRI");
-abbrev.splice(80,  2, "mmu", "rno");
-abbrev.splice(82,  1, "hsa");
-
-// define parent-child relationships
-for (var i =  1 ; i <=  3 ; i++) { parent[i] =  0; }
-
-for (var i =  4 ; i <=  7 ; i++) { parent[i] =  1; }
-for (var i =  8 ; i <=  9 ; i++) { parent[i] =  2; }
-for (var i = 10 ; i <= 14 ; i++) { parent[i] =  3; }
-
-for (var i = 15 ; i <= 25 ; i++) { parent[i] =  8; }
-for (var i = 26 ; i <= 30 ; i++) { parent[i] =  9; }
-
-for (var i = 31 ; i <= 32 ; i++) { parent[i] = 10; }
-for (var i = 33 ; i <= 36 ; i++) { parent[i] = 11; }
-for (var i = 37 ; i <= 38 ; i++) { parent[i] = 12; }
-for (var i = 39 ; i <= 48 ; i++) { parent[i] = 13; }
-for (var i = 49 ; i <= 51 ; i++) { parent[i] = 14; }
-
-for (var i = 52 ; i <= 52 ; i++) { parent[i] = 37; }
-for (var i = 53 ; i <= 55 ; i++) { parent[i] = 38; }
-
-for (var i = 56 ; i <= 57 ; i++) { parent[i] = 49; }
-for (var i = 58 ; i <= 59 ; i++) { parent[i] = 50; }
-for (var i = 60 ; i <= 62 ; i++) { parent[i] = 51; }
-
-for (var i = 63 ; i <= 63 ; i++) { parent[i] = 53; }
-for (var i = 64 ; i <= 66 ; i++) { parent[i] = 54; }
-for (var i = 67 ; i <= 70 ; i++) { parent[i] = 55; }
-
-for (var i = 71 ; i <= 71 ; i++) { parent[i] = 60; }
-for (var i = 72 ; i <= 74 ; i++) { parent[i] = 61; }
-for (var i = 75 ; i <= 76 ; i++) { parent[i] = 62; }
-
-for (var i = 77 ; i <= 77 ; i++) { parent[i] = 75; }
-for (var i = 78 ; i <= 79 ; i++) { parent[i] = 76; }
-
-for (var i = 80 ; i <= 81 ; i++) { parent[i] = 78; }
-for (var i = 82 ; i <= 82 ; i++) { parent[i] = 79; }
-
-parent[37] = null; // remove unused Other for thi
-parent[52] = null; // remove thi
-parent[69] = null; // remove pvi
-
-// fill the children array
-for (var i = 0 ; i < parent.length ; i++) {
-  if (parent[i] != null) {
-    var parentidx = parent[i];
-    children[parentidx][children[parentidx].length] = i;
-  } 
-}
-
-function setstate (imgidx, urlidx, dofixparent) {
-  state[imgidx] = urlidx;
-  if (imgidx != 37 && imgidx != 52 && imgidx != 69) {
-    document["images"]["img" + imgidx].src = "images/" + urls[urlidx];
-  }
-  for (var i = 0 ; i < children[imgidx].length ; i++) {
-    setstate(children[imgidx][i], urlidx == 3 ? 0 : urlidx, 0);
-  }
-
-  if (dofixparent) {
-    fixparent(imgidx, urlidx);
-  }
-}
-
-function fixparent (imgidx, urlidx) {
-
-  var parentidx = parent[imgidx];
-  if (parentidx != null) {
-    var allmatch = 1;
-    if (urlidx == null) {
-      allmatch = 0;
-    } else {
-      for (var i = 0 ; i < children[parentidx].length ; i++) {
-        if (state[children[parentidx][i]] != urlidx) {
-          allmatch = 0;
-          break;
+function displayNode(node) {
+    var hasChild = (node.children.length != 0);
+    document.writeln("<div>");
+    
+    document.write("<image id='" + node.id + "_fold' width='20' height='20'");
+    document.write(" src='images/" + (hasChild ? "minus.png'" : "spacer.gif'"));
+    document.writeln(" onclick=\"toggleFold('" + node.id + "')\" />");
+    
+    document.writeln("<image id='" + node.id + "_check' src='images/" + urls[node.state] + "' />");
+    
+    document.writeln("<span class='node-" + (hasChild ? "highlight" : "normal") + "'>");
+    document.writeln(node.name + " (" + node.abbrev + ")</span>");
+    
+    document.writeln("</div>");
+    if (hasChild) {
+        document.writeln("<div id='" + node.id + "_child' class='node-indent'>");
+        for(var i = 0; i < node.children.length; i++) {
+            displayNode(node.children[i]);
         }
-      }    
+        document.writeln("</div>");
     }
-    if (allmatch) {
-      state[parentidx] = urlidx;
-      document["images"]["img" + parentidx].src = "images/" + urls[urlidx];
-      fixparent(parentidx, urlidx);
-    } else {
-      state[parentidx] = null;
-      document["images"]["img" + parentidx].src = "images/" + urls[4];
-      fixparent(parentidx, null);
-    }
-  }
 }
 
-function toggle (imgidx) {
-  var urlidx = 0;
-  if (state[imgidx] != null) {
-    if (children[imgidx].length) {
-      urlidx = (state[imgidx] + 1) % 4;
-    } else {
-      urlidx = (state[imgidx] + 1) % 3;
-    }
-  }
-  setstate(imgidx, urlidx, 1);
-  calctext();
+function toggleFold(nodeId) {
+    var imgFold = document.getElementById(nodeId + "_fold");
+    var divChild = document.getElementById(nodeId + "_child");
+    var isFolded = (divChild.style.display == "none");
+    imgFold.src = "images/" + (isFolded ? "minus.png" : "plus.png");
+    divChild.style.display = (isFolded ? "block" : "none");
 }
 
-function calctext () {
-  var tree = new Array();
-  var clause = new Array();
-  tree[tree.length] = 0;
-  while (tree.length) {
-      var parent = tree.shift();
-      var leafabbrev = abbrev[parent];
-      var leaflist = new Array();
-      if (leafabbrev == "OTH") {
-	  // need to replace with all children's abbreviations
-	  leaflist = listchildren(parent);
-	  if (leaflist.length > 1) {
-	      leafabbrev = leaflist.join("+");
-	  } else {
-	      leafabbrev = leaflist[0];
-	  }
-      }
-      if (state[parent] == null) {
-	  // need to walk children
-          for (var j = 0 ; j < children[parent].length ; j++) {
-	    tree[tree.length] = children[parent][j];
-          }
-      } else if (state[parent] == 1) {
-	  if(children[parent].length) {
-	      var count = countchildren(parent);
-	      if (count > 1) {
-		  clause[clause.length] = "(" + leafabbrev + "=" + count + "T" + " AND " + leafabbrev + ">=" + count + ")";
-	      } else {
-		  clause[clause.length] = leafabbrev + ">=" + count;
-	      }
-	  } else {
-	      clause[clause.length] = leafabbrev + ">=1";
-	  }
-      } else if (state[parent] == 2) {
-	  clause[clause.length] = leafabbrev + "=0";
-      } else if (state[parent] == 3) {
-          clause[clause.length] = leafabbrev + ">=1T";
-      }
-  }
-  document.forms[0]['q'].value = clause.join(" AND ");
+function toggleStates(nodeId) {
+
 }
 
-function countchildren (parent) {
-    var count = 0;
-    for (var i = 0 ; i < children[parent].length ; i++) {
-	if(children[children[parent][i]].length) {
-	    count += countchildren(children[parent][i]);
-	} else {
-	    count += 1;
-	}
-    }
-    return count;
-}
-
-function listchildren (parent) {
-    var list = new Array();
-    for (var i = 0 ; i < children[parent].length ; i++) {
-	if(children[children[parent][i]].length) {
-	    newlist = listchildren(children[parent][i]);
-	    for (var j = 0 ; j < newlist.length ; j++) {
-		list[list.length] = newlist[j];
-	    }
-	} else {
-	    list[list.length] = abbrev[children[parent][i]];
-	}
-    }
-    return list;
-}
+function changeState
 
 // -->
 </script>
@@ -219,143 +73,13 @@ function listchildren (parent) {
 <input type="hidden" name="rm" value="groupList">
 <input type="hidden" name="type" value="ppexpression">
 <p><b>Key:</b> <img border=0 src="images/dc.gif"> no constraint, <img border=0 src="images/yes.gif"> must be present in group, <img border=0 src="images/no.gif"> must be excluded from group, <img border=0 src="images/unk.gif"> mixture of constraints</p>
-<table border="0" bgcolor="lightgray" align="center">
-  <tr>
-    <th colspan="16"><a href="javascript:toggle(0)"><img border=0 id="img0" src="images/dc.gif"></a>&nbsp;All Organisms</th>
-  </tr>
-  <tr>
-    <th bgcolor="pink"><a href="javascript:toggle(1)"><img border=0 id="img1" src="images/dc.gif"></a>&nbsp;Archaea</th>
-    <th colspan="2" bgcolor="lightblue"><a href="javascript:toggle(2)"><img border=0 id="img2" src="images/dc.gif"></a>&nbsp;Bacteria</th>
-    <th colspan="13" bgcolor="palegreen"><a href="javascript:toggle(3)"><img border=0 id="img3" src="images/dc.gif"></a>&nbsp;Eukaryota</th>
-  </tr>
-  <tr>
-    <td rowspan="99" bgcolor="pink" valign="top">
-        <a href="javascript:toggle(4)"><img border=0 id="img4" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Halobacterium sp. NRC-1</i>');">hal</a><br>
-        <a href="javascript:toggle(5)"><img border=0 id="img5" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Methanococcus jannaschii DSSM 2661</i>');">mja<br>
-        <a href="javascript:toggle(6)"><img border=0 id="img6" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Sulfolobus solfataricus P2</i>');">sso<br>
-        <a href="javascript:toggle(7)"><img border=0 id="img7" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Nanoarchaeum equitans Kin4-M</i>');">neq<br>
-    </td>
-    <th bgcolor="lightblue"><a href="javascript:toggle(8)"><img border=0 id="img8" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="lightblue"><a href="javascript:toggle(9)"><img border=0 id="img9" src="images/dc.gif"></a>&nbsp;Proteo-<br>bacteria</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(10)"><img border=0 id="img10" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(11)"><img border=0 id="img11" src="images/dc.gif"></a>&nbsp;Plants/<br>Algae</th>
-    <th bgcolor="palegreen" colspan="3"><a href="javascript:toggle(12)"><img border=0 id="img12" src="images/dc.gif"></a>&nbsp;Alveolates</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(13)"><img border=0 id="img13" src="images/dc.gif"></a>&nbsp;Fungi</th>
-    <th colspan="7" bgcolor="palegreen"><a href="javascript:toggle(14)"><img border=0 id="img14" src="images/dc.gif"></a>&nbsp;Metazoa</th>
-  </tr>
-  <tr>
-    <td rowspan="99" bgcolor="lightblue" valign="top">
-        <a href="javascript:toggle(15)"><img border=0 id="img15" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Aquifex aeolicus VF5</i>');">aae<br>
-	<a href="javascript:toggle(16)"><img border=0 id="img16" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Thermotoga maritima MSB8</i>');">tma<br>
-        <a href="javascript:toggle(17)"><img border=0 id="img17" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Dehalococcoides ethenogenes 195</i>');">det<br>
-	<a href="javascript:toggle(18)"><img border=0 id="img18" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Deinococcus radiodurans R1</i>');">dra<br>
-	<a href="javascript:toggle(19)"><img border=0 id="img19" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Treponema pallidum subsp. pallidum str. Nichols</i>');">tpa<br>
-	<a href="javascript:toggle(20)"><img border=0 id="img20" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Chlorobium tepidum TLS</i>');">cte<br>
-	<a href="javascript:toggle(21)"><img border=0 id="img21" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Rhodopirellula baltica SH_1</i>');">rba<br>
-	<a href="javascript:toggle(22)"><img border=0 id="img22" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Chlamydophila pneumoniae CWL029</i>');">cpn<br>
-	<a href="javascript:toggle(23)"><img border=0 id="img23" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Synechococcus sp. WH8102</i>');">syn<br>
-	<a href="javascript:toggle(24)"><img border=0 id="img24" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Mycobacterium tuberculosis H37Rv</i>');">mtu<br>
-	<a href="javascript:toggle(25)"><img border=0 id="img25" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Bacillus anthracis Ames</i>');">ban<br>
-    </td>
-    <td rowspan="99" bgcolor="lightblue" valign="top">
-        <a href="javascript:toggle(26)"><img border=0 id="img26" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Wolinella succinogenes DSM 1740</i>');">wsu<br>
-	<a href="javascript:toggle(27)"><img border=0 id="img27" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Geobacter sulfurreducens PCA</i>');">gsu<br>
-	<a href="javascript:toggle(28)"><img border=0 id="img28" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Agrobacterium tumefaciens C58 Uwash</i>');">atu<br>
-	<a href="javascript:toggle(29)"><img border=0 id="img29" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Ralstonia solanacearum GMI1000</i>');">rso<br>
-	<a href="javascript:toggle(30)"><img border=0 id="img30" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Escherichia coli K12</i>');">eco<br>
-    </td>
-    <td rowspan="99" bgcolor="palegreen" valign="top">
-        <a href="javascript:toggle(31)"><img border=0 id="img31" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Entamoeba histolytica</i>');">ehi<br>
-        <a href="javascript:toggle(32)"><img border=0 id="img32" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Dictyostelium discoideum</i>');">ddi<br>
-    </td>
-    <td rowspan="99" bgcolor="palegreen" valign="top">
-        <a href="javascript:toggle(33)"><img border=0 id="img33" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Cyanodioschyzon merolae 10D</i>');">cme<br>
-        <a href="javascript:toggle(34)"><img border=0 id="img34" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Thalassiosira pseudonana</i>');">tps<br>
-        <a href="javascript:toggle(35)"><img border=0 id="img35" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Arabidopsis thaliana</i>');">ath<br>
-        <a href="javascript:toggle(36)"><img border=0 id="img36" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Oryza sativa</i>');">osa<br>
-    </td>
-    <!-- <th bgcolor="palegreen"><a href="javascript:toggle(37)"><img border=0 id="img37" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i></i>');">Other</th>  -->
-    <th bgcolor="coral" colspan="3"><a href="javascript:toggle(38)"><img border=0 id="img38" src="images/dc.gif"></a>&nbsp;Apicomplexa</th>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-        <a href="javascript:toggle(39)"><img border=0 id="img39" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Saccharomyces cerevisiae S288C</i>');">sce<br>
-        <a href="javascript:toggle(40)"><img border=0 id="img40" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Schizosaccharomyces pombe</i>');">spo<br>
-        <a href="javascript:toggle(41)"><img border=0 id="img41" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Yarrowia lipolytica CLIB99</i>');">yli<br>
-        <a href="javascript:toggle(42)"><img border=0 id="img42" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Kluyveromyces lactis CLIB210</i>');">kla<br>
-        <a href="javascript:toggle(43)"><img border=0 id="img43" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Debaryomyces hansenii CBS767</i>');">dha<br>
-        <a href="javascript:toggle(44)"><img border=0 id="img44" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Candida glabrate CBS138</i>');">cgl<br>
-        <a href="javascript:toggle(45)"><img border=0 id="img45" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Encephalitozoon cuniculi</i>');">ecu<br>
-        <a href="javascript:toggle(46)"><img border=0 id="img46" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Cryptococcus neoformans</i>');">cne<br>
-        <a href="javascript:toggle(47)"><img border=0 id="img47" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Ashbya gossypii</i>');">ago<br>
-        <a href="javascript:toggle(48)"><img border=0 id="img48" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Neurospora crassa OR74A</i>');">ncr<br>
-    </td>
-    <th bgcolor="palegreen"><a href="javascript:toggle(49)"><img border=0 id="img49" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(50)"><img border=0 id="img50" src="images/dc.gif"></a>&nbsp;Arthro-<br>poda</th>
-    <th bgcolor="palegreen" colspan="5"><a href="javascript:toggle(51)"><img border=0 id="img51" src="images/dc.gif"></a>&nbsp;Deuterostomia</th>
-  </tr>
-  <tr>
-    <!--
-    <td valign="top" bgcolor="palegreen" rowspan="99">
-        <a href="javascript:toggle(52)"><img border=0 id="img52" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i></i>');">thi<br>
-    </td>
-    -->
-    <th bgcolor="coral"><a href="javascript:toggle(53)"><img border=0 id="img53" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="coral"><a href="javascript:toggle(54)"><img border=0 id="img54" src="images/dc.gif"></a>&nbsp;Coccidia</th>
-    <th bgcolor="coral"><a href="javascript:toggle(55)"><img border=0 id="img55" src="images/dc.gif"></a>&nbsp;Haemo-<br>sporida</th>
-    <td rowspan="99" valign="top" bgcolor="palegreen">
-        <a href="javascript:toggle(56)"><img border=0 id="img56" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Caenorhabditis elegans</i>');">cel<br>
-        <a href="javascript:toggle(57)"><img border=0 id="img57" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Caenorhabditis briggsae</i>');">cbr<br>
-    </td>
-    <td rowspan="99" valign="top" bgcolor="palegreen">
-        <a href="javascript:toggle(58)"><img border=0 id="img58" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Drosophila melanogaster</i>');">dme<br>
-        <a href="javascript:toggle(59)"><img border=0 id="img59" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Anopheles gambiae PEST</i>');">aga<br>
-    </td>
-    <th bgcolor="palegreen"><a href="javascript:toggle(60)"><img border=0 id="img60" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(61)"><img border=0 id="img61" src="images/dc.gif"></a>&nbsp;Bony<br>fish</th>
-    <th bgcolor="palegreen" colspan="3"><a href="javascript:toggle(62)"><img border=0 id="img62" src="images/dc.gif"></a>&nbsp;Tetrapoda</th>
-  </tr>
-  <tr>
-    <td bgcolor="coral" rowspan="99" valign="top">
-        <a href="javascript:toggle(63)"><img border=0 id="img63" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Theileria parva</i>');">the<br>
-    </td>
-    <td bgcolor="coral" rowspan="99" valign="top">
-        <a href="javascript:toggle(64)"><img border=0 id="img64" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Toxoplasma gondii</i>');">tgo<br>
-        <a href="javascript:toggle(65)"><img border=0 id="img65" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Cryptosporidium parvum Iowa (Type2)</i>');">cpa<br>
-        <a href="javascript:toggle(66)"><img border=0 id="img66" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Cryptosporidium hominis TU502 (Type 1)</i>');">cho<br>
-    </td>
-    <td bgcolor="coral" rowspan="99" valign="top">
-        <a href="javascript:toggle(67)"><img border=0 id="img67" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Plasmodium falciparum 3D7</i>');">pfa<br>
-        <a href="javascript:toggle(68)"><img border=0 id="img68" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Plasmodium yoelii 17XNL</i>');">pyo<br>
-        <!-- <a href="javascript:toggle(69)"><img border=0 id="img69" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Halythicion bacitrix</i>');">pvi<br> -->
-        <a href="javascript:toggle(70)"><img border=0 id="img70" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Plasmodium knowlesi</i>');">pkn<br>
-    </td>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-        <a href="javascript:toggle(71)"><img border=0 id="img71" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Ciona intestinalis</i>');">cin<br>
-    </td>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-        <a href="javascript:toggle(72)"><img border=0 id="img72" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Fugu rubripes</i>');">fru<br>
-        <a href="javascript:toggle(73)"><img border=0 id="img73" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Tetraodon nigroviridis</i>');">tni<br>
-        <a href="javascript:toggle(74)"><img border=0 id="img74" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Danio rerio</i>');">dre<br>
-    </td>
-    <th bgcolor="palegreen"><a href="javascript:toggle(75)"><img border=0 id="img75" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="palegreen" colspan="2"><a href="javascript:toggle(76)"><img border=0 id="img76" src="images/dc.gif"></a>&nbsp;Mammals</th>
-  </tr>
-  <tr>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-      <a href="javascript:toggle(77)"><img border=0 id="img77" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Gallus gallus</i>');">gga<br>
-    </td>
-    <th bgcolor="palegreen"><a href="javascript:toggle(78)"><img border=0 id="img78" src="images/dc.gif"></a>&nbsp;Other</th>
-    <th bgcolor="palegreen"><a href="javascript:toggle(79)"><img border=0 id="img79" src="images/dc.gif"></a>&nbsp;Primates</th>
-  </tr>
-  <tr>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-        <a href="javascript:toggle(80)"><img border=0 id="img80" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Mus musculus</i>');">mmu<br>
-	<a href="javascript:toggle(81)"><img border=0 id="img81" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Rattus norvegicus</i>');">rno<br>
-    </td>
-    <td bgcolor="palegreen" rowspan="99" valign="top">
-        <a href="javascript:toggle(82)"><img border=0 id="img82" src="images/dc.gif"></a>&nbsp;<a class="nocolor" href="javascript:void(0);" onMouseOut="window.status='';" onMouseOver="window.status='foo';this.T_WIDTH=100;return escape('<i>Homo sapiens</i>');">hsa<br>
-    </td>
-  </tr>
-</table>
+<div class="node-region">
+    <script language="javascript">
+        for(var i = 0; i < roots.length; i++) {
+            displayNode(roots[i]);
+        }
+    </script>
+</div>
 <input type="text" name="q" value="" size="100">
 <input type="submit" name="runPPE" value="Execute Phyletic Query">
 </form>

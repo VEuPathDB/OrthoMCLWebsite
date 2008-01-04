@@ -6,6 +6,9 @@ BEGIN {
   $ENV{PATH} = "";
 }
 
+use lib "@targetDir@/lib/perl";
+$ENV{GUS_HOME} = '@targetDir@';
+
 use base 'CGI::Application';
 use DBI;     # Needed for OrthoMCL database connection
 use CGI;
@@ -13,7 +16,7 @@ use CGI::Application::Plugin::DBH qw(dbh_config dbh dbh_default_name);
 use CGI::Application::Plugin::Session;
 use File::Spec ();
 use YAML qw(LoadFile);
-use CommandQueryPhyPat;
+use OrthoMCLWebsite::Model::Ppe::Processor;
 use FunKeyword;
 use GD;
 
@@ -531,7 +534,8 @@ sub groupList {
 		my $time=$tmp[0];
 		if ($querytype eq 'ppexpression') {
 			if ($querycode = $q->param("q")) {
-				($orthogroup_ids_ref,$debug_info)=CommandQueryPhyPat::query_phy_pat($querycode,$dbh);
+			    print STDERR "exp: $querycode.\n";
+				$orthogroup_ids_ref=OrthoMCLWebsite::Model::Ppe::Processor->processPpe($dbh, $querycode);
 				push(@{$group_query_history},{
 												CODE   => $querycode,
 												TYPE   => 'Phyletic Pattern Expression',
@@ -2203,10 +2207,10 @@ sub blast {
 sub sourceIdToColors {
     my $sourceId = $_[0];
 
-    if (index($sourceId,'IPR0') >= 0) {
+    if (&index($sourceId,'IPR0') >= 0) {
 	$sourceId = '2'.substr($sourceId,4);
     }
-    elsif (index($sourceId,'PF') >= 0) {
+    elsif (&index($sourceId,'PF') >= 0) {
 	$sourceId = '1'.substr($sourceId,2);
     }
     

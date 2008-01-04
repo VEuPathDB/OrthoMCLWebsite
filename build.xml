@@ -6,7 +6,7 @@
 
 
   <target name="ApiCommonWebsite/View-Installation">
-    <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite-Installation">
+    <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite/View-Installation">
       <property name="project" value="ApiCommonWebsite"/>
       <property name="version" value="2.0"/>
     </ant>
@@ -89,6 +89,7 @@
     </replace>
     
     <!-- run YAPP to generate the parser -->
+    <echo>Run yapp tool to generate Parser module from the grammar. The yapp must have been installed in the current path.</echo>
     <exec executable="yapp" failonerror="true">
         <arg value="-m" />
         <arg value="OrthoMCLWebsite::Model::Ppe::Parser" />
@@ -96,6 +97,7 @@
         <arg value="${targetDir}/lib/perl/OrthoMCLWebsite/Model/Ppe/Parser.pm" />
         <arg value="${targetDir}/lib/perl/OrthoMCLWebsite/Model/Ppe/Parser.yp" />
     </exec>
+
   </target>
 
   <target name="OrthoMCLWebsite/Site-Installation">
@@ -120,6 +122,13 @@
     </ant>
 
     <replace dir="${cgibinTargetDir}" 
+             propertyFile="${targetDir}/config/gus.config" >
+      <include name="**/*" />
+      <replacefilter token="@perl@" property="perl"/>
+      <replacefilter token="@targetDir@" value="${targetDir}"/>
+    </replace>
+    
+    <replace dir="${cgilibTargetDir}" 
              propertyFile="${targetDir}/config/gus.config" >
       <include name="**/*" />
       <replacefilter token="@perl@" property="perl"/>

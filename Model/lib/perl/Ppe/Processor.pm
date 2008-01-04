@@ -12,19 +12,21 @@ sub run {
 
   print $cgi->header('text/plain');
 
+  my $dbh = $self->getQueryHandle();
   my $expression = $cgi->param('expression');
   &error("missing 'expression' param") unless $expression;
-  my $groupIds = $self->processPpe($expression);
+  my $groupIds = &processPpe($dbh, $expression);
 
   exit();
 }
 
 sub processPpe {
-  my ($self, $ppeExpression) = @_;
+  my ($self, $dbh, $ppeExpression) = @_;
 
-  my $dbh = $self->getQueryHandle();
+  print STDERR "$ppeExpression\n";
+
   my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
-  my $boolean = $self->parsePpeExpression($ppeExpression);
+  my $boolean = &parsePpeExpression($ppeExpression);
   $boolean->setOtherTaxa();
   my $whereClause = $boolean->toSqlString($columnMgr);
   my $sql = "
@@ -44,7 +46,7 @@ ORDER BY ortholog_group_id
 }
 
 sub parsePpeExpression {
-    my($self, $expression) = @_;
+    my($expression) = @_;
     $expression =~ s/plus/\+/g;
     
     my $parser = OrthoMCLWebsite::Model::Ppe::Parser->new();

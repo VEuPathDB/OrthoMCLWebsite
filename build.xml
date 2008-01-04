@@ -5,7 +5,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
 
-  <target name="ApiCommonWebsite-Installation">
+  <target name="ApiCommonWebsite/View-Installation">
     <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite-Installation">
       <property name="project" value="ApiCommonWebsite"/>
       <property name="version" value="2.0"/>
@@ -63,7 +63,7 @@
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-Installation" depends="ApiCommonWebsite-Installation,
+  <target name="OrthoMCLWebsite-Installation" depends="ApiCommonWebsite/View-Installation,
                                                        OrthoMCLData/Load-Installation,
                                                        OrthoMCLWebsite/Site-Installation,
                                                        OrthoMCLWebsite/Model-Installation">

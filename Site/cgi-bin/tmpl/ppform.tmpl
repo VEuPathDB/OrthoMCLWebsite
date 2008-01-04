@@ -64,10 +64,12 @@ function toggleStates(nodeId) {
 
 }
 
+function changeState
+
 // -->
 </script>
 <div align="center">
-<form action="cgi-bin/ppe">
+<form action="cgi-bin/OrthoMclWeb.cgi">
 <input type="hidden" name="rm" value="groupList">
 <input type="hidden" name="type" value="ppexpression">
 <p><b>Key:</b> <img border=0 src="images/dc.gif"> no constraint, <img border=0 src="images/yes.gif"> must be present in group, <img border=0 src="images/no.gif"> must be excluded from group, <img border=0 src="images/unk.gif"> mixture of constraints</p>
@@ -78,8 +80,7 @@ function toggleStates(nodeId) {
         }
     </script>
 </div>
-<input type="text" name="expression" value="" size="100">
-<input type="hidden" name="project_id" value="OrthoMCL">
+<input type="text" name="q" value="" size="100">
 <input type="submit" name="runPPE" value="Execute Phyletic Query">
 </form>
 </div>

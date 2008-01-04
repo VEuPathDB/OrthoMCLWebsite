@@ -123,7 +123,7 @@
              propertyFile="${targetDir}/config/gus.config" >
       <include name="**/*" />
       <replacefilter token="@perl@" property="perl"/>
-      <replacefilter token="@targetDir@" property="${targetDir}"/>
+      <replacefilter token="@targetDir@" value="${targetDir}"/>
     </replace>
 
   </target>

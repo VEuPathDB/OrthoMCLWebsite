@@ -1,7 +1,10 @@
-<script type="text/javascript" lang="JavaScript">
+<script type="text/javascript" src="js/ppform.js"></script>
+
+<script type="text/javascript">
 <!-- //
 
-var urls = new Array("dc.gif", "yes.gif", "no.gif", "yes.gif", "unk.gif");var taxons = { };
+var urls = new Array("dc.gif", "yes.gif", "no.gif", "maybe.gif", "unk.gif");
+var taxons = { };
 var roots = [];
 
 <TMPL_LOOP NAME=TAXONS>
@@ -25,43 +28,8 @@ function initial() {
             parent.children.push(taxon);
         } else { 
             roots.push(taxon); 
-        };
-    }
-}
-
-function displayNode(node) {
-    var hasChild = (node.children.length != 0);
-    document.writeln("<div>");
-    
-    document.write("<image id='" + node.id + "_fold' width='20' height='20'");
-    document.write(" src='images/" + (hasChild ? "minus.png'" : "spacer.gif'"));
-    document.writeln(" onclick=\"toggleFold('" + node.id + "')\" />");
-    
-    document.writeln("<image id='" + node.id + "_check' src='images/" + urls[node.state] + "' />");
-    
-    document.writeln("<span class='node-" + (hasChild ? "highlight" : "normal") + "'>");
-    document.writeln(node.name + " (" + node.abbrev + ")</span>");
-    
-    document.writeln("</div>");
-    if (hasChild) {
-        document.writeln("<div id='" + node.id + "_child' class='node-indent'>");
-        for(var i = 0; i < node.children.length; i++) {
-            displayNode(node.children[i]);
         }
-        document.writeln("</div>");
     }
-}
-
-function toggleFold(nodeId) {
-    var imgFold = document.getElementById(nodeId + "_fold");
-    var divChild = document.getElementById(nodeId + "_child");
-    var isFolded = (divChild.style.display == "none");
-    imgFold.src = "images/" + (isFolded ? "minus.png" : "plus.png");
-    divChild.style.display = (isFolded ? "block" : "none");
-}
-
-function toggleStates(nodeId) {
-
 }
 
 // -->
@@ -72,13 +40,13 @@ function toggleStates(nodeId) {
 <input type="hidden" name="type" value="ppexpression">
 <p><b>Key:</b> <img border=0 src="images/dc.gif"> no constraint, <img border=0 src="images/yes.gif"> must be present in group, <img border=0 src="images/no.gif"> must be excluded from group, <img border=0 src="images/unk.gif"> mixture of constraints</p>
 <div class="node-region">
-    <script language="javascript">
+    <script type="text/javascript">
         for(var i = 0; i < roots.length; i++) {
             displayNode(roots[i]);
         }
     </script>
 </div>
-<input type="text" name="q" value="" size="100">
+<input type="text" id="query" name="q" value="" size="100">
 <input type="submit" name="runPPE" value="Execute Phyletic Query">
 </form>
 </div>

@@ -1,0 +1,7 @@
+webappTargetDir=<dir_to_orthomcl_website>
+confTargetDir=<dir_to_gus_home_config>
+htdocsTargetDir=<dir_to_orthomcl_website>
+cgibinTargetDir=<dir_to_orthomcl_website_cgi-bin>
+cgilibTargetDir=<dir_to_orthomcl_website_cgi-lib>
+libTargetDir=<dir_to_gus_home_lib>
+

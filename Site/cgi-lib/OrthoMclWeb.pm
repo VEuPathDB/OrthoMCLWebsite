@@ -1381,6 +1381,31 @@ sub sequenceList {
 		}
 
 		if (not defined $sequence_ids_ref) {$sequence_ids_ref=[];}
+		elsif (scalar(@$sequence_ids_ref)==1) {
+			if (my $groupredirect=$q->param("groupredirect")) {
+				if ($groupredirect==1) {
+					# my $group_qs="SELECT orthogroup.accession FROM sequence JOIN orthogroup USING (orthogroup_id) WHERE sequence_id=".$sequence_ids_ref->[0];
+					my $group_qs="SELECT og.name 
+					              FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence 
+					              WHERE og.ortholog_group_id = ogs.ortholog_group_id
+					                AND ogs.aa_sequence_id=".$sequence_ids_ref->[0];
+					my $group_q=$dbh->prepare($group_qs);
+					$group_q->execute();
+					my @group_ac;
+					while (my @data=$group_q->fetchrow_array()) {
+						push(@group_ac,$data[0]);
+					}
+					if (scalar(@group_ac)==1) {
+#						$para{JS_CODE}="$group_ac[0]";
+						$para{JS_CODE}="<script type=\"text/javascript\" language=\"JavaScript\">
+						                    setTimeout('Redirect()',0);
+						                    function Redirect() {
+						                        location.href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=".$group_ac[0]."';
+						                    }</script>\n";
+					}
+				}	
+			}
+		}
 
 		push(@{$sequence_query_history},{
 										CODE   => $querycode,

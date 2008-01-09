@@ -136,11 +136,17 @@ sub groupQueryForm {
 		$tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Phyletic Pattern Form");
 		$tmpl->param(PPFORM => 1);
 		
+		#my $query_taxon = $dbh->prepare('SELECT orthomcl_taxon_id AS taxon_id, 
+		#                                        nvl(parent_id, orthomcl_taxon_id) AS parent_id, 
+		#                                        three_letter_abbrev AS abbrev, 
+		#                                        name 
+		#                                 FROM apidb.OrthomclTaxon');
 		my $query_taxon = $dbh->prepare('SELECT orthomcl_taxon_id AS taxon_id, 
-		                                        nvl(parent_id, orthomcl_taxon_id) AS parent_id, 
-		                                        three_letter_abbrev AS abbrev, 
-		                                        name 
-		                                 FROM apidb.OrthomclTaxon');
+                                                        nvl(parent_id, orthomcl_taxon_id) AS parent_id, 
+                                                        three_letter_abbrev AS abbrev,
+                                                        name
+                                                 FROM apidb.OrthomclTaxon
+                                                 ORDER BY parent_id ASC, is_species DESC');
 		$query_taxon->execute();
 		my %para;
 		while (my @data = $query_taxon->fetchrow_array()) {

@@ -96,8 +96,21 @@ function calcText () {
     var query;
     var rootStrs = [];
 
+    inLeaves = [];
+    outLeaves = [];
+
     for (var i = 0, j = roots.length; i < j; ++i) {
-	 rootStrs.push(nodeText(roots[i].id));
+         var rootText;
+         if (rootText = nodeText(roots[i].id)) {
+	     rootStrs.push(rootText);
+         }
+    }
+
+    if (inLeaves.length) {
+        rootStrs.push(inLeaves.join("+") + "=" + inLeaves.length + "T");
+    }
+    if (outLeaves.length) {
+        rootStrs.push(outLeaves.join("+") + "=0T");
     }
 
     query = rootStrs.join(" AND ");
@@ -108,6 +121,7 @@ function calcText () {
 function nodeText(nodeId) {
     var nodeStr;
 
+    if (taxons[nodeId].children.length) {
     if (taxons[nodeId].state == 1) {
         nodeStr = taxons[nodeId].abbrev + "=" + countLeaves(nodeId) + "T";
     }
@@ -127,14 +141,22 @@ function nodeText(nodeId) {
         }
         nodeStr = childStrs.join(" AND ");
     }
+    }
+    else {
+        if (taxons[nodeId].state == 1) {
+            inLeaves.push(taxons[nodeId].abbrev);
+        }
+        else if (taxons[nodeId].state == 2) {
+            outLeaves.push(taxons[nodeId].abbrev);
+        }
+    }
 
     return nodeStr;
 }
 
 function countLeaves(nodeId) {
     var count = 0;
-    var node = taxons[nodeId];
-
+   
     if (!taxons[nodeId].children.length) {
         return 1;
     }

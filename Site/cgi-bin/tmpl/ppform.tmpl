@@ -6,6 +6,8 @@
 var urls = new Array("dc.gif", "yes.gif", "no.gif", "maybe.gif", "unk.gif");
 var taxons = { };
 var roots = [];
+var inLeaves;
+var outLeaves;
 
 <TMPL_LOOP NAME=TAXONS>
 taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id:"<TMPL_VAR NAME=TAXON_ID>",

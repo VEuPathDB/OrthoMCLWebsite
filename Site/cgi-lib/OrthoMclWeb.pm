@@ -87,10 +87,10 @@ sub index {
 
   # my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
   my $query_num_sequences = $dbh->prepare('SELECT count(*) 
-                                           FROM DoTS.ExternalAaSequence 
-                                           WHERE taxon_id IN (SELECT taxon_id 
-                                                              FROM apidb.OrthomclTaxon 
-                                                              WHERE is_species = 1)');
+                                           FROM dots.ExternalAaSequence eas,
+                                                apidb.OrthomclTaxon ot
+                                           WHERE ot.taxon_id = eas.taxon_id
+                                             AND ot.is_species = 1');
   $query_num_sequences->execute();
   @tmp = $query_num_sequences->fetchrow_array();
   $para{NUM_SEQUENCES}=$tmp[0];
@@ -146,7 +146,7 @@ sub groupQueryForm {
                                                         three_letter_abbrev AS abbrev,
                                                         name
                                                  FROM apidb.OrthomclTaxon
-                                                 ORDER BY parent_id ASC, is_species DESC');
+                                                 ORDER BY parent_id ASC, is_species ASC');
 		$query_taxon->execute();
 		my %para;
 		while (my @data = $query_taxon->fetchrow_array()) {
@@ -566,59 +566,59 @@ sub groupList {
 				} else {
 				    my $query_string;
 				    if ($in eq 'Keyword') {
-#					my $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND sequence.description LIKE '%".$querycode."%' GROUP BY orthogroup.orthogroup_id";
-					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (sequence.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
-					$query_string = "SELECT ogs.ortholog_group_id 
-					                 FROM apidb.OrthologGroupAaSequence ogs, 
-					                      dots.ExternalAaSequence eas
-					                 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-					                   AND ogs.ortholog_group_id != 0 
-					                   AND eas.description LIKE '%".$querycode."%' 
-					                 GROUP BY ogs.ortholog_group_id";
+                        # my $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND sequence.description LIKE '%".$querycode."%' GROUP BY orthogroup.orthogroup_id";
+					    # $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (sequence.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					    $query_string = "SELECT ogs.ortholog_group_id 
+					                     FROM apidb.OrthologGroupAaSequence ogs, 
+					                          dots.ExternalAaSequence eas
+					                     WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+					                       AND ogs.ortholog_group_id != 0 
+					                       AND eas.description LIKE '%".$querycode."%' 
+					                     GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Accession') {
 					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.accession = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
-					$query_string = "SELECT ogs.ortholog_group_id 
-					                 FROM apidb.OrthologGroupAaSequence ogs,
-					                      dots.DomainFeature df, 
-					                      dots.DbRefAaFeature dbaf,
-					                      sres.DbRef db
-					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
-					                   AND df.aa_feature_id = dbaf.aa_feature_id
-					                   AND dbaf.db_ref_id = db.db_ref_id
-					                   AND ogs.ortholog_group_id != 0 
-					                   AND db.primary_identifier LIKE '%".$querycode."%'
-					                 GROUP BY ogs.ortholog_group_id";
+					    $query_string = "SELECT ogs.ortholog_group_id 
+					                     FROM apidb.OrthologGroupAaSequence ogs,
+					                          dots.DomainFeature df, 
+					                          dots.DbRefAaFeature dbaf,
+					                          sres.DbRef db
+					                     WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                       AND df.aa_feature_id = dbaf.aa_feature_id
+					                       AND dbaf.db_ref_id = db.db_ref_id
+					                       AND ogs.ortholog_group_id != 0 
+					                       AND db.primary_identifier LIKE '%".$querycode."%'
+					                     GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Name') {
-					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.name = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
-					$query_string = "SELECT ogs.ortholog_group_id 
-					                 FROM apidb.OrthologGroupAaSequence ogs,
-					                      dots.DomainFeature df, 
-					                      dots.DbRefAaFeature dbaf,
-					                      sres.DbRef db
-					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
-					                   AND df.aa_feature_id = dbaf.aa_feature_id
-					                   AND dbaf.db_ref_id = db.db_ref_id
-					                   AND ogs.ortholog_group_id != 0 
-					                   AND db.secondary_identifier LIKE '%".$querycode."%'
-					                 GROUP BY ogs.ortholog_group_id";
+					    # $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND domain.name = '".$querycode."' GROUP BY orthogroup.orthogroup_id";
+					    $query_string = "SELECT ogs.ortholog_group_id 
+					                     FROM apidb.OrthologGroupAaSequence ogs,
+					                          dots.DomainFeature df, 
+					                          dots.DbRefAaFeature dbaf,
+					                          sres.DbRef db
+					                     WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                       AND df.aa_feature_id = dbaf.aa_feature_id
+					                       AND dbaf.db_ref_id = db.db_ref_id
+					                       AND ogs.ortholog_group_id != 0 
+					                       AND db.secondary_identifier LIKE '%".$querycode."%'
+					                     GROUP BY ogs.ortholog_group_id";
 				    } elsif ($in eq 'Pfam_Keyword') {
-					# $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
-					$query_string = "SELECT ogs.ortholog_group_id 
-					                 FROM apidb.OrthologGroupAaSequence ogs,
-					                      dots.DomainFeature df, 
-					                      dots.DbRefAaFeature dbaf,
-					                      sres.DbRef db
-					                 WHERE ogs.aa_sequence_id = df.aa_sequence_id
-					                   AND df.aa_feature_id = dbaf.aa_feature_id
-					                   AND dbaf.db_ref_id = db.db_ref_id
-					                   AND ogs.ortholog_group_id != 0 
-					                   AND db.remark LIKE '%".$querycode."%'
-					                 GROUP BY ogs.ortholog_group_id";
+					    # $query_string = "SELECT orthogroup.orthogroup_id FROM orthogroup INNER JOIN sequence USING (orthogroup_id) INNER JOIN sequence2domain USING (sequence_id) INNER JOIN domain USING (domain_id) WHERE orthogroup.orthogroup_id <> 0 AND MATCH (domain.description) AGAINST ('".$querycode."' IN BOOLEAN MODE) GROUP BY orthogroup.orthogroup_id";
+					    $query_string = "SELECT ogs.ortholog_group_id 
+					                     FROM apidb.OrthologGroupAaSequence ogs,
+					                          dots.DomainFeature df, 
+					                          dots.DbRefAaFeature dbaf,
+					                          sres.DbRef db
+					                     WHERE ogs.aa_sequence_id = df.aa_sequence_id
+					                       AND df.aa_feature_id = dbaf.aa_feature_id
+					                       AND dbaf.db_ref_id = db.db_ref_id
+					                       AND ogs.ortholog_group_id != 0 
+					                       AND db.remark LIKE '%".$querycode."%'
+					                     GROUP BY ogs.ortholog_group_id";
 				    }
 				    my $query_orthogroup = $dbh->prepare($query_string);
 				    $query_orthogroup->execute();
 				    while (my @data = $query_orthogroup->fetchrow_array()) {
-					push(@{$orthogroup_ids_ref},$data[0]);
+					    push(@{$orthogroup_ids_ref},$data[0]);
 				    }
 				}
 				push(@{$group_query_history},{
@@ -740,6 +740,20 @@ sub groupList {
 			push(@{$para{LOOP_DEBUG}},{DEBUG=>$_});
 		}
 	}
+	
+	# get the taxon tree for phyletic pattern in the group list page
+	my $query_taxonname = $dbh->prepare('SELECT orthomcl_taxon_id, nvl(parent_id, orthomcl_taxon_id) AS parent_id, 
+	                                            three_letter_abbrev, name, is_species
+	                                     FROM apidb.OrthomclTaxon
+	                                     ORDER BY parent_id ASC, is_species ASC');
+	$query_taxonname->execute();
+	while (my @data = $query_taxonname->fetchrow_array()) {
+		push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
+		                          PARENT_ID => $data[1],
+		                          ABBREV => $data[2],
+		                          NAME => $data[3],
+		                          IS_SPECIES => $data[4] });
+	}
 
 	$para{NUM_GROUPS}=scalar(@{$orthogroup_ids_ref});
 	$para{NUM_PAGES}=int(($para{NUM_GROUPS}-1)/10)+1;
@@ -775,52 +789,27 @@ sub getGroupRows {
 
 	my @rows;
 
-#   this is for phyletic pattern display
-	my @class;
-	my %taxaclass;
-		while (<DATA>) {
-			$_=~s/\r|\n//g;
-			next if (/^\#/);
-			next unless (length($_) >= 3);
-			my ($t,$c)=split("	",$_);
-			unless (exists $taxaclass{$c}) {
-				push(@class,$c);
-			}
-			push(@{$taxaclass{$c}},$t);
-		}
-	my %taxaname;
+    #   this is for phyletic pattern display
 	# my $query_taxonname = $dbh->prepare('SELECT abbrev, name FROM taxon');
-	my $query_taxonname = $dbh->prepare('SELECT three_letter_abbrev, name FROM apidb.OrthomclTaxon');
-	$query_taxonname->execute();
-	while (my @data = $query_taxonname->fetchrow_array()) {
-		$taxaname{$data[0]}=$data[1];
-	}
-
-
 
 	# my $query_orthogroup = $dbh->prepare('SELECT * FROM orthogroup where orthogroup_id = ?');
 	my $query_orthogroup = $dbh->prepare('SELECT ortholog_group_id, name, 0 AS avg_dcs,
 	                                             avg_percent_identity, avg_percent_match, 
 	                                             (avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue, 
-	                                             number_of_match_pairs 
+	                                             number_of_match_pairs, number_of_members
 	                                      FROM apidb.OrthologGroup 
 	                                      WHERE ortholog_group_id = ?');
 	
 	# my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) FROM sequence INNER JOIN taxon USING (taxon_id) WHERE orthogroup_id = ? AND abbrev = ?');
-	my $query_nogene_by_ot = $dbh->prepare('SELECT COUNT(*) 
-	                                        FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
-	                                        WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-	                                          AND ogs.ortholog_group_id = ?
-	                                          AND eas.taxon_id IN (SELECT taxon_id FROM sres.TaxonName WHERE unique_name_variant = ?)');
-
-	# my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE orthogroup_id = ?');
-	my $query_nogene_by_o = $dbh->prepare('SELECT COUNT(*) FROM apidb.OrthologGroupAaSequence WHERE ortholog_group_id = ?');
-
 	# my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT taxon_id) FROM sequence WHERE orthogroup_id = ?');
-	my $query_notaxa_by_o = $dbh->prepare('SELECT COUNT(DISTINCT eas.taxon_id)  
-	                                       FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+	my $query_taxa_by_o = $dbh->prepare('SELECT ot.orthomcl_taxon_id, count(ogs.aa_sequence_id) AS sequence_count
+	                                       FROM apidb.OrthologGroupAaSequence ogs, 
+	                                            dots.ExternalAaSequence eas,
+	                                            apidb.OrthomclTaxon ot
 	                                       WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-	                                         AND ogs.ortholog_group_id = ?');
+	                                         AND eas.taxon_id = ot.taxon_id
+	                                         AND ogs.ortholog_group_id = ?
+	                                       GROUP BY ot.orthomcl_taxon_id');
 	
 	# my $query_sdescription_by_o = $dbh->prepare('SELECT description FROM sequence WHERE orthogroup_id = ?'); # used for summarizing keyword
 	my $query_sdescription_by_o = $dbh->prepare('SELECT eas.description  
@@ -863,22 +852,22 @@ sub getGroupRows {
 		$group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
 		$group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
 
+		$group{NO_SEQUENCES}=$data[7];
 
-		my @tmp;
-		$query_nogene_by_o->execute($orthogroup_id);
-		@tmp = $query_nogene_by_o->fetchrow_array();
-		$group{NO_SEQUENCES}=$tmp[0];
-
-		if (($tmp[0]<=100) && ($tmp[0]>=2)) {
+		if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
 			$group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
 			$group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
 		}
-
-		$query_notaxa_by_o->execute($orthogroup_id);
-		@tmp = $query_notaxa_by_o->fetchrow_array();
-		$group{NO_TAXA}=$tmp[0];
-
-
+		
+		# get taxon and gene counts
+		$query_taxa_by_o->execute($orthogroup_id);
+		my $taxon_count = 0;
+		while (my @data = $query_taxa_by_o->fetchrow_array()) {
+		   push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
+		                                  GENE_COUNT => $data[1] });
+		    $taxon_count++;
+		}
+		$group{NO_TAXA} = $taxon_count;
 
 		$group{GROUP_ACCESSION}=$data[1];
 		$group{NO_MATCH_PAIRS}=$data[6];
@@ -899,7 +888,7 @@ sub getGroupRows {
 		if (1) {
 		    $query_sdescription_by_o->execute($orthogroup_id);
 		    my @funlines;
-		    while (@tmp = $query_sdescription_by_o->fetchrow_array()) {
+		    while (my @tmp = $query_sdescription_by_o->fetchrow_array()) {
 			push(@funlines,$tmp[0]);
 		    }
 		    my %keywords = %{FunKeyword(\@funlines)};
@@ -912,37 +901,16 @@ sub getGroupRows {
 		if (1) {
 			my %sequence_domain;
 			$query_domain_by_o->execute($orthogroup_id);
-			while (@tmp = $query_domain_by_o->fetchrow_array()) {
+			while (my @tmp = $query_domain_by_o->fetchrow_array()) {
 			    $sequence_domain{$tmp[0]}->{$tmp[1]}=1;
 			}
 			my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
 			foreach my $d (keys %domains) {
 			    my $c=sprintf("%X",int((1-$domains{$d})*255));
 			    $query_ddescription_by_d->execute($d);
-			    @tmp = $query_ddescription_by_d->fetchrow_array();
+			    my @tmp = $query_ddescription_by_d->fetchrow_array();
 			    $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
 			}
-		}
-
-		foreach my $c (@class) {
-			my %category;
-			$category{CATEGORY_ID}=$c;
-			foreach my $t (@{$taxaclass{$c}}) {
-				my %taxon;
-
-				if ($t eq 'SPACE') {
-					push(@{$category{LOOP_TAXON}},\%taxon);
-					next;
-				}
-
-				$taxon{TAXON_ID}=$t;
-				$taxon{TAXON_NAME}=$taxaname{$t};
-				$query_nogene_by_ot->execute($orthogroup_id,$t);
-				@tmp = $query_nogene_by_ot->fetchrow_array();
-				$taxon{NO_GENES}=$tmp[0];
-				push(@{$category{LOOP_TAXON}},\%taxon);
-			}
-			push(@{$group{LOOP_CATEGORY}},\%category);
 		}
 		push(@rows,\%group);
 	}

@@ -40,3 +40,53 @@ A.nocolor_w:link {
     margin-left: 20px;
     display: block;
 }
+
+.phyletic-category {
+    background-color: #eeeeee;
+    border-collapse: collapse;
+}
+
+.phyletic-category * table {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666666;
+    margin: 0;
+    padding: 0;
+}
+
+.phyletic-category * td {
+    text-align: center;
+    white-space: nowrap;
+    font-size: xx-small;
+    margin: 0;
+    padding: 0;
+}
+
+.phyletic-category * div {
+    text-align: center;
+    white-space: nowrap;
+    font-size: xx-small;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    width: 26px;
+    cursor: pointer;
+}
+
+div.zero {
+    background-color: white;
+}
+
+div.one {
+    background-color: #aaaaaa;
+}
+
+div.two {
+    background-color: #606060;
+    color: white;
+}
+
+div.more {
+    background-color: black;
+    color: white;
+}

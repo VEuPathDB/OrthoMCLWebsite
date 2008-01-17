@@ -2,6 +2,28 @@
 <TMPL_INCLUDE header.tmpl>
 
 <!-- BEGIN CONTENT -->
+<script type="text/javascript" src="js/phyletic-pattern.js"></script>
+
+<script language="javascript">
+<!--//
+var taxons = { };
+var groups = { };
+
+<TMPL_LOOP NAME=TAXONS>
+taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id: "<TMPL_VAR NAME=TAXON_ID>",
+    parent_id: "<TMPL_VAR NAME=PARENT_ID>",
+    abbrev: "<TMPL_VAR NAME=ABBREV>",
+    name: "<TMPL_VAR NAME=NAME>",
+    is_species: <TMPL_VAR NAME=IS_SPECIES>,
+    expanded: true,
+    species_count: 0,
+    children: [] };
+</TMPL_LOOP>
+
+initial();
+
+//-->
+</script>
 
 <TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
 
@@ -91,22 +113,31 @@
 		  </tr>
 		  <tr>
   		    <td colspan="7">
-		      <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-		      <table bgcolor="#eeeeee">
-		      <TMPL_LOOP NAME="LOOP_CATEGORY">
-			<tr>
-			  <td><font size="2" color="#5555cc"><TMPL_VAR NAME="CATEGORY_ID"></font></td>
-			<TMPL_LOOP NAME="LOOP_TAXON">
-			<TMPL_IF NAME="NO_GENES">
-			  <td width=20 bgcolor="#000000" align="center"><font size="1" color="#ffffff"><TMPL_VAR NAME="TAXON_ID"><br><TMPL_VAR NAME="NO_GENES"></font></td>
-			<TMPL_ELSE>
-			  <td width=20 bgcolor="#ffffff" align="center"><font size="1" color="#000000"><TMPL_VAR NAME="TAXON_ID"><br><TMPL_VAR NAME="NO_GENES"></font></td>
-			</TMPL_IF>
-			</TMPL_LOOP>
-			</tr>
-		      </TMPL_LOOP>
-		      </table>
-		      <!-- END PHYLETIC PATTERN BLOCK -->
+
+                      <!-- BEGIN PHYLETIC PATTERN BLOCK -->
+                      <table border="1" cellspacing="0">
+
+<script language="javascript">
+<!--//
+var group = {name: "<TMPL_VAR GROUP_ACCESSION>",
+             counts: { } };
+
+<TMPL_LOOP NAME=TAXON_GENES>
+group.counts["<TMPL_VAR NAME=TAXON_ID>"] = { gene_count: <TMPL_VAR NAME=GENE_COUNT>,
+                                             species_count: 1};
+</TMPL_LOOP>
+
+groups[group.name] = group;
+
+updateGroup(group);
+displayCategories(group);
+
+//-->
+</script>
+
+                      </table>
+                      <!-- END PHYLETIC PATTERN BLOCK -->
+
 		    </td>
 
 		  </tr>

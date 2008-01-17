@@ -70,6 +70,9 @@ A.nocolor_w:link {
     border-width: 1px;
     border-color: black;
     width: 26px;
+}
+
+.phyletic-category * div span {
     cursor: pointer;
 }
 

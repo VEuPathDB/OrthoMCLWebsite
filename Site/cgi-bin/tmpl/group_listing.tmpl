@@ -84,7 +84,7 @@ function countGroup(group, taxon) {
 
 function displayCategories(group) {
     for(var i = 0; i < categories.length; i++) {
-        document.writeln("<tr><td width=\"10\" nowrap>" + categories[i].name + "</td>");
+        document.writeln("<tr><td width=\"10%\" nowrap>" + categories[i].name + "</td>");
         document.writeln("<td class=\"phyletic-category\"><span>");
         displayCategory(group, categories[i]);
         document.writeln("</span></td></tr>");

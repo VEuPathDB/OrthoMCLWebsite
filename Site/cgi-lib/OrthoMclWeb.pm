@@ -29,7 +29,7 @@ sub cgiapp_init {
 	my $mode = $q->param("rm");
 
 	if (index($mode,"draw") < 0) {
-	    $config = LoadFile("../cgi-lib/config.yaml");
+	    $config = LoadFile("@cgilibTargetDir@/config.yaml");
 	    $self->param(config => $config);
 	    
 	    $self->dbh_config('orthomcl', 
@@ -55,7 +55,7 @@ sub cgiapp_init {
 
 sub setup {
 	my $self = shift;
-	$self->tmpl_path('./tmpl');
+	$self->tmpl_path('@cgibinTargetDir@/tmpl');
 	$self->start_mode('index');
 	$self->run_modes([qw(index
 	                     groupQueryForm sequenceQueryForm

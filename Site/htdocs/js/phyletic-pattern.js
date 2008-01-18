@@ -74,27 +74,37 @@ function displayCategories(group) {
 }
 
 function displayCategory(group, taxon) {
+    var geneCount = group.counts[taxon.id].gene_count;
     var className;
-    if (group.counts[taxon.id].gene_count == 0) className = "zero";
-    else if (group.counts[taxon.id].gene_count == 1) className = "one";
-    else if (group.counts[taxon.id].gene_count == 2) className = "two";
+    if (geneCount == 0) className = "zero";
+    else if (geneCount == 1) className = "one";
+    else if (geneCount == 2) className = "two";
     else className = "more";
     
     document.write("<div class=\"" + className + "\" ");
-    document.write(" title=\"" + taxon.name + "\" ");
     if (taxon.is_species == 1) {    // display species
-        document.writeln(" >" + taxon.abbrev + "<br/>");
-        document.writeln(group.counts[taxon.id].gene_count);
+        var tooltip = "[" + taxon.name + "] " + geneCount + " genes in the group.";
+        document.writeln(" title=\"" + tooltip + "\" >");
+        document.write(taxon.abbrev + "<br/>");
+        document.writeln(geneCount);
         document.writeln("</div>");
     } else {    // display clade
-        var infoDisplay = taxon.expanded ? "none" : "block";
+        var speciesCount = group.counts[taxon.id].species_count;
+        var tooltip = "[" + taxon.name + "] " 
+            + speciesCount + " out of "  + taxon.species_count + " species, " 
+            + geneCount + " genes in the group.";
+        document.write(" title=\"" + tooltip + " Click to show this branch.\" ");
+
         document.write(" id=\"" + group.name + "_" + taxon.id + "_info\" ");
+
+        var infoDisplay = taxon.expanded ? "none" : "block";
         document.write(" style=\"display: "+ infoDisplay +"; cursor: pointer;\" ");
+        
         document.writeln(" onclick=\"toggleTaxon('" + taxon.id + "')\" >");
+        
         document.writeln(taxon.abbrev + "<br/>");
-        document.write(group.counts[taxon.id].species_count + "/");
-        document.writeln(taxon.species_count + "<br/>");
-        document.writeln(group.counts[taxon.id].gene_count);
+        document.writeln(speciesCount + "/" + taxon.species_count + "<br/>");
+        document.writeln(geneCount);
         document.writeln("</div>");
         
         document.write("<table id=\"" + group.name + "_" + taxon.id + "_child\" ");
@@ -102,7 +112,7 @@ function displayCategory(group, taxon) {
         document.writeln(" ><tr><td>");
         document.write("<img src=\"images/minus.png\" ");
         document.write(" style=\"cursor: pointer\" ");
-        document.write(" title=\"" + taxon.name + "\" ");
+        document.write(" title=\"" + tooltip + " Click to hide this branch.\" ");
         document.writeln(" onclick=\"toggleTaxon('" + taxon.id + "')\" />");
         document.writeln("</td>");
         for (var i = 0; i < taxon.children.length; i++) {

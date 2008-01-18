@@ -25,6 +25,8 @@ function initial() {
             categories.push(roots[i].children[j]);
         }
     }
+    // load the saved status
+    loadState();
 }
 
 function countSpecies(taxon) {
@@ -121,4 +123,38 @@ function toggleTaxon(taxon_id) {
         taxonChild.style.display = taxon.expanded ? "none" : "block";
     }
     taxon.expanded = !taxon.expanded;
+    saveState();
+}
+
+function saveState() {
+    var content = "";
+    for(var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        if (!taxon.expanded) {
+            if (content.length > 0) content += "|";
+            content += taxon.abbrev;
+        }
+    }
+    document.cookie = "phyletic-pattern=" + content + "; max-age=" + (60*60*24*364);
+}
+
+function loadState() {
+    var allcookies = document.cookie;
+    var pos = allcookies.indexOf("phyletic-pattern=");
+    if (pos >= 0) {
+        pos += 17;
+        var end = allcookies.indexOf(";", pos);
+        var content = (end >= 0) ? allcookies.substring(pos, end) 
+                                 : allcookies.substring(pos);
+        var collapsed = { };
+        var parts = content.split("|");
+        for (var i = 0; i < parts.length; i++) {
+            collapsed[parts[i]] = true;
+        }
+        // update taxons
+        for (var taxon_id in taxons) {
+            var taxon = taxons[taxon_id];
+            if (taxon.abbrev in collapsed) taxon.expanded = false;
+        }
+    }
 }

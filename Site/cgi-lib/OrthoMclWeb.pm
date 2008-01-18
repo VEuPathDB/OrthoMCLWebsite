@@ -28,27 +28,29 @@ sub cgiapp_init {
     my $q = $self->query();
     my $mode = $q->param("rm");
 
-    if (index($mode,"draw") < 0) {
-        $config = LoadFile("@cgilibTargetDir@/config.yaml");
-        $self->param(config => $config);
-        
-        $self->dbh_config('orthomcl', 
-                  [ $config->{database}, 
-                $config->{user}, 
-                $config->{password},
-                {RaiseError => 1, PrintWarn => 1, PrintError => 1}
-                ]);
-        $self->dbh_default_name("orthomcl");
-        
-        # Configure the session
-        #$self->session_config(
-        #   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
-        #   SEND_COOKIE         => 1,
-        #);
-        $self->session_config(
-                  CGI_SESSION_OPTIONS => [ "driver:File", $self->query, {Directory=>File::Spec->tmpdir} ],
-                  SEND_COOKIE         => 1,
-                  );
+    if (!$mode || index($mode,"draw") < 0) {
+	$config = LoadFile("@cgilibTargetDir@/config.yaml");
+	$self->param(config => $config);
+	
+	$self->dbh_config('orthomcl', 
+			  [ $config->{database}, 
+			    $config->{user}, 
+			    $config->{password},
+			    {RaiseError => 1, PrintWarn => 1, PrintError => 1}
+			    ]);
+	$self->dbh_default_name("orthomcl");
+	
+	# Configure the session
+	#$self->session_config(
+	#   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
+	#   SEND_COOKIE         => 1,
+	#);
+	$self->session_config(
+			      CGI_SESSION_OPTIONS => [ "driver:File",
+						       $self->query,
+						       {Directory=>File::Spec->tmpdir} ],
+			      SEND_COOKIE         => 1,
+			      );
     }
 }    
 

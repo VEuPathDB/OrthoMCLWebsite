@@ -72,10 +72,6 @@ A.nocolor_w:link {
     width: 26px;
 }
 
-.phyletic-category * div span {
-    cursor: pointer;
-}
-
 div.zero {
     background-color: white;
 }

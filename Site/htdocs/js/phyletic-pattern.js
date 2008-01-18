@@ -85,8 +85,9 @@ function displayCategory(group, taxon) {
         document.writeln(group.counts[taxon.id].gene_count);
         document.writeln("</div>");
     } else {    // display clade
+        var infoDisplay = taxon.expanded ? "none" : "block";
         document.write(" id=\"" + group.name + "_" + taxon.id + "_info\" ");
-        if (taxon.expanded) document.write(" style=\"display: none\" ");
+        document.write(" style=\"display: "+ infoDisplay +"; cursor: pointer;\" ");
         document.writeln(" onclick=\"toggleTaxon('" + taxon.id + "')\" >");
         document.writeln(taxon.abbrev + "<br/>");
         document.write(group.counts[taxon.id].species_count + "/");

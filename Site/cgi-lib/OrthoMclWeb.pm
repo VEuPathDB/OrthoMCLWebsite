@@ -1640,6 +1640,9 @@ sub sequence {
     my $dbh = $self->dbh();
     my $q = $self->query();
 
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
+
     my $sequence_accession = $q->param("accession");
 
     my %para;
@@ -1649,7 +1652,8 @@ sub sequence {
     # my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.name,taxon.name,sequence.orthogroup_id,sequence.description,sequence.length,taxon.xref FROM sequence INNER JOIN taxon USING (taxon_id) WHERE sequence.accession = ?');
     my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.name, 
                                                ot.name, ogs.ortholog_group_id,
-                                               eas.description, eas.length, edr.id_url 
+                                               eas.description, eas.length, 
+                                               edr.id_url, eas.sequence
                                         FROM dots.ExternalAaSequence eas,
                                              apidb.OrthomclTaxon ot,
                                              sres.ExternalDatabaseRelease edr,
@@ -1677,27 +1681,33 @@ sub sequence {
         $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
         $orthogroup_old_ac = transformOGAC($para{GROUP_ACCESSION});
     }
-    my @desc_info = split(" ",$data[4]);
-    shift @desc_info;
-    $para{DESCRIPTION}=join(" ",@desc_info);
-    $para{LENGTH}=$data[5];
+    
+    if ($data[4]) {
+        my @desc_info = split(" ",$data[4]);
+        shift @desc_info;
+        $para{DESCRIPTION}=join(" ",@desc_info);
+    }
+
     if (defined $data[6]) {
         $para{XREF_LINK}=$data[6].$data[1];
     }
 
+    my $len = $data[5];
+    $para{LENGTH}=$len;
+    my $seq = $data[7];
 
-    # use Bio::Index::Fasta to retrieve sequence
-    #require Bio::Index::Fasta;
-
-    #my $inx = Bio::Index::Fasta->new('-filename' => $config->{FAIDX_file});
-
-    #my $seq = $inx->fetch($para{ACCESSION});
-    #my $len = $seq->length();
-    $para{SEQUENCE}.="<font face=\"Courier\" size=\"2\">>".$para{NAME}." ".$para{DESCRIPTION}." [".$para{TAXON}."]<br>";
-    #for (my $i=1;$i<=$len;$i+=60) {
-    #    if ($i+60-1>$len) {$para{SEQUENCE}.=$seq->subseq($i,$len)."<br>";} 
-    #    else {$para{SEQUENCE}.=$seq->subseq($i,$i+60-1)."<br>";}
-    #}
+    # display sequence
+    $para{SEQUENCE} = "<font face=\"Courier\" size=\"2\">";
+    if ($para{NAME}) { $para{SEQUENCE} .= $para{NAME}." "; }
+    if ($para{DESCRIPTION}) { $para{SEQUENCE} .= $para{DESCRIPTION}." "; }
+    $para{SEQUENCE} .= "[".$para{TAXON}."]<br>";
+    for (my $i=1;$i<=$len;$i+=60) {
+        if ($i+60-1>$len) {
+            $para{SEQUENCE} .= substr($seq, $i) ."<br>";
+        } else {
+            $para{SEQUENCE} .= substr($seq, $i,60) . "<br>";
+        }
+    }
     $para{SEQUENCE}.="</font>";
 
     # prepare data to fill out domain architecture block
@@ -2401,62 +2411,3 @@ sub done {
 
 1;  # Perl requires this at the end of all modules
 
-
-__DATA__
-aae    Bacteria    Bacteria: Aquifex    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Aquifex_aeolicus/
-tma    Bacteria    Bacteria: Thermotoga    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Thermotoga_maritima/
-det    Bacteria    Bacteria: Green nonsulfur bacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Dehalococcoides_ethenogenes_195
-dra    Bacteria    Bacteria: Deinococci    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Deinococcus_radiodurans/
-tpa    Bacteria    Bacteria: Spirochetes    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Treponema_pallidum/
-cte    Bacteria    Bacteria: Green sulfur bacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Chlorobium_tepidum_TLS/
-rba    Bacteria    Bacteria: Planctomyces/Pirella    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Pirellula_sp/
-cpn    Bacteria    Bacteria: Chlamydia    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Chlamydophila_pneumoniae_CWL029/
-syn    Bacteria    Bacteria: Cyanobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Synechococcus_sp_WH8102/
-mtu    Bacteria    Bacteria: Actinobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Mycobacterium_tuberculosis_H37Rv/
-ban    Bacteria    Bacteria: Gram-positive    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Bacillus_anthracis_Ames/
-wsu    Bacteria    Bacteria: epsilon-proteobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Wolinella_succinogenes/
-gsu    Bacteria    Bacteria: delta-proteobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Geobacter_sulfurreducens/
-atu    Bacteria    Bacteria: alpha-proteobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Agrobacterium_tumefaciens_C58_UWash/
-rso    Bacteria    Bacteria: beta-proteobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Ralstonia_solanacearum/
-eco    Bacteria    Bacteria: gamma-proteobacteria    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia_coli_K12/
-
-hal    Archaea    Archaea: Euryarchaeota    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Halobacterium_sp/
-mja    Archaea    Archaea: Euryarchaeota    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Methanococcus_jannaschii/
-sso    Archaea    Archaea: Crenarchaeota    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Sulfolobus_solfataricus/
-neq    Archaea    Archaea: Nanoarchaeota    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans/
-
-ehi    Single-Cellular Eukaryota    amoebae    TIGR    ftp://ftp.tigr.org/pub/data/Eukaryotic_Projects/e_histolytica/annotation_dbs/EHA1.pep
-ddi    Single-Cellular Eukaryota    social amoebae, slime mold    dictyBase    http://www.dictybase.org/db/cgi-bin/dictyBase/download/download.pl?area=blast_databases&ID=dicty_primary_protein.gz
-pfa    Single-Cellular Eukaryota    APICOMPLEXA    PlasmoDB, v4.4    http://plasmodb.org/restricted/data/P_falciparum/WG/cds.aa/Pfa3D7_WholeGenome_Annotated_PEP_2005.2.11.fasta
-pyo    Single-Cellular Eukaryota    APICOMPLEXA    PlasmoDB, v4.4    http://www.plasmodb.org/restricted/data/P_yoelii/Whole_genome/cds.aa/Pyoelii_WholeGenome_Annotated_PEP_2002.9.10.fasta
-pkn    Single-Cellular Eukaryota    APICOMPLEXA    PlasmoDB, v4.3    http://www.plasmodb.org/restricted/data/P_knowlesi/WG/cds.aa/pkn_prots.db
-cpa    Single-Cellular Eukaryota    APICOMPLEXA    CryptoDB    http://cryptodb.org/download/public/pep/genomic/CpIOWA/CpIOWA_protein.gz
-cho    Single-Cellular Eukaryota    APICOMPLEXA    CryptoDB    http://cryptodb.org/download/public/pep/genomic/ChTU502/ChTU502_protein.gz
-tgo    Single-Cellular Eukaryota    APICOMPLEXA    ToxoDB    N/A
-the    Single-Cellular Eukaryota    APICOMPLEXA    TIGR    ftp://ftp.tigr.org/pub/data/Eukaryotic_Projects/t_parva/annotation_dbs/
-sce    Single-Cellular Eukaryota    FUNGI    SGD    ftp://genome-ftp.stanford.edu/pub/yeast/sequence/genomic_sequence/orf_protein/orf_trans_all.fasta.gz
-spo    Single-Cellular Eukaryota    FUNGI    Sanger    ftp://ftp.sanger.ac.uk/pub/yeast/pombe/Protein_data/pompep
-yli    Single-Cellular Eukaryota    FUNGI    Genolevures    http://cbi.labri.u-bordeaux.fr/Genolevures/raw/seq/Y_lipolytica.rc2.aa
-kla    Single-Cellular Eukaryota    FUNGI    Genolevures    http://cbi.labri.u-bordeaux.fr/Genolevures/raw/seq/K_lactis.rc2.aa
-dha    Single-Cellular Eukaryota    FUNGI    Genolevures    http://cbi.labri.u-bordeaux.fr/Genolevures/raw/seq/D_hansenii.rc2.aa
-cgl    Single-Cellular Eukaryota    FUNGI    Genolevures    http://cbi.labri.u-bordeaux.fr/Genolevures/raw/seq/C_glabrata.rc2.aa
-ecu    Single-Cellular Eukaryota    FUNGI    GenBank    ftp://ftp.ncbi.nih.gov/genomes/Encephalitozoon_cuniculi/*.faa
-cne    Single-Cellular Eukaryota    FUNGI    TIGR    ftp://ftp.tigr.org/pub/data/Eukaryotic_Projects/c_neoformans/annotation_dbs/CNA1.pep
-ago    Single-Cellular Eukaryota    FUNGI    AGD    http://agd.unibas.ch/Ashbya_gossypii/downloads/AGD_ORF_translations_r2_1.fas
-ncr    Single-Cellular Eukaryota    FUNGI    WI    ftp://www-genome.wi.mit.edu/pub/annotation/N_crassa/release7/neurospora_crassa_7_proteins.fasta.gz
-cme    Single-Cellular Eukaryota    Red algae    UTOKYO    http://merolae.biol.s.u-tokyo.ac.jp/download/cds.fasta.txt
-tps    Single-Cellular Eukaryota    Diatom    JGI    ftp://ftp.jgi-psf.org/pub/JGI_data/Diatom/thaps1/thaps1Prots.fasta.gz
-ath    Multi-Cellular Eukaryota    PLANTS    TIGR    ftp://ftp.tigr.org/pub/data/a_thaliana/ath1/SEQUENCES/ATH1.pep.gz
-osa    Multi-Cellular Eukaryota    PLANTS, rice    TIGR    ftp://ftp.tigr.org/pub/data/Eukaryotic_Projects/o_sativa/annotation_dbs/BAC_PAC_clones/OSA1.pep
-cel    Multi-Cellular Eukaryota    NEMATODES    WORMBASE    ftp://ftp.wormbase.org/pub/wormbase/data_freezes/WS140/acedb/wormpep140.tar.gz
-cbr    Multi-Cellular Eukaryota    NEMATODES    SANGER    ftp://ftp.sanger.ac.uk/pub/wormbase/cbriggsae/cb25.agp8/brigpep2.pep.gz
-dme    Multi-Cellular Eukaryota    ARTHROPODA, fruit fly    ensembl    ftp://ftp.ensembl.org/pub/fly-30.3d/data/fasta/pep/Drosophila_melanogaster.BDGP3.2.1.apr.pep.fa.gz
-aga    Multi-Cellular Eukaryota    ARTHROPODA, mosquito    ensembl    ftp://ftp.ensembl.org/pub/anopheles-30.2e/data/fasta/pep/Anopheles_gambiae.MOZ2a.apr.pep.fa.gz
-cin    Multi-Cellular Eukaryota    FISH, sea squirt    JGI    ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.prot.fasta.gz
-fru    Multi-Cellular Eukaryota    FISH, fugu    ensembl    ftp://ftp.ensembl.org/pub/fugu-30.2e/data/fasta/pep/Fugu_rubripes.FUGU2.apr.pep.fa.gz
-tni    Multi-Cellular Eukaryota    FISH, teleost fish     ensembl    ftp://ftp.ensembl.org/pub/tetraodon-30.1b/data/fasta/pep/Tetraodon_nigroviridis.TETRAODON7.apr.pep.fa.gz
-dre    Multi-Cellular Eukaryota    FISH, zebrafish    ensembl    ftp://ftp.ensembl.org/pub/zebrafish-30.4c/data/fasta/pep/Danio_rerio.ZFISH4.apr.pep.fa.gz
-hsa    Multi-Cellular Eukaryota    PRIMATES, human    ensembl    ftp://ftp.ensembl.org/pub/human-30.35c/data/fasta/pep/Homo_sapiens.NCBI35.apr.pep.fa.gz
-mmu    Multi-Cellular Eukaryota    MAMMALS, mouse    ensembl    ftp://ftp.ensembl.org/pub/mouse-30.33f/data/fasta/pep/Mus_musculus.NCBIM33.apr.pep.fa.gz
-rno    Multi-Cellular Eukaryota    MAMMALS, Brown Norway Rat    ensembl    ftp://ftp.ensembl.org/pub/rat-30.34/data/fasta/pep/Rattus_norvegicus.RGSC3.4.apr.pep.fa.gz
-gga    Multi-Cellular Eukaryota    BIRD, chicken    ensembl    ftp://ftp.ensembl.org/pub/chicken-30.1f/data/fasta/pep/Gallus_gallus.WASHUC1.apr.pep.fa.gz

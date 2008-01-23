@@ -8,6 +8,10 @@ BEGIN {
 
 use lib "@targetDir@/lib/perl";
 $ENV{GUS_HOME} = '@targetDir@';
+my $oracleHome = $ENV{ORACLE_HOME};
+if (!$oracleHome) {
+    $ENV{ORACLE_HOME} = '@oracleHome@';
+}
 
 use base 'CGI::Application';
 use DBI;     # Needed for OrthoMCL database connection

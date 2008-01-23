@@ -856,7 +856,7 @@ sub getGroupRows {
         $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
         $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
         $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
-
+        
         $group{NO_SEQUENCES}=$data[7];
 
         if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
@@ -890,11 +890,14 @@ sub getGroupRows {
         $group{NO_TAXA} = $taxon_count;
 
 # about Keywords summary
+        $group{KEYWORDS} = "";
         if (1) {
             $query_sdescription_by_o->execute($orthogroup_id);
             my @funlines;
             while (my @tmp = $query_sdescription_by_o->fetchrow_array()) {
-            push(@funlines,$tmp[0]);
+                if ($tmp[0]) {
+                    push(@funlines,$tmp[0]);
+                }
             }
             my %keywords = %{FunKeyword(\@funlines)};
             foreach my $k (keys %keywords) {
@@ -903,6 +906,7 @@ sub getGroupRows {
             }
         }
 # about Pfam domain summary
+        $group{DOMAIN} = "";
         if (1) {
             my %sequence_domain;
             $query_domain_by_o->execute($orthogroup_id);
@@ -913,8 +917,11 @@ sub getGroupRows {
             foreach my $d (keys %domains) {
                 my $c=sprintf("%X",int((1-$domains{$d})*255));
                 $query_ddescription_by_d->execute($d);
-                my @tmp = $query_ddescription_by_d->fetchrow_array();
-                $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
+                if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
+                    if ($tmp[0]) {
+                        $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
+                    }
+                }
             }
         }
         push(@rows,\%group);

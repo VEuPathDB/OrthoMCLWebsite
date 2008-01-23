@@ -69,7 +69,9 @@ sub FunKeyword {
 	my $total_funlines=0;
 	my %freq;
 
-	foreach my $line (@funlines) {
+	NEXTLINE: foreach my $line (@funlines) {
+	    next NEXTLINE if (!$line);
+	    
 		# removing some punctuation marks of the line
 		$line=punctuation_mark($line);
 		# dealing with the upper/lower cases

@@ -1801,18 +1801,6 @@ sub genome {
     @tmp = $query_num_sequences->fetchrow_array();
     $para{NUM_SEQUENCES}=$tmp[0];
 
-
-    my (%description,%source,%url);
-    while (<DATA>) {
-        $_=~s/\r|\n//g;
-        next if (/^\#/);
-        next unless (length($_) >= 6);
-        my @data = split("    ",$_);
-        $description{$data[0]}=$data[2];
-        $source{$data[0]}=$data[3];
-        $url{$data[0]}=$data[4];
-    }
-
     my $type;
     if ($type = $q->param("type")) {
         if ($type eq 'data') {
@@ -1828,7 +1816,16 @@ sub genome {
     }
     
     # my $query_taxon = $dbh->prepare('SELECT * FROM taxon');
-    my $query_taxon = $dbh->prepare('SELECT COUNT(taxon_id) FROM apidb.OrthomclTaxon WHERE is_species = 1');
+    my $query_taxon = $dbh->prepare('SELECT ot.taxon_id, ot.name, ot.three_letter_abbrev,
+                                            ed.name, edr.download_url, edr.description
+                                     FROM apidb.OrthomclTaxon ot,
+                                          dots.ExternalAaSequence eas,
+                                          sres.ExternalDatabase ed,
+                                          sres.ExternalDatabaseRelease edr
+                                     WHERE ot.taxon_id = eas.taxon_id
+                                       AND eas.external_database_release_id = edr.external_database_release_id
+                                       AND edr.external_database_id = ed.external_database_id
+                                       AND ot.is_species = 1');
 
     # my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM sequence WHERE taxon_id = ?');
     my $query_numseq = $dbh->prepare('SELECT COUNT(*) FROM dots.ExternalAASequence WHERE taxon_id = ?');
@@ -1856,21 +1853,22 @@ sub genome {
         $taxon{ABBREV}=$data[2];
         if (defined $type) {
             if ($type eq 'data') {
-                $taxon{DATASOURCE}=$source{$data[2]};
-                $taxon{URL}=$url{$data[2]};
+                $taxon{DATASOURCE}=$data[3];
+                $taxon{URL}=$data[4];
             } elsif ($type eq 'summary') {
-                $query_numseq->execute($data[0]);
+                my $taxonId = $data[0];
+                $query_numseq->execute($taxonId);
                 my @tmp = $query_numseq->fetchrow_array();
                 $taxon{NUMSEQ}=$tmp[0];
-                $query_numseqclustered->execute($data[0]);
+                $query_numseqclustered->execute($taxonId);
                 @tmp = $query_numseqclustered->fetchrow_array();
                 $taxon{NUMSEQ_CLUSTERED}=$tmp[0];
-                $query_numgroup->execute($data[0]);
+                $query_numgroup->execute($taxonId);
                 @tmp = $query_numgroup->fetchrow_array();
                 $taxon{NUMGROUPS}=$tmp[0];
             }
         } else {
-            $taxon{DESCRIPTION}=$description{$data[2]};
+            $taxon{DESCRIPTION}=$data[5];
         }
         push(@{$para{LOOP_TAXON}},\%taxon);
     }
@@ -1981,17 +1979,17 @@ sub getSeq {
     my $dbh = $self->dbh();
     my $q = $self->query();
 
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
 
-    require Bio::Index::Fasta;
-    my $inx = Bio::Index::Fasta->new('-filename' => $config->{FAIDX_file});
-    
     if ($q->param("groupid") || $q->param("groupac")) {
         my %para;
         my $query_sequence;
         if (my $groupac = $q->param("groupac")) {
             $para{PAGETITLE}="FASTA Sequences for $groupac";
             # $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) INNER JOIN orthogroup USING (orthogroup_id) WHERE orthogroup.accession = ?');
-            $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
+            $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, 
+                                                    ot.name, eas.length, eas.sequence
                                              FROM apidb.OrthologGroup og,
                                                   apidb.OrthologGroupAaSequence ogs,
                                                   dots.ExternalAaSequence eas,
@@ -2005,7 +2003,8 @@ sub getSeq {
             $query_sequence->execute($groupac);
         } elsif (my $groupid = $q->param("groupid")) {
             # $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.orthogroup_id = ?');
-            $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
+            $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, 
+                                                    ot.name, eas.length, eas.sequence
                                              FROM apidb.OrthologGroupAaSequence ogs,
                                                   dots.ExternalAaSequence eas,
                                                   apidb.OrthomclTaxon ot
@@ -2015,17 +2014,19 @@ sub getSeq {
             $query_sequence->execute($groupid);
         }
 
+        $para{CONTENT} = "";
         while (my @data = $query_sequence->fetchrow_array()) {
             my $ac = $data[0];
             my $desc = $data[1];
             my $taxon = $data[2];
-
-            my $seq = $inx->fetch($ac);
-            my $len = $seq->length();
-            $para{CONTENT}.="\n<font face=\"Courier\" size=\"2\">>$desc [$taxon]<br>";
+            my $len = $data[3];
+            my $seq = $data[4];
+            $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">";
+            if ($desc) { $para{CONTENT} .= $desc; }
+            $para{CONTENT} .= " [$taxon]<br>";
             for (my $i=1;$i<=$len;$i+=60) {
-                if ($i+60-1>$len) {$para{CONTENT}.=$seq->subseq($i,$len)."<br>";} 
-                else {$para{CONTENT}.=$seq->subseq($i,$i+60-1)."<br>";}
+                if ($i+60-1>$len) {$para{CONTENT}.= substr($seq, $i)."<br>";} 
+                else {$para{CONTENT}.= substr($seq, $i, 60)."<br>";}
             }
             $para{CONTENT}.="</font>";
         }
@@ -2038,7 +2039,8 @@ sub getSeq {
         my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
         my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
         # my $query_sequence = $dbh->prepare('SELECT sequence.accession,sequence.description,taxon.name FROM taxon INNER JOIN sequence USING (taxon_id) WHERE sequence.sequence_id = ?');
-        my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, ot.name 
+        my $query_sequence = $dbh->prepare('SELECT eas.source_id, eas.description, 
+                                                   ot.name, eas.length, eas.sequence
                                              FROM dots.ExternalAaSequence eas,
                                                   apidb.OrthomclTaxon ot
                                              WHERE eas.taxon_id = ot.taxon_id
@@ -2051,13 +2053,12 @@ sub getSeq {
             my $ac = $data[0];
             my $desc = $data[1];
             my $taxon = $data[2];
-
-            my $seq = $inx->fetch($ac);
-            my $len = $seq->length();
+            my $len = $data[3];
+            my $seq = $data[4];
             $file_content.=">$desc [$taxon]\r\n";
             for (my $i=1;$i<=$len;$i+=60) {
-                if ($i+60-1>$len) {$file_content.=$seq->subseq($i,$len)."\r\n";} 
-                else {$file_content.=$seq->subseq($i,$i+60-1)."\r\n";}
+                if ($i+60-1>$len) {$file_content.= substr($seq, $i)."\r\n";} 
+                else {$file_content.= substr($seq, $i, 60)."\r\n";}
             }
         }
 

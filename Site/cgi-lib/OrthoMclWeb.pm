@@ -91,7 +91,7 @@ sub index {
   $para{NUM_TAXA}=$tmp[0];
 
   # my $query_num_sequences = $dbh->prepare('SELECT COUNT(*) FROM sequence');
-  my $query_num_sequences = $dbh->prepare('SELECT count(*) 
+  my $query_num_sequences = $dbh->prepare('SELECT count(eas.aa_sequence_id) 
                                            FROM dots.ExternalAaSequence eas,
                                                 apidb.OrthomclTaxon ot
                                            WHERE ot.taxon_id = eas.taxon_id

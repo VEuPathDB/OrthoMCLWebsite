@@ -16,12 +16,11 @@ WHERE is_species = 1
        <name>all_sequences_count</name>
        <sql>
 <![CDATA[ 
-SELECT count(*) 
-FROM DoTS.ExternalAaSequence 
-WHERE taxon_id IN 
-   (SELECT taxon_id 
-    FROM apidb.OrthomclTaxon 
-    WHERE is_species = 1)
+SELECT count(eas.aa_sequence_id) 
+FROM dots.ExternalAaSequence eas,
+     apidb.OrthomclTaxon ot
+WHERE ot.taxon_id = eas.taxon_id
+  AND ot.is_species = 1
 ]]>
        </sql>
      </sqlQuery> 
@@ -304,15 +303,17 @@ WHERE ortholog_group_id = ?
        <sql>
 <![CDATA[ 
 SELECT COUNT(*) 
-FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas,
+     apidb.OrthomclTaxon ot
 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 AND ogs.ortholog_group_id = ?
-AND eas.taxon_id IN (SELECT taxon_id FROM apidb.OrthomclTaxon WHERE three_letter_abbrev = ?)
+AND eas.taxon_id = ot.taxon_id 
+AND ot.three_letter_abbrev = ?
 ]]>
        </sql>
      </sqlQuery> 
 
-
+<!-- not needed any more
      <sqlQuery>
        <name>num_genes_per_group</name>
        <sql>
@@ -323,8 +324,9 @@ WHERE ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 
+-->
 
-
+<!-- not needed either
      <sqlQuery>
        <name>num_species_per_group</name>
        <sql>
@@ -336,7 +338,7 @@ AND ogs.ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 
-
+-->
 
      <sqlQuery>
        <name>sequence_descrip_per_group</name>

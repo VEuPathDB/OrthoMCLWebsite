@@ -53,17 +53,6 @@ ORDER BY parent_id ASC, is_species ASC
 
 
      <sqlQuery>
-       <name>all_three_letter_abbrevs</name>
-       <sql>
-<![CDATA[ 
-SELECT three_letter_abbrev, name 
-FROM apidb.OrthomclTaxon
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
        <name>sequence_info_per_history_seq</name>
        <sql>
 <![CDATA[ 
@@ -76,18 +65,6 @@ WHERE ot.taxon_id = eas.taxon_id
   AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
   AND ogs.ortholog_group_id = og.ortholog_group_id(+)
   AND eas.aa_sequence_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>group_name_per_history_grp</name>
-       <sql>
-<![CDATA[ 
-SELECT og.name 
-FROM apidb.OrthologGroup og
-WHERE ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 
@@ -115,19 +92,6 @@ WHERE ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>group_per_group_name</name>
-       <sql>
-<![CDATA[ 
-SELECT og.ortholog_group_id
-FROM apidb.OrthologGroup og
-WHERE og.name = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
 
 
      <sqlQuery>
@@ -299,7 +263,7 @@ WHERE ortholog_group_id = ?
 
 
      <sqlQuery>
-       <name>species_num_genes_per_group</name>
+       <name>taxa_num_genes_per_group</name>
        <sql>
 <![CDATA[ 
 SELECT ot.orthomcl_taxon_id, count(ogs.aa_sequence_id) AS sequence_count
@@ -351,18 +315,6 @@ AND ogs.ortholog_group_id = ?
 SELECT remark
  FROM sres.DbRef 
 WHERE db_ref_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>sequence_per_id</name>
-       <sql>
-<![CDATA[ 
-SELECT aa_sequence_id 
-FROM dots.ExternalAaSequence 
-WHERE source_id = ?
 ]]>
        </sql>
      </sqlQuery> 
@@ -562,7 +514,7 @@ WHERE name = ?
      </sqlQuery> 
 
 
-
+    <!-- merge this one and sequence_attributees_per_group -->
      <sqlQuery>
        <name>sequence_info_per_group_id</name>
        <sql>
@@ -664,31 +616,6 @@ AND eas.source_id = ?
        </sql>
      </sqlQuery> 
 
-
-     <sqlQuery>
-       <name>num_sequences</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(eas.aa_sequence_id) 
-FROM dots.ExternalAASequence eas,
-apidb.OrthomclTaxon ot
- WHERE eas.taxon_id = ot.taxon_id
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-
-     <sqlQuery>
-       <name>num_species</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(taxon_id) 
-FROM apidb.OrthomclTaxon 
-WHERE is_species = 1 
-]]>
-       </sql>
-     </sqlQuery> 
 
      <sqlQuery>
        <name>species_details</name>
@@ -856,19 +783,4 @@ AND eas.source_id = ?
 ]]>
        </sql>
      </sqlQuery> 
-
-
-
-     <sqlQuery>
-       <name>group_name_per_group_id</name>
-       <sql>
-<![CDATA[ 
-SELECT name 
-FROM apidb.OrthologGroup 
-WHERE ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
 

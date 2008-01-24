@@ -77,19 +77,10 @@
 
     <test name="all_taxa_info" min="50" max="500">
     </test>
-
-
-    <test name="all_three_letter_abbrevs" min="50" max="500">
-    </test>
       
 
     <test name="sequence_info_per_history_seq" min="20" max="20">
       <prepare type="aa_sequence_id" count="20"/>
-    </test>
-      
-
-    <test name="group_name_per_history_grp" min="20" max="20">
-      <prepare type="ortholog_group_id" count="20"/>
     </test>
       
 
@@ -100,11 +91,6 @@
 
     <test name="sequences_per_grp" min="200" max="2000">
       <prepare type="ortholog_group_id" count="200"/>
-    </test>
-      
-
-    <test name="group_per_group_name" min="200" max="200">
-      <prepare type="ortholog_group_name" count="200"/>
     </test>
       
 
@@ -163,6 +149,10 @@
     </test>
       
 
+    <test name="taxa_num_genes_per_group" min="1" max="2000">
+      <prepare type="ortholog_group_id" count="1000"/>
+    </test>
+
 
     <test name="sequence_descrip_per_group" min="10000" max="50000">
       <prepare type="ortholog_group_id" count="10000"/>
@@ -177,12 +167,6 @@
     <test name="description_per_domain" min="10000" max="10000">
       <prepare type="db_ref_id" count="10000"/>
     </test>
-      
-
-    <test name="sequence_per_id" min="10000" max="10000">
-      <prepare type="sequence_source_id" count="10000"/>
-    </test>
-      
 
 
     <test name="sequence_attributes_per_group" min="10000" max="50000">
@@ -270,11 +254,7 @@
      </test>
       
 
-    <test name="num_sequences" min="1" max="1">
-    </test>
-      
-
-    <test name="num_species" min="1" max="1">
+    <test name="species_details" min="87" max="87">
     </test>
       
 
@@ -326,13 +306,6 @@
     <test name="group_id_per_sequence_source_id" min="10000" max="10000">
       <prepare type="sequence_source_id" count="10000"/>
     </test>
-      
 
-    <test name="group_name_per_group_id" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
 <gbrowseSanity>
-      
-
-
 

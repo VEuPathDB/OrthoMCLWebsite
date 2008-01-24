@@ -1,0 +1,935 @@
+<sqlDictionary>
+  <module>
+     <sqlQuery>
+       <name>all_taxa_count</name>
+       <sql>
+<![CDATA[ 
+SELECT count(*) 
+FROM apidb.OrthomclTaxon 
+WHERE is_species = 1
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>all_sequences_count</name>
+       <sql>
+<![CDATA[ 
+SELECT count(*) 
+FROM DoTS.ExternalAaSequence 
+WHERE taxon_id IN 
+   (SELECT taxon_id 
+    FROM apidb.OrthomclTaxon 
+    WHERE is_species = 1)
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>all_groups_count</name>
+       <sql>
+<![CDATA[ 
+SELECT count(*) 
+FROM ApiDB.OrthologGroup
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>all_taxa_info</name>
+       <sql>
+<![CDATA[ 
+SELECT orthomcl_taxon_id AS taxon_id,
+       nvl(parent_id, orthomcl_taxon_id) AS parent_id,
+       three_letter_abbrev AS abbrev,
+       name
+FROM apidb.OrthomclTaxon
+ORDER BY parent_id ASC, is_species DESC
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>all_three_letter_abbrevs</name>
+       <sql>
+<![CDATA[ 
+SELECT three_letter_abbrev, name 
+FROM apidb.OrthomclTaxon
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>sequence_info_per_history_seq</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, og.name, ot.name
+FROM dots.ExternalAaSequence eas,
+     apidb.OrthologGroup og,
+     apidb.OrthologGroupAaSequence ogs,
+     apidb.OrthomclTaxon ot
+WHERE ot.taxon_id = eas.taxon_id
+  AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+  AND ogs.ortholog_group_id = og.ortholog_group_id(+)
+  AND eas.aa_sequence_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>group_name_per_history_grp</name>
+       <sql>
+<![CDATA[ 
+SELECT og.name 
+FROM apidb.OrthologGroup og
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>group_per_seq</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs
+WHERE ogs.aa_sequence_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>sequences_per_grp</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.aa_sequence_id 
+FROM apidb.OrthologGroupAaSequence ogs 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>group_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT og.ortholog_group_id
+FROM apidb.OrthologGroup og
+WHERE og.name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>groups_like_seq_descrip_keyword</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs,
+dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id != 0
+AND eas.description LIKE '%$querycode%'
+GROUP BY ogs.ortholog_group_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_like_pfam_accession</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id 
+FROM apidb.OrthologGroupAaSequence ogs,
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+WHERE ogs.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND ogs.ortholog_group_id != 0 
+AND db.primary_identifier LIKE '%$querycode%'
+GROUP BY ogs.ortholog_group_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_like_pfam_name</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id 
+FROM apidb.OrthologGroupAaSequence ogs,
+dots.DomainFeature df, 
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+WHERE ogs.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND ogs.ortholog_group_id != 0 
+AND db.secondary_identifier LIKE '%$querycode%'
+GROUP BY ogs.ortholog_group_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_like_pfam_description</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs,
+ dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+ WHERE ogs.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND ogs.ortholog_group_id != 0
+AND db.remark LIKE '%$querycode%'
+GROUP BY ogs.ortholog_group_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_num_seqs</name>
+       <sql>
+<![CDATA[ 
+SELECT og.ortholog_group_id
+FROM apidb.OrthologGroup og
+WHERE og.ortholog_group_id != 0
+AND og.number_of_members  $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_num_species</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id 
+FROM apidb.OrthologGroupAaSequence ogs,
+dots.ExternalAaSequence eas
+WHERE ogs.ortholog_group_id != 0
+AND ogs.aa_sequence_id = eas.aa_sequence_id
+GROUP BY ogs.ortholog_group_id
+HAVING count(DISTINCT(eas.taxon_id))  $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_num_match_pairs</name>
+       <sql>
+<![CDATA[ 
+SELECT og.ortholog_group_id, og.number_of_match_pairs AS matchpair
+FROM apidb.OrthologGroup og
+WHERE 100 * og.number_of_match_pairs * 2 / (og.number_of_members * (og.number_of_members - 1))  $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_percent_identity</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id 
+FROM apidb.OrthologGroup 
+WHERE avg_percent_identity  $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_percent_match</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id 
+FROM apidb.OrthologGroup 
+WHERE avg_percent_match $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>groups_by_blast_evalue</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id 
+FROM apidb.OrthologGroup 
+WHERE avg_evalue_mant * power(10, avg_evalue_exp) $number
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>group_attributes_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id, name, 0 AS avg_dcs,
+avg_percent_identity, avg_percent_match,
+(avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue,
+number_of_match_pairs 
+FROM apidb.OrthologGroup 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_genes_per_group_per_species</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(*) 
+FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id = ?
+AND eas.taxon_id IN (SELECT taxon_id FROM apidb.OrthomclTaxon WHERE three_letter_abbrev = ?)
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_genes_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(*) 
+FROM apidb.OrthologGroupAaSequence 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_species_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(DISTINCT eas.taxon_id)
+FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>sequence_descrip_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.description  
+FROM apidb.OrthologGroupAaSequence ogs, 
+dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>sequence_domains_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.aa_sequence_id, dbaf.db_ref_id 
+FROM apidb.OrthologGroupAaSequence ogs, 
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf
+WHERE ogs.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>description_per_domain</name>
+       <sql>
+<![CDATA[ 
+SELECT remark
+ FROM sres.DbRef 
+WHERE db_ref_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>sequence_per_id</name>
+       <sql>
+<![CDATA[ 
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence 
+WHERE source_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>blast_attributes_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id, name, 0 AS avg_dcs,
+avg_percent_identity, avg_percent_match, 
+(avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue, 
+number_of_match_pairs 
+FROM apidb.OrthologGroup 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_sequences_per_group_per_taxon</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(ogs.aa_sequence_id) 
+FROM apidb.OrthologGroupAaSequence ogs, 
+ dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id = ?
+ AND eas.taxon_id = ot.taxon_id
+AND ot.three_letter_abbrev = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_sequences_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(*) 
+FROM apidb.OrthologGroupAaSequence 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>num_species_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(DISTINCT eas.taxon_id)
+FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_attributes_per_group</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.name, eas.description,
+eas.length, ot.name, edr.id_url 
+FROM apidb.OrthologGroupAaSequence ogs,
+ dots.ExternalAaSequence eas,
+ sres.ExternalDatabaseRelease edr,
+ apidb.OrthomclTaxon ot
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.external_database_release_id = edr.external_database_release_id
+AND eas.taxon_id = ot.taxon_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_per_source_id</name>
+       <sql>
+<![CDATA[ 
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence 
+WHERE source_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_like_id_and_descrip_keyword</name>
+       <sql>
+<![CDATA[ 
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence 
+WHERE source_id LIKE '%$querycode%' 
+OR description LIKE '%$querycode%'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_like_descrip_keyword</name>
+       <sql>
+<![CDATA[ 
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence 
+WHERE description LIKE '%$querycode%'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_by_three_letter_abbrev</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id 
+FROM dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot
+WHERE eas.taxon_id = ot.taxon_id 
+AND ot.three_letter_abbrev = '$querycode'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_by_pfam_accession</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id 
+FROM dots.ExternalAaSequence eas,
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+ WHERE eas.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND db.primary_identifier = '$querycode'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_by_pfam_name</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id 
+FROM dots.ExternalAaSequence eas,
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+ WHERE eas.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND db.secondary_identifier = '$querycode'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_id_by_pfam_keyword</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id 
+FROM dots.ExternalAaSequence eas,
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND db.remark = '$querycode'
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>group_name_by_sequence_id</name>
+       <sql>
+<![CDATA[ 
+SELECT og.name 
+FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence ogs
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+AND ogs.aa_sequence_id=$seq_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_sequence_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.secondary_identifier, 
+eas.description, eas.length, ot.name,
+ edr.id_url, og.name, og.ortholog_group_id 
+FROM dots.ExternalAaSequence eas,
+ sres.ExternalDatabaseRelease edr,
+apidb.OrthomclTaxon ot,
+apidb.OrthologGroup og,
+apidb.OrthologGroupAaSequence ogs
+WHERE eas.external_database_release_id = edr.external_database_release_id
+AND eas.taxon_id = ot.taxon_id
+ AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+AND ogs.ortholog_group_id = og.ortholog_group_id(+) 
+AND eas.aa_sequence_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>group_name_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT name 
+FROM apidb.OrthologGroup 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>group_id_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT ortholog_group_id
+FROM apidb.OrthologGroup 
+WHERE name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id, 
+eas.source_id, eas.description, 
+eas.length, ot.three_letter_abbrev 
+FROM apidb.OrthologGroupAaSequence ogs,
+dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot
+ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.taxon_id = ot.taxon_id
+AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>max_length_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT MAX(eas.length)
+FROM apidb.OrthologGroupAaSequence ogs,
+ dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot
+ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.taxon_id = ot.taxon_id
+ AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>domains_info_per_sequence_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, db.primary_identifier,
+db.secondary_identifier, db.remark,
+ al.start_min, al.end_max
+FROM dots.ExternalAaSequence eas,
+dots.DomainFeature df,
+dots.DbRefAaFeature dbaf,
+dots.AaLocation al,
+sres.DbRef db
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = al.aa_feature_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+ AND eas.aa_sequence_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_source_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.name, 
+ot.name, ogs.ortholog_group_id,
+eas.description, eas.length, edr.id_url 
+FROM dots.ExternalAaSequence eas,
+ apidb.OrthomclTaxon ot,
+sres.ExternalDatabaseRelease edr,
+apidb.OrthologGroupAaSequence ogs
+WHERE eas.taxon_id = ot.taxon_id
+AND eas.external_database_release_id = edr.external_database_release_id
+AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+AND eas.source_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>domain_arch_per_sequence_source_id</name>
+       <sql>
+<![CDATA[ 
+SELECT al.start_min, al.end_max, db.primary_identifier,
+db.secondary_identifier, db.remark
+FROM dots.ExternalAaSequence eas,
+dots.DomainFeature df,
+dots.AaLocation al,
+dots.DbRefAaFeature dbaf,
+sres.DbRef db
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+AND df.aa_feature_id = al.aa_feature_id
+AND df.aa_feature_id = dbaf.aa_feature_id
+AND dbaf.db_ref_id = db.db_ref_id
+AND eas.source_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>num_sequences</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(eas.aa_sequence_id) 
+FROM dots.ExternalAASequence eas,
+apidb.OrthomclTaxon ot
+ WHERE eas.taxon_id = ot.taxon_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>num_species</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(distinct taxon_id) 
+FROM dots.ExternalAASequence 
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>num_sequences_per_species</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(*) 
+FROM dots.ExternalAASequence 
+WHERE taxon_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>num_clustered_sequences_per_species</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(ogs.aa_sequence_id) 
+FROM dots.ExternalAASequence eas,
+ apidb.OrthologGroupAaSequence ogs
+WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+AND eas.taxon_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>num_groups_per_species</name>
+       <sql>
+<![CDATA[ 
+SELECT COUNT(DISTINCT(ogs.ortholog_group_id)) 
+FROM dots.ExternalAASequence eas,
+apidb.OrthologGroupAaSequence ogs
+WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+AND eas.taxon_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>msa_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT multiple_sequence_alignment 
+FROM apidb.OrthologGroup 
+WHERE name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>svg_content_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT svg_content 
+FROM apidb.OrthologGroup 
+WHERE name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>biolayout_image_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT biolayout_image 
+FROM apidb.OrthologGroup 
+WHERE name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.description, ot.name 
+FROM apidb.OrthologGroup og,
+apidb.OrthologGroupAaSequence ogs,
+dots.ExternalAaSequence eas,
+ apidb.OrthomclTaxon ot
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+AND ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.taxon_id = ot.taxon_id
+AND og.name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.description, ot.name 
+FROM apidb.OrthologGroupAaSequence ogs,
+ dots.ExternalAaSequence eas,
+  apidb.OrthomclTaxon ot
+ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.taxon_id = ot.taxon_id
+ AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>sequence_info_per_sequence_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.source_id, eas.description, ot.name 
+FROM dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot
+WHERE eas.taxon_id = ot.taxon_id
+AND eas.aa_sequence_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>group_id_per_sequence_source_id</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.aa_sequence_id, ogs.ortholog_group_id 
+FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+AND eas.source_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+
+     <sqlQuery>
+       <name>group_name_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT name 
+FROM apidb.OrthologGroup 
+WHERE ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+

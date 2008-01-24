@@ -1697,7 +1697,7 @@ sub sequence {
     my $seq = $data[7];
 
     # display sequence
-    $para{SEQUENCE} = "<font face=\"Courier\" size=\"2\">";
+    $para{SEQUENCE} = "<font face=\"Courier\" size=\"2\">&gt;";
     if ($para{NAME}) { $para{SEQUENCE} .= $para{NAME}." "; }
     if ($para{DESCRIPTION}) { $para{SEQUENCE} .= $para{DESCRIPTION}." "; }
     $para{SEQUENCE} .= "[".$para{TAXON}."]<br>";
@@ -2021,7 +2021,7 @@ sub getSeq {
             my $taxon = $data[2];
             my $len = $data[3];
             my $seq = $data[4];
-            $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">";
+            $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">&gt;";
             if ($desc) { $para{CONTENT} .= $desc; }
             $para{CONTENT} .= " [$taxon]<br>";
             for (my $i=1;$i<=$len;$i+=60) {

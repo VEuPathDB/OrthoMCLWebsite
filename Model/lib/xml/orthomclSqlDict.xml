@@ -44,9 +44,9 @@ FROM ApiDB.OrthologGroup
 SELECT orthomcl_taxon_id AS taxon_id,
        nvl(parent_id, orthomcl_taxon_id) AS parent_id,
        three_letter_abbrev AS abbrev,
-       name
+       name, is_species
 FROM apidb.OrthomclTaxon
-ORDER BY parent_id ASC, is_species DESC
+ORDER BY parent_id ASC, is_species ASC
 ]]>
        </sql>
      </sqlQuery> 
@@ -290,7 +290,7 @@ WHERE avg_evalue_mant * power(10, avg_evalue_exp) $number
 SELECT ortholog_group_id, name, 0 AS avg_dcs,
 avg_percent_identity, avg_percent_match,
 (avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue,
-number_of_match_pairs 
+number_of_match_pairs, number_of_members
 FROM apidb.OrthologGroup 
 WHERE ortholog_group_id = ?
 ]]>
@@ -299,46 +299,20 @@ WHERE ortholog_group_id = ?
 
 
      <sqlQuery>
-       <name>num_genes_per_group_per_species</name>
+       <name>species_num_genes_per_group</name>
        <sql>
 <![CDATA[ 
-SELECT COUNT(*) 
-FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas,
+SELECT ot.orthomcl_taxon_id, count(ogs.aa_sequence_id) AS sequence_count
+FROM apidb.OrthologGroupAaSequence ogs, 
+     dots.ExternalAaSequence eas,
      apidb.OrthomclTaxon ot
 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND ogs.ortholog_group_id = ?
-AND eas.taxon_id = ot.taxon_id 
-AND ot.three_letter_abbrev = ?
+  AND eas.taxon_id = ot.taxon_id
+  AND ogs.ortholog_group_id = ?
+GROUP BY ot.orthomcl_taxon_id
 ]]>
        </sql>
      </sqlQuery> 
-
-<!-- not needed any more
-     <sqlQuery>
-       <name>num_genes_per_group</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(*) 
-FROM apidb.OrthologGroupAaSequence 
-WHERE ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
--->
-
-<!-- not needed either
-     <sqlQuery>
-       <name>num_species_per_group</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(DISTINCT eas.taxon_id)
-FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
-WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND ogs.ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
--->
 
      <sqlQuery>
        <name>sequence_descrip_per_group</name>
@@ -392,65 +366,6 @@ WHERE source_id = ?
 ]]>
        </sql>
      </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>blast_attributes_per_group</name>
-       <sql>
-<![CDATA[ 
-SELECT ortholog_group_id, name, 0 AS avg_dcs,
-avg_percent_identity, avg_percent_match, 
-(avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue, 
-number_of_match_pairs 
-FROM apidb.OrthologGroup 
-WHERE ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>num_sequences_per_group_per_taxon</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(ogs.aa_sequence_id) 
-FROM apidb.OrthologGroupAaSequence ogs, 
- dots.ExternalAaSequence eas,
-apidb.OrthomclTaxon ot
-WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND ogs.ortholog_group_id = ?
- AND eas.taxon_id = ot.taxon_id
-AND ot.three_letter_abbrev = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>num_sequences_per_group</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(*) 
-FROM apidb.OrthologGroupAaSequence 
-WHERE ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-
-     <sqlQuery>
-       <name>num_species_per_group</name>
-       <sql>
-<![CDATA[ 
-SELECT COUNT(DISTINCT eas.taxon_id)
-FROM apidb.OrthologGroupAaSequence ogs, dots.ExternalAaSequence eas
-WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND ogs.ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
 
 
      <sqlQuery>
@@ -712,8 +627,9 @@ AND dbaf.db_ref_id = db.db_ref_id
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.name, 
-ot.name, ogs.ortholog_group_id,
-eas.description, eas.length, edr.id_url 
+       ot.name, ogs.ortholog_group_id,
+       eas.description, eas.length, 
+       edr.id_url, eas.sequence 
 FROM dots.ExternalAaSequence eas,
  apidb.OrthomclTaxon ot,
 sres.ExternalDatabaseRelease edr,
@@ -767,12 +683,30 @@ apidb.OrthomclTaxon ot
        <name>num_species</name>
        <sql>
 <![CDATA[ 
-SELECT COUNT(distinct taxon_id) 
-FROM dots.ExternalAASequence 
+SELECT COUNT(taxon_id) 
+FROM apidb.OrthomclTaxon 
+WHERE is_species = 1 
 ]]>
        </sql>
      </sqlQuery> 
 
+     <sqlQuery>
+       <name>species_details</name>
+       <sql>
+<![CDATA[ 
+SELECT ot.taxon_id, ot.name, ot.three_letter_abbrev,
+       ed.name, edr.download_url, edr.description
+FROM apidb.OrthomclTaxon ot,
+     dots.ExternalAaSequence eas,
+     sres.ExternalDatabase ed,
+     sres.ExternalDatabaseRelease edr
+WHERE ot.taxon_id = eas.taxon_id
+  AND eas.external_database_release_id = edr.external_database_release_id
+  AND edr.external_database_id = ed.external_database_id
+  AND ot.is_species = 1
+]]>
+       </sql>
+     </sqlQuery> 
 
 
      <sqlQuery>
@@ -861,7 +795,8 @@ WHERE name = ?
        <name>sequence_info_per_group_name</name>
        <sql>
 <![CDATA[ 
-SELECT eas.source_id, eas.description, ot.name 
+SELECT eas.source_id, eas.description, 
+       ot.name, eas.length, eas.sequence 
 FROM apidb.OrthologGroup og,
 apidb.OrthologGroupAaSequence ogs,
 dots.ExternalAaSequence eas,
@@ -880,7 +815,8 @@ AND og.name = ?
        <name>sequence_info_per_group_id</name>
        <sql>
 <![CDATA[ 
-SELECT eas.source_id, eas.description, ot.name 
+SELECT eas.source_id, eas.description, 
+       ot.name, eas.length, eas.sequence 
 FROM apidb.OrthologGroupAaSequence ogs,
  dots.ExternalAaSequence eas,
   apidb.OrthomclTaxon ot
@@ -897,7 +833,8 @@ AND eas.taxon_id = ot.taxon_id
        <name>sequence_info_per_sequence_id</name>
        <sql>
 <![CDATA[ 
-SELECT eas.source_id, eas.description, ot.name 
+SELECT eas.source_id, eas.description, 
+       ot.name, eas.length, eas.sequence
 FROM dots.ExternalAaSequence eas,
 apidb.OrthomclTaxon ot
 WHERE eas.taxon_id = ot.taxon_id

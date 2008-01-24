@@ -154,28 +154,28 @@
     </test>
 
 
-    <test name="sequence_descrip_per_group" min="10000" max="50000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="sequence_descrip_per_group" min="100" max="50000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="sequence_domains_per_group" min="10000" max="100000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="sequence_domains_per_group" min="100" max="100000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="description_per_domain" min="10000" max="10000">
-      <prepare type="db_ref_id" count="10000"/>
+    <test name="description_per_domain" min="100" max="10000">
+      <prepare type="db_ref_id" count="100"/>
     </test>
 
 
-    <test name="sequence_attributes_per_group" min="10000" max="50000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="sequence_attributes_per_group" min="100" max="50000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="sequence_per_source_id" min="10000" max="10000">
-      <prepare type="sequence_source_id" count="10000"/>
+    <test name="sequence_per_source_id" min="100" max="10000">
+      <prepare type="sequence_source_id" count="100"/>
     </test>
       
 
@@ -214,43 +214,43 @@
     </test>
       
 
-    <test name="sequence_info_per_sequence_id" min="10000" max="10000">
-      <prepare type="aa_sequence_id" count="10000"/>
+    <test name="sequence_info_per_sequence_id" min="100" max="10000">
+      <prepare type="aa_sequence_id" count="100"/>
     </test>
       
 
-    <test name="group_name_per_group_id" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="group_name_per_group_id" min="100" max="10000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="group_id_per_group_name" min="10000" max="10000">
-      <prepare type="ortholog_group_name" count="10000"/>
+    <test name="group_id_per_group_name" min="100" max="10000">
+      <prepare type="ortholog_group_name" count="100"/>
     </test>
       
 
-    <test name="sequence_info_per_group_id" min="10000" max="100000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="sequence_info_per_group_id" min="100" max="100000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="max_length_per_group_id" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="max_length_per_group_id" min="100" max="10000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="domains_info_per_sequence_id" min="10000" max="20000">
-      <prepare type="aa_sequence_id" count="10000"/>
+    <test name="domains_info_per_sequence_id" min="100" max="20000">
+      <prepare type="aa_sequence_id" count="100"/>
     </test>
       
 
-    <test name="sequence_info_per_source_id" min="10000" max="10000">
-      <prepare type="sequence_source_id" count="10000"/>
+    <test name="sequence_info_per_source_id" min="100" max="10000">
+      <prepare type="sequence_source_id" count="100"/>
     </test>
       
 
-    <test name="domain_arch_per_sequence_source_id" min="10000" max="20000">
-      <prepare type="sequence_source_id" count="10000"/>
+    <test name="domain_arch_per_sequence_source_id" min="100" max="20000">
+      <prepare type="sequence_source_id" count="100"/>
      </test>
       
 
@@ -278,33 +278,33 @@
     </test>
       
 
-    <test name="svg_content_per_group_name" min="10000" max="10000">
-      <prepare type="ortholog_group_name" count="10000"/>
+    <test name="svg_content_per_group_name" min="100" max="10000">
+      <prepare type="ortholog_group_name" count="100"/>
     </test>
       
 
-    <test name="biolayout_image_per_group_name" min="10000" max="10000">
-      <prepare type="ortholog_group_name" count="10000"/>
+    <test name="biolayout_image_per_group_name" min="100" max="10000">
+      <prepare type="ortholog_group_name" count="100"/>
     </test>
       
 
-    <test name="sequence_info_per_group_name" min="10000" max="10000">
-      <prepare type="ortholog_group_name" count="10000"/>
+    <test name="sequence_info_per_group_name" min="100" max="10000">
+      <prepare type="ortholog_group_name" count="100"/>
     </test>
       
 
-    <test name="sequence_info_per_group_id" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
+    <test name="sequence_info_per_group_id" min="100" max="10000">
+      <prepare type="ortholog_group_id" count="100"/>
     </test>
       
 
-    <test name="sequence_info_per_sequence_id" min="10000" max="10000">
-      <prepare type="aa_sequence_id" count="10000"/>
+    <test name="sequence_info_per_sequence_id" min="100" max="10000">
+      <prepare type="aa_sequence_id" count="100"/>
     </test>
       
 
-    <test name="group_id_per_sequence_source_id" min="10000" max="10000">
-      <prepare type="sequence_source_id" count="10000"/>
+    <test name="group_id_per_sequence_source_id" min="100" max="10000">
+      <prepare type="sequence_source_id" count="100"/>
     </test>
 
 <gbrowseSanity>

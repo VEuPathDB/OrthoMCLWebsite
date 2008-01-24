@@ -2084,7 +2084,7 @@ sub getSql {
   my ($self, $name, $argsHash) = @_;
 
   if (!$self->{sqlDict}) {
-    $self->{sqlDict} = ApiCommonWebsite::Model::SqlXmlParser("$ENV{GUS_HOME}/lib/xml/orthomclSqlDict.xml");
+    $self->{sqlDict} = ApiCommonWebsite::Model::SqlXmlParser::parseSqlXmlFile("$ENV{GUS_HOME}/lib/xml/orthomclSqlDict.xml");
   }
 
   my $sqlString = $self->{sqlDict}->{$name} || die "sql dictionary doesn't contain entry for '$name'";

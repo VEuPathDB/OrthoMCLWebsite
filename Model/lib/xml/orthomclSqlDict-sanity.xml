@@ -25,18 +25,6 @@
       </sql>
     </sqlValue>
 
-    <sqlValue name="group_id_three_letter_abbrev">
-      <sql>
-      <![CDATA[
-      select ortholog_group_id, three_letter_abbrev
-      from apidb.orthologgroupaasequence gs, dots.externalaasequence s, apidb.orthomcltaxon t
-      where gs.aa_sequence_id = s.aa_sequence_id
-      and s.taxon_id = t.taxon_id
-      and rownum <= ROWNUM_COUNT
-      ]]>
-      </sql>
-    </sqlValue>
-
     <sqlValue name="ortholog_group_id">
       <sql>
       <![CDATA[
@@ -175,20 +163,6 @@
     </test>
       
 
-    <test name="num_genes_per_group_per_species" min="10000" max="10000">
-      <prepare type="group_id_three_letter_abbrev" count="10000"/>
-    </test>
-      
-
-    <test name="num_genes_per_group" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
-      
-
-    <test name="num_species_per_group" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
-      
 
     <test name="sequence_descrip_per_group" min="10000" max="50000">
       <prepare type="ortholog_group_id" count="10000"/>
@@ -210,25 +184,6 @@
     </test>
       
 
-    <test name="blast_attributes_per_group" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
-      
-
-    <test name="num_sequences_per_group_per_taxon" min="50" max="50">
-      <prepare type="group_id_three_letter_abbrev" count="50"/>
-    </test>
-      
-
-    <test name="num_sequences_per_group" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
-      
-
-    <test name="num_species_per_group" min="10000" max="10000">
-      <prepare type="ortholog_group_id" count="10000"/>
-    </test>
-      
 
     <test name="sequence_attributes_per_group" min="10000" max="50000">
       <prepare type="ortholog_group_id" count="10000"/>

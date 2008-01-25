@@ -34,23 +34,23 @@ sub cgiapp_init {
     my $mode = $q->param("rm");
 
     if (!$mode || index($mode,"draw") < 0) {
-	$config = LoadFile("@cgilibTargetDir@/config.yaml");
-	$self->param(config => $config);
+	    $config = LoadFile("@cgilibTargetDir@/config.yaml");
+	    $self->param(config => $config);
 	
-	$self->dbh_config('orthomcl', 
+	    $self->dbh_config('orthomcl', 
 			  [ $config->{database}, 
 			    $config->{user}, 
 			    $config->{password},
 			    {RaiseError => 1, PrintWarn => 1, PrintError => 1}
 			    ]);
-	$self->dbh_default_name("orthomcl");
+	    $self->dbh_default_name("orthomcl");
 	
-	# Configure the session
-	#$self->session_config(
-	#   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
-	#   SEND_COOKIE         => 1,
-	#);
-	$self->session_config(
+	    # Configure the session
+	    #$self->session_config(
+	    #   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
+	    #   SEND_COOKIE         => 1,
+	    #);
+	    $self->session_config(
 			      CGI_SESSION_OPTIONS => [ "driver:File",
 						       $self->query,
 						       {Directory=>File::Spec->tmpdir} ],
@@ -62,8 +62,8 @@ sub cgiapp_init {
 sub setup {
     my $self = shift;
     $self->tmpl_path('@cgibinTargetDir@/tmpl');
-    $self->start_mode('index');
-    $self->run_modes([qw(index
+    $self->start_mode('indexMode');
+    $self->run_modes([qw(indexMode
                          groupQueryForm sequenceQueryForm
                  groupList sequenceList
                  domarchList
@@ -75,7 +75,7 @@ sub setup {
                ]);
 }
 
-sub index {
+sub indexMode {
   my $self = shift;
   my $dbh = $self->dbh();
   my $config = $self->param("config");
@@ -1878,12 +1878,12 @@ sub blast {
 }
 
 sub sourceIdToColors {
-    my $sourceId = $_[0];
+    my ($self, $sourceId) = @_;
 
-    if (&index($sourceId,'IPR0') >= 0) {
+    if (index($sourceId,'IPR0') >= 0) {
     $sourceId = '2'.substr($sourceId,4);
     }
-    elsif (&index($sourceId,'PF') >= 0) {
+    elsif (index($sourceId,'PF') >= 0) {
     $sourceId = '1'.substr($sourceId,2);
     }
     
@@ -1901,11 +1901,11 @@ sub getRGBColor {
     my $b;
 
     do {
-    $r = sprintf('%x', (rand(256) % 6) * 3);
-    $g = sprintf('%x', (rand(256) % 6) * 3);
-    do {
-        $b = sprintf('%x', (rand(256) % 6) * 3);
-    } while ($r==$g && $g==$b);
+        $r = sprintf('%x', (rand(256) % 6) * 3);
+        $g = sprintf('%x', (rand(256) % 6) * 3);
+        do {
+            $b = sprintf('%x', (rand(256) % 6) * 3);
+        } while ($r==$g && $g==$b);
     } while ($cut > 0 && (($r < $cut && $g < $cut) || ($r < $cut && $b < $cut) || ($g < $cut && $b < $cut)));
     #} while ($cut>0 && ($r < $cut || $g<$cut || $b < $cut));
 
@@ -1937,7 +1937,7 @@ sub drawDomain {
     my $color1;
     my $color2;
 
-    ($color1,$color2)=sourceIdToColors($source_id);
+    ($color1,$color2)=$self->sourceIdToColors($source_id);
 
     # domain image
     my $domain_image = new GD::Image($length*$scale_factor+1,$dom_height+1);
@@ -1998,7 +1998,7 @@ sub drawProtein {
     my $color1;
     my $color2;
 
-    ($color1,$color2)=sourceIdToColors($domain_source);
+    ($color1,$color2)=$self->sourceIdToColors($domain_source);
     my $domain_inside = $image->colorAllocate($color1->[0],$color1->[1],$color1->[2]);
     my $domain_outside = $image->colorAllocate($color2->[0],$color2->[1],$color2->[2]);
     

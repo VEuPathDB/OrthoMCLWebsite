@@ -2094,10 +2094,10 @@ sub getSql {
   }
 
   my $sqlString = $self->{queryNameHash}->{$name}->{sql}->[0] || die "sql dictionary doesn't contain entry for '$name'";
-  my @macros = ($sqlString =~ /\$(\S+)/g);
+  my @macros = ($sqlString =~ /\$(\w+)/g);
   scalar(@macros) == scalar(keys(%$argsHash)) || die "wrong number of values";
   foreach my $macro (@macros) { 
-    $argsHash->{$macro} || die "sql has '\$$macro' but no value found for it";
+    $argsHash->{$macro} || die "sql $name has '\$$macro' but no value found for it";
     $sqlString =~ s/\$$macro/$argsHash->{$macro}/g;
   }
 

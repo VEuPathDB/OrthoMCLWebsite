@@ -123,7 +123,7 @@ WHERE ogs.aa_sequence_id = df.aa_sequence_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
 AND ogs.ortholog_group_id != 0 
-AND db.primary_identifier LIKE '%$querycode%'
+AND db.primary_identifier = '$querycode'
 GROUP BY ogs.ortholog_group_id
 ]]>
        </sql>

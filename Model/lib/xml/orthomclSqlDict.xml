@@ -618,17 +618,13 @@ AND eas.source_id = ?
      <sqlQuery>
        <name>species_details</name>
        <sql>
-<![CDATA[ 
+<![CDATA[
 SELECT ot.taxon_id, ot.name, ot.three_letter_abbrev,
-       ed.name, edr.download_url, edr.description
+       od.resource_name, od.resource_url, od.description
 FROM apidb.OrthomclTaxon ot,
-     dots.ExternalAaSequence eas,
-     sres.ExternalDatabase ed,
-     sres.ExternalDatabaseRelease edr
-WHERE ot.taxon_id = eas.taxon_id
-  AND eas.external_database_release_id = edr.external_database_release_id
-  AND edr.external_database_id = ed.external_database_id
-  AND ot.is_species = 1
+     apidb.OrthomclResource od
+WHERE od.orthomcl_taxon_id = ot.orthomcl_taxon_id
+  AND ot.is_species = 1 
 ]]>
        </sql>
      </sqlQuery> 

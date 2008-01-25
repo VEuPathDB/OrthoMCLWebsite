@@ -111,7 +111,7 @@ GROUP BY ogs.ortholog_group_id
 
 
      <sqlQuery>
-       <name>groups_like_pfam_accession</name>
+       <name>groups_by_pfam_accession</name>
        <sql>
 <![CDATA[ 
 SELECT ogs.ortholog_group_id 
@@ -413,7 +413,7 @@ AND db.primary_identifier = '$querycode'
 
 
      <sqlQuery>
-       <name>sequence_id_by_pfam_name</name>
+       <name>sequence_id_like_pfam_name</name>
        <sql>
 <![CDATA[ 
 SELECT eas.aa_sequence_id 
@@ -424,7 +424,7 @@ sres.DbRef db
  WHERE eas.aa_sequence_id = df.aa_sequence_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
-AND db.secondary_identifier = '$querycode'
+AND db.secondary_identifier LIKE '%$querycode%'
 ]]>
        </sql>
      </sqlQuery> 
@@ -432,7 +432,7 @@ AND db.secondary_identifier = '$querycode'
 
 
      <sqlQuery>
-       <name>sequence_id_by_pfam_keyword</name>
+       <name>sequence_id_like_pfam_keyword</name>
        <sql>
 <![CDATA[ 
 SELECT eas.aa_sequence_id 
@@ -443,7 +443,7 @@ sres.DbRef db
 WHERE eas.aa_sequence_id = df.aa_sequence_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
-AND db.remark = '$querycode'
+AND db.remark LIKE '%$querycode%'
 ]]>
        </sql>
      </sqlQuery> 
@@ -749,6 +749,23 @@ AND eas.taxon_id = ot.taxon_id
      </sqlQuery> 
 
 
+     <sqlQuery>
+       <name>domain_sequence_info_per_group_id</name>
+       <sql>
+<![CDATA[ 
+SELECT eas.aa_sequence_id, 
+     eas.source_id, eas.description, 
+      eas.length, ot.three_letter_abbrev 
+FROM apidb.OrthologGroupAaSequence ogs,
+     dots.ExternalAaSequence eas,
+      apidb.OrthomclTaxon ot
+WHERE ogs.aa_sequence_id = eas.aa_sequence_id
+    AND eas.taxon_id = ot.taxon_id
+    AND ogs.ortholog_group_id = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
 
      <sqlQuery>
        <name>sequence_info_per_sequence_id</name>
@@ -777,4 +794,6 @@ AND eas.source_id = ?
 ]]>
        </sql>
      </sqlQuery> 
+  </module>
+</sqlDictionary>
 

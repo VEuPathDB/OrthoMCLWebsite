@@ -99,7 +99,7 @@
     </test>
       
      
-    <test name="groups_like_pfam_accession" min="1" max="200">
+    <test name="groups_by_pfam_accession" min="1" max="200">
          <param name="querycode" value="PF00091"/>
     </test>
       
@@ -149,7 +149,7 @@
     </test>
       
 
-    <test name="taxa_num_genes_per_group" min="1" max="2000">
+    <test name="taxa_num_genes_per_group" min="1" max="3000">
       <prepare type="ortholog_group_id" count="1000"/>
     </test>
 
@@ -199,12 +199,12 @@
     </test>
       
 
-    <test name="sequence_id_by_pfam_name" min="10" max="1000">
+    <test name="sequence_id_like_pfam_name" min="10" max="1000">
       <param name="querycode" value="kinase"/>
     </test>
       
 
-    <test name="sequence_id_by_pfam_keyword" min="10" max="1000">
+    <test name="sequence_id_like_pfam_keyword" min="10" max="1000">
       <param name="querycode" value="Adenylate"/>
     </test>
       
@@ -298,6 +298,11 @@
     </test>
       
 
+    <test name="domain_sequence_info_per_group_id" min="100" max="10000">
+      <prepare type="ortholog_group_id" count="100"/>
+    </test>
+      
+
     <test name="sequence_info_per_sequence_id" min="100" max="10000">
       <prepare type="aa_sequence_id" count="100"/>
     </test>
@@ -307,5 +312,5 @@
       <prepare type="sequence_source_id" count="100"/>
     </test>
 
-<gbrowseSanity>
+</gbrowseSanity>
 

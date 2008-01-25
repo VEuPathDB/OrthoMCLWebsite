@@ -539,7 +539,7 @@ sub groupList {
                     if ($in eq 'Keyword') {
                         $query_string = $self->getSql('groups_like_seq_descrip_keyword', {querycode=>$querycode});
                     } elsif ($in eq 'Pfam_Accession') {
-                        $query_string = $self->getSql('groups_like_pfam_accession', {querycode=>$querycode});
+                        $query_string = $self->getSql('groups_by_pfam_accession', {querycode=>$querycode});
                     } elsif ($in eq 'Pfam_Name') {
                         $query_string = $self->getSql('groups_like_pfam_name', {querycode=>$querycode});
                     } elsif ($in eq 'Pfam_Keyword') {
@@ -1122,9 +1122,9 @@ sub sequenceList {
             } elsif ($in eq 'Pfam_Accession') {
                 $query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
             } elsif ($in eq 'Pfam_Name') {
-                $query_string = $self->getSql('sequence_id_by_pfam_name', {querycode=>$querycode});
+                $query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
             } elsif ($in eq 'Pfam_Keyword') {
-                $query_string = $self->getSql('sequence_id_by_pfam_keyword', {querycode=>$querycode});
+                $query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
             }
 
             if ($debug) {
@@ -1282,6 +1282,9 @@ sub domarchList {
     my $dbh = $self->dbh();
     my $q = $self->query();
 
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
+
     my %para;
 
     my ($orthogroup_id,$orthogroup_ac);
@@ -1300,7 +1303,7 @@ sub domarchList {
     $para{GROUP_ACCESSION}=$orthogroup_ac;
 
     $para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-    my $query_sequence_by_groupid = $dbh->prepare($self->getSql('sequence_info_per_group_id'));
+    my $query_sequence_by_groupid = $dbh->prepare($self->getSql('domain_sequence_info_per_group_id'));
 
     my $query_max_length_by_groupid = $dbh->prepare($self->getSql('max_length_per_group_id'));
     
@@ -2083,11 +2086,14 @@ sub done {
 sub getSql {
   my ($self, $name, $argsHash) = @_;
 
-  if (!$self->{sqlDict}) {
-    $self->{sqlDict} = ApiCommonWebsite::Model::SqlXmlParser::parseSqlXmlFile("$ENV{GUS_HOME}/lib/xml/orthomclSqlDict.xml");
+  if (!$self->{queryNameHash}) {
+    my $gbrowseConfig = ApiCommonWebsite::Model::SqlXmlParser::parseSqlXmlFile("$ENV{GUS_HOME}/lib/xml/orthomclSqlDict.xml");
+    #my $gbrowseConfig = &ApiCommonWebsite::Model::SqlXmlParser::parseSqlXmlFile($gbrowseFile, $showParseG);
+    ($self->{queryNameHash}, $self->{queryNameArray}) = &getQueryNameHash($gbrowseConfig);
+
   }
 
-  my $sqlString = $self->{sqlDict}->{$name} || die "sql dictionary doesn't contain entry for '$name'";
+  my $sqlString = $self->{queryNameHash}->{$name}->{sql}->[0] || die "sql dictionary doesn't contain entry for '$name'";
   my @macros = ($sqlString =~ /\$(\S+)/g);
   scalar(@macros) == scalar(keys(%$argsHash)) || die "wrong number of values";
   foreach my $macro (@macros) { 
@@ -2096,6 +2102,21 @@ sub getSql {
   }
 
   return $sqlString;
+}
+
+
+sub getQueryNameHash {
+  my ($gbrowseConfig) = @_;
+
+  my $qnh = {};
+  my @qna;
+  foreach my $module (@{$gbrowseConfig->{module}}) {
+    foreach my $sqlQuery (@{$module->{sqlQuery}}) {
+      push(@qna, $sqlQuery->{name}->[0]);
+      $qnh->{$sqlQuery->{name}->[0]} = $sqlQuery;
+    }
+  }
+  return ($qnh,\@qna);
 }
 
 

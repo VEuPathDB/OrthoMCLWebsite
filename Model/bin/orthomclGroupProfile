@@ -2,29 +2,36 @@
 
 use strict;
 
-use lib "@targetDir@/lib/perl";
+use lib '@targetDir@/lib/perl';
 $ENV{GUS_HOME} = '@targetDir@';
 
 use OrthoMCLData::Load::MatrixColumnManager;
 use ApiCommonWebsite::Model::ModelConfig;
+use DBI;
 
 my $groupName = $ARGV[0] || die "usage: orthomclGroupProfile group_name \n";
+my $cladeFile = "$ENV{GUS_HOME}/config/orthomclClades.txt";
+my $speciesFile = "$ENV{GUS_HOME}/config/orthomclSpecies.txt";
+
+my $dbh = &getDbHandle();
 
 my $colMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
 
-my $dbh = &getDbHandle();
 my $sql = "
 select m.*
 from apidb.grouptaxonmatrix m, apidb.orthologgroup g
-where g.name = '$name'
+where g.name = '$groupName'
 and  m.ortholog_group_id = g.ortholog_group_id
 ";
 
 my $stmt = &getDbHandle()->prepare($sql);
 $stmt->execute();
-while (my $row = $stmt->getrow_hashref()) {
+my $proteinCounts;
+my $taxonCounts;
+while (my $row = $stmt->fetchrow_hashref()) {
   foreach my $colName (keys(%$row)) {
-    my ($taxonAbbrev, $proteinOrTaxonFlag) = $colMgr->getTaxonAbbrev($col);
+    next unless $colName =~ /column\d+/i;
+    my ($taxonAbbrev, $proteinOrTaxonFlag) = $colMgr->getTaxonAbbrev($colName);
     if ($proteinOrTaxonFlag eq 'P') {
 	$proteinCounts->{$taxonAbbrev} = $row->{$colName};
     } else {
@@ -50,15 +57,15 @@ while (<CLADE>) {
     /^([\|\s\s]*)([A-Z]{3})/;
     my $indent = $1;
     my $cladeAbbrev = $2;
-    print "$indent $cladeAbbrev  T:$taxonCounts->{$clade}  P:$proteinCounts->{$clade}\n";
-    foreach my $species (@{$clades->{$clade}}) {
-	print "$indent $species T:$taxonCounts->{$species}  P:$proteinCounts->{$species}\n" if $proteinCounts->{$species};
+    print "$indent$cladeAbbrev    T:$taxonCounts->{$cladeAbbrev}  P:$proteinCounts->{$cladeAbbrev}\n";
+    foreach my $species (@{$clades->{$cladeAbbrev}}) {
+	print "$indent|  $species T:$taxonCounts->{$species}  P:$proteinCounts->{$species}\n" if $proteinCounts->{$species};
     }
 			 
 }
 
 sub getDbHandle {
-  my $c = new ApiCommonWebsite::Model::ModelConfig($model);
+  my $c = new ApiCommonWebsite::Model::ModelConfig("OrthoMCL");
 
   my $dsn = $c->getDbiDsn();
   my $login = $c->getLogin();

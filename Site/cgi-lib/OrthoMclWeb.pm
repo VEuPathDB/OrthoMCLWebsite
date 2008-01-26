@@ -1145,10 +1145,10 @@ sub sequenceList {
                 if ($groupredirect==1) {
                     my $seq_id = $sequence_ids_ref->[0];
                     my $group_qs= $self->getSql('group_name_by_sequence_id', {seq_id=>$seq_id});
-                    my $group_q=$dbh->prepare($group_qs);
-                    $group_q->execute();
+                    my $group_q1=$dbh->prepare($group_qs);
+                    $group_q1->execute();
                     my @group_ac;
-                    while (my @data=$group_q->fetchrow_array()) {
+                    while (my @data=$group_q1->fetchrow_array()) {
                         push(@group_ac,$data[0]);
                     }
                     if (scalar(@group_ac)==1) {

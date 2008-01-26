@@ -24,6 +24,7 @@ use OrthoMCLWebsite::Model::Ppe::Processor;
 use ApiCommonWebsite::Model::SqlXmlParser;
 use FunKeyword;
 use GD;
+use Data::Dumper;
 
 my $debug=0;
 our $config;
@@ -1724,7 +1725,7 @@ sub getSeq {
     } elsif (my $querynumber = $q->param("querynumber")) {
         my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
         my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-        my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_sequence_id'));
+        my $query_sequence = $dbh->prepare($self->getSql('history_sequence_info_per_sequence_id'));
 
         my $file_content;
         foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {

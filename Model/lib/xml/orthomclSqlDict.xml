@@ -768,7 +768,7 @@ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 
 
      <sqlQuery>
-       <name>sequence_info_per_sequence_id</name>
+       <name>history_sequence_info_per_sequence_id</name>
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.description, 

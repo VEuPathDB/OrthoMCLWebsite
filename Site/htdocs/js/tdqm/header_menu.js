@@ -277,7 +277,7 @@ Main Menu Items (Text, URL's, and Icons)
 
 	dqm__maindesc0 = "Home"
 	dqm__micon_index0 = 0
-	dqm__url0 = "/cgi-bin/OrthoMclWeb.cgi?rm=index"
+	dqm__url0 = "/cgi-bin/OrthoMclWeb.cgi?rm=indx"
 
 
 

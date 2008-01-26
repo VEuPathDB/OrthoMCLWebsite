@@ -44,6 +44,8 @@ sub cgiapp_init {
 			    {RaiseError => 1, PrintWarn => 1, PrintError => 1}
 			    ]);
 	    $self->dbh_default_name("orthomcl");
+	    $self->dbh()->{LongTruncOk} = 0;
+	    $self->dbh()->{LongReadLen} = 100000000;
 	
 	    # Configure the session
 	    #$self->session_config(

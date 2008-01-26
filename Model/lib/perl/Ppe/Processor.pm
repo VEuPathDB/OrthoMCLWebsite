@@ -15,7 +15,8 @@ sub run {
   my $dbh = $self->getQueryHandle();
   my $expression = $cgi->param('expression');
   &error("missing 'expression' param") unless $expression;
-  my $groupIds = &processPpe($dbh, $expression);
+
+  my $groupIds = $self->processPpe($dbh, $expression);
 
   exit();
 }
@@ -23,12 +24,11 @@ sub run {
 sub processPpe {
   my ($self, $dbh, $ppeExpression) = @_;
 
-  print STDERR "$ppeExpression\n";
-
   my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
   my $boolean = &parsePpeExpression($ppeExpression);
   $boolean->setOtherTaxa();
   my $whereClause = $boolean->toSqlString($columnMgr);
+
   my $sql = "
 SELECT ortholog_group_id
 FROM apidb.GroupTaxonMatrix
@@ -41,7 +41,7 @@ ORDER BY ortholog_group_id
   while (my ($id) = $stmt->fetchrow_array) {
       push(@$groupIds, $id);
   }
-  print STDERR "$whereClause\n";
+
   return $groupIds;
 }
 
@@ -52,6 +52,7 @@ sub parsePpeExpression {
     my $parser = OrthoMCLWebsite::Model::Ppe::Parser->new();
 
     $parser->YYData()->{INPUT} = $expression;
+
     return $parser->YYParse(yylex => \&OrthoMCLWebsite::Model::Ppe::Parser::Lexer,
 			    yyerror => \&OrthoMCLWebsite::Model::Ppe::Parser::Error,
 			    yydebug => 0);  # set to 0x01 for lexer debug

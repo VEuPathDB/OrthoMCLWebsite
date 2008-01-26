@@ -64,7 +64,10 @@ sub Lexer {
     } elsif ($parser->YYData()->{INPUT} =~ s/^(\))\s*//) {
           @tokenDescriptor = (')', ')');
 
-    } elsif ($parser->YYData()->{INPUT} =~ s/^([\>\<]?\=)\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\<\=|\>\=)\s*//) {
+          @tokenDescriptor = ('COMPARATOR', $1);
+
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(\>|\<|\=)\s*//) {
           @tokenDescriptor = ('COMPARATOR', $1);
 
     } elsif ($parser->YYData()->{INPUT} =~ s/^(\d+)T\s*//) {

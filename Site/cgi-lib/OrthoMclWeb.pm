@@ -62,8 +62,8 @@ sub cgiapp_init {
 sub setup {
     my $self = shift;
     $self->tmpl_path('@cgibinTargetDir@/tmpl');
-    $self->start_mode('indexMode');
-    $self->run_modes([qw(indexMode
+    $self->start_mode('indx');
+    $self->run_modes([qw(indx
                          groupQueryForm sequenceQueryForm
                  groupList sequenceList
                  domarchList
@@ -75,7 +75,7 @@ sub setup {
                ]);
 }
 
-sub indexMode {
+sub indx {
   my $self = shift;
   my $dbh = $self->dbh();
   my $config = $self->param("config");

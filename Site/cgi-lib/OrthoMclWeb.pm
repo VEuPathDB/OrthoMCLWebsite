@@ -1785,7 +1785,8 @@ sub blast {
     print $fh $fasta;
     close($fh);
     $ENV{BLASTMAT} = $config->{BLASTMAT};
-    open(BLAST, $config->{BLAST}." -p blastp -i $tempfile -d ".$config->{FA_file}." -e 1e-5 |") or die $!;
+    my $blastcmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5";
+    open(BLAST, "$blastcmd |") or die $!;
     
     my $query_sequence = $dbh->prepare($self->getSql('group_id_per_sequence_source_id'));
 
@@ -1871,7 +1872,7 @@ sub blast {
       $querynumber=scalar(@{$sequence_query_history});
       $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber);# store the current querynumber for later paging
 
-      mv pro    } else {
+      } else {
     $para{ERROR}="Please provide protein sequence for BLASTP!";
     }
 

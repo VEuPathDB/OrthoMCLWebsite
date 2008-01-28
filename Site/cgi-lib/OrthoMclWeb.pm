@@ -618,7 +618,7 @@ sub groupList {
                                             });
             }
         } elsif ($querytype eq 'ppform') {
-            
+            # should we be doing something in here, similar to the ppexpression query type?
         }
         $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
         @$orthogroup_ids_ref=sort {$a<=>$b} @$orthogroup_ids_ref;
@@ -2034,7 +2034,7 @@ sub drawScale {
     my $image = new GD::Image($size_x,20);
     my $image_bg = $image->colorAllocate(1,1,1);
     my $image_color;
-    if ($scale_color == "white") {
+    if ($scale_color eq "white") {
     $image_color = $image->colorAllocate(255,255,255);
     }
     else {

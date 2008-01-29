@@ -414,7 +414,7 @@ sub groupQueryHistory {
 	foreach (@{$group_query_ids_history->[$b-1]}) {
 	  $b_ids{$_}=1;
 	}
-	foreach my $a _id (@{$group_query_ids_history->[$a-1]}) {
+	foreach my $a_id (@{$group_query_ids_history->[$a-1]}) {
 	  next if (defined $b_ids{$a_id});
 	  push(@result_ids,$a_id);
 	}
@@ -868,7 +868,7 @@ sub sequenceQueryHistory {
 	$action_description = $action.' (#'.join("+#",@select).')';
 	my %present_ids;
 	foreach my $querynumber (@select) {
-	  foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+	  foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
 	    $present_ids{$sequence_id}=1;
 	  }
 	}
@@ -877,7 +877,7 @@ sub sequenceQueryHistory {
 	$action_description = $action.' (#'.join("+#",@select).')';
 	my %present_ids;
 	foreach my $querynumber (@select) {
-	  foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+	  foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
 	    $present_ids{$sequence_id}++;
 	  }
 	}
@@ -901,7 +901,7 @@ sub sequenceQueryHistory {
 	foreach (@{$sequence_query_ids_history->[$b-1]}) {
 	  $b_seqids{$_}=1;
 	}
-	foreach my $a _seqid (@{$sequence_query_ids_history->[$a-1]}) {
+	foreach my $a_seqid (@{$sequence_query_ids_history->[$a-1]}) {
 	  next if (defined $b_seqids{$a_seqid});
 	  push(@result_ids,$a_seqid);
 	}
@@ -1760,7 +1760,7 @@ sub getSeq {
     my $query_sequence = $dbh->prepare($self->getSql('history_sequence_info_per_sequence_id'));
 
     my $file_content;
-    foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+    foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
       $query_sequence->execute($sequence_id);
       my @data = $query_sequence->fetchrow_array();
       my $ac = $data[0];

@@ -1825,7 +1825,7 @@ sub blast {
     my $blastcmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5";
     open(BLAST, "$blastcmd |") or die $!;
     
-    my $query_sequence = $dbh->prepare($self->getSql('group_id_per_sequence_source_id'));
+    my $query_sequence = $dbh->prepare($self->getSql('group_id_per_sequence_id'));
 
     my $query_orthogroup = $dbh->prepare($self->getSql('group_name_per_group_id'));
     
@@ -1839,8 +1839,15 @@ sub blast {
 	  if (m/^\s*$/) {
 	    $para{CONTENT}.="$_\n";last;
 	  }
-	  if (m/^(\S+)(\s+)(\S+.*)/) {
-            $query_sequence->execute($1);
+
+          # handle a line in this format:
+	  # 149456 PY07337                                                        632   e-180
+	  if (m/^(\S+) (\S+)(\s+)(\S+.*)/) {
+            my $aa_sequence_id = $1;
+            my $seq_source_id = $2;
+            my $padding = $3;
+            my $the_rest = $4;
+            $query_sequence->execute($aa_sequence_id);
             my ($sequence_id,$orthogroup_ac,$orthogroup_id);
             while (my @data = $query_sequence->fetchrow_array()) {
 	      $sequence_id = $data[0];
@@ -1852,16 +1859,15 @@ sub blast {
                 $orthogroup_ac = $data[0];
 	      }
 	      push(@{$sequence_ids_ref},$sequence_id);
-	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> 
-                                 <a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id\">$orthogroup_ac</a>";
-	      for (my $i=1;$i<=length($2)-length($orthogroup_ac)-1;$i++) {
+	      $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id">$seq_source_id</a>};
+	      for (my $i=1;$i<=length($padding)-length($orthogroup_ac)-1;$i++) {
                 $para{CONTENT}.=' ';
 	      }
-	      $para{CONTENT}.="$3\n";
+	      $para{CONTENT}.="$the_rest\n";
             } elsif ($sequence_id ne '') {
-	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>$2$3\n";
+	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id\">$seq_source_id</a>$padding$the_rest\n";
             } else {
-	      $para{CONTENT}.="$1$2$3\n";
+	      $para{CONTENT}.="$seq_source_id$padding$the_rest\n";
             }
 	  }
         }

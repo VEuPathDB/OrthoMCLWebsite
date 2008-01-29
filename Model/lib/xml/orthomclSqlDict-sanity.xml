@@ -308,8 +308,8 @@
     </test>
       
 
-    <test name="group_id_per_sequence_source_id" min="100" max="10000">
-      <prepare type="sequence_source_id" count="100"/>
+    <test name="group_id_per_sequence_id" min="100" max="10000">
+      <prepare type="aa_source_id" count="100"/>
     </test>
 
 </gbrowseSanity>

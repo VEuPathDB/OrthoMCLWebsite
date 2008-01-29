@@ -10,11 +10,11 @@ use lib "@targetDir@/lib/perl";
 $ENV{GUS_HOME} = '@targetDir@';
 my $oracleHome = $ENV{ORACLE_HOME};
 if (!$oracleHome) {
-    $ENV{ORACLE_HOME} = '@oracleHome@';
+  $ENV{ORACLE_HOME} = '@oracleHome@';
 }
 
 use base 'CGI::Application';
-use DBI;     # Needed for OrthoMCL database connection
+use DBI;		     # Needed for OrthoMCL database connection
 use CGI;
 use CGI::Application::Plugin::DBH qw(dbh_config dbh dbh_default_name);
 use CGI::Application::Plugin::Session;
@@ -30,43 +30,45 @@ my $debug=0;
 our $config;
 
 sub cgiapp_init {
-    my $self = shift;
-    my $q = $self->query();
-    my $mode = $q->param("rm");
+  my $self = shift;
+  my $q = $self->query();
+  my $mode = $q->param("rm");
 
-    if (!$mode || index($mode,"draw") < 0) {
-	    $config = LoadFile("@cgilibTargetDir@/config.yaml");
-	    $self->param(config => $config);
+  if (!$mode || index($mode,"draw") < 0) {
+    $config = LoadFile("@cgilibTargetDir@/config.yaml");
+    $self->param(config => $config);
 	
-	    $self->dbh_config('orthomcl', 
-			  [ $config->{database}, 
-			    $config->{user}, 
-			    $config->{password},
-			    {RaiseError => 1, PrintWarn => 1, PrintError => 1}
-			    ]);
-	    $self->dbh_default_name("orthomcl");
-	    $self->dbh()->{LongTruncOk} = 0;
-	    $self->dbh()->{LongReadLen} = 100000000;
+    $self->dbh_config('orthomcl', 
+		      [ $config->{database}, 
+			$config->{user}, 
+			$config->{password},
+			{
+			 RaiseError => 1, PrintWarn => 1, PrintError => 1}
+		      ]);
+    $self->dbh_default_name("orthomcl");
+    $self->dbh()->{LongTruncOk} = 0;
+    $self->dbh()->{LongReadLen} = 100000000;
 	
-	    # Configure the session
-	    #$self->session_config(
-	    #   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
-	    #   SEND_COOKIE         => 1,
-	    #);
-	    $self->session_config(
-			      CGI_SESSION_OPTIONS => [ "driver:File",
-						       $self->query,
-						       {Directory=>File::Spec->tmpdir} ],
-			      SEND_COOKIE         => 1,
-			      );
-    }
+    # Configure the session
+    #$self->session_config(
+    #   CGI_SESSION_OPTIONS => [ "driver:Oracle", $self->query, {Handle=>$self->dbh()} ],
+    #   SEND_COOKIE         => 1,
+    #);
+    $self->session_config(
+			  CGI_SESSION_OPTIONS => [ "driver:File",
+						   $self->query,
+						   {
+						    Directory=>File::Spec->tmpdir} ],
+			  SEND_COOKIE         => 1,
+			 );
+  }
 }    
 
 sub setup {
-    my $self = shift;
-    $self->tmpl_path('@cgibinTargetDir@/tmpl');
-    $self->start_mode('indx');
-    $self->run_modes([qw(indx
+  my $self = shift;
+  $self->tmpl_path('@cgibinTargetDir@/tmpl');
+  $self->start_mode('indx');
+  $self->run_modes([qw(indx
                          groupQueryForm sequenceQueryForm
                  groupList sequenceList
                  domarchList
@@ -75,7 +77,7 @@ sub setup {
                  orthomcl drawScale drawDomain drawProtein
                  MSA BLGraph getSeq
                  querySave queryTransform)
-               ]);
+		   ]);
 }
 
 sub indx {
@@ -121,978 +123,996 @@ sub indx {
 }
 
 sub groupQueryForm {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-    my $type=$q->param("type");  # query type: ppexpression, ppform, property
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+  my $type=$q->param("type"); # query type: ppexpression, ppform, property
 
-    my $tmpl = $self->load_tmpl("groupqueryform.tmpl");
-    $self->defaults($tmpl);
+  my $tmpl = $self->load_tmpl("groupqueryform.tmpl");
+  $self->defaults($tmpl);
 
-#    $tmpl->param(LEFTNAV => 1);
+  #    $tmpl->param(LEFTNAV => 1);
 
-    if ($type eq 'ackeyword') {
-        $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Accession / Keyword");
-        $tmpl->param(ACKEYWORD => 1);
-    } elsif ($type eq 'ppform') {
-        $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Phyletic Pattern Form");
-        $tmpl->param(PPFORM => 1);
+  if ($type eq 'ackeyword') {
+    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Accession / Keyword");
+    $tmpl->param(ACKEYWORD => 1);
+  } elsif ($type eq 'ppform') {
+    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Phyletic Pattern Form");
+    $tmpl->param(PPFORM => 1);
         
-        my $query_taxon = $dbh->prepare($self->getSql('all_taxa_info'));
-        $query_taxon->execute();
-        my %para;
-        while (my @data = $query_taxon->fetchrow_array()) {
-            push(@{$para{TAXONS}}, { TAXON_ID=>$data[0],
-                                     PARENT_ID=>$data[1],
-                                     ABBREV=>$data[2],
-                                     NAME=>$data[3], 
-                                   });
-        }
-        $tmpl->param(\%para);
-    } elsif ($type eq 'property') {
-        $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Group Properties");
-        $tmpl->param(PROPERTY => 1);
-    } else {
-        $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By PPE (Phyletic Pattern Expression)");
-        $tmpl->param(PPEXPRESSION => 1);
+    my $query_taxon = $dbh->prepare($self->getSql('all_taxa_info'));
+    $query_taxon->execute();
+    my %para;
+    while (my @data = $query_taxon->fetchrow_array()) {
+      push(@{$para{TAXONS}}, { TAXON_ID=>$data[0],
+			       PARENT_ID=>$data[1],
+			       ABBREV=>$data[2],
+			       NAME=>$data[3], 
+			     });
+    }
+    $tmpl->param(\%para);
+  } elsif ($type eq 'property') {
+    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Group Properties");
+    $tmpl->param(PROPERTY => 1);
+  } else {
+    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By PPE (Phyletic Pattern Expression)");
+    $tmpl->param(PPEXPRESSION => 1);
 
-        my %para;
-        my $query_taxon = $dbh->prepare($self->getSql('all_taxa_info'));
-        $query_taxon->execute();
-        my $count=0;
-        my @prev_data;
-        while (my @data = $query_taxon->fetchrow_array()) {
-            $count++;
-            if ($count%2==0) {    # which means every tr has two td
-                push(@{$para{LOOP_TR}},{LOOP_TD=>[
-                        {ABBREV=>$prev_data[2],NAME=>$prev_data[3]},
-                        {ABBREV=>$data[2],NAME=>$data[3]}
-                    ]});
-            }
-            @prev_data=@data;
-        }
-        if ($count%2) {
-            push(@{$para{LOOP_TR}},{LOOP_TD=>[
-                    {ABBREV=>$prev_data[0],NAME=>$prev_data[1]}
-                ]});
-        }
-
-        $tmpl->param(\%para);
+    my %para;
+    my $query_taxon = $dbh->prepare($self->getSql('all_taxa_info'));
+    $query_taxon->execute();
+    my $count=0;
+    my @prev_data;
+    while (my @data = $query_taxon->fetchrow_array()) {
+      $count++;
+      if ($count%2==0) {	# which means every tr has two td
+	push(@{$para{LOOP_TR}},{LOOP_TD=>[
+					  {
+					   ABBREV=>$prev_data[2],NAME=>$prev_data[3]},
+					  {
+					   ABBREV=>$data[2],NAME=>$data[3]}
+					 ]});
+      }
+      @prev_data=@data;
+    }
+    if ($count%2) {
+      push(@{$para{LOOP_TR}},{LOOP_TD=>[
+					{
+					 ABBREV=>$prev_data[0],NAME=>$prev_data[1]}
+				       ]});
     }
 
-    return $self->done($tmpl);
+    $tmpl->param(\%para);
+  }
+
+  return $self->done($tmpl);
 }
 
 sub sequenceQueryForm {
-    my $self = shift;
-    my $q = $self->query();
-    my $type=$q->param("type");  # query type: keyword or blast
+  my $self = shift;
+  my $q = $self->query();
+  my $type=$q->param("type");	# query type: keyword or blast
 
-    my $tmpl = $self->load_tmpl("sequencequeryform.tmpl");
-    $self->defaults($tmpl);
+  my $tmpl = $self->load_tmpl("sequencequeryform.tmpl");
+  $self->defaults($tmpl);
 
-#    $tmpl->param(LEFTNAV => 1);
+  #    $tmpl->param(LEFTNAV => 1);
 
-    if ($type eq 'blast') {
-        $tmpl->param(PAGETITLE => "Query Protein Sequences By BLAST Search");
-        $tmpl->param(BLAST => 1);
-    } else {
-        $tmpl->param(PAGETITLE => "Query Protein Sequences By Accession/Keyword");
-        $tmpl->param(ACKEYWORD => 1);
-    }
+  if ($type eq 'blast') {
+    $tmpl->param(PAGETITLE => "Query Protein Sequences By BLAST Search");
+    $tmpl->param(BLAST => 1);
+  } else {
+    $tmpl->param(PAGETITLE => "Query Protein Sequences By Accession/Keyword");
+    $tmpl->param(ACKEYWORD => 1);
+  }
 
-    return $self->done($tmpl);
+  return $self->done($tmpl);
 }
 
 sub querySave {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-    my $file_content;
-    if ((my $type=$q->param("type")) && (my $querynumber=$q->param("querynumber"))) {
-        my $file_name = 'OrthoMCL-DB_'.$type.'_query_'.$querynumber.'.txt';
-        $self->header_props(
-            -type=>'text/plain',
-            '-Content-Disposition'=>'attachment; filename="'.$file_name.'"');
-        my $query_accession_string;
-        my $query_ids_history;
-        if ($type eq 'sequence') {
-            $query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-            $query_accession_string = $self->getSql('sequence_info_per_history_seq');
-        } elsif ($type eq 'group') {
-            $query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
-            $query_accession_string = $self->getSql('group_name_per_group_id');
-        }
-        my $query_accession = $dbh->prepare($query_accession_string);
-        foreach my $id (@{$query_ids_history->[$querynumber-1]}) {
-            $query_accession->execute($id);
-            my @tmp = $query_accession->fetchrow_array();
-            if ($type eq 'sequence') {
-                $file_content.="$tmp[0]\t$tmp[1]\t$tmp[2]\r\n"; 
-            } elsif ($type eq 'group') {
-                $file_content.="$tmp[0]\r\n"; 
-            }
-        }
-    } else {
-        $file_content = "Please specify both type (group/sequence) and querynumber\n";
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+  my $file_content;
+  if ((my $type=$q->param("type")) && (my $querynumber=$q->param("querynumber"))) {
+    my $file_name = 'OrthoMCL-DB_'.$type.'_query_'.$querynumber.'.txt';
+    $self->header_props(
+			-type=>'text/plain',
+			'-Content-Disposition'=>'attachment; filename="'.$file_name.'"');
+    my $query_accession_string;
+    my $query_ids_history;
+    if ($type eq 'sequence') {
+      $query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
+      $query_accession_string = $self->getSql('sequence_info_per_history_seq');
+    } elsif ($type eq 'group') {
+      $query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
+      $query_accession_string = $self->getSql('group_name_per_group_id');
     }
-    return $file_content;
+    my $query_accession = $dbh->prepare($query_accession_string);
+    foreach my $id (@{$query_ids_history->[$querynumber-1]}) {
+      $query_accession->execute($id);
+      my @tmp = $query_accession->fetchrow_array();
+      if ($type eq 'sequence') {
+	$file_content.="$tmp[0]\t$tmp[1]\t$tmp[2]\r\n"; 
+      } elsif ($type eq 'group') {
+	$file_content.="$tmp[0]\r\n"; 
+      }
+    }
+  } else {
+    $file_content = "Please specify both type (group/sequence) and querynumber\n";
+  }
+  return $file_content;
 }
 
 sub queryTransform {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-    my $config = $self->param("config");
-    my @select=$q->param("select");
-    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-    my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+  my $config = $self->param("config");
+  my @select=$q->param("select");
+  my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
+  my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
 
-    if (($q->param("from") eq 'sequence') && ($q->param("to") eq 'group')) {
-        my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory";
-        $self->header_type('redirect');
-        $self->header_props(-url=>$new_url);
+  if (($q->param("from") eq 'sequence') && ($q->param("to") eq 'group')) {
+    my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory";
+    $self->header_type('redirect');
+    $self->header_props(-url=>$new_url);
 
-        my %sequence_ids;
-        foreach my $querynumber (@select) {
-            foreach my $id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-                $sequence_ids{$id}=1;
-            }
-        }
-        my %group_ids;
-        my $query_group = $dbh->prepare($self->getSql('group_per_seq'));
-        foreach (keys %sequence_ids) {
-            $query_group->execute($_);
-            my @data = $query_group->fetchrow_array();
-            next if ($data[0]==0); # ignore those sequences not clustered (groupid is zero)
-            $group_ids{$data[0]}=1;
-        }
-        my (@result_ids)=sort {$a<=>$b} keys %group_ids;
-        
-        # insert into group history as a new query
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @data = $query_time->fetchrow_array(); 
-        my $time=$data[0];
-
-        my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY");
-        my $action_description = 'from sequence query #'.join(",#",@select);
-        push(@{$group_query_history},{    CODE   =>$action_description,
-                                TYPE   =>'Query Transform',
-                                TIME   =>$time,
-                                NUMHITS=>scalar(@result_ids),
-                                SHOW   =>1,
-                                });
-        $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
-        push(@{$group_query_ids_history},\@result_ids);
-        $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
-        return "Redirecting to Group Query History";
-    } elsif (($q->param("from") eq 'group') && ($q->param("to") eq 'sequence')) {
-        my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
-        $self->header_type('redirect');
-        $self->header_props(-url=>$new_url);
-
-        my %group_ids;
-        foreach my $querynumber (@select) {
-            foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
-                $group_ids{$id}=1;
-            }
-        }
-        my %sequence_ids;
-        my $query_sequence = $dbh->prepare($self->getSql('sequences_per_grp'));
-        foreach (keys %group_ids) {
-            next if ($_==0); # (groupid is zero) means not clustered
-            $query_sequence->execute($_);
-            while (my @data = $query_sequence->fetchrow_array()) {
-                $sequence_ids{$data[0]}=1;;
-            }
-        }
-        my (@result_ids)=sort {$a<=>$b} keys %sequence_ids;
-        # insert into group history as a new query
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @data = $query_time->fetchrow_array(); 
-        my $time=$data[0];
-
-        my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
-        my $action_description = 'from group query #'.join(",#",@select);
-        push(@{$sequence_query_history},{CODE   =>$action_description,
-                                TYPE   =>'Query Transform',
-                                TIME   =>$time,
-                                NUMHITS=>scalar(@result_ids),
-                                SHOW   =>1,
-                                });
-        $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
-        push(@{$sequence_query_ids_history},\@result_ids);
-        $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
-        return "Redirecting to Sequence Query History";
+    my %sequence_ids;
+    foreach my $querynumber (@select) {
+      foreach my $id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+	$sequence_ids{$id}=1;
+      }
     }
+    my %group_ids;
+    my $query_group = $dbh->prepare($self->getSql('group_per_seq'));
+    foreach (keys %sequence_ids) {
+      $query_group->execute($_);
+      my @data = $query_group->fetchrow_array();
+      next if ($data[0]==0); # ignore those sequences not clustered (groupid is zero)
+      $group_ids{$data[0]}=1;
+    }
+    my (@result_ids)=sort {$a<=>$b} keys %group_ids;
+        
+    # insert into group history as a new query
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @data = $query_time->fetchrow_array(); 
+    my $time=$data[0];
+
+    my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY");
+    my $action_description = 'from sequence query #'.join(",#",@select);
+    push(@{$group_query_history},{    CODE   =>$action_description,
+				      TYPE   =>'Query Transform',
+				      TIME   =>$time,
+				      NUMHITS=>scalar(@result_ids),
+				      SHOW   =>1,
+				 });
+    $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
+    push(@{$group_query_ids_history},\@result_ids);
+    $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
+    return "Redirecting to Group Query History";
+  } elsif (($q->param("from") eq 'group') && ($q->param("to") eq 'sequence')) {
+    my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
+    $self->header_type('redirect');
+    $self->header_props(-url=>$new_url);
+
+    my %group_ids;
+    foreach my $querynumber (@select) {
+      foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
+	$group_ids{$id}=1;
+      }
+    }
+    my %sequence_ids;
+    my $query_sequence = $dbh->prepare($self->getSql('sequences_per_grp'));
+    foreach (keys %group_ids) {
+      next if ($_==0);	       # (groupid is zero) means not clustered
+      $query_sequence->execute($_);
+      while (my @data = $query_sequence->fetchrow_array()) {
+	$sequence_ids{$data[0]}=1;;
+      }
+    }
+    my (@result_ids)=sort {$a<=>$b} keys %sequence_ids;
+    # insert into group history as a new query
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @data = $query_time->fetchrow_array(); 
+    my $time=$data[0];
+
+    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
+    my $action_description = 'from group query #'.join(",#",@select);
+    push(@{$sequence_query_history},{CODE   =>$action_description,
+				     TYPE   =>'Query Transform',
+				     TIME   =>$time,
+				     NUMHITS=>scalar(@result_ids),
+				     SHOW   =>1,
+				    });
+    $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
+    push(@{$sequence_query_ids_history},\@result_ids);
+    $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+    return "Redirecting to Sequence Query History";
+  }
 }
 
 sub groupQueryHistory {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-    my @select=$q->param("select");
-    my $config = $self->param("config");
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+  my @select=$q->param("select");
+  my $config = $self->param("config");
 
-    if (my $transform=$q->param("transform")) {
-        my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=group&to=sequence";
-        foreach (@select) {
-            $new_url.="&select=$_";
-        }
-        $self->header_type('redirect');
-        $self->header_props(-url=>$new_url);
-        return "Redirecting to Query Transform";
+  if (my $transform=$q->param("transform")) {
+    my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=group&to=sequence";
+    foreach (@select) {
+      $new_url.="&select=$_";
     }
+    $self->header_type('redirect');
+    $self->header_props(-url=>$new_url);
+    return "Redirecting to Query Transform";
+  }
 
-    my $action=$q->param("action");
-    my %para;
+  my $action=$q->param("action");
+  my %para;
 
-    $para{PAGETITLE}="OrthoMCL Group Query History";
+  $para{PAGETITLE}="OrthoMCL Group Query History";
 
-    if ($debug) {
-        push(@{$para{LOOP_DEBUG}},{DEBUG=>"action: $action"});
-        foreach (@select) {
-            push(@{$para{LOOP_DEBUG}},{DEBUG=>"select: $_"});
-        }
+  if ($debug) {
+    push(@{$para{LOOP_DEBUG}},{DEBUG=>"action: $action"});
+    foreach (@select) {
+      push(@{$para{LOOP_DEBUG}},{DEBUG=>"select: $_"});
     }
+  }
 
-    my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY") || [];
+  my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY") || [];
 
-    if (my $action=$q->param("action")) {
-        if ($action eq 'REMOVE') {
-        foreach my $querynumber (@select) {
-            $group_query_history->[$querynumber-1]->{SHOW}=0;
-        }
-        } else {
-        my $action_description;
-        if (scalar(@select)<2) {
-            push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
-        }
-        my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
-        my @result_ids;
-        if ($action eq 'UNION') {
-            $action_description = $action.' (#'.join("+#",@select).')';
-            my %present_ids;
-            foreach my $querynumber (@select) {
-            foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
-                $present_ids{$id}=1;
-            }
-            }
-            @result_ids=sort {$a<=>$b} keys %present_ids;
-        } elsif ($action eq 'INTERSECT') {
-            $action_description = $action.' (#'.join("+#",@select).')';
-            my %present_ids;
-            foreach my $querynumber (@select) {
-            foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
-                $present_ids{$id}++;
-            }
-            }
-            foreach (sort {$a<=>$b} keys %present_ids) {
-            if ($present_ids{$_}==scalar(@select)) {push(@result_ids,$_);}
-            }
-        } elsif (($action eq 'TOP MINUS BOTTOM') || ($action eq 'BOTTOM MINUS TOP')) {
-            @select = sort {$a<=>$b} @select;
-            my ($a,$b);
-            if ($action eq 'TOP MINUS BOTTOM') {
-            $a = $select[0];
-            $b = $select[$#select];
-            } elsif ($action eq 'BOTTOM MINUS TOP') {
-            $a = $select[$#select];
-            $b = $select[0];
-            }
-            $action_description = "$action (#$a-#$b)";
-            my %b_ids;
-            foreach (@{$group_query_ids_history->[$b-1]}) {$b_ids{$_}=1;}
-            foreach my $a_id (@{$group_query_ids_history->[$a-1]}) {
-            next if (defined $b_ids{$a_id});
-            push(@result_ids,$a_id);
-            }
-        } else {
-            push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
-        }
+  if (my $action=$q->param("action")) {
+    if ($action eq 'REMOVE') {
+      foreach my $querynumber (@select) {
+	$group_query_history->[$querynumber-1]->{SHOW}=0;
+      }
+    } else {
+      my $action_description;
+      if (scalar(@select)<2) {
+	push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
+      }
+      my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
+      my @result_ids;
+      if ($action eq 'UNION') {
+	$action_description = $action.' (#'.join("+#",@select).')';
+	my %present_ids;
+	foreach my $querynumber (@select) {
+	  foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
+	    $present_ids{$id}=1;
+	  }
+	}
+	@result_ids=sort {$a<=>$b} keys %present_ids;
+      } elsif ($action eq 'INTERSECT') {
+	$action_description = $action.' (#'.join("+#",@select).')';
+	my %present_ids;
+	foreach my $querynumber (@select) {
+	  foreach my $id (@{$group_query_ids_history->[$querynumber-1]}) {
+	    $present_ids{$id}++;
+	  }
+	}
+	foreach (sort {$a<=>$b} keys %present_ids) {
+	  if ($present_ids{$_}==scalar(@select)) {
+	    push(@result_ids,$_);
+	  }
+	}
+      } elsif (($action eq 'TOP MINUS BOTTOM') || ($action eq 'BOTTOM MINUS TOP')) {
+	@select = sort {$a<=>$b} @select;
+	my ($a,$b);
+	if ($action eq 'TOP MINUS BOTTOM') {
+	  $a = $select[0];
+	  $b = $select[$#select];
+	} elsif ($action eq 'BOTTOM MINUS TOP') {
+	  $a = $select[$#select];
+	  $b = $select[0];
+	}
+	$action_description = "$action (#$a-#$b)";
+	my %b_ids;
+	foreach (@{$group_query_ids_history->[$b-1]}) {
+	  $b_ids{$_}=1;
+	}
+	foreach my $a _id (@{$group_query_ids_history->[$a-1]}) {
+	  next if (defined $b_ids{$a_id});
+	  push(@result_ids,$a_id);
+	}
+      } else {
+	push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
+      }
 
-        # insert into history as a new query
-            my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-            $query_time->execute();
-            my @data = $query_time->fetchrow_array();
-            push(@{$group_query_history},{    CODE   =>$action_description,
-                                            TYPE   =>'Query Action',
-                                            TIME   =>$data[0],
-                                            NUMHITS=>scalar(@result_ids),
-                                            SHOW   =>1,
-                                        });
-            $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
-            push(@{$group_query_ids_history},\@result_ids);
-            $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
+      # insert into history as a new query
+      my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+      $query_time->execute();
+      my @data = $query_time->fetchrow_array();
+      push(@{$group_query_history},{    CODE   =>$action_description,
+					TYPE   =>'Query Action',
+					TIME   =>$data[0],
+					NUMHITS=>scalar(@result_ids),
+					SHOW   =>1,
+				   });
+      $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
+      push(@{$group_query_ids_history},\@result_ids);
+      $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
 
-        }
-    } elsif (my $filehandle = $q->upload("file")) {
-        my $filename=$q->param("file");
-#        $q->param(-file=>'');
-#        $q->clear("file");#otherwise, there will be errors generated like "Do not know how to reconstitute blessed object of base type GLOB"
-        $filename=~s/.*[\/\\](.*)/$1/g;
-        my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
-        my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
-        my @result_ids;
-        while (<$filehandle>) {
-            $_=~s/\r|\n//g;
-            next if (/^\#/);
-            if (/^(OG1_\d+)/) {
-                $query_orthogroupid->execute($1);
-                my @data = $query_orthogroupid->fetchrow_array();
-                if ($data[0]) {
-                    push(@result_ids,$data[0]);
-                } else {
-                    push(@{$para{LOOP_ERROR}},{ERROR=>"<STRONG>$1</STRONG> is not a OrthoMCL Group accession OR can't be found in OrthoMCL-DB"});
-                }
-            }
-        }
-        # insert into history as a new query
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @data = $query_time->fetchrow_array();
-        push(@{$group_query_history},{    CODE   =>$filename,
-                                        TYPE   =>'Retrieve Groups From File',
-                                        TIME   =>$data[0],
-                                        NUMHITS=>scalar(@result_ids),
-                                        SHOW   =>1,
-                                    });
-        $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
-        push(@{$group_query_ids_history},\@result_ids);
-        $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
     }
-
-    my $number_history=0;
-    for (my $i=0;$i<=$#{$group_query_history};$i++) {
-        next unless ($group_query_history->[$i]->{SHOW});
-        my %query;
-        $query{QUERYNUMBER}=$i+1;
-        $query{QUERYTYPE}=$group_query_history->[$i]->{TYPE};
-        $query{QUERYCODE}=$group_query_history->[$i]->{CODE};
-        $query{QUERYNUMHIT}=$group_query_history->[$i]->{NUMHITS};
-        $query{QUERYTIME}=$group_query_history->[$i]->{TIME};
-        push(@{$para{LOOP_QUERYHISTORY}},\%query);
-        $number_history++;
+  } elsif (my $filehandle = $q->upload("file")) {
+    my $filename=$q->param("file");
+    #        $q->param(-file=>'');
+    #        $q->clear("file");#otherwise, there will be errors generated like "Do not know how to reconstitute blessed object of base type GLOB"
+    $filename=~s/.*[\/\\](.*)/$1/g;
+    my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
+    my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
+    my @result_ids;
+    while (<$filehandle>) {
+      $_=~s/\r|\n//g;
+      next if (/^\#/);
+      if (/^(OG1_\d+)/) {
+	$query_orthogroupid->execute($1);
+	my @data = $query_orthogroupid->fetchrow_array();
+	if ($data[0]) {
+	  push(@result_ids,$data[0]);
+	} else {
+	  push(@{$para{LOOP_ERROR}},{ERROR=>"<STRONG>$1</STRONG> is not a OrthoMCL Group accession OR can't be found in OrthoMCL-DB"});
+	}
+      }
     }
+    # insert into history as a new query
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @data = $query_time->fetchrow_array();
+    push(@{$group_query_history},{    CODE   =>$filename,
+				      TYPE   =>'Retrieve Groups From File',
+				      TIME   =>$data[0],
+				      NUMHITS=>scalar(@result_ids),
+				      SHOW   =>1,
+				 });
+    $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
+    push(@{$group_query_ids_history},\@result_ids);
+    $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
+  }
 
-    if ($number_history==0) {$para{NO_HISTORY}=1;}
+  my $number_history=0;
+  for (my $i=0;$i<=$#{$group_query_history};$i++) {
+    next unless ($group_query_history->[$i]->{SHOW});
+    my %query;
+    $query{QUERYNUMBER}=$i+1;
+    $query{QUERYTYPE}=$group_query_history->[$i]->{TYPE};
+    $query{QUERYCODE}=$group_query_history->[$i]->{CODE};
+    $query{QUERYNUMHIT}=$group_query_history->[$i]->{NUMHITS};
+    $query{QUERYTIME}=$group_query_history->[$i]->{TIME};
+    push(@{$para{LOOP_QUERYHISTORY}},\%query);
+    $number_history++;
+  }
 
-    my $tmpl = $self->load_tmpl('group_queryhistory.tmpl');  # loading template
-    $self->defaults($tmpl);
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+  if ($number_history==0) {
+    $para{NO_HISTORY}=1;
+  }
+
+  my $tmpl = $self->load_tmpl('group_queryhistory.tmpl'); # loading template
+  $self->defaults($tmpl);
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
 }
 
 sub groupList {
-    my $self = shift;
-    my $q = $self->query();
-    my $dbh = $self->dbh();
-    my $config = $self->param("config");
+  my $self = shift;
+  my $q = $self->query();
+  my $dbh = $self->dbh();
+  my $config = $self->param("config");
 
-    my $tmpl = $self->load_tmpl('group_listing.tmpl');  # loading template
-    $self->defaults($tmpl);
+  my $tmpl = $self->load_tmpl('group_listing.tmpl'); # loading template
+  $self->defaults($tmpl);
 
-    my %para;   # the parameters to fill in the html template
-    $para{PAGETITLE}="OrthoMCL Group List";
+  my %para;		 # the parameters to fill in the html template
+  $para{PAGETITLE}="OrthoMCL Group List";
 
-    my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY") || [];
-    my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY") || [];
+  my $group_query_history = $self->session->param("GROUP_QUERY_HISTORY") || [];
+  my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY") || [];
 
-    my $querynumber;
-    my $querycode;
-    my $orthogroup_ids_ref=[];
-    my $debug_info;
-#    my ($orthogroup_ids_ref,$debug_info);  # store all the orthogroup ids for current query
+  my $querynumber;
+  my $querycode;
+  my $orthogroup_ids_ref=[];
+  my $debug_info;
+  #    my ($orthogroup_ids_ref,$debug_info);  # store all the orthogroup ids for current query
 
-    if (my $querytype = $q->param('type')) {   # initiate a new query
-        #dealing with query time
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @tmp = $query_time->fetchrow_array();
-        my $time=$tmp[0];
-        if ($querytype eq 'ppexpression') {
-            if ($querycode = $q->param("q")) {
-                print STDERR "exp: $querycode.\n";
-                $orthogroup_ids_ref=OrthoMCLWebsite::Model::Ppe::Processor->processPpe($dbh, $querycode);
-                push(@{$group_query_history},{
-                                                CODE   => $querycode,
-                                                TYPE   => 'Phyletic Pattern Expression',
-                                                TIME   => $time,
-                                                NUMHITS=> scalar(@{$orthogroup_ids_ref}),
-                                                SHOW   => 1,
-                                            });
-            }
-        } elsif ($querytype eq 'ackeyword') {
-            if ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
-                if ($in eq 'Accession') {
-                    my @qc=split(" ",$querycode);
-                    foreach (@qc) {
-                        my $query_orthogroup = $dbh->prepare('SELECT og.ortholog_group_id 
+  if (my $querytype = $q->param('type')) { # initiate a new query
+    #dealing with query time
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @tmp = $query_time->fetchrow_array();
+    my $time=$tmp[0];
+    if ($querytype eq 'ppexpression') {
+      if ($querycode = $q->param("q")) {
+	print STDERR "exp: $querycode.\n";
+	$orthogroup_ids_ref=OrthoMCLWebsite::Model::Ppe::Processor->processPpe($dbh, $querycode);
+	push(@{$group_query_history},{
+				      CODE   => $querycode,
+				      TYPE   => 'Phyletic Pattern Expression',
+				      TIME   => $time,
+				      NUMHITS=> scalar(@{$orthogroup_ids_ref}),
+				      SHOW   => 1,
+				     });
+      }
+    } elsif ($querytype eq 'ackeyword') {
+      if ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
+	if ($in eq 'Accession') {
+	  my @qc=split(" ",$querycode);
+	  foreach (@qc) {
+	    my $query_orthogroup = $dbh->prepare('SELECT og.ortholog_group_id 
                                                               FROM apidb.OrthologGroup og 
                                                               WHERE og.name = ?');
-                        $query_orthogroup->execute($_);
-                        while (my @data = $query_orthogroup->fetchrow_array()) {
-                            push(@{$orthogroup_ids_ref},$data[0]);
-                        }
-                    }
-                } else {
-                    my $query_string;
-                    if ($in eq 'Keyword') {
-                        $query_string = $self->getSql('groups_like_seq_descrip_keyword', {querycode=>$querycode});
-                    } elsif ($in eq 'Pfam_Accession') {
-                        $query_string = $self->getSql('groups_by_pfam_accession', {querycode=>$querycode});
-                    } elsif ($in eq 'Pfam_Name') {
-                        $query_string = $self->getSql('groups_like_pfam_name', {querycode=>$querycode});
-                    } elsif ($in eq 'Pfam_Keyword') {
-                        $query_string = $self->getSql('groups_like_pfam_description', {querycode=>$querycode});
-                    }
-                    my $query_orthogroup = $dbh->prepare($query_string);
-                    $query_orthogroup->execute();
-                    while (my @data = $query_orthogroup->fetchrow_array()) {
-                        push(@{$orthogroup_ids_ref},$data[0]);
-                    }
-                }
-                push(@{$group_query_history},{
-                                                CODE   => "$querycode in $in",
-                                                TYPE   => "Group Accession/Keyword Search",
-                                                TIME   => $time,
-                                                NUMHITS=> scalar(@{$orthogroup_ids_ref}),
-                                                SHOW   => 1,
-                                            });
-            }
-        } elsif ($querytype eq 'property') {
-            if ((my $sizeof = $q->param("sizeof")) && (my $number = $q->param("number"))) {
-                my $query_orthogroup;
-                if ($sizeof eq 'Sequences') {
-                    my $query_string = $self->getSql('groups_by_num_seqs', {number=>$number});
-                    $query_orthogroup=$dbh->prepare($query_string);
-                } elsif ($sizeof eq 'Genomes') {
-                    my $query_string = $self->getSql('groups_by_num_species', {number=>$number});
-                    $query_orthogroup=$dbh->prepare($query_string);
-                }
-                $query_orthogroup->execute();
-                while (my @data = $query_orthogroup->fetchrow_array()) {
-                    push(@{$orthogroup_ids_ref},$data[0]);
-                }
-                push(@{$group_query_history},{
-                                                CODE   => "SIZE($sizeof)$number",
-                                                TYPE   => 'Group Size Search',
-                                                TIME   => $time,
-                                                NUMHITS=> scalar(@{$orthogroup_ids_ref}),
-                                                SHOW   => 1,
-                                            });
+	    $query_orthogroup->execute($_);
+	    while (my @data = $query_orthogroup->fetchrow_array()) {
+	      push(@{$orthogroup_ids_ref},$data[0]);
+	    }
+	  }
+	} else {
+	  my $query_string;
+	  if ($in eq 'Keyword') {
+	    $query_string = $self->getSql('groups_like_seq_descrip_keyword', {querycode=>$querycode});
+	  } elsif ($in eq 'Pfam_Accession') {
+	    $query_string = $self->getSql('groups_by_pfam_accession', {querycode=>$querycode});
+	  } elsif ($in eq 'Pfam_Name') {
+	    $query_string = $self->getSql('groups_like_pfam_name', {querycode=>$querycode});
+	  } elsif ($in eq 'Pfam_Keyword') {
+	    $query_string = $self->getSql('groups_like_pfam_description', {querycode=>$querycode});
+	  }
+	  my $query_orthogroup = $dbh->prepare($query_string);
+	  $query_orthogroup->execute();
+	  while (my @data = $query_orthogroup->fetchrow_array()) {
+	    push(@{$orthogroup_ids_ref},$data[0]);
+	  }
+	}
+	push(@{$group_query_history},{
+				      CODE   => "$querycode in $in",
+				      TYPE   => "Group Accession/Keyword Search",
+				      TIME   => $time,
+				      NUMHITS=> scalar(@{$orthogroup_ids_ref}),
+				      SHOW   => 1,
+				     });
+      }
+    } elsif ($querytype eq 'property') {
+      if ((my $sizeof = $q->param("sizeof")) && (my $number = $q->param("number"))) {
+	my $query_orthogroup;
+	if ($sizeof eq 'Sequences') {
+	  my $query_string = $self->getSql('groups_by_num_seqs', {number=>$number});
+	  $query_orthogroup=$dbh->prepare($query_string);
+	} elsif ($sizeof eq 'Genomes') {
+	  my $query_string = $self->getSql('groups_by_num_species', {number=>$number});
+	  $query_orthogroup=$dbh->prepare($query_string);
+	}
+	$query_orthogroup->execute();
+	while (my @data = $query_orthogroup->fetchrow_array()) {
+	  push(@{$orthogroup_ids_ref},$data[0]);
+	}
+	push(@{$group_query_history},{
+				      CODE   => "SIZE($sizeof)$number",
+				      TYPE   => 'Group Size Search',
+				      TIME   => $time,
+				      NUMHITS=> scalar(@{$orthogroup_ids_ref}),
+				      SHOW   => 1,
+				     });
 
-            } elsif ((my $prop = $q->param("prop")) && ($number = $q->param("number"))) {
-                my ($querystring,$query_orthogroup);
-                if ($prop=~/Pairs/) {
-                    my $querystring= $self->getSql('groups_by_num_match_pairs', {number=>$number});
-                    $query_orthogroup=$dbh->prepare($querystring);
-                # } elsif ($prop=~/DCS/) {
-                #     my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
-                } elsif ($prop=~/Identity/) {
-                    my $querystring= $self->getSql('groups_by_percent_identity', {number=>$number});
-                } elsif ($prop=~/Match/) {
-                    my $querystring= $self->getSql('groups_by_percent_match', {number=>$number});
-                } elsif ($prop=~/BLAST/) {
-                    my $querystring= $self->getSql('groups_by_blast_evalue', {number=>$number});
-                }
-                $query_orthogroup=$dbh->prepare($querystring);
+      } elsif ((my $prop = $q->param("prop")) && ($number = $q->param("number"))) {
+	my ($querystring,$query_orthogroup);
+	if ($prop=~/Pairs/) {
+	  my $querystring= $self->getSql('groups_by_num_match_pairs', {number=>$number});
+	  $query_orthogroup=$dbh->prepare($querystring);
+	  # } elsif ($prop=~/DCS/) {
+	  #     my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
+	} elsif ($prop=~/Identity/) {
+	  my $querystring= $self->getSql('groups_by_percent_identity', {number=>$number});
+	} elsif ($prop=~/Match/) {
+	  my $querystring= $self->getSql('groups_by_percent_match', {number=>$number});
+	} elsif ($prop=~/BLAST/) {
+	  my $querystring= $self->getSql('groups_by_blast_evalue', {number=>$number});
+	}
+	$query_orthogroup=$dbh->prepare($querystring);
 
-                if ($debug) {
-                    push(@{$para{LOOP_DEBUG}},{DEBUG=>$querystring});
-                }
+	if ($debug) {
+	  push(@{$para{LOOP_DEBUG}},{DEBUG=>$querystring});
+	}
 
-                $query_orthogroup->execute();
-                while (my @data = $query_orthogroup->fetchrow_array()) {
-                    push(@{$orthogroup_ids_ref},$data[0]);
-                }
-                if (not defined $orthogroup_ids_ref) {$orthogroup_ids_ref=[];}
-                push(@{$group_query_history},{
-                                                CODE   => "$prop$number",
-                                                TYPE   => 'Property Search',
-                                                TIME   => $time,
-                                                NUMHITS=> scalar(@{$orthogroup_ids_ref}),
-                                                SHOW   => 1,
-                                            });
-            }
-        } elsif ($querytype eq 'ppform') {
-            # should we be doing something in here, similar to the ppexpression query type?
-        }
-        $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
-        @$orthogroup_ids_ref=sort {$a<=>$b} @$orthogroup_ids_ref;
-        push(@{$group_query_ids_history},$orthogroup_ids_ref);
-        $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
-
-        $querynumber=scalar(@{$group_query_history});
-        $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE};   # for group_listing page to display
-        $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE};   # for group_listing page to display
-        $self->session->param('GROUP_QUERY_NUMBER',$querynumber);# store the current querynumber for later paging
-    } else {  # refer to an old query
-        if ($querynumber = $q->param('querynumber')) {
-            $self->session->param('GROUP_QUERY_NUMBER',$querynumber);
-            $orthogroup_ids_ref=$group_query_ids_history->[$querynumber-1];
-            $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE};
-            $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE};
-        } elsif ($querynumber=$self->session->param('GROUP_QUERY_NUMBER')) {
-            $orthogroup_ids_ref=$group_query_ids_history->[$querynumber-1];
-            $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE};
-            $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE};
-        } else {
-            $orthogroup_ids_ref=[];
-            $para{QUERY_TYPE}='N/A';
-            $para{QUERY_CODE}='N/A';
-            push(@{$para{LOOP_ERROR}},{ERROR=>"You have no query in history! Or start a new query!"});
-        }
+	$query_orthogroup->execute();
+	while (my @data = $query_orthogroup->fetchrow_array()) {
+	  push(@{$orthogroup_ids_ref},$data[0]);
+	}
+	if (not defined $orthogroup_ids_ref) {
+	  $orthogroup_ids_ref=[];
+	}
+	push(@{$group_query_history},{
+				      CODE   => "$prop$number",
+				      TYPE   => 'Property Search',
+				      TIME   => $time,
+				      NUMHITS=> scalar(@{$orthogroup_ids_ref}),
+				      SHOW   => 1,
+				     });
+      }
+    } elsif ($querytype eq 'ppform') {
+      # should we be doing something in here, similar to the ppexpression query type?
     }
+    $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
+    @$orthogroup_ids_ref=sort {$a<=>$b} @$orthogroup_ids_ref;
+    push(@{$group_query_ids_history},$orthogroup_ids_ref);
+    $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
 
-    if ($debug) {
-        foreach (@$debug_info) {
-            push(@{$para{LOOP_DEBUG}},{DEBUG=>$_});
-        }
+    $querynumber=scalar(@{$group_query_history});
+    $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE}; # for group_listing page to display
+    $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE}; # for group_listing page to display
+    $self->session->param('GROUP_QUERY_NUMBER',$querynumber); # store the current querynumber for later paging
+  } else {			# refer to an old query
+    if ($querynumber = $q->param('querynumber')) {
+      $self->session->param('GROUP_QUERY_NUMBER',$querynumber);
+      $orthogroup_ids_ref=$group_query_ids_history->[$querynumber-1];
+      $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE};
+      $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE};
+    } elsif ($querynumber=$self->session->param('GROUP_QUERY_NUMBER')) {
+      $orthogroup_ids_ref=$group_query_ids_history->[$querynumber-1];
+      $para{QUERY_TYPE}=$group_query_history->[$querynumber-1]->{TYPE};
+      $para{QUERY_CODE}=$group_query_history->[$querynumber-1]->{CODE};
+    } else {
+      $orthogroup_ids_ref=[];
+      $para{QUERY_TYPE}='N/A';
+      $para{QUERY_CODE}='N/A';
+      push(@{$para{LOOP_ERROR}},{ERROR=>"You have no query in history! Or start a new query!"});
     }
+  }
+
+  if ($debug) {
+    foreach (@$debug_info) {
+      push(@{$para{LOOP_DEBUG}},{DEBUG=>$_});
+    }
+  }
     
-    # get the taxon tree for phyletic pattern in the group list page
-    my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
-    $query_taxonname->execute();
-    while (my @data = $query_taxonname->fetchrow_array()) {
-        push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
-                                  PARENT_ID => $data[1],
-                                  ABBREV => $data[2],
-                                  NAME => $data[3],
-                                  IS_SPECIES => $data[4] });
-    }
+  # get the taxon tree for phyletic pattern in the group list page
+  my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
+  $query_taxonname->execute();
+  while (my @data = $query_taxonname->fetchrow_array()) {
+    push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
+			      PARENT_ID => $data[1],
+			      ABBREV => $data[2],
+			      NAME => $data[3],
+			      IS_SPECIES => $data[4] });
+  }
 
-    $para{NUM_GROUPS}=scalar(@{$orthogroup_ids_ref});
-    $para{NUM_PAGES}=int(($para{NUM_GROUPS}-1)/10)+1;
-    if ($para{NUM_PAGES}==1) {$para{ONEPAGE}=1;}
+  $para{NUM_GROUPS}=scalar(@{$orthogroup_ids_ref});
+  $para{NUM_PAGES}=int(($para{NUM_GROUPS}-1)/10)+1;
+  if ($para{NUM_PAGES}==1) {
+    $para{ONEPAGE}=1;
+  }
     
-    $tmpl->param(\%para);
+  $tmpl->param(\%para);
 
-    require HTML::Pager;
-    my $pager = HTML::Pager->new( query => $self->query,
-                template => $tmpl,
-                get_data_callback => [ \&getGroupRows,
-                                        $orthogroup_ids_ref, $dbh, $tmpl, $config, $self
-                                    ],
-                rows => scalar(@{$orthogroup_ids_ref}),
-                page_size => 10,
-                );
+  require HTML::Pager;
+  my $pager = HTML::Pager->new( query => $self->query,
+				template => $tmpl,
+				get_data_callback => [ \&getGroupRows,
+						       $orthogroup_ids_ref, $dbh, $tmpl, $config, $self
+						     ],
+				rows => scalar(@{$orthogroup_ids_ref}),
+				page_size => 10,
+			      );
 
-    return $pager->output;
+  return $pager->output;
 }
 
 sub getGroupRows {
-    my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
+  my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
 
 
-    $tmpl->param(ROWSPERPAGE => $rows);
-    $tmpl->param(GROUP_NUM_S => $offset+1);
-    if (scalar(@{$orthogroup_ids_ref})<$offset+$rows) {
-        $tmpl->param(GROUP_NUM_E => scalar(@{$orthogroup_ids_ref}));
+  $tmpl->param(ROWSPERPAGE => $rows);
+  $tmpl->param(GROUP_NUM_S => $offset+1);
+  if (scalar(@{$orthogroup_ids_ref})<$offset+$rows) {
+    $tmpl->param(GROUP_NUM_E => scalar(@{$orthogroup_ids_ref}));
+  } else {
+    $tmpl->param(GROUP_NUM_E => $offset+$rows);
+  }
+  #    $tmpl->param(CURRENTPAGE => int($offset / $rows) + 1);
+
+  my @rows;
+
+  #   this is for phyletic pattern display
+  my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
+    
+  my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
+    
+  my $query_sdescription_by_o = $dbh->prepare($self->getSql('sequence_descrip_per_group')); # used for summarizing keyword
+    
+  my $query_domain_by_o = $dbh->prepare($self->getSql('sequence_domains_per_group'));
+
+  my $query_ddescription_by_d = $dbh->prepare($self->getSql('description_per_domain'));
+  my $count=0;
+
+  for (my $x = 0; $x < $rows; $x++) {
+    last if ($offset+$x>$#{$orthogroup_ids_ref});
+    my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
+    #    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
+        
+    $query_orthogroup->execute($orthogroup_id);
+    my @data = $query_orthogroup->fetchrow_array();
+
+    my %group;
+    $count++;
+    if ($count%2) {
+      $group{__ODD__}=1;
     } else {
-        $tmpl->param(GROUP_NUM_E => $offset+$rows);
-    }
-#    $tmpl->param(CURRENTPAGE => int($offset / $rows) + 1);
-
-    my @rows;
-
-    #   this is for phyletic pattern display
-    my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
-    
-    my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
-    
-    my $query_sdescription_by_o = $dbh->prepare($self->getSql('sequence_descrip_per_group')); # used for summarizing keyword
-    
-    my $query_domain_by_o = $dbh->prepare($self->getSql('sequence_domains_per_group'));
-
-    my $query_ddescription_by_d = $dbh->prepare($self->getSql('description_per_domain'));
-    my $count=0;
-
-    for (my $x = 0; $x < $rows; $x++) {
-        last if ($offset+$x>$#{$orthogroup_ids_ref});
-        my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
-#    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
-        
-        $query_orthogroup->execute($orthogroup_id);
-        my @data = $query_orthogroup->fetchrow_array();
-
-        my %group;
-        $count++;
-        if ($count%2) {
-            $group{__ODD__}=1;
-        } else {
-            $group{__EVEN__}=1;
-        }
-
-        $group{GROUP_NUMBER}=$offset+$x+1;
-        $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
-        $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
-        $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
-        
-        $group{NO_SEQUENCES}=$data[7];
-
-        if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
-            $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
-            $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
-        }
-
-        $group{GROUP_ACCESSION}=$data[1];
-        $group{NO_MATCH_PAIRS}=$data[6];
-        $group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
-
-        if ($group{NO_MATCH_PAIRS}==0) {
-            $group{AVE_EVAL}='N/A';
-            $group{AVE_PM}='N/A';
-            $group{AVE_PI}='N/A';
-        } else {
-            $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
-            $group{AVE_PM}=$data[4];
-            $group{AVE_PI}=$data[3];
-        }
-#        $group{AVE_DCS}=$data[2];
-
-        # get taxon and gene counts
-        $query_taxa_by_o->execute($orthogroup_id);
-        my $taxon_count = 0;
-        while (my @data = $query_taxa_by_o->fetchrow_array()) {
-           push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
-                                          GENE_COUNT => $data[1] });
-            $taxon_count++;
-        }
-        $group{NO_TAXA} = $taxon_count;
-
-# about Keywords summary
-        $group{KEYWORDS} = "";
-        if (1) {
-            $query_sdescription_by_o->execute($orthogroup_id);
-            my @funlines;
-            while (my @tmp = $query_sdescription_by_o->fetchrow_array()) {
-                if ($tmp[0]) {
-                    push(@funlines,$tmp[0]);
-                }
-            }
-            my %keywords = %{FunKeyword(\@funlines)};
-            foreach my $k (keys %keywords) {
-            my $c=sprintf("%X",int((1-$keywords{$k})*255));
-            $group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
-            }
-        }
-# about Pfam domain summary
-        $group{DOMAIN} = "";
-        if (1) {
-            my %sequence_domain;
-            $query_domain_by_o->execute($orthogroup_id);
-            while (my @tmp = $query_domain_by_o->fetchrow_array()) {
-                $sequence_domain{$tmp[0]}->{$tmp[1]}=1;
-            }
-            my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
-            foreach my $d (keys %domains) {
-                my $c=sprintf("%X",int((1-$domains{$d})*255));
-                $query_ddescription_by_d->execute($d);
-                if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
-                    if ($tmp[0]) {
-                        $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
-                    }
-                }
-            }
-        }
-        push(@rows,\%group);
+      $group{__EVEN__}=1;
     }
 
-    return \@rows;
+    $group{GROUP_NUMBER}=$offset+$x+1;
+    $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
+    $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
+    $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
+        
+    $group{NO_SEQUENCES}=$data[7];
+
+    if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
+      $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
+      $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
+    }
+
+    $group{GROUP_ACCESSION}=$data[1];
+    $group{NO_MATCH_PAIRS}=$data[6];
+    $group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
+
+    if ($group{NO_MATCH_PAIRS}==0) {
+      $group{AVE_EVAL}='N/A';
+      $group{AVE_PM}='N/A';
+      $group{AVE_PI}='N/A';
+    } else {
+      $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
+      $group{AVE_PM}=$data[4];
+      $group{AVE_PI}=$data[3];
+    }
+    #        $group{AVE_DCS}=$data[2];
+
+    # get taxon and gene counts
+    $query_taxa_by_o->execute($orthogroup_id);
+    my $taxon_count = 0;
+    while (my @data = $query_taxa_by_o->fetchrow_array()) {
+      push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
+				     GENE_COUNT => $data[1] });
+      $taxon_count++;
+    }
+    $group{NO_TAXA} = $taxon_count;
+
+    # about Keywords summary
+    $group{KEYWORDS} = "";
+    if (1) {
+      $query_sdescription_by_o->execute($orthogroup_id);
+      my @funlines;
+      while (my @tmp = $query_sdescription_by_o->fetchrow_array()) {
+	if ($tmp[0]) {
+	  push(@funlines,$tmp[0]);
+	}
+      }
+      my %keywords = %{FunKeyword(\@funlines)};
+      foreach my $k (keys %keywords) {
+	my $c=sprintf("%X",int((1-$keywords{$k})*255));
+	$group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
+      }
+    }
+    # about Pfam domain summary
+    $group{DOMAIN} = "";
+    if (1) {
+      my %sequence_domain;
+      $query_domain_by_o->execute($orthogroup_id);
+      while (my @tmp = $query_domain_by_o->fetchrow_array()) {
+	$sequence_domain{$tmp[0]}->{$tmp[1]}=1;
+      }
+      my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
+      foreach my $d (keys %domains) {
+	my $c=sprintf("%X",int((1-$domains{$d})*255));
+	$query_ddescription_by_d->execute($d);
+	if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
+	  if ($tmp[0]) {
+	    $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
+	  }
+	}
+      }
+    }
+    push(@rows,\%group);
+  }
+
+  return \@rows;
 }
 
 sub sequenceQueryHistory {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-    my @select=$q->param("select");
-    my $config = $self->param("config");
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+  my @select=$q->param("select");
+  my $config = $self->param("config");
 
-    if (my $transform=$q->param("transform")) {
-        my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=sequence&to=group";
-        foreach (@select) {
-            $new_url.="&select=$_";
-        }
-        $self->header_type('redirect');
-        $self->header_props(-url=>$new_url);
-        return "Redirecting to Query Transform";
+  if (my $transform=$q->param("transform")) {
+    my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=queryTransform&from=sequence&to=group";
+    foreach (@select) {
+      $new_url.="&select=$_";
     }
+    $self->header_type('redirect');
+    $self->header_props(-url=>$new_url);
+    return "Redirecting to Query Transform";
+  }
 
-    my $action=$q->param("action");
+  my $action=$q->param("action");
 
-    my %para;
+  my %para;
 
-    $para{PAGETITLE}="Sequence Query History";
+  $para{PAGETITLE}="Sequence Query History";
 
-    if ($debug) {
-        push(@{$para{LOOP_DEBUG}},{DEBUG=>"action: $action"});
-        foreach (@select) {
-            push(@{$para{LOOP_DEBUG}},{DEBUG=>"select: $_"});
-        }
+  if ($debug) {
+    push(@{$para{LOOP_DEBUG}},{DEBUG=>"action: $action"});
+    foreach (@select) {
+      push(@{$para{LOOP_DEBUG}},{DEBUG=>"select: $_"});
     }
+  }
 
-    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
+  my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
 
-    if (my $action=$q->param("action")) {
-        if ($action eq 'REMOVE') {
-            foreach my $querynumber (@select) {
-                $sequence_query_history->[$querynumber-1]->{SHOW}=0;
-            }
-        } else {
-            if (scalar(@select)<2) {
-                push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
-            }
-            my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-            my @result_ids;
-            my $action_description;
+  if (my $action=$q->param("action")) {
+    if ($action eq 'REMOVE') {
+      foreach my $querynumber (@select) {
+	$sequence_query_history->[$querynumber-1]->{SHOW}=0;
+      }
+    } else {
+      if (scalar(@select)<2) {
+	push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
+      }
+      my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
+      my @result_ids;
+      my $action_description;
 
-            if ($action eq 'UNION') {
-                $action_description = $action.' (#'.join("+#",@select).')';
-                my %present_ids;
-                foreach my $querynumber (@select) {
-                    foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-                        $present_ids{$sequence_id}=1;
-                    }
-                }
-                @result_ids=sort {$a<=>$b} keys %present_ids;
-            } elsif ($action eq 'INTERSECT') {
-                $action_description = $action.' (#'.join("+#",@select).')';
-                my %present_ids;
-                foreach my $querynumber (@select) {
-                    foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-                        $present_ids{$sequence_id}++;
-                    }
-                }
-                foreach (sort {$a<=>$b} keys %present_ids) {
-                    if ($present_ids{$_}==scalar(@select)) {push(@result_ids,$_);}
-                }
-            } elsif (($action eq 'TOP MINUS BOTTOM') || ($action eq 'BOTTOM MINUS TOP')) {
-                @select = sort {$a<=>$b} @select;
-                my ($a,$b);
-                if ($action eq 'TOP MINUS BOTTOM') {
-                    $a = $select[0];
-                    $b = $select[$#select];
-                } elsif ($action eq 'BOTTOM MINUS TOP') {
-                    $a = $select[$#select];
-                    $b = $select[0];
-                }
-                $action_description = "$action (#$a-#$b)";
-                my %b_seqids;
-                foreach (@{$sequence_query_ids_history->[$b-1]}) {$b_seqids{$_}=1;}
-                foreach my $a_seqid (@{$sequence_query_ids_history->[$a-1]}) {
-                    next if (defined $b_seqids{$a_seqid});
-                    push(@result_ids,$a_seqid);
-                }
-            } else {
-                push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
-            }
+      if ($action eq 'UNION') {
+	$action_description = $action.' (#'.join("+#",@select).')';
+	my %present_ids;
+	foreach my $querynumber (@select) {
+	  foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+	    $present_ids{$sequence_id}=1;
+	  }
+	}
+	@result_ids=sort {$a<=>$b} keys %present_ids;
+      } elsif ($action eq 'INTERSECT') {
+	$action_description = $action.' (#'.join("+#",@select).')';
+	my %present_ids;
+	foreach my $querynumber (@select) {
+	  foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+	    $present_ids{$sequence_id}++;
+	  }
+	}
+	foreach (sort {$a<=>$b} keys %present_ids) {
+	  if ($present_ids{$_}==scalar(@select)) {
+	    push(@result_ids,$_);
+	  }
+	}
+      } elsif (($action eq 'TOP MINUS BOTTOM') || ($action eq 'BOTTOM MINUS TOP')) {
+	@select = sort {$a<=>$b} @select;
+	my ($a,$b);
+	if ($action eq 'TOP MINUS BOTTOM') {
+	  $a = $select[0];
+	  $b = $select[$#select];
+	} elsif ($action eq 'BOTTOM MINUS TOP') {
+	  $a = $select[$#select];
+	  $b = $select[0];
+	}
+	$action_description = "$action (#$a-#$b)";
+	my %b_seqids;
+	foreach (@{$sequence_query_ids_history->[$b-1]}) {
+	  $b_seqids{$_}=1;
+	}
+	foreach my $a _seqid (@{$sequence_query_ids_history->[$a-1]}) {
+	  next if (defined $b_seqids{$a_seqid});
+	  push(@result_ids,$a_seqid);
+	}
+      } else {
+	push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
+      }
 
-            # insert into history as a new query
-            my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-            $query_time->execute();
-            my @data = $query_time->fetchrow_array(); 
-            my $time=$data[0];
-            push(@{$sequence_query_history},{    CODE   =>$action_description,
-                                            TYPE   =>'Query Action',
-                                            TIME   =>$time,
-                                            NUMHITS=>scalar(@result_ids),
-                                            SHOW   =>1,
-                                        });
-            $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
-            push(@{$sequence_query_ids_history},\@result_ids);
-            $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
-        }
-    } elsif (my $filehandle = $q->upload("file")) {
-        my $filename=$q->param("file");
-        $filename=~s/.*[\/\\](.*)/$1/g;
-        my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-        my $query_sequenceid = $dbh->prepare($self->getSql('sequence_per_source_id'));
-        my @result_ids;
-        while (<$filehandle>) {
-            $_=~s/\r|\n//g;
-            next if (/^\#/);
-            if (/^(\S+)/) {
-                $query_sequenceid->execute($1);
-                my @data = $query_sequenceid->fetchrow_array();
-                if ($data[0]) {
-                    push(@result_ids,$data[0]);
-                } else {
-                    push(@{$para{LOOP_ERROR}},{ERROR=>"<STRONG>$1</STRONG> is not a sequence accession OR can't be found in OrthoMCL-DB"});
-                }
-            }
-        }
-        # insert into history as a new query
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @data = $query_time->fetchrow_array();
-        push(@{$sequence_query_history},{    CODE   =>$filename,
-                                        TYPE   =>'Retrieve Sequences From File',
-                                        TIME   =>$data[0],
-                                        NUMHITS=>scalar(@result_ids),
-                                        SHOW   =>1,
+      # insert into history as a new query
+      my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+      $query_time->execute();
+      my @data = $query_time->fetchrow_array(); 
+      my $time=$data[0];
+      push(@{$sequence_query_history},{    CODE   =>$action_description,
+					   TYPE   =>'Query Action',
+					   TIME   =>$time,
+					   NUMHITS=>scalar(@result_ids),
+					   SHOW   =>1,
+				      });
+      $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
+      push(@{$sequence_query_ids_history},\@result_ids);
+      $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+    }
+  } elsif (my $filehandle = $q->upload("file")) {
+    my $filename=$q->param("file");
+    $filename=~s/.*[\/\\](.*)/$1/g;
+    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
+    my $query_sequenceid = $dbh->prepare($self->getSql('sequence_per_source_id'));
+    my @result_ids;
+    while (<$filehandle>) {
+      $_=~s/\r|\n//g;
+      next if (/^\#/);
+      if (/^(\S+)/) {
+	$query_sequenceid->execute($1);
+	my @data = $query_sequenceid->fetchrow_array();
+	if ($data[0]) {
+	  push(@result_ids,$data[0]);
+	} else {
+	  push(@{$para{LOOP_ERROR}},{ERROR=>"<STRONG>$1</STRONG> is not a sequence accession OR can't be found in OrthoMCL-DB"});
+	}
+      }
+    }
+    # insert into history as a new query
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @data = $query_time->fetchrow_array();
+    push(@{$sequence_query_history},{    CODE   =>$filename,
+					 TYPE   =>'Retrieve Sequences From File',
+					 TIME   =>$data[0],
+					 NUMHITS=>scalar(@result_ids),
+					 SHOW   =>1,
                                     });
-        $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
-        push(@{$sequence_query_ids_history},\@result_ids);
-        $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
-    }
+    $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
+    push(@{$sequence_query_ids_history},\@result_ids);
+    $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+  }
 
-    my $number_history=0;
-    for (my $i=0;$i<=$#{$sequence_query_history};$i++) {
-        next unless ($sequence_query_history->[$i]->{SHOW});
-        my %query;
-        $query{QUERYNUMBER}=$i+1;
-        $query{QUERYTYPE}=$sequence_query_history->[$i]->{TYPE};
-        $query{QUERYCODE}=$sequence_query_history->[$i]->{CODE};
-        $query{QUERYNUMHIT}=$sequence_query_history->[$i]->{NUMHITS};
-        $query{QUERYTIME}=$sequence_query_history->[$i]->{TIME};
-        push(@{$para{LOOP_QUERYHISTORY}},\%query);
-        $number_history++;
-    }
+  my $number_history=0;
+  for (my $i=0;$i<=$#{$sequence_query_history};$i++) {
+    next unless ($sequence_query_history->[$i]->{SHOW});
+    my %query;
+    $query{QUERYNUMBER}=$i+1;
+    $query{QUERYTYPE}=$sequence_query_history->[$i]->{TYPE};
+    $query{QUERYCODE}=$sequence_query_history->[$i]->{CODE};
+    $query{QUERYNUMHIT}=$sequence_query_history->[$i]->{NUMHITS};
+    $query{QUERYTIME}=$sequence_query_history->[$i]->{TIME};
+    push(@{$para{LOOP_QUERYHISTORY}},\%query);
+    $number_history++;
+  }
 
-    if ($number_history==0) {$para{NO_HISTORY}=1;}
+  if ($number_history==0) {
+    $para{NO_HISTORY}=1;
+  }
 
-    my $tmpl = $self->load_tmpl('sequence_queryhistory.tmpl');  # loading template
-    $self->defaults($tmpl);
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+  my $tmpl = $self->load_tmpl('sequence_queryhistory.tmpl'); # loading template
+  $self->defaults($tmpl);
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
 }
 
 
 sub sequenceList {
-    my $self   = shift;
-    my $config = $self->param("config");
-    my $q      = $self->query();
-    my $dbh    = $self->dbh();
+  my $self   = shift;
+  my $config = $self->param("config");
+  my $q      = $self->query();
+  my $dbh    = $self->dbh();
 
-    my $tmpl   = $self->load_tmpl('sequence_listing.tmpl');
-    $self->defaults($tmpl);
+  my $tmpl   = $self->load_tmpl('sequence_listing.tmpl');
+  $self->defaults($tmpl);
 
-    my %para;
+  my %para;
 
-    $para{PAGETITLE}="Sequence List";
+  $para{PAGETITLE}="Sequence List";
 
-    my $sequence_ids_ref;  # store all the sequence ids for current query
-    # this variable is used for paging,  thus not suitable for sequence list of certain groupid
+  my $sequence_ids_ref;	# store all the sequence ids for current query
+  # this variable is used for paging,  thus not suitable for sequence list of certain groupid
 
-    if ($q->param("groupid") || $q->param("groupac")) {
+  if ($q->param("groupid") || $q->param("groupac")) {
 
-        my ($orthogroup_id,$orthogroup_ac);
-        if ($orthogroup_ac = $q->param("groupac")) {
-        my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
-        $query_orthogroupid->execute($orthogroup_ac);
-        my @tmp = $query_orthogroupid->fetchrow_array();
-        $orthogroup_id = $tmp[0];
-        } else {
-        $orthogroup_id = $q->param("groupid");
-        }
-
-        $para{GROUP}=1;
-
-        # Prepare Group Summary Part #
-        my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
-
-        # get the taxon tree for phyletic pattern in the group list page
-        my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
-        $query_taxonname->execute();
-        while (my @data = $query_taxonname->fetchrow_array()) {
-            push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
-                                      PARENT_ID => $data[1],
-                                      ABBREV => $data[2],
-                                      NAME => $data[3],
-                                      IS_SPECIES => $data[4] });
-        }
-
-        $query_orthogroup->execute($orthogroup_id);
-        my @data = $query_orthogroup->fetchrow_array();
-
-        $para{NO_SEQUENCES}=$data[7];
-        $para{GROUP_ACCESSION}=$data[1];
-        $para{NO_MATCH_PAIRS}=$data[6];
-        $para{PERC_MATCH_PAIRS}=int(1000*$para{NO_MATCH_PAIRS}/($para{NO_SEQUENCES}*($para{NO_SEQUENCES}-1)/2))/10;
-        $para{AVE_EVAL}=sprintf("%8.2e",$data[5]);
-        $para{AVE_PM}=$data[4];
-        $para{AVE_PI}=$data[3];
-#        $para{AVE_DCS}=$data[2];
-
-        $para{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=".$para{GROUP_ACCESSION};
-        $para{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=".$para{GROUP_ACCESSION};
-        if (($para{NO_SEQUENCES}<=100) && ($para{NO_SEQUENCES}>=2)) {
-            $para{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=".$para{GROUP_ACCESSION};
-            $para{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
-        }
-
-        my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
-        
-        # get taxon and gene counts
-        $query_taxa_by_o->execute($orthogroup_id);
-        my $taxon_count = 0;
-        while (my @data = $query_taxa_by_o->fetchrow_array()) {
-           push(@{$para{TAXON_GENES}}, { TAXON_ID => $data[0],
-                                          GENE_COUNT => $data[1] });
-            $taxon_count++;
-        }
-        $para{NO_TAXA} = $taxon_count;
-
-        # Prepare Sequence List Part #
-        my $query_sequence_by_groupid = $dbh->prepare($self->getSql('sequence_attributes_per_group'));
-        $query_sequence_by_groupid->execute($orthogroup_id);
-
-        my $count=0;
-        while (my @data = $query_sequence_by_groupid->fetchrow_array()) {
-            my %sequence;
-            $count++;
-            if ($count%2) {
-                $sequence{__ODD__}=1;
-            } else {
-                $sequence{__EVEN__}=1;
-            }
-            $sequence{SEQUENCE_NUMBER}=$count;
-            $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
-            $sequence{SEQUENCE_ACCESSION}=$data[0];
-            $sequence{XREF}=$data[1];
-            if (defined $data[5]) {
-                $sequence{XREF_LINK}=$data[5].$data[1];
-            }
-            my @desc_info = split(" ",$data[2]);
-            shift @desc_info;
-            $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
-            $sequence{SEQUENCE_LENGTH}=$data[3];
-            $sequence{SEQUENCE_TAXON}=$data[4];
-            push(@{$para{PAGER_DATA_LIST}},\%sequence);
-        }
-        $para{NO_GROUPAC}=1;
-        $tmpl->param(\%para);
-        return $self->done($tmpl);
-
+    my ($orthogroup_id,$orthogroup_ac);
+    if ($orthogroup_ac = $q->param("groupac")) {
+      my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
+      $query_orthogroupid->execute($orthogroup_ac);
+      my @tmp = $query_orthogroupid->fetchrow_array();
+      $orthogroup_id = $tmp[0];
+    } else {
+      $orthogroup_id = $q->param("groupid");
     }
-    elsif ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
 
-        my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
-        my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
+    $para{GROUP}=1;
 
-        my $querynumber;
+    # Prepare Group Summary Part #
+    my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
 
-        # Prepare Sequence List Part #
-        my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-        $query_time->execute();
-        my @tmp = $query_time->fetchrow_array();
-        my $time=$tmp[0];
+    # get the taxon tree for phyletic pattern in the group list page
+    my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
+    $query_taxonname->execute();
+    while (my @data = $query_taxonname->fetchrow_array()) {
+      push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
+				PARENT_ID => $data[1],
+				ABBREV => $data[2],
+				NAME => $data[3],
+				IS_SPECIES => $data[4] });
+    }
 
-        if ($in eq "blast") {
-          use File::Temp qw(tempfile);
-          my ($fh, $tempfile) = tempfile(DIR => "/tmp");
-          print $fh $querycode;
-          close($fh);
-          $ENV{BLASTMAT} = $config->{BLASTMAT};
-          open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
-          my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
-          while (<BLAST>) {
-            if (m/Sequences producing significant alignments/) {
-              <BLAST>; # empty line
-              while (<BLAST>) {
+    $query_orthogroup->execute($orthogroup_id);
+    my @data = $query_orthogroup->fetchrow_array();
+
+    $para{NO_SEQUENCES}=$data[7];
+    $para{GROUP_ACCESSION}=$data[1];
+    $para{NO_MATCH_PAIRS}=$data[6];
+    $para{PERC_MATCH_PAIRS}=int(1000*$para{NO_MATCH_PAIRS}/($para{NO_SEQUENCES}*($para{NO_SEQUENCES}-1)/2))/10;
+    $para{AVE_EVAL}=sprintf("%8.2e",$data[5]);
+    $para{AVE_PM}=$data[4];
+    $para{AVE_PI}=$data[3];
+    #        $para{AVE_DCS}=$data[2];
+
+    $para{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=".$para{GROUP_ACCESSION};
+    $para{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=".$para{GROUP_ACCESSION};
+    if (($para{NO_SEQUENCES}<=100) && ($para{NO_SEQUENCES}>=2)) {
+      $para{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=".$para{GROUP_ACCESSION};
+      $para{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
+    }
+
+    my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
+        
+    # get taxon and gene counts
+    $query_taxa_by_o->execute($orthogroup_id);
+    my $taxon_count = 0;
+    while (my @data = $query_taxa_by_o->fetchrow_array()) {
+      push(@{$para{TAXON_GENES}}, { TAXON_ID => $data[0],
+				    GENE_COUNT => $data[1] });
+      $taxon_count++;
+    }
+    $para{NO_TAXA} = $taxon_count;
+
+    # Prepare Sequence List Part #
+    my $query_sequence_by_groupid = $dbh->prepare($self->getSql('sequence_attributes_per_group'));
+    $query_sequence_by_groupid->execute($orthogroup_id);
+
+    my $count=0;
+    while (my @data = $query_sequence_by_groupid->fetchrow_array()) {
+      my %sequence;
+      $count++;
+      if ($count%2) {
+	$sequence{__ODD__}=1;
+      } else {
+	$sequence{__EVEN__}=1;
+      }
+      $sequence{SEQUENCE_NUMBER}=$count;
+      $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+      $sequence{SEQUENCE_ACCESSION}=$data[0];
+      $sequence{XREF}=$data[1];
+      if (defined $data[5]) {
+	$sequence{XREF_LINK}=$data[5].$data[1];
+      }
+      my @desc_info = split(" ",$data[2]);
+      shift @desc_info;
+      $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
+      $sequence{SEQUENCE_LENGTH}=$data[3];
+      $sequence{SEQUENCE_TAXON}=$data[4];
+      push(@{$para{PAGER_DATA_LIST}},\%sequence);
+    }
+    $para{NO_GROUPAC}=1;
+    $tmpl->param(\%para);
+    return $self->done($tmpl);
+
+  } elsif ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
+
+    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
+    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
+
+    my $querynumber;
+
+    # Prepare Sequence List Part #
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @tmp = $query_time->fetchrow_array();
+    my $time=$tmp[0];
+
+    if ($in eq "blast") {
+      use File::Temp qw(tempfile);
+      my ($fh, $tempfile) = tempfile(DIR => "/tmp");
+      print $fh $querycode;
+      close($fh);
+      $ENV{BLASTMAT} = $config->{BLASTMAT};
+      open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
+      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
+      while (<BLAST>) {
+	if (m/Sequences producing significant alignments/) {
+	  <BLAST>;		# empty line
+	  while (<BLAST>) {
             last if m/^\s*$/;
             if (m/^(\S+)/) {
               $query_sequence->execute($1);
@@ -1100,236 +1120,239 @@ sub sequenceList {
                 push(@{$sequence_ids_ref},$data[0]);
               }
             }
-              }
-            }
-          }
-          close(BLAST);
-          unlink($tempfile);
-        } elsif ($in eq 'Accession') {
-            my @qc = split(" ",$querycode);
-            my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
-            foreach (@qc) {
-                $query_sequence->execute($_);
-                while (my @data = $query_sequence->fetchrow_array()) {
-                    push(@{$sequence_ids_ref},$data[0]);
-                }
-            }
-        } else {
-            my $query_string;
-            if ($in eq 'All') {
-                $query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
-            } elsif ($in eq 'Keyword') {
-                $query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
-            } elsif ($in eq 'Taxon_Abbreviation') {
-                $query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
-            } elsif ($in eq 'Pfam_Accession') {
-                $query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
-            } elsif ($in eq 'Pfam_Name') {
-                $query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
-            } elsif ($in eq 'Pfam_Keyword') {
-                $query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
-            }
+	  }
+	}
+      }
+      close(BLAST);
+      unlink($tempfile);
+    } elsif ($in eq 'Accession') {
+      my @qc = split(" ",$querycode);
+      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
+      foreach (@qc) {
+	$query_sequence->execute($_);
+	while (my @data = $query_sequence->fetchrow_array()) {
+	  push(@{$sequence_ids_ref},$data[0]);
+	}
+      }
+    } else {
+      my $query_string;
+      if ($in eq 'All') {
+	$query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
+      } elsif ($in eq 'Keyword') {
+	$query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
+      } elsif ($in eq 'Taxon_Abbreviation') {
+	$query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
+      } elsif ($in eq 'Pfam_Accession') {
+	$query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
+      } elsif ($in eq 'Pfam_Name') {
+	$query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
+      } elsif ($in eq 'Pfam_Keyword') {
+	$query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
+      }
 
-            if ($debug) {
-                push(@{$para{LOOP_DEBUG}},{DEBUG=>"SQL: $query_string"});
-            }
+      if ($debug) {
+	push(@{$para{LOOP_DEBUG}},{DEBUG=>"SQL: $query_string"});
+      }
 
-            my $query_sequence = $dbh->prepare($query_string);
-            $query_sequence->execute();
+      my $query_sequence = $dbh->prepare($query_string);
+      $query_sequence->execute();
 
-            while (my @data = $query_sequence->fetchrow_array()) {
-                push(@{$sequence_ids_ref},$data[0]);
-            }
-        }
+      while (my @data = $query_sequence->fetchrow_array()) {
+	push(@{$sequence_ids_ref},$data[0]);
+      }
+    }
 
-        if (not defined $sequence_ids_ref) {$sequence_ids_ref=[];}
-        elsif (scalar(@$sequence_ids_ref)==1) {
-            if (my $groupredirect=$q->param("groupredirect")) {
-                if ($groupredirect==1) {
-                    my $seq_id = $sequence_ids_ref->[0];
-                    my $group_qs= $self->getSql('group_name_by_sequence_id', {seq_id=>$seq_id});
-                    my $group_q1=$dbh->prepare($group_qs);
-                    $group_q1->execute();
-                    my @group_ac;
-                    while (my @data=$group_q1->fetchrow_array()) {
-                        push(@group_ac,$data[0]);
-                    }
-                    if (scalar(@group_ac)==1) {
-#                        $para{JS_CODE}="$group_ac[0]";
-                        $para{JS_CODE}="<script type=\"text/javascript\" language=\"JavaScript\">
+    if (not defined $sequence_ids_ref) {
+      $sequence_ids_ref=[];
+    } elsif (scalar(@$sequence_ids_ref)==1) {
+      if (my $groupredirect=$q->param("groupredirect")) {
+	if ($groupredirect==1) {
+	  my $seq_id = $sequence_ids_ref->[0];
+	  my $group_qs= $self->getSql('group_name_by_sequence_id', {seq_id=>$seq_id});
+	  my $group_q1=$dbh->prepare($group_qs);
+	  $group_q1->execute();
+	  my @group_ac;
+	  while (my @data=$group_q1->fetchrow_array()) {
+	    push(@group_ac,$data[0]);
+	  }
+	  if (scalar(@group_ac)==1) {
+	    #                        $para{JS_CODE}="$group_ac[0]";
+	    $para{JS_CODE}="<script type=\"text/javascript\" language=\"JavaScript\">
                                             setTimeout('Redirect()',0);
                                             function Redirect() {
                                                 location.href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=".$group_ac[0]."';
                                             }</script>\n";
-                    }
-                }    
-            }
-        }
+	  }
+	}    
+      }
+    }
 
-        push(@{$sequence_query_history},{CODE   => $querycode,
-                                         TYPE   => $in,
-                                         TIME   => $time,
-                                         NUMHITS=> scalar(@{$sequence_ids_ref}),
-                                         SHOW   => 1,
+    push(@{$sequence_query_history},{CODE   => $querycode,
+				     TYPE   => $in,
+				     TIME   => $time,
+				     NUMHITS=> scalar(@{$sequence_ids_ref}),
+				     SHOW   => 1,
                                     });
 
-        $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
+    $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
     
-        push(@{$sequence_query_ids_history},$sequence_ids_ref);
-        $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+    push(@{$sequence_query_ids_history},$sequence_ids_ref);
+    $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
 
-        $para{QUERY_TYPE}=$in;          # for sequence_listing page to display
-        $para{QUERY_CODE}=$querycode;   # for sequence_listing page to display
-        $querynumber=scalar(@{$sequence_query_history});
-        $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber);# store the current querynumber for later paging
-    } else {  # refer to an old query
-        my $querynumber;
-        my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
-        my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
+    $para{QUERY_TYPE}=$in;	# for sequence_listing page to display
+    $para{QUERY_CODE}=$querycode; # for sequence_listing page to display
+    $querynumber=scalar(@{$sequence_query_history});
+    $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber); # store the current querynumber for later paging
+  } else {			# refer to an old query
+    my $querynumber;
+    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
+    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
 
-        if ($querynumber = $q->param('querynumber')) {
-            $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber);
-            $sequence_ids_ref=$sequence_query_ids_history->[$querynumber-1];
-            $para{QUERY_TYPE}=$sequence_query_history->[$querynumber-1]->{TYPE};
-            $para{QUERY_CODE}=$sequence_query_history->[$querynumber-1]->{CODE};
-        } elsif ($querynumber=$self->session->param('SEQUENCE_QUERY_NUMBER')) {
-            $sequence_ids_ref=$sequence_query_ids_history->[$querynumber-1];
-            $para{QUERY_TYPE}=$sequence_query_history->[$querynumber-1]->{TYPE};
-            $para{QUERY_CODE}=$sequence_query_history->[$querynumber-1]->{CODE};
-        } else {
-            $sequence_ids_ref=[];
-            $para{QUERY_TYPE}='N/A';
-            $para{QUERY_CODE}='N/A';
-            push(@{$para{LOOP_ERROR}},{ERROR=>"You have no query in history! Or start a new query!"});
-        }
+    if ($querynumber = $q->param('querynumber')) {
+      $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber);
+      $sequence_ids_ref=$sequence_query_ids_history->[$querynumber-1];
+      $para{QUERY_TYPE}=$sequence_query_history->[$querynumber-1]->{TYPE};
+      $para{QUERY_CODE}=$sequence_query_history->[$querynumber-1]->{CODE};
+    } elsif ($querynumber=$self->session->param('SEQUENCE_QUERY_NUMBER')) {
+      $sequence_ids_ref=$sequence_query_ids_history->[$querynumber-1];
+      $para{QUERY_TYPE}=$sequence_query_history->[$querynumber-1]->{TYPE};
+      $para{QUERY_CODE}=$sequence_query_history->[$querynumber-1]->{CODE};
+    } else {
+      $sequence_ids_ref=[];
+      $para{QUERY_TYPE}='N/A';
+      $para{QUERY_CODE}='N/A';
+      push(@{$para{LOOP_ERROR}},{ERROR=>"You have no query in history! Or start a new query!"});
     }
-    $para{NUM_SEQUENCES}=scalar(@{$sequence_ids_ref});
-    $para{NUM_PAGES}=int(($para{NUM_SEQUENCES}-1)/50)+1;
-    if ($para{NUM_PAGES}==1) {$para{ONEPAGE}=1;}
+  }
+  $para{NUM_SEQUENCES}=scalar(@{$sequence_ids_ref});
+  $para{NUM_PAGES}=int(($para{NUM_SEQUENCES}-1)/50)+1;
+  if ($para{NUM_PAGES}==1) {
+    $para{ONEPAGE}=1;
+  }
     
-    $tmpl->param(\%para);
+  $tmpl->param(\%para);
 
-    require HTML::Pager;
-    my $pager = HTML::Pager->new( query => $self->query,
-                template => $tmpl,
-                get_data_callback => [ \&getSequenceRows,
-                                        $sequence_ids_ref, $dbh, $tmpl, $config, $self
-                                    ],
-                rows => scalar(@{$sequence_ids_ref}),
-                page_size => 50,
-                );
-    return $pager->output;
+  require HTML::Pager;
+  my $pager = HTML::Pager->new( query => $self->query,
+				template => $tmpl,
+				get_data_callback => [ \&getSequenceRows,
+						       $sequence_ids_ref, $dbh, $tmpl, $config, $self
+						     ],
+				rows => scalar(@{$sequence_ids_ref}),
+				page_size => 50,
+			      );
+  return $pager->output;
 }
 
 sub getSequenceRows {
-    my ($offset, $rows, $sequence_ids_ref, $dbh, $tmpl, $config, $self) = @_;
+  my ($offset, $rows, $sequence_ids_ref, $dbh, $tmpl, $config, $self) = @_;
 
-    $tmpl->param(ROWSPERPAGE => $rows);
-    $tmpl->param(SEQUENCE_NUM_S => $offset+1);
-    if (scalar(@{$sequence_ids_ref})<$offset+$rows) {
-        $tmpl->param(SEQUENCE_NUM_E => scalar(@{$sequence_ids_ref}));
-    } else {
-        $tmpl->param(SEQUENCE_NUM_E => $offset+$rows);
-    }
+  $tmpl->param(ROWSPERPAGE => $rows);
+  $tmpl->param(SEQUENCE_NUM_S => $offset+1);
+  if (scalar(@{$sequence_ids_ref})<$offset+$rows) {
+    $tmpl->param(SEQUENCE_NUM_E => scalar(@{$sequence_ids_ref}));
+  } else {
+    $tmpl->param(SEQUENCE_NUM_E => $offset+$rows);
+  }
 
-    my @rows;
+  my @rows;
 
-    my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_sequence_id'));
+  my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_sequence_id'));
 
-    my $count=0;
+  my $count=0;
 
-    for (my $x = 0; $x < $rows; $x++) {
-        last if ($offset+$x>$#{$sequence_ids_ref});
-        my $sequence_id=$sequence_ids_ref->[$offset+$x];
+  for (my $x = 0; $x < $rows; $x++) {
+    last if ($offset+$x>$#{$sequence_ids_ref});
+    my $sequence_id=$sequence_ids_ref->[$offset+$x];
         
-        $query_sequence->execute($sequence_id);
-        my @data = $query_sequence->fetchrow_array();
+    $query_sequence->execute($sequence_id);
+    my @data = $query_sequence->fetchrow_array();
 
-        my %sequence;
-        $count++;
-        if ($count%2) {
-            $sequence{__ODD__}=1;
-        } else {
-            $sequence{__EVEN__}=1;
-        }
-
-        $sequence{SEQUENCE_NUMBER}=$offset+$x+1;;
-        $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
-        $sequence{SEQUENCE_ACCESSION}=$data[0];
-        $sequence{XREF}=$data[1];
-        if (defined $data[5]) {
-            $sequence{XREF_LINK}=$data[5].$data[1];
-        }
-        my @desc_info = split(" ",$data[2]);
-        shift @desc_info;
-        $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
-        $sequence{SEQUENCE_LENGTH}=$data[3];
-        $sequence{SEQUENCE_TAXON}=$data[4];
-        if (defined $data[6]) {
-            $sequence{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[7]";
-            $sequence{GROUP_ACCESSION}=$data[6];
-        } else {
-            $sequence{GROUP_ACCESSION}='not clustered';
-        }
-        push(@rows,\%sequence);
+    my %sequence;
+    $count++;
+    if ($count%2) {
+      $sequence{__ODD__}=1;
+    } else {
+      $sequence{__EVEN__}=1;
     }
 
-    return \@rows;
+    $sequence{SEQUENCE_NUMBER}=$offset+$x+1;;
+    $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+    $sequence{SEQUENCE_ACCESSION}=$data[0];
+    $sequence{XREF}=$data[1];
+    if (defined $data[5]) {
+      $sequence{XREF_LINK}=$data[5].$data[1];
+    }
+    my @desc_info = split(" ",$data[2]);
+    shift @desc_info;
+    $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
+    $sequence{SEQUENCE_LENGTH}=$data[3];
+    $sequence{SEQUENCE_TAXON}=$data[4];
+    if (defined $data[6]) {
+      $sequence{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[7]";
+      $sequence{GROUP_ACCESSION}=$data[6];
+    } else {
+      $sequence{GROUP_ACCESSION}='not clustered';
+    }
+    push(@rows,\%sequence);
+  }
+
+  return \@rows;
 }
 
 
 
 sub domarchList {
-    my $self = shift;
-    my $config = $self->param("config");
-    my $dbh = $self->dbh();
-    my $q = $self->query();
+  my $self = shift;
+  my $config = $self->param("config");
+  my $dbh = $self->dbh();
+  my $q = $self->query();
 
-    $dbh->{LongTruncOk} = 0;
-    $dbh->{LongReadLen} = 100000000;
+  $dbh->{LongTruncOk} = 0;
+  $dbh->{LongReadLen} = 100000000;
 
-    my %para;
+  my %para;
 
-    my ($orthogroup_id,$orthogroup_ac);
-    if ($orthogroup_id = $q->param("groupid")) {
-        my $query_orthogroup_by_groupid = $dbh->prepare($self->getSql('group_name_per_group_id'));
-        $query_orthogroup_by_groupid->execute($orthogroup_id);
-        my @tmp = $query_orthogroup_by_groupid->fetchrow_array();
-        $orthogroup_ac = $tmp[0];
-    } elsif ($orthogroup_ac = $q->param("groupac")) {
-        my $query_orthogroup_by_groupac = $dbh->prepare($self->getSql('group_id_per_group_name'));
-        $query_orthogroup_by_groupac->execute($orthogroup_ac);
-        my @tmp = $query_orthogroup_by_groupac->fetchrow_array();
-        $orthogroup_id = $tmp[0];
-    }
+  my ($orthogroup_id,$orthogroup_ac);
+  if ($orthogroup_id = $q->param("groupid")) {
+    my $query_orthogroup_by_groupid = $dbh->prepare($self->getSql('group_name_per_group_id'));
+    $query_orthogroup_by_groupid->execute($orthogroup_id);
+    my @tmp = $query_orthogroup_by_groupid->fetchrow_array();
+    $orthogroup_ac = $tmp[0];
+  } elsif ($orthogroup_ac = $q->param("groupac")) {
+    my $query_orthogroup_by_groupac = $dbh->prepare($self->getSql('group_id_per_group_name'));
+    $query_orthogroup_by_groupac->execute($orthogroup_ac);
+    my @tmp = $query_orthogroup_by_groupac->fetchrow_array();
+    $orthogroup_id = $tmp[0];
+  }
 
-    $para{GROUP_ACCESSION}=$orthogroup_ac;
+  $para{GROUP_ACCESSION}=$orthogroup_ac;
 
-    $para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-    my $query_sequence_by_groupid = $dbh->prepare($self->getSql('domain_sequence_info_per_group_id'));
+  $para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
+  my $query_sequence_by_groupid = $dbh->prepare($self->getSql('domain_sequence_info_per_group_id'));
 
-    my $query_max_length_by_groupid = $dbh->prepare($self->getSql('max_length_per_group_id'));
+  my $query_max_length_by_groupid = $dbh->prepare($self->getSql('max_length_per_group_id'));
     
-    my $query_domains_by_sequenceid = $dbh->prepare($self->getSql('domains_info_per_sequence_id'));
+  my $query_domains_by_sequenceid = $dbh->prepare($self->getSql('domains_info_per_sequence_id'));
 
-    # Fetch max length, set params needed in order to generate images
-    $query_max_length_by_groupid->execute($orthogroup_id);
-    my @length_data=$query_max_length_by_groupid->fetchrow_array();
-    my $length_max=$length_data[0];
-    my $dom_height=14;
-    my $spacer_height=15;
-    my $margin_x = 10;
-    my $margin_y = 40;
+  # Fetch max length, set params needed in order to generate images
+  $query_max_length_by_groupid->execute($orthogroup_id);
+  my @length_data=$query_max_length_by_groupid->fetchrow_array();
+  my $length_max=$length_data[0];
+  my $dom_height=14;
+  my $spacer_height=15;
+  my $margin_x = 10;
+  my $margin_y = 40;
     my $scale_factor=0.7;
     my $tick_step=50; # generally 50 is used, but when $length_max is too big, ...
-    if ($length_max>=2000) {
+      if ($length_max>=2000) {
         $tick_step = int($length_max/2000)*100;
-    }
-    if ($length_max>1000) {
-        $scale_factor = $scale_factor*(1000/$length_max);
-    }
-    my $size_x = $length_max*$scale_factor+2*$margin_x;
-    my $size_y = $margin_y + $dom_height + $spacer_height;
+      }
+  if ($length_max>1000) {
+    $scale_factor = $scale_factor*(1000/$length_max);
+  }
+  my $size_x = $length_max*$scale_factor+2*$margin_x;
+  my $size_y = $margin_y + $dom_height + $spacer_height;
     my $pos_y = $margin_y + $spacer_height + $dom_height/2;
 
     # Fetch sequences
@@ -1338,59 +1361,59 @@ sub domarchList {
     my @sequence_ids;
     my %domains_seen;
     while (my @sequence_data = $query_sequence_by_groupid->fetchrow_array()) {
-        push(@sequence_ids,$sequence_data[0]);
-        my %sequence;
-        $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
-        $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-        $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
-        $sequence{SEQUENCE_TAXON}=$sequence_data[4];
+  push(@sequence_ids,$sequence_data[0]);
+  my %sequence;
+  $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
+  $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
+  $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
+  $sequence{SEQUENCE_TAXON}=$sequence_data[4];
         
-        my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
+  my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
-        #Fetch domains for sequence
-        $query_domains_by_sequenceid->execute($sequence_data[0]);
+  #Fetch domains for sequence
+  $query_domains_by_sequenceid->execute($sequence_data[0]);
 
-        my $num_dom_in_sequence=0;
-        while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
-        if (!exists $domains_seen{$domain_data[1]}) {
-            $domains_seen{$domain_data[1]}='y';
-            my %domain;
-            $domain{DOMAIN_ACCESSION}=$domain_data[1];
-            $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-            $domain{DOMAIN_NAME}=$domain_data[2];
-            $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
-            push(@{$para{LOOP_DOMAIN}},\%domain);
+  my $num_dom_in_sequence=0;
+  while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
+    if (!exists $domains_seen{$domain_data[1]}) {
+      $domains_seen{$domain_data[1]}='y';
+      my %domain;
+      $domain{DOMAIN_ACCESSION}=$domain_data[1];
+      $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+      $domain{DOMAIN_NAME}=$domain_data[2];
+      $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
+      push(@{$para{LOOP_DOMAIN}},\%domain);
         
-            my $from = $domain_data[4];
-            my $to = $domain_data[5];
-            my $length=$to-$from;
-            my $source_id = $domain_data[1];
-            $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
-        }
+      my $from = $domain_data[4];
+      my $to = $domain_data[5];
+      my $length=$to-$from;
+      my $source_id = $domain_data[1];
+      $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
+    }
 
-        $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
-        $num_dom_in_sequence++;
-        }
+    $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
+    $num_dom_in_sequence++;
+  }
         
-        $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
+  $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
        
-        push(@{$para{LOOP_DOMARCH}},\%sequence);
-    }
+  push(@{$para{LOOP_DOMARCH}},\%sequence);
+}
     
-           # includes scale image in page  (the heading for the column w/sequence images
-    $para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
+# includes scale image in page  (the heading for the column w/sequence images
+$para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
 
-    unless (keys(%domains_seen)) {
-        $para{NOPFAM}=1;
-    }
+unless (keys(%domains_seen)) {
+  $para{NOPFAM}=1;
+}
     
-    my $tmpl = $self->load_tmpl('domarch_listing.tmpl');
-    $self->defaults($tmpl);
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+my $tmpl = $self->load_tmpl('domarch_listing.tmpl');
+$self->defaults($tmpl);
+$tmpl->param(\%para);
+return $self->done($tmpl);
 }
 
-sub sequence {
+  sub sequence {
     my $self = shift;
     my $config = $self->param("config");
     my $dbh = $self->dbh();
@@ -1416,23 +1439,23 @@ sub sequence {
     $para{TAXON}=$data[2];
     my $orthogroup_old_ac;
     if ($data[3]==0) {
-        $para{GROUP_ACCESSION}='not clustered';
+      $para{GROUP_ACCESSION}='not clustered';
     } else {
-        $query_orthogroup->execute($data[3]);
-        my @data2 = $query_orthogroup->fetchrow_array();
-        $para{GROUP_ACCESSION}=$data2[0];
-        $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
-        $orthogroup_old_ac = transformOGAC($para{GROUP_ACCESSION});
+      $query_orthogroup->execute($data[3]);
+      my @data2 = $query_orthogroup->fetchrow_array();
+      $para{GROUP_ACCESSION}=$data2[0];
+      $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
+      $orthogroup_old_ac = transformOGAC($para{GROUP_ACCESSION});
     }
     
     if ($data[4]) {
-        my @desc_info = split(" ",$data[4]);
-        shift @desc_info;
-        $para{DESCRIPTION}=join(" ",@desc_info);
+      my @desc_info = split(" ",$data[4]);
+      shift @desc_info;
+      $para{DESCRIPTION}=join(" ",@desc_info);
     }
 
     if (defined $data[6]) {
-        $para{XREF_LINK}=$data[6].$data[1];
+      $para{XREF_LINK}=$data[6].$data[1];
     }
 
     my $len = $data[5];
@@ -1441,15 +1464,19 @@ sub sequence {
 
     # display sequence
     $para{SEQUENCE} = "<font face=\"Courier\" size=\"2\">&gt;";
-    if ($para{NAME}) { $para{SEQUENCE} .= $para{NAME}." "; }
-    if ($para{DESCRIPTION}) { $para{SEQUENCE} .= $para{DESCRIPTION}." "; }
+    if ($para{NAME}) {
+      $para{SEQUENCE} .= $para{NAME}." ";
+    }
+    if ($para{DESCRIPTION}) {
+      $para{SEQUENCE} .= $para{DESCRIPTION}." ";
+    }
     $para{SEQUENCE} .= "[".$para{TAXON}."]<br>";
     for (my $i=1;$i<=$len;$i+=60) {
-        if ($i+60-1>$len) {
-            $para{SEQUENCE} .= substr($seq, $i) ."<br>";
-        } else {
-            $para{SEQUENCE} .= substr($seq, $i,60) . "<br>";
-        }
+      if ($i+60-1>$len) {
+	$para{SEQUENCE} .= substr($seq, $i) ."<br>";
+      } else {
+	$para{SEQUENCE} .= substr($seq, $i,60) . "<br>";
+      }
     }
     $para{SEQUENCE}.="</font>";
 
@@ -1473,11 +1500,11 @@ sub sequence {
     my $margin_y = 40;
     my $scale_factor=0.7;
     my $tick_step=50; # generally 50 is used, but when $length_max is too big, ...
-    if ($length_max>=2000) {
+      if ($length_max>=2000) {
         $tick_step = int($length_max/2000)*100;
-    }
+      }
     if ($length_max>1000) {
-        $scale_factor = $scale_factor*(1000/$length_max);
+      $scale_factor = $scale_factor*(1000/$length_max);
     }
     my $size_x = $length_max*$scale_factor+2*$margin_x;
     my $size_y = $margin_y + $dom_height + $spacer_height;
@@ -1487,17 +1514,17 @@ sub sequence {
 
     my $num_dom_in_sequence=0;
     while (@data = $query_domarch_by_ac->fetchrow_array()) {
-        my %domain;
-        $domain{DOMAIN_START}=$data[0];
-        $domain{DOMAIN_END}=$data[1];
-        $domain{DOMAIN_ACCESSION}=$data[2];
-        $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-        $domain{DOMAIN_NAME}=$data[3];
-        $domain{DOMAIN_DESCRIPTION}=$data[4];
-        push(@{$para{LOOP_DOMAIN}},\%domain);
+      my %domain;
+      $domain{DOMAIN_START}=$data[0];
+      $domain{DOMAIN_END}=$data[1];
+      $domain{DOMAIN_ACCESSION}=$data[2];
+      $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+      $domain{DOMAIN_NAME}=$data[3];
+      $domain{DOMAIN_DESCRIPTION}=$data[4];
+      push(@{$para{LOOP_DOMAIN}},\%domain);
 
-        $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$data[0]."&domain_to".$num_dom_in_sequence."=".$data[1]."&domain_source".$num_dom_in_sequence."=".$data[2];
-        $num_dom_in_sequence++;
+      $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$data[0]."&domain_to".$num_dom_in_sequence."=".$data[1]."&domain_source".$num_dom_in_sequence."=".$data[2];
+      $num_dom_in_sequence++;
     }
 
     $para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=black";
@@ -1507,131 +1534,131 @@ sub sequence {
     $self->defaults($tmpl);
     $tmpl->param(\%para);
     return $self->done($tmpl);
-}
+  }
 
 sub genome {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $q = $self->query();
+  my $self = shift;
+  my $dbh = $self->dbh();
+  my $q = $self->query();
 
-    my %para;
-    $para{PAGETITLE}="Release Summary";
+  my %para;
+  $para{PAGETITLE}="Release Summary";
 
-    my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
-    $query_num_taxa->execute();
-    my @tmp = $query_num_taxa->fetchrow_array();
-    $para{NUM_TAXA}=$tmp[0];
+  my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
+  $query_num_taxa->execute();
+  my @tmp = $query_num_taxa->fetchrow_array();
+  $para{NUM_TAXA}=$tmp[0];
 
-    my $query_num_sequences = $dbh->prepare($self->getSql('all_sequences_count'));
-    $query_num_sequences->execute();
-    @tmp = $query_num_sequences->fetchrow_array();
-    $para{NUM_SEQUENCES}=$tmp[0];
+  my $query_num_sequences = $dbh->prepare($self->getSql('all_sequences_count'));
+  $query_num_sequences->execute();
+  @tmp = $query_num_sequences->fetchrow_array();
+  $para{NUM_SEQUENCES}=$tmp[0];
 
-    my $type;
-    if ($type = $q->param("type")) {
-        if ($type eq 'data') {
-            $para{FLAG_DATASOURCE}=1;
-            $para{FLAG_URL}=1;
-        } elsif ($type eq 'summary') {
-            $para{FLAG_NUMSEQ}=1;
-            $para{FLAG_NUMSEQ_CLUSTERED}=1;
-            $para{FLAG_NUMGROUPS}=1;
-        }
+  my $type;
+  if ($type = $q->param("type")) {
+    if ($type eq 'data') {
+      $para{FLAG_DATASOURCE}=1;
+      $para{FLAG_URL}=1;
+    } elsif ($type eq 'summary') {
+      $para{FLAG_NUMSEQ}=1;
+      $para{FLAG_NUMSEQ_CLUSTERED}=1;
+      $para{FLAG_NUMGROUPS}=1;
+    }
+  } else {
+    $para{FLAG_DESCRIPTION}=1;
+  }
+    
+  my $query_taxon = $dbh->prepare($self->getSql('species_details'));
+
+  my $query_numseq = $dbh->prepare($self->getSql('num_sequences_per_species'));
+
+  my $query_numseqclustered = $dbh->prepare($self->getSql('num_clustered_sequences_per_species'));
+    
+  my $query_numgroup = $dbh->prepare($self->getSql('num_groups_per_species'));
+  $query_taxon->execute();
+  my $count=0;
+  while (my @data = $query_taxon->fetchrow_array()) {
+    $count++;
+    my %taxon;
+    $taxon{NUMBER}=$count;
+    $taxon{NAME}=$data[1];
+    $taxon{ABBREV}=$data[2];
+    if (defined $type) {
+      if ($type eq 'data') {
+	$taxon{DATASOURCE}=$data[3];
+	$taxon{URL}=$data[4];
+      } elsif ($type eq 'summary') {
+	my $taxonId = $data[0];
+	$query_numseq->execute($taxonId);
+	my @tmp = $query_numseq->fetchrow_array();
+	$taxon{NUMSEQ}=$tmp[0];
+	$query_numseqclustered->execute($taxonId);
+	@tmp = $query_numseqclustered->fetchrow_array();
+	$taxon{NUMSEQ_CLUSTERED}=$tmp[0];
+	$query_numgroup->execute($taxonId);
+	@tmp = $query_numgroup->fetchrow_array();
+	$taxon{NUMGROUPS}=$tmp[0];
+      }
     } else {
-        $para{FLAG_DESCRIPTION}=1;
+      $taxon{DESCRIPTION}=$data[5];
     }
-    
-    my $query_taxon = $dbh->prepare($self->getSql('species_details'));
+    push(@{$para{LOOP_TAXON}},\%taxon);
+  }
 
-    my $query_numseq = $dbh->prepare($self->getSql('num_sequences_per_species'));
-
-    my $query_numseqclustered = $dbh->prepare($self->getSql('num_clustered_sequences_per_species'));
-    
-    my $query_numgroup = $dbh->prepare($self->getSql('num_groups_per_species'));
-    $query_taxon->execute();
-    my $count=0;
-    while (my @data = $query_taxon->fetchrow_array()) {
-        $count++;
-        my %taxon;
-        $taxon{NUMBER}=$count;
-        $taxon{NAME}=$data[1];
-        $taxon{ABBREV}=$data[2];
-        if (defined $type) {
-            if ($type eq 'data') {
-                $taxon{DATASOURCE}=$data[3];
-                $taxon{URL}=$data[4];
-            } elsif ($type eq 'summary') {
-                my $taxonId = $data[0];
-                $query_numseq->execute($taxonId);
-                my @tmp = $query_numseq->fetchrow_array();
-                $taxon{NUMSEQ}=$tmp[0];
-                $query_numseqclustered->execute($taxonId);
-                @tmp = $query_numseqclustered->fetchrow_array();
-                $taxon{NUMSEQ_CLUSTERED}=$tmp[0];
-                $query_numgroup->execute($taxonId);
-                @tmp = $query_numgroup->fetchrow_array();
-                $taxon{NUMGROUPS}=$tmp[0];
-            }
-        } else {
-            $taxon{DESCRIPTION}=$data[5];
-        }
-        push(@{$para{LOOP_TAXON}},\%taxon);
-    }
-
-    my $tmpl = $self->load_tmpl('genomepage.tmpl');
-    $self->defaults($tmpl);
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+  my $tmpl = $self->load_tmpl('genomepage.tmpl');
+  $self->defaults($tmpl);
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
 }
 
 sub MSA {
-    my $self = shift;
-    my $config = $self->param("config");
-    my $dbh = $self->dbh();
-    my $q = $self->query();
+  my $self = shift;
+  my $config = $self->param("config");
+  my $dbh = $self->dbh();
+  my $q = $self->query();
 
-    my %para;
-    $para{CONTENT}="<pre>";
-    if (my $ac = $q->param("groupac")) {
-        $para{PAGETITLE}="MSA $ac";
+  my %para;
+  $para{CONTENT}="<pre>";
+  if (my $ac = $q->param("groupac")) {
+    $para{PAGETITLE}="MSA $ac";
         
-        # in order to read clobs correctly
-        $dbh->{LongTruncOk} = 0;
-        $dbh->{LongReadLen} = 100000000;
+    # in order to read clobs correctly
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
         
-        my $query_msa = $dbh->prepare($self->getSql('msa_per_group_name'));
-        $query_msa->execute($ac);
-        if (my @data = $query_msa->fetchrow_array()) {
-            $para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
-            $para{CONTENT}.=$data[0];
-        } else {
-            # $para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
-            $para{ERROR}="The MSA result doesn't exist. Please check it later because we are updating data currently."
-        }
+    my $query_msa = $dbh->prepare($self->getSql('msa_per_group_name'));
+    $query_msa->execute($ac);
+    if (my @data = $query_msa->fetchrow_array()) {
+      $para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
+      $para{CONTENT}.=$data[0];
+    } else {
+      # $para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
+      $para{ERROR}="The MSA result doesn't exist. Please check it later because we are updating data currently."
     }
+  }
 
-    my $tmpl = $self->load_tmpl('empty.tmpl');
-    $self->defaults($tmpl);
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+  my $tmpl = $self->load_tmpl('empty.tmpl');
+  $self->defaults($tmpl);
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
 }
 
 sub BLGraph {
-    my $self = shift;
-    my $config = $self->param("config");
-    my $dbh = $self->dbh();
-    my $q = $self->query();
+  my $self = shift;
+  my $config = $self->param("config");
+  my $dbh = $self->dbh();
+  my $q = $self->query();
 
-    $dbh->{LongTruncOk} = 0;
-    $dbh->{LongReadLen} = 100000000;
+  $dbh->{LongTruncOk} = 0;
+  $dbh->{LongReadLen} = 100000000;
 
-    my $ac = $q->param("groupac");
-    my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
-    my %para;
-    if ($q->param("svg")) {
-        $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
-        $para{T} = "BioLayout Graph (SVG) for Group <font color=\"red\">$ac</font>";
-        $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
+  my $ac = $q->param("groupac");
+  my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
+  my %para;
+  if ($q->param("svg")) {
+    $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
+    $para{T} = "BioLayout Graph (SVG) for Group <font color=\"red\">$ac</font>";
+    $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
                                height=\"800\" type=\"image/svg+xml\"></embed>
                         <p>Notes: In this graph, nodes represent proteins (species are 
                            color-coded); edges stand for three edge relationships: 
@@ -1644,141 +1671,151 @@ sub BLGraph {
                            on. When you move your mouse over a certain node (or edge), 
                            associated information will be displayed in the \"INFORMATION\" 
                            box, the nodes from the same species will also be highlighted.</p>";
-    } elsif ($q->param("svgdata")) {
-        # read the content of the svg
-        my $query_content = $dbh->prepare($self->getSql('svg_content_per_group_name'));
-        $query_content->execute($ac);
-        my ($svg_content) = $query_content->fetchrow();
+  } elsif ($q->param("svgdata")) {
+    # read the content of the svg
+    my $query_content = $dbh->prepare($self->getSql('svg_content_per_group_name'));
+    $query_content->execute($ac);
+    my ($svg_content) = $query_content->fetchrow();
             
-        $self->header_props(-type=>'image/svg+xml');
-        return $svg_content;
-    } elsif ($q->param("image")) {
-        # read the image of biolayout
-        my $query_image = $dbh->prepare($self->getSql('biolayout_image_per_group_name'));
-        $query_image->execute($ac);
-        my ($bl_image) = $query_image->fetchrow();
+    $self->header_props(-type=>'image/svg+xml');
+    return $svg_content;
+  } elsif ($q->param("image")) {
+    # read the image of biolayout
+    my $query_image = $dbh->prepare($self->getSql('biolayout_image_per_group_name'));
+    $query_image->execute($ac);
+    my ($bl_image) = $query_image->fetchrow();
             
-        binmode STDOUT;
-        print CGI::header("image/png");
-        print $bl_image;
-        return;
-    } else {
-        $para{PAGETITLE}="BioLayout Graph for $ac";
-        $para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
-        $para{CONTENT}="Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
+    binmode STDOUT;
+    print CGI::header("image/png");
+    print $bl_image;
+    return;
+  } else {
+    $para{PAGETITLE}="BioLayout Graph for $ac";
+    $para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
+    $para{CONTENT}="Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
                         <b>Interactive Graph (SVG)</b></a></font> <font size=\"1\">.    
                         You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">
                         Scalable Vector Graphics Viewer</a></font>.
                         <p><img src=\"$bl_src&image=1\"><p>";
+  }
+
+  my $tmpl = $self->load_tmpl('empty.tmpl');
+  $self->defaults($tmpl);
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
+}
+
+sub getSeq {
+  my $self = shift;
+  my $config = $self->param("config");
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+
+  $dbh->{LongTruncOk} = 0;
+  $dbh->{LongReadLen} = 100000000;
+
+  if ($q->param("groupid") || $q->param("groupac")) {
+    my %para;
+    my $query_sequence;
+    if (my $groupac = $q->param("groupac")) {
+      $para{PAGETITLE}="FASTA Sequences for $groupac";
+      $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_name'));
+
+      $para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
+      $query_sequence->execute($groupac);
+    } elsif (my $groupid = $q->param("groupid")) {
+      $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_id'));
+      $query_sequence->execute($groupid);
+    }
+
+    $para{CONTENT} = "";
+    while (my @data = $query_sequence->fetchrow_array()) {
+      my $ac = $data[0];
+      my $desc = $data[1];
+      my $taxon = $data[2];
+      my $len = $data[3];
+      my $seq = $data[4];
+      $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">&gt;";
+      if ($desc) {
+	$para{CONTENT} .= $desc;
+      }
+      $para{CONTENT} .= " [$taxon]<br>";
+      for (my $i=1;$i<=$len;$i+=60) {
+	if ($i+60-1>$len) {
+	  $para{CONTENT}.= substr($seq, $i)."<br>";
+	} else {
+	  $para{CONTENT}.= substr($seq, $i, 60)."<br>";
+	}
+      }
+      $para{CONTENT}.="</font>";
     }
 
     my $tmpl = $self->load_tmpl('empty.tmpl');
     $self->defaults($tmpl);
     $tmpl->param(\%para);
     return $self->done($tmpl);
-}
+  } elsif (my $querynumber = $q->param("querynumber")) {
+    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
+    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
+    my $query_sequence = $dbh->prepare($self->getSql('history_sequence_info_per_sequence_id'));
 
-sub getSeq {
-    my $self = shift;
-    my $config = $self->param("config");
-    my $dbh = $self->dbh();
-    my $q = $self->query();
-
-    $dbh->{LongTruncOk} = 0;
-    $dbh->{LongReadLen} = 100000000;
-
-    if ($q->param("groupid") || $q->param("groupac")) {
-        my %para;
-        my $query_sequence;
-        if (my $groupac = $q->param("groupac")) {
-            $para{PAGETITLE}="FASTA Sequences for $groupac";
-            $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_name'));
-
-            $para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
-            $query_sequence->execute($groupac);
-        } elsif (my $groupid = $q->param("groupid")) {
-           $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_id'));
-            $query_sequence->execute($groupid);
-        }
-
-        $para{CONTENT} = "";
-        while (my @data = $query_sequence->fetchrow_array()) {
-            my $ac = $data[0];
-            my $desc = $data[1];
-            my $taxon = $data[2];
-            my $len = $data[3];
-            my $seq = $data[4];
-            $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">&gt;";
-            if ($desc) { $para{CONTENT} .= $desc; }
-            $para{CONTENT} .= " [$taxon]<br>";
-            for (my $i=1;$i<=$len;$i+=60) {
-                if ($i+60-1>$len) {$para{CONTENT}.= substr($seq, $i)."<br>";} 
-                else {$para{CONTENT}.= substr($seq, $i, 60)."<br>";}
-            }
-            $para{CONTENT}.="</font>";
-        }
-
-        my $tmpl = $self->load_tmpl('empty.tmpl');
-        $self->defaults($tmpl);
-        $tmpl->param(\%para);
-        return $self->done($tmpl);
-    } elsif (my $querynumber = $q->param("querynumber")) {
-        my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
-        my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
-        my $query_sequence = $dbh->prepare($self->getSql('history_sequence_info_per_sequence_id'));
-
-        my $file_content;
-        foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-            $query_sequence->execute($sequence_id);
-            my @data = $query_sequence->fetchrow_array();
-            my $ac = $data[0];
-            my $desc = $data[1];
-            my $taxon = $data[2];
-            my $len = $data[3];
-            my $seq = $data[4];
-            $file_content.=">$desc [$taxon]\r\n";
-            for (my $i=1;$i<=$len;$i+=60) {
-                if ($i+60-1>$len) {$file_content.= substr($seq, $i)."\r\n";} 
-                else {$file_content.= substr($seq, $i, 60)."\r\n";}
-            }
-        }
-
-        my $file_name = 'OrthoMCL-DB_sequence_query_'.$querynumber.'.fasta';
-        $self->header_props(
-            -type=>'text/plain',
-            '-Content-Disposition'=>'attachment; filename="'.$file_name.'"');
-        return $file_content;
+    my $file_content;
+    foreach my $sequence _id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+      $query_sequence->execute($sequence_id);
+      my @data = $query_sequence->fetchrow_array();
+      my $ac = $data[0];
+      my $desc = $data[1];
+      my $taxon = $data[2];
+      my $len = $data[3];
+      my $seq = $data[4];
+      $file_content.=">$desc [$taxon]\r\n";
+      for (my $i=1;$i<=$len;$i+=60) {
+	if ($i+60-1>$len) {
+	  $file_content.= substr($seq, $i)."\r\n";
+	} else {
+	  $file_content.= substr($seq, $i, 60)."\r\n";
+	}
+      }
     }
+
+    my $file_name = 'OrthoMCL-DB_sequence_query_'.$querynumber.'.fasta';
+    $self->header_props(
+			-type=>'text/plain',
+			'-Content-Disposition'=>'attachment; filename="'.$file_name.'"');
+    return $file_content;
+  }
 }
 
 sub blast {
-    my $self = shift;
-    my $config = $self->param("config");
-    my $q = $self->query();
-    my $dbh = $self->dbh();
+  my $self = shift;
+  my $config = $self->param("config");
+  my $q = $self->query();
+  my $dbh = $self->dbh();
 
-    my $tmpl = $self->load_tmpl('empty.tmpl');
-    $self->defaults($tmpl);
+  my $tmpl = $self->load_tmpl('empty.tmpl');
+  $self->defaults($tmpl);
 
-    my $querynumber;
-    my $sequence_ids_ref;  # store all the sequence ids for current query
+  my $querynumber;
+  my $sequence_ids_ref;	# store all the sequence ids for current query
 
-    my %para;
-    $para{CONTENT}="<pre>";
-    $para{PAGETITLE}="BLASTP Result";
+  my %para;
+  $para{CONTENT}="<pre>";
+  $para{PAGETITLE}="BLASTP Result";
 
-    if (my $fasta = $q->param("q")) {
+  if (my $fasta = $q->param("q")) {
     my $fasta_name;
     if ($fasta=~/^\>(\S+)/) {
       $fasta_name=$1;
-    } else {$fasta_name='<unknown sequence>';}
+    } else {
+      $fasta_name='<unknown sequence>';
+    }
     $para{PAGETITLE}="BLASTP Result for $fasta_name";
 
-      $para{T}="BLASTP result for <font color=\"red\">$fasta_name</font>";
-      my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
-      $query_time->execute();
-      my @tmp = $query_time->fetchrow_array();
-      my $time=$tmp[0];
+    $para{T}="BLASTP result for <font color=\"red\">$fasta_name</font>";
+    my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
+    $query_time->execute();
+    my @tmp = $query_time->fetchrow_array();
+    my $time=$tmp[0];
 
     use File::Temp qw(tempfile);
     my ($fh, $tempfile) = tempfile(DIR => "/tmp");
@@ -1793,209 +1830,212 @@ sub blast {
     my $query_orthogroup = $dbh->prepare($self->getSql('group_name_per_group_id'));
     
     while (<BLAST>) {
-        $_=~s/\r|\n//g;
-        if (/Sequences producing significant alignments/) {
-        <BLAST>; # empty line
+      $_=~s/\r|\n//g;
+      if (/Sequences producing significant alignments/) {
+        <BLAST>;		# empty line
         $para{CONTENT}.="\n";
         while (<BLAST>) {
-            $_=~s/\r|\n//g;
-            if (m/^\s*$/) {$para{CONTENT}.="$_\n";last;}
-            if (m/^(\S+)(\s+)(\S+.*)/) {
+	  $_=~s/\r|\n//g;
+	  if (m/^\s*$/) {
+	    $para{CONTENT}.="$_\n";last;
+	  }
+	  if (m/^(\S+)(\s+)(\S+.*)/) {
             $query_sequence->execute($1);
             my ($sequence_id,$orthogroup_ac,$orthogroup_id);
             while (my @data = $query_sequence->fetchrow_array()) {
-                $sequence_id = $data[0];
-                $orthogroup_id = $data[1];
+	      $sequence_id = $data[0];
+	      $orthogroup_id = $data[1];
             }
             if (($sequence_id ne '') && ($orthogroup_id != 0)) {
-                $query_orthogroup->execute($orthogroup_id);
-                while (my @data = $query_orthogroup->fetchrow_array()) {
+	      $query_orthogroup->execute($orthogroup_id);
+	      while (my @data = $query_orthogroup->fetchrow_array()) {
                 $orthogroup_ac = $data[0];
-                }
-                push(@{$sequence_ids_ref},$sequence_id);
-                $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> 
+	      }
+	      push(@{$sequence_ids_ref},$sequence_id);
+	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a> 
                                  <a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id\">$orthogroup_ac</a>";
-                for (my $i=1;$i<=length($2)-length($orthogroup_ac)-1;$i++) {
+	      for (my $i=1;$i<=length($2)-length($orthogroup_ac)-1;$i++) {
                 $para{CONTENT}.=' ';
-                }
-                $para{CONTENT}.="$3\n";
+	      }
+	      $para{CONTENT}.="$3\n";
             } elsif ($sequence_id ne '') {
-                $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>$2$3\n";
+	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1\">$1</a>$2$3\n";
             } else {
-                $para{CONTENT}.="$1$2$3\n";
+	      $para{CONTENT}.="$1$2$3\n";
             }
-            }
+	  }
         }
-        } elsif (/^\>(\S+)/) {
+      } elsif (/^\>(\S+)/) {
         $query_sequence->execute($1);
         my ($sequence_id,$orthogroup_ac,$orthogroup_id);
         while (my @data = $query_sequence->fetchrow_array()) {
-            $sequence_id = $data[0];
-            $orthogroup_id = $data[1];
+	  $sequence_id = $data[0];
+	  $orthogroup_id = $data[1];
         }
         if (($sequence_id ne '') && ($orthogroup_id != 0)) {
-            $query_orthogroup->execute($orthogroup_id);
-            while (my @data = $query_orthogroup->fetchrow_array()) {
+	  $query_orthogroup->execute($orthogroup_id);
+	  while (my @data = $query_orthogroup->fetchrow_array()) {
             $orthogroup_ac = $data[0];
-            }
-            $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> 
+	  }
+	  $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> 
                               <a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id'>$orthogroup_ac</a>\n";
         } elsif ($sequence_id ne '') {
-            $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
+	  $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
         } else {
-            $para{CONTENT}.=">$1\n";
+	  $para{CONTENT}.=">$1\n";
         }
-        } else {
+      } else {
         $para{CONTENT}.="$_\n";
-        }
+      }
     }
 
     close(BLAST);
     unlink($tempfile);
 
-    if (not defined $sequence_ids_ref) {$sequence_ids_ref=[];}
-
-      my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
-      push(@{$sequence_query_history},{
-            CODE   => $fasta_name,
-            TYPE   => 'BLAST',
-            TIME   => $time,
-            NUMHITS=> scalar(@{$sequence_ids_ref}),
-            SHOW   => 1,
-          });
-      $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
-
-      my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
-      push(@{$sequence_query_ids_history},$sequence_ids_ref);
-      $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
-
-      $querynumber=scalar(@{$sequence_query_history});
-      $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber);# store the current querynumber for later paging
-
-      } else {
-    $para{ERROR}="Please provide protein sequence for BLASTP!";
+    if (not defined $sequence_ids_ref) {
+      $sequence_ids_ref=[];
     }
 
+    my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY") || [];
+    push(@{$sequence_query_history},{
+				     CODE   => $fasta_name,
+				     TYPE   => 'BLAST',
+				     TIME   => $time,
+				     NUMHITS=> scalar(@{$sequence_ids_ref}),
+				     SHOW   => 1,
+				    });
+    $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
 
-    $tmpl->param(\%para);
-    return $self->done($tmpl);
+    my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY") || [];
+    push(@{$sequence_query_ids_history},$sequence_ids_ref);
+    $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+
+    $querynumber=scalar(@{$sequence_query_history});
+    $self->session->param('SEQUENCE_QUERY_NUMBER',$querynumber); # store the current querynumber for later paging
+
+  } else {
+    $para{ERROR}="Please provide protein sequence for BLASTP!";
+  }
+
+
+  $tmpl->param(\%para);
+  return $self->done($tmpl);
 }
 
 sub sourceIdToColors {
-    my ($self, $sourceId) = @_;
+  my ($self, $sourceId) = @_;
 
-    if (index($sourceId,'IPR0') >= 0) {
+  if (index($sourceId,'IPR0') >= 0) {
     $sourceId = '2'.substr($sourceId,4);
-    }
-    elsif (index($sourceId,'PF') >= 0) {
+  } elsif (index($sourceId,'PF') >= 0) {
     $sourceId = '1'.substr($sourceId,2);
-    }
+  }
     
-    srand($sourceId);
+  srand($sourceId);
     
-    return (getRGBColor(), getRGBColor(6));
+  return (getRGBColor(), getRGBColor(6));
 }
 
 sub getRGBColor {
-    my $cut=$_[0];
+  my $cut=$_[0];
 
-    my @color_rgb;
-    my $r;
-    my $g;
-    my $b;
+  my @color_rgb;
+  my $r;
+  my $g;
+  my $b;
 
+  do {
+    $r = sprintf('%x', (rand(256) % 6) * 3);
+    $g = sprintf('%x', (rand(256) % 6) * 3);
     do {
-        $r = sprintf('%x', (rand(256) % 6) * 3);
-        $g = sprintf('%x', (rand(256) % 6) * 3);
-        do {
-            $b = sprintf('%x', (rand(256) % 6) * 3);
-        } while ($r==$g && $g==$b);
-    } while ($cut > 0 && (($r < $cut && $g < $cut) || ($r < $cut && $b < $cut) || ($g < $cut && $b < $cut)));
-    #} while ($cut>0 && ($r < $cut || $g<$cut || $b < $cut));
+      $b = sprintf('%x', (rand(256) % 6) * 3);
+    } while ($r==$g && $g==$b);
+  } while ($cut > 0 && (($r < $cut && $g < $cut) || ($r < $cut && $b < $cut) || ($g < $cut && $b < $cut)));
+  #} while ($cut>0 && ($r < $cut || $g<$cut || $b < $cut));
 
-    #if ($r==$g) {
-    #while ($g==$b) {
-    #    $b = sprintf('%x', (rand(256) % 6) * 3);
-    #}
-    #}
+  #if ($r==$g) {
+  #while ($g==$b) {
+  #    $b = sprintf('%x', (rand(256) % 6) * 3);
+  #}
+  #}
         
     
-    $color_rgb[0] = hex($r.$r);
-    $color_rgb[1] = hex($g.$g);
-    $color_rgb[2] = hex($b.$b);
+  $color_rgb[0] = hex($r.$r);
+  $color_rgb[1] = hex($g.$g);
+  $color_rgb[2] = hex($b.$b);
     
-    return \@color_rgb;
+  return \@color_rgb;
 }
 
 #sub drawDomain {
 #}
 
 sub drawDomain {
-    my $self = shift;
-    my $q = $self->query();
+  my $self = shift;
+  my $q = $self->query();
     
-    my $length = $q->param("length");
-    my $source_id = $q->param("source_id");
-    my $scale_factor = $q->param("scale_factor");
-    my $dom_height = $q->param("dom_height");
-    my $color1;
-    my $color2;
+  my $length = $q->param("length");
+  my $source_id = $q->param("source_id");
+  my $scale_factor = $q->param("scale_factor");
+  my $dom_height = $q->param("dom_height");
+  my $color1;
+  my $color2;
 
-    ($color1,$color2)=$self->sourceIdToColors($source_id);
+  ($color1,$color2)=$self->sourceIdToColors($source_id);
 
-    # domain image
-    my $domain_image = new GD::Image($length*$scale_factor+1,$dom_height+1);
-    my $domain_bg = $domain_image->colorAllocate(1,1,1);
-    my $domain_black = $domain_image->colorAllocate(0,0,0);
-    my $domain_inside = $domain_image->colorAllocate($color1->[0],$color1->[1],$color1->[2]);
-    my $domain_outside = $domain_image->colorAllocate($color2->[0],$color2->[1],$color2->[2]);
+  # domain image
+  my $domain_image = new GD::Image($length*$scale_factor+1,$dom_height+1);
+  my $domain_bg = $domain_image->colorAllocate(1,1,1);
+  my $domain_black = $domain_image->colorAllocate(0,0,0);
+  my $domain_inside = $domain_image->colorAllocate($color1->[0],$color1->[1],$color1->[2]);
+  my $domain_outside = $domain_image->colorAllocate($color2->[0],$color2->[1],$color2->[2]);
     
-    $domain_image->transparent($domain_bg);
-    $domain_image->filledRectangle(0,0,$length*$scale_factor,$dom_height,$domain_outside);
-    $domain_image->rectangle(0,0,$length*$scale_factor,$dom_height,$domain_black);
-    $domain_image->filledRectangle(3,3,$length*$scale_factor-4,$dom_height-3,$domain_inside);
-    $domain_image->rectangle(3,3,$length*$scale_factor-4,$dom_height-3,$domain_black);
+  $domain_image->transparent($domain_bg);
+  $domain_image->filledRectangle(0,0,$length*$scale_factor,$dom_height,$domain_outside);
+  $domain_image->rectangle(0,0,$length*$scale_factor,$dom_height,$domain_black);
+  $domain_image->filledRectangle(3,3,$length*$scale_factor-4,$dom_height-3,$domain_inside);
+  $domain_image->rectangle(3,3,$length*$scale_factor-4,$dom_height-3,$domain_black);
     
-    print CGI::header("image/png"), $domain_image->png(9);
+  print CGI::header("image/png"), $domain_image->png(9);
 }
 
 #sub drawProtein {
 #}
 
 sub drawProtein {
-    my $self = shift;
-    my $q = $self->query();
+  my $self = shift;
+  my $q = $self->query();
     
-    my $margin_x = $q->param("margin_x");
-    my $scale_factor = $q->param("scale_factor");
-    my $pos_y = $q->param("pos_y");
+  my $margin_x = $q->param("margin_x");
+  my $scale_factor = $q->param("scale_factor");
+  my $pos_y = $q->param("pos_y");
     my $size_x = $q->param("size_x");
     my $size_y = $q->param("size_y");
-    my $dom_height = $q->param("dom_height");
-    my $length = $q->param("length");
-    my $length_max = $q->param("length_max");
-    my $tick_step = $q->param("tick_step");
-    my $num_domains = $q->param("num_domains");
+  my $dom_height = $q->param("dom_height");
+  my $length = $q->param("length");
+  my $length_max = $q->param("length_max");
+  my $tick_step = $q->param("tick_step");
+  my $num_domains = $q->param("num_domains");
 
-    my @domain_info;
+  my @domain_info;
 
-    my $image = new GD::Image($size_x,$dom_height+1);
+  my $image = new GD::Image($size_x,$dom_height+1);
 
-    my $image_bg = $image->colorAllocate(1,1,1);
-    my $image_black = $image->colorAllocate(0,0,0);
-    my $image_gray = $image->colorAllocate(153,153,153);
-    my $image_dkgray = $image->colorAllocate(102,102,102);
+  my $image_bg = $image->colorAllocate(1,1,1);
+  my $image_black = $image->colorAllocate(0,0,0);
+  my $image_gray = $image->colorAllocate(153,153,153);
+  my $image_dkgray = $image->colorAllocate(102,102,102);
 
-    $image->transparent($image_bg);
+  $image->transparent($image_bg);
 
-    my $tick_len=4;
-    for (my $i=0;$i<=$length_max;$i+=$tick_step) {
+  my $tick_len=4;
+  for (my $i=0;$i<=$length_max;$i+=$tick_step) {
     $image->line($margin_x+$i*$scale_factor,0,$margin_x+$i*$scale_factor,$dom_height,$image_gray);
-    }
+  }
 
-    $image->filledRectangle($margin_x+1,$dom_height/2-2,$margin_x+$length*$scale_factor,$dom_height/2+2,$image_dkgray);
+  $image->filledRectangle($margin_x+1,$dom_height/2-2,$margin_x+$length*$scale_factor,$dom_height/2+2,$image_dkgray);
      
-   for (my $i=0;$i<$num_domains;$i++) {
+  for (my $i=0;$i<$num_domains;$i++) {
     my $from = $q->param("domain_from$i");
     my $to = $q->param("domain_to$i");
     my $domain_source = $q->param("domain_source$i");
@@ -2010,81 +2050,81 @@ sub drawProtein {
     $image->rectangle($margin_x+$from*$scale_factor,0,$margin_x+$to*$scale_factor,$dom_height,$image_black);
     $image->filledRectangle($margin_x+$from*$scale_factor+3,3,$margin_x+$to*$scale_factor-4,$dom_height-3,$domain_inside);
     $image->rectangle($margin_x+$from*$scale_factor+3,3,$margin_x+$to*$scale_factor-4,$dom_height-3,$image_black);
-    }
+  }
     
-    print CGI::header("image/png"), $image->png(9);
+  print CGI::header("image/png"), $image->png(9);
 }
 
 #sub drawScale {
 #}
 
 sub drawScale {
-    my $self = shift;
-    my $q = $self->query();
+  my $self = shift;
+  my $q = $self->query();
 
-    my $size_x = $q->param("size_x");
-    my $margin_x = $q->param("margin_x");
-    my $scale_factor = $q->param("scale_factor");
-    my $length_max = $q->param("length_max");
-    my $tick_step = $q->param("tick_step");
-    my $scale_color = $q->param("scale_color");
+  my $size_x = $q->param("size_x");
+  my $margin_x = $q->param("margin_x");
+  my $scale_factor = $q->param("scale_factor");
+  my $length_max = $q->param("length_max");
+  my $tick_step = $q->param("tick_step");
+  my $scale_color = $q->param("scale_color");
 
     
-    #cluster scale image  # with white/grey line and string # used in OrthoMCL DB
-    my $image = new GD::Image($size_x,20);
-    my $image_bg = $image->colorAllocate(1,1,1);
-    my $image_color;
-    if ($scale_color eq "white") {
+  #cluster scale image  # with white/grey line and string # used in OrthoMCL DB
+  my $image = new GD::Image($size_x,20);
+  my $image_bg = $image->colorAllocate(1,1,1);
+  my $image_color;
+  if ($scale_color eq "white") {
     $image_color = $image->colorAllocate(255,255,255);
-    }
-    else {
+  } else {
     $image_color = $image->colorAllocate(0,0,0);
-    }
+  }
 
-    $image->transparent($image_bg);
-    $image->line($margin_x,4,$margin_x+$length_max*$scale_factor,4,$image_color);
-    my $tick_len=4;
-    for (my $i=0;$i<=$length_max;$i+=$tick_step) {
+  $image->transparent($image_bg);
+  $image->line($margin_x,4,$margin_x+$length_max*$scale_factor,4,$image_color);
+  my $tick_len=4;
+  for (my $i=0;$i<=$length_max;$i+=$tick_step) {
     $image->line($margin_x+$i*$scale_factor,4,$margin_x+$i*$scale_factor,4+$tick_len,$image_color);
     if ($tick_len==4) {
-        $image->string(gdTinyFont,$margin_x+$i*$scale_factor-1.5-(length($i)-1)*5/2,4+5,$i,$image_color);
-        $tick_len=2;
-        }
-    else {$tick_len=4;}
+      $image->string(gdTinyFont,$margin_x+$i*$scale_factor-1.5-(length($i)-1)*5/2,4+5,$i,$image_color);
+      $tick_len=2;
+    } else {
+      $tick_len=4;
     }
-    print CGI::header('image/png'), $image->png(9);
+  }
+  print CGI::header('image/png'), $image->png(9);
 }
 
 sub transformOGAC {
-    # OG1_100
-    my $a = $_[0];
-    return 'ORTHOMCL'.(split(/\_/,$a))[1];
+  # OG1_100
+  my $a = $_[0];
+  return 'ORTHOMCL'.(split(/\_/,$a))[1];
 }
 
 sub orthomcl {
-    my $self = shift;
-    # Get our database connection
-    my $dbh = $self->dbh();
+  my $self = shift;
+  # Get our database connection
+  my $dbh = $self->dbh();
 
 
-    my $tmpl = $self->load_tmpl('orthomcl.tmpl');
-    $self->defaults($tmpl);
-    return $self->done($tmpl);
+  my $tmpl = $self->load_tmpl('orthomcl.tmpl');
+  $self->defaults($tmpl);
+  return $self->done($tmpl);
 }
 
 sub defaults {
 
-   my ($self, $tmpl) = @_;
+  my ($self, $tmpl) = @_;
 
-   my $config = $self->param("config");
-   $tmpl->param(BASEHREF => $config->{basehref});
-   $tmpl->param(PAGETITLE => "OrthoMCL Database") unless $tmpl->param("PAGETITLE");
+  my $config = $self->param("config");
+  $tmpl->param(BASEHREF => $config->{basehref});
+  $tmpl->param(PAGETITLE => "OrthoMCL Database") unless $tmpl->param("PAGETITLE");
 }
 
 sub done {
 
-   my ($self, $tmpl) = @_;
-   return $tmpl->output;
+  my ($self, $tmpl) = @_;
+  return $tmpl->output;
 }
 
 sub getSql {
@@ -2124,5 +2164,5 @@ sub getQueryNameHash {
 }
 
 
-1;  # Perl requires this at the end of all modules
+1;			# Perl requires this at the end of all modules
 

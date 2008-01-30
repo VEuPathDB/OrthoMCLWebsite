@@ -699,124 +699,122 @@ sub groupList {
 }
 
 sub getGroupRows {
-  my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
-
-
-  $tmpl->param(ROWSPERPAGE => $rows);
-  $tmpl->param(GROUP_NUM_S => $offset+1);
-  if (scalar(@{$orthogroup_ids_ref})<$offset+$rows) {
-    $tmpl->param(GROUP_NUM_E => scalar(@{$orthogroup_ids_ref}));
-  } else {
-    $tmpl->param(GROUP_NUM_E => $offset+$rows);
-  }
-  #    $tmpl->param(CURRENTPAGE => int($offset / $rows) + 1);
-
-  my @rows;
-
-  #   this is for phyletic pattern display
-  my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
+    my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
     
-  my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
     
-  my $query_sdescription_by_o = $dbh->prepare($self->getSql('sequence_descrip_per_group')); # used for summarizing keyword
-    
-  my $query_domain_by_o = $dbh->prepare($self->getSql('sequence_domains_per_group'));
-
-  my $query_ddescription_by_d = $dbh->prepare($self->getSql('description_per_domain'));
-  my $count=0;
-
-  for (my $x = 0; $x < $rows; $x++) {
-    last if ($offset+$x>$#{$orthogroup_ids_ref});
-    my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
-    #    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
-        
-    $query_orthogroup->execute($orthogroup_id);
-    my @data = $query_orthogroup->fetchrow_array();
-
-    my %group;
-    $count++;
-    if ($count%2) {
-      $group{__ODD__}=1;
+    $tmpl->param(ROWSPERPAGE => $rows);
+    $tmpl->param(GROUP_NUM_S => $offset+1);
+    if (scalar(@{$orthogroup_ids_ref})<$offset+$rows) {
+	$tmpl->param(GROUP_NUM_E => scalar(@{$orthogroup_ids_ref}));
     } else {
-      $group{__EVEN__}=1;
+	$tmpl->param(GROUP_NUM_E => $offset+$rows);
     }
-
-    $group{GROUP_NUMBER}=$offset+$x+1;
-    $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
-    $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
-    $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
+    #    $tmpl->param(CURRENTPAGE => int($offset / $rows) + 1);
+    
+    my @rows;
+    
+    #   this is for phyletic pattern display
+    my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
+    
+    my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));
+    
+    my $query_keywords_by_o = $dbh->prepare($self->getSql('keywords_per_group')); # used for summarizing keyword
+    
+    my $query_domain_by_o = $dbh->prepare($self->getSql('sequence_domains_per_group'));
+    
+    my $query_ddescription_by_d = $dbh->prepare($self->getSql('description_per_domain'));
+    my $count=0;
+    
+    for (my $x = 0; $x < $rows; $x++) {
+	last if ($offset+$x>$#{$orthogroup_ids_ref});
+	my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
+	#    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
         
-    $group{NO_SEQUENCES}=$data[7];
-
-    if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
-      $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
-      $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
-    }
-
-    $group{GROUP_ACCESSION}=$data[1];
-    $group{NO_MATCH_PAIRS}=$data[6];
-    $group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
-
-    if ($group{NO_MATCH_PAIRS}==0) {
-      $group{AVE_EVAL}='N/A';
-      $group{AVE_PM}='N/A';
-      $group{AVE_PI}='N/A';
-    } else {
-      $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
-      $group{AVE_PM}=$data[4];
-      $group{AVE_PI}=$data[3];
-    }
-    #        $group{AVE_DCS}=$data[2];
-
-    # get taxon and gene counts
-    $query_taxa_by_o->execute($orthogroup_id);
-    my $taxon_count = 0;
-    while (my @data = $query_taxa_by_o->fetchrow_array()) {
-      push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
-				     GENE_COUNT => $data[1] });
-      $taxon_count++;
-    }
-    $group{NO_TAXA} = $taxon_count;
-
-    # about Keywords summary
-    $group{KEYWORDS} = "";
-    if (1) {
-      $query_sdescription_by_o->execute($orthogroup_id);
-      my @funlines;
-      while (my @tmp = $query_sdescription_by_o->fetchrow_array()) {
-	if ($tmp[0]) {
-	  push(@funlines,$tmp[0]);
+	$query_orthogroup->execute($orthogroup_id);
+	my @data = $query_orthogroup->fetchrow_array();
+	
+	my %group;
+	$count++;
+	if ($count%2) {
+	    $group{__ODD__}=1;
+	} else {
+	    $group{__EVEN__}=1;
 	}
-      }
-      my %keywords = %{FunKeyword(\@funlines)};
-      foreach my $k (keys %keywords) {
-	my $c=sprintf("%X",int((1-$keywords{$k})*255));
-	$group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
-      }
-    }
-    # about Pfam domain summary
-    $group{DOMAIN} = "";
-    if (1) {
-      my %sequence_domain;
-      $query_domain_by_o->execute($orthogroup_id);
-      while (my @tmp = $query_domain_by_o->fetchrow_array()) {
-	$sequence_domain{$tmp[0]}->{$tmp[1]}=1;
-      }
-      my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
-      foreach my $d (keys %domains) {
-	my $c=sprintf("%X",int((1-$domains{$d})*255));
-	$query_ddescription_by_d->execute($d);
-	if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
-	  if ($tmp[0]) {
-	    $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
-	  }
+	
+	$group{GROUP_NUMBER}=$offset+$x+1;
+	$group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
+	$group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
+	$group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
+        
+	$group{NO_SEQUENCES}=$data[7];
+	
+	if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
+	    $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
+	    $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
 	}
-      }
-    }
-    push(@rows,\%group);
-  }
+	
+	$group{GROUP_ACCESSION}=$data[1];
+	$group{NO_MATCH_PAIRS}=$data[6];
+	$group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
+	
+	if ($group{NO_MATCH_PAIRS}==0) {
+	    $group{AVE_EVAL}='N/A';
+	    $group{AVE_PM}='N/A';
+	    $group{AVE_PI}='N/A';
+	} else {
+	    $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
+	    $group{AVE_PM}=$data[4];
+	    $group{AVE_PI}=$data[3];
+	}
+	#        $group{AVE_DCS}=$data[2];
+	
+	# get taxon and gene counts
+	$query_taxa_by_o->execute($orthogroup_id);
+	my $taxon_count = 0;
+	while (my @data = $query_taxa_by_o->fetchrow_array()) {
+	    push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
+					   GENE_COUNT => $data[1] });
+	    $taxon_count++;
+	}
+	$group{NO_TAXA} = $taxon_count;
+	
+	# about Keywords summary
+	$group{KEYWORDS} = "";
+	if (1) {
+	    $query_keywords_by_o->execute($orthogroup_id);
+	    my %keywords;
+	    while (my @data = $query_keywords_by_o->fetchrow_array()) {
+		$keywords{$data[0]} = $data[1];
+	    }
 
-  return \@rows;
+	    foreach my $k (keys %keywords) {
+		my $c=sprintf("%X",int((1-$keywords{$k})*255));
+		$group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
+	    }
+	}
+	# about Pfam domain summary
+	$group{DOMAIN} = "";
+	if (1) {
+	    my %sequence_domain;
+	    $query_domain_by_o->execute($orthogroup_id);
+	    while (my @tmp = $query_domain_by_o->fetchrow_array()) {
+		$sequence_domain{$tmp[0]}->{$tmp[1]}=1;
+	    }
+	    my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
+	    foreach my $d (keys %domains) {
+		my $c=sprintf("%X",int((1-$domains{$d})*255));
+		$query_ddescription_by_d->execute($d);
+		if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
+		    if ($tmp[0]) {
+			$group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
+		    }
+		}
+	    }
+	}
+	push(@rows,\%group);
+    }
+    
+    return \@rows;
 }
 
 sub sequenceQueryHistory {

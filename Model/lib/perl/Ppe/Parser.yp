@@ -52,7 +52,7 @@ sub Lexer {
     } elsif ($parser->YYData()->{INPUT} =~ s/^([a-z]{3})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
        
-    } elsif ($parser->YYData()->{INPUT} =~ s/^([A-Z]{3})\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^(ALL|[A-Z]{4})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
        
     } elsif ($parser->YYData()->{INPUT} =~ s/^(\+)\s*//) {

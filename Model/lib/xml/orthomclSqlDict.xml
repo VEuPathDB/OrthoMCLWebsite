@@ -785,9 +785,13 @@ AND eas.aa_sequence_id = ?
        <name>group_id_per_sequence_id</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.aa_sequence_id, ogs.ortholog_group_id 
-FROM apidb.OrthologGroupAaSequence ogs
+SELECT ogs.aa_sequence_id, ogs.ortholog_group_id, t.three_letter_abbrev 
+FROM apidb.OrthologGroupAaSequence ogs,
+     dots.externalaasequence s,
+     apidb.OrthomclTaxon t
 WHERE ogs.aa_sequence_id = ?
+  AND s.aa_sequence_id = ?
+  AND t.taxon_id = s.taxon_id
 ]]>
        </sql>
      </sqlQuery> 

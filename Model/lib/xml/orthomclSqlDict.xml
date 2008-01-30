@@ -790,7 +790,7 @@ FROM apidb.OrthologGroupAaSequence ogs,
      dots.externalaasequence s,
      apidb.OrthomclTaxon t
 WHERE ogs.aa_sequence_id = ?
-  AND s.aa_sequence_id = ?
+  AND s.aa_sequence_id = ogs.aa_sequence_id
   AND t.taxon_id = s.taxon_id
 ]]>
        </sql>

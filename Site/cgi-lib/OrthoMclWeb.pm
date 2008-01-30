@@ -1846,10 +1846,11 @@ sub blast {
             my $padding = $3;
             my $the_rest = $4;
             $query_sequence->execute($aa_sequence_id);
-            my ($sequence_id,$orthogroup_ac,$orthogroup_id);
+            my ($sequence_id,$orthogroup_id,$orthogroup_ac,$three_letter_abbrev);
             while (my @data = $query_sequence->fetchrow_array()) {
 	      $sequence_id = $data[0];
 	      $orthogroup_id = $data[1];
+	      $three_letter_abbrev = $data[2];
             }
             if (($sequence_id ne '') && ($orthogroup_id != 0)) {
 	      $query_orthogroup->execute($orthogroup_id);
@@ -1857,7 +1858,7 @@ sub blast {
                 $orthogroup_ac = $data[0];
 	      }
 	      push(@{$sequence_ids_ref},$sequence_id);
-	      $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id">$seq_source_id</a>};
+	      $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id">$three_letter_abbrev|$seq_source_id</a>};
 	      for (my $i=1;$i<=length($padding)-length($orthogroup_ac)-1;$i++) {
                 $para{CONTENT}.=' ';
 	      }

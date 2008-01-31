@@ -1,8 +1,9 @@
 
 <TMPL_INCLUDE header.tmpl>
 
-<!-- BEGIN CONTENT -->
+<div id="debug" />
 
+<!-- BEGIN CONTENT -->
 <script type="text/javascript" src="js/phyletic-pattern.js"></script>
 
 <script language="javascript">
@@ -15,9 +16,8 @@ taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id: "<TMPL_VAR NAME=TAXON_ID>",
     parent_id: "<TMPL_VAR NAME=PARENT_ID>",
     abbrev: "<TMPL_VAR NAME=ABBREV>",
     name: "<TMPL_VAR NAME=NAME>",
-    is_species: <TMPL_VAR NAME=IS_SPECIES>,
-    expanded: true,
-    species_count: 0,
+    is_species: (<TMPL_VAR NAME=IS_SPECIES> == 0) ? false : true,
+    index: <TMPL_VAR NAME=INDEX>,
     children: [] };
 </TMPL_LOOP>
 
@@ -135,8 +135,7 @@ initial();
 		  <tr>
   		    <td colspan="7">
 		      <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-		      <table border="1" cellspacing="0">
-
+               <table width="100%" border="1" cellspacing="0" cellpadding="0">
 <script language="javascript">
 <!--//
 var group = {name: "<TMPL_VAR GROUP_ACCESSION>",
@@ -154,6 +153,7 @@ displayCategories(group);
 
 //-->
 </script>
+		      </table>
 
 		      <!-- END PHYLETIC PATTERN BLOCK -->
 		    </td>

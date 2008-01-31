@@ -674,7 +674,8 @@ sub groupList {
 			      PARENT_ID => $data[1],
 			      ABBREV => $data[2],
 			      NAME => $data[3],
-			      IS_SPECIES => $data[4] });
+			      IS_SPECIES => $data[4],
+			      INDEX => $data[5] });
   }
 
   $para{NUM_GROUPS}=scalar(@{$orthogroup_ids_ref});

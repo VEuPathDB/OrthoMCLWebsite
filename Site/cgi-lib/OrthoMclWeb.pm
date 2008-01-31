@@ -763,8 +763,8 @@ sub getGroupRows {
 	    $group{AVE_PI}='N/A';
 	} else {
 	    $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
-	    $group{AVE_PM}=$data[4];
-	    $group{AVE_PI}=$data[3];
+	    $group{AVE_PM}=sprintf("%.1f", $data[4]);
+	    $group{AVE_PI}=sprintf("%.1f", $data[3]);
 	}
 	#        $group{AVE_DCS}=$data[2];
 	

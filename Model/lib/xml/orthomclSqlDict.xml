@@ -6,7 +6,7 @@
 <![CDATA[ 
 SELECT count(*) 
 FROM apidb.OrthomclTaxon 
-WHERE is_species = 1
+WHERE is_species != 0
 ]]>
        </sql>
      </sqlQuery> 
@@ -20,7 +20,7 @@ SELECT count(eas.aa_sequence_id)
 FROM dots.ExternalAaSequence eas,
      apidb.OrthomclTaxon ot
 WHERE ot.taxon_id = eas.taxon_id
-  AND ot.is_species = 1
+  AND ot.is_species != 0
 ]]>
        </sql>
      </sqlQuery> 
@@ -622,7 +622,7 @@ SELECT ot.taxon_id, ot.name, ot.three_letter_abbrev,
 FROM apidb.OrthomclTaxon ot,
      apidb.OrthomclResource od
 WHERE od.orthomcl_taxon_id = ot.orthomcl_taxon_id
-  AND ot.is_species = 1 
+  AND ot.is_species != 0 
 ]]>
        </sql>
      </sqlQuery> 

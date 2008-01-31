@@ -233,7 +233,7 @@ function saveState() {
             content += taxon.abbrev;
         }
     }
-    document.cookie = "phyletic-pattern=" + content + "; max-age=" + (60*60*24*364);
+    document.cookie = "phyletic-pattern=" + content + "; max-age=" + (60*60*24*365);
 }
 
 function loadState() {

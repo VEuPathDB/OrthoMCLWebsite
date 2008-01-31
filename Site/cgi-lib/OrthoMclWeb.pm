@@ -148,7 +148,8 @@ sub groupQueryForm {
 			       PARENT_ID=>$data[1],
 			       ABBREV=>$data[2],
 			       NAME=>$data[3], 
-			     });
+			       IS_SPECIES => $data[4],
+			       INDEX => $data[5] });
     }
     $tmpl->param(\%para);
   } elsif ($type eq 'property') {
@@ -1050,7 +1051,8 @@ sub sequenceList {
 				PARENT_ID => $data[1],
 				ABBREV => $data[2],
 				NAME => $data[3],
-				IS_SPECIES => $data[4] });
+			    IS_SPECIES => $data[4],
+			    INDEX => $data[5] });
     }
 
     $query_orthogroup->execute($orthogroup_id);

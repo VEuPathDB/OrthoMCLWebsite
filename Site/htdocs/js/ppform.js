@@ -1,33 +1,82 @@
-function displayNode(node) {
-    var hasChild = (node.children.length != 0);
-    document.writeln("<div id='" + node.id + "'>");
-    
-    document.write("<image id='" + node.id + "_fold' width='20' height='20'");
-    document.write(" src='images/" + (hasChild ? "minus.png'" : "spacer.gif'"));
-    document.writeln(" onclick=\"toggleFold('" + node.id + "')\" />");
-    
-    document.writeln("<image id='" + node.id + "_check' src='images/" + urls[node.state] + "'");
-    document.writeln(" onclick=\"toggleState('" + node.id + "')\" />");
-    
-    document.writeln("<span class='node-" + (hasChild ? "highlight" : "normal") + "'>");
-    document.writeln(node.name + " (" + node.abbrev + ")</span>");
-    
-    document.writeln("</div>");
-    if (hasChild) {
-        document.writeln("<div id='" + node.id + "_child' class='node-indent'>");
-        for(var i = 0, j = node.children.length; i < j; i++) {
-            displayNode(node.children[i]);
+var urls = new Array("dc.gif", "yes.gif", "no.gif", "maybe.gif", "unk.gif");
+var taxons = { };
+var roots = [];
+var inLeaves;
+var outLeaves;
+
+function initial() {
+    // resolve the children of each node
+    for (var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        taxon.expanded = !taxons.is_species;
+        if (taxon_id != taxon.parent_id) {
+            var parent = taxons[taxon.parent_id];
+            parent.children.push(taxon);
+        } else { 
+            roots.push(taxon); 
         }
-        document.writeln("</div>");
+    }
+    roots.sort(compareTaxons);
+    
+    // sort children
+    for (var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        taxon.children.sort(compareTaxons);
+    }
+    // load the saved status
+    loadState();
+}
+
+function compareTaxons(a, b) {
+    return a.index - b.index;
+}
+
+function displayNodes() {
+    var content  = [];
+    for(var i = 0; i < roots.length; i++) {
+        displayNode(roots[i], content);
+    }
+    document.write(content.join(""));
+}
+
+function displayNode(node, content) {
+    var hasChild = (node.children.length != 0);
+    var foldImage = hasChild ? (node.expanded ? "minus.png" : "plus.png") : "spacer.gif";
+
+    content.push("<div id='", node.id, "'>");
+    content.push("<image id='", node.id + "_fold' width='20' height='20' ");
+    content.push(" style=\"cursor:pointer;\" ");
+    content.push(" src=\"images/" + foldImage + "\" ");
+    content.push(" onclick=\"toggleFold('" + node.id + "')\" />");
+    
+    content.push("<image id='" + node.id + "_check' src='images/" + urls[node.state]);
+    content.push("' onclick=\"toggleState('" + node.id + "')\" />");
+    
+    content.push("<span class='node-" + (hasChild ? "highlight" : "normal") + "'>");
+    content.push(node.name + " (" + node.abbrev + ")</span>");
+    
+    content.push("</div>");
+    if (hasChild) {
+        var display = node.expanded ? "" : "display: none;";
+        content.push("<div id='" + node.id + "_child' class='node-indent' ");
+        content.push(" style=\"" + display + "\">");
+        for(var i = 0, j = node.children.length; i < j; i++) {
+            displayNode(node.children[i], content);
+        }
+        content.push("</div>");
     }
 }
 
 function toggleFold(nodeId) {
     var imgFold = document.getElementById(nodeId + "_fold");
     var divChild = document.getElementById(nodeId + "_child");
-    var isFolded = (divChild.style.display == "none");
-    imgFold.src = "images/" + (isFolded ? "minus.png" : "plus.png");
-    divChild.style.display = (isFolded ? "block" : "none");
+    var taxon = taxons[nodeId];
+    taxon.expanded = !taxon.expanded;
+    
+    imgFold.src = "images/" + (taxon.expanded ? "minus.png" : "plus.png");
+    divChild.style.display = (taxon.expanded ? "block" : "none");
+
+    saveState();
 }
 
 function toggleState(nodeId) {
@@ -166,4 +215,41 @@ function countLeaves(nodeId) {
     }
 
     return count;
+}
+
+
+function saveState() {
+    var content = "";
+    for(var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        if (!taxon.is_species && !taxon.expanded) {
+            if (content.length > 0) content += "|";
+            content += taxon.abbrev;
+        }
+    }
+
+    document.cookie = "phyletic-tree=" + content + "; max-age=" + (60*60*24*365);
+}
+
+function loadState() {
+    var allcookies = document.cookie;
+    var key = "phyletic-tree=";
+    var pos = allcookies.indexOf(key);
+    if (pos >= 0) {
+        pos += key.length;
+        var end = allcookies.indexOf(";", pos);
+        var content = (end >= 0) ? allcookies.substring(pos, end) 
+                                 : allcookies.substring(pos);
+
+        var collapsed = { };
+        var parts = content.split("|");
+        for (var i = 0; i < parts.length; i++) {
+            collapsed[parts[i]] = true;
+        }
+        // update taxons
+        for (var taxon_id in taxons) {
+            var taxon = taxons[taxon_id];
+            if (taxon.abbrev in collapsed) taxon.expanded = false;
+        }
+    }
 }

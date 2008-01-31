@@ -3,36 +3,20 @@
 <script type="text/javascript">
 <!-- //
 
-var urls = new Array("dc.gif", "yes.gif", "no.gif", "maybe.gif", "unk.gif");
 var taxons = { };
-var roots = [];
-var inLeaves;
-var outLeaves;
 
 <TMPL_LOOP NAME=TAXONS>
 taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id:"<TMPL_VAR NAME=TAXON_ID>",
-                                       parent_id:"<TMPL_VAR NAME=PARENT_ID>",
-                                       abbrev:"<TMPL_VAR NAME=ABBREV>",
-                                       name:"<TMPL_VAR NAME=NAME>",
-                                       state:0,
-                                       children:[],
-                                     };
+    parent_id:"<TMPL_VAR NAME=PARENT_ID>",
+    abbrev:"<TMPL_VAR NAME=ABBREV>",
+    name:"<TMPL_VAR NAME=NAME>",
+    state:0,
+    is_species: (<TMPL_VAR NAME=IS_SPECIES> == 0) ? false : true,
+    index: <TMPL_VAR NAME=INDEX>,
+    children:[], };
 </TMPL_LOOP>
 
 initial();
-
-function initial() {
-    // resolve the children of each node
-    for (var taxon_id in taxons) {
-        var taxon = taxons[taxon_id];
-        if (taxon_id != taxon.parent_id) {
-            var parent = taxons[taxon.parent_id];
-            parent.children.push(taxon);
-        } else { 
-            roots.push(taxon); 
-        }
-    }
-}
 
 // -->
 </script>
@@ -43,9 +27,7 @@ function initial() {
 <p><b>Key:</b> <img border=0 src="images/dc.gif"> no constraint, <img border=0 src="images/yes.gif"> must be present in group, <img border=0 src="images/no.gif"> must be excluded from group, <img border=0 src="images/maybe.gif"> at least one must be present, <img border=0 src="images/unk.gif"> mixture of constraints</p>
 <div class="node-region">
     <script type="text/javascript">
-        for(var i = 0; i < roots.length; i++) {
-            displayNode(roots[i]);
-        }
+        displayNodes();
     </script>
 </div>
 <input type="text" id="query" name="q" value="" size="100">

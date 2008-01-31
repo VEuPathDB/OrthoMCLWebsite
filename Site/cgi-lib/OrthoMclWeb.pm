@@ -201,13 +201,13 @@ sub groupQueryForm {
     if ($count_species%2) {
       push(@{$para{LOOP_TR}},{LOOP_TD=>[
 					{
-					 ABBREV=>$prev_specie_data[0],NAME=>$prev_specie_data[1]}
+					 ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3]}
 				       ]});
     }
     if ($count_groups%2) {
       push(@{$para{LOOP_GROUPTR}},{LOOP_GROUPTD=>[
 					{
-					 ABBREV=>$prev_group_data[0],NAME=>$prev_group_data[1]}
+					 ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3]}
 				       ]});
     }
 

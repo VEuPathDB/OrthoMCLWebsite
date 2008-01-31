@@ -161,24 +161,52 @@ sub groupQueryForm {
     my %para;
     my $query_taxon = $dbh->prepare($self->getSql('all_taxa_info'));
     $query_taxon->execute();
-    my $count=0;
-    my @prev_data;
+    my $count_species=0;
+    my $count_groups=0;
+    my @prev_specie_data;
+    my @prev_group_data;
     while (my @data = $query_taxon->fetchrow_array()) {
-      $count++;
-      if ($count%2==0) {	# which means every tr has two td
-	push(@{$para{LOOP_TR}},{LOOP_TD=>[
-					  {
-					   ABBREV=>$prev_data[2],NAME=>$prev_data[3]},
-					  {
-					   ABBREV=>$data[2],NAME=>$data[3]}
-					 ]});
-      }
-      @prev_data=@data;
+	if ($data[4]) {
+	    $count_species++;
+	}
+	else {
+	    $count_groups++;
+	}
+	if ($count_species==2) {	# which means every tr has two td
+	    push(@{$para{LOOP_TR}},{LOOP_TD=>[
+					      {
+						  ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3]},
+					      {
+						  ABBREV=>$data[2],NAME=>$data[3]}
+					      ]});
+	    $count_species=0;
+	}
+	elsif ($count_groups==2) {	# which means every tr has two td
+	    push(@{$para{LOOP_GROUPTR}},{LOOP_GROUPTD=>[
+					      {
+						  ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3]},
+					      {
+						  ABBREV=>$data[2],NAME=>$data[3]}
+					      ]});
+	    $count_groups=0;
+	}
+	if ($data[4]) {
+	    @prev_specie_data=@data;
+	}
+	else {
+	    @prev_group_data=@data;
+	}
     }
-    if ($count%2) {
+    if ($count_species%2) {
       push(@{$para{LOOP_TR}},{LOOP_TD=>[
 					{
-					 ABBREV=>$prev_data[0],NAME=>$prev_data[1]}
+					 ABBREV=>$prev_specie_data[0],NAME=>$prev_specie_data[1]}
+				       ]});
+    }
+    if ($count_groups%2) {
+      push(@{$para{LOOP_GROUPTR}},{LOOP_GROUPTD=>[
+					{
+					 ABBREV=>$prev_group_data[0],NAME=>$prev_group_data[1]}
 				       ]});
     }
 

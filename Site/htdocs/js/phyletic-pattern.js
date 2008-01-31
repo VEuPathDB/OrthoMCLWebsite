@@ -171,8 +171,9 @@ function displayCategory(group, taxon, isHide, content) {
         content.push(fontSize, "em; ", display, "\">{</td>");
         
         // output children
+        if (!isHide) isHide = !taxon.expanded;
         for (var i = 0; i < taxon.children.length; i++) {
-            displayCategory(group, taxon.children[i], !taxon.expanded, content);
+            displayCategory(group, taxon.children[i], isHide, content);
         }
         
         // output close bracket
@@ -202,7 +203,7 @@ function showHide(taxon, isHide) {
 
         var tdInfo = document.getElementById(idPrefix + "_info");
         if (taxon.is_species) {
-            tdInfo.style.display = isHide ? "none" : "table-cell";;
+            tdInfo.style.display = isHide ? "none" : "table-cell";
         } else {
             tdInfo.style.display = (isHide | taxon.expanded) ? "none" : "table-cell";
         }
@@ -218,9 +219,10 @@ function showHide(taxon, isHide) {
         var tdClose = document.getElementById(idPrefix + "_close")
         if (tdClose) tdClose.style.display = display;
     }
-
+    
+    if (!isHide) isHide = !taxon.expanded;
     for (var i = 0; i < taxon.children.length; i++) {
-        showHide(taxon.children[i], !taxon.expanded);
+        showHide(taxon.children[i], isHide);
     }
 }
 

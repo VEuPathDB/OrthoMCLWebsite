@@ -54,7 +54,7 @@ function compareTaxons(a, b) {
 function displayCategories(group) {
     var content = [];
 
-    content.push("<tr><td colspan=\"2\" align=\"left\">");
+    content.push("<tr>");
     
     // display the first row
     var key = "BACT";
@@ -63,7 +63,7 @@ function displayCategories(group) {
         displayCategory(group, category, 0, category.length, content);
     }
 
-    content.push("</td></tr><tr><td align=\"left\">");
+    content.push("</tr><tr>");
    
     // display the first half of second row
     key = "ARCH";
@@ -71,8 +71,6 @@ function displayCategories(group) {
         var category = categories[key];
         displayCategory(group, category, 0, category.length, content);
     }
-
-    content.push("</td><td align=\"right\">");
    
     // display the second half of second row
     key = "EUKA";
@@ -81,7 +79,7 @@ function displayCategories(group) {
         displayCategory(group, category, 0, 25, content);
     }
 
-    content.push("</td></tr><tr><td colspan=\"2\" align=\"left\">");
+    content.push("<td></td></tr><tr>");
     
     // display the third row
     if (key in categories) {
@@ -89,7 +87,7 @@ function displayCategories(group) {
         displayCategory(group, category, 25, category.length, content);
     }        
 
-    content.push("</td></tr><tr><td colspan=\"2\" align=\"left\">");
+    content.push("</tr><tr>");
     
     // display the first row
     var key = "OTHER";
@@ -98,14 +96,13 @@ function displayCategories(group) {
         displayCategory(group, category, 0, category.length, content);
     }
 
-    content.push("</td></tr>");
+    content.push("<td></td><td></td></tr>");
 
     document.write(content.join(""));      
 }
 
 function displayCategory(group, category, from, to, content) {
     to = (category.length >= to) ? to : category.length;
-    content.push("<table border='0' cellspacing='1' cellpadding='0'><tr>");
     for (var i = from; i < to; i++) {
         var taxon = category[i];
         var count = (taxon.id in group) ? group[taxon.id] : 0;
@@ -120,5 +117,4 @@ function displayCategory(group, category, from, to, content) {
         content.push(", ", category.name, ", ", taxon.path ,"\">");
         content.push(taxon.abbrev, "</div></td>");
     }
-    content.push("</tr></table>");
 }

@@ -51,9 +51,9 @@ A.nocolor_w:link {
     font-family: times;
     margin: 0px;
     padding: 0px;
-    border-style: solid;
+    border-bottom-style: groove;
     border-width: 0px;
-    border-bottom-width: 4px;
+    border-bottom-width: 3px;
     width: 25px;
 }
 
@@ -62,7 +62,7 @@ A.nocolor_w:link {
 }
 
 .phyletic-category * .ARCH {
-    border-color: #8888ff;
+    border-color: #0000ff;
 }
 
 .phyletic-category * .EUKA {
@@ -70,6 +70,6 @@ A.nocolor_w:link {
 }
 
 .phyletic-category * .OTHER {
-    border-color: black;
+    border-color: #ff0088;
 }
 

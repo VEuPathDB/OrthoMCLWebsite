@@ -23,7 +23,7 @@ function initial() {
             if (key != "BACT" && key != "ARCH" && key != "EUKA") key = "OTHER";
             
             var category = (key in categories) ? categories[key] : [];
-            buildCategory(taxon, category);
+            buildCategory(taxon, category, "");
             category.sort(compareTaxons);
             category.key = key;
             category.name = taxon.name;
@@ -32,12 +32,15 @@ function initial() {
     }
 }
 
-function buildCategory(taxon, category) {
+function buildCategory(taxon, category, prefix) {
     if (taxon.is_species) {
+        taxon.path = prefix;
         category.push(taxon);
     } else {
+        if (prefix.length > 0) prefix += "->";
+        prefix += taxon.abbrev;
         for (var i = 0; i < taxon.children.length; i++) {
-            buildCategory(taxon.children[i], category);
+            buildCategory(taxon.children[i], category, prefix);
         }
     }
 }
@@ -112,8 +115,9 @@ function displayCategory(group, category, from, to, content) {
         else style = "color: white; background-color: black;";
         
         content.push("<td><div class=\"", category.key, "\" style=\"", style);
-        content.push("\" title=\"[", taxon.abbrev, "] ", taxon.name, ", (");
-        content.push(category.name, "), ", count ," genes\">");
+        content.push("\" title=\"", taxon.name, " (", taxon.abbrev, ") = ", count, " gene");
+        if (count > 1) content.push("s");
+        content.push(", ", category.name, ", ", taxon.path ,"\">");
         content.push(taxon.abbrev, "</div></td>");
     }
     content.push("</tr></table>");

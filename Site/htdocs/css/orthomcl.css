@@ -53,20 +53,20 @@ A.nocolor_w:link {
     padding: 0px;
     border-style: solid;
     border-width: 0px;
-    border-bottom-width: 2px;
+    border-bottom-width: 4px;
     width: 25px;
 }
 
 .phyletic-category * .BACT {
-    border-color: red;
+    border-color: #ff8800;
 }
 
 .phyletic-category * .ARCH {
-    border-color: blue;
+    border-color: #8888ff;
 }
 
 .phyletic-category * .EUKA {
-    border-color: green;
+    border-color: #88ff00;
 }
 
 .phyletic-category * .OTHER {

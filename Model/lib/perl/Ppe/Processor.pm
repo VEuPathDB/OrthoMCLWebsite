@@ -16,7 +16,7 @@ sub run {
   my $expression = $cgi->param('expression');
   &error("missing 'expression' param") unless $expression;
 
-  my $groupIds = $self->processPpe($dbh, $expression);
+  my $groupIds = $self->processPpe($dbh, $expression,$fromCmdLine);
 
   exit();
 }
@@ -40,6 +40,11 @@ ORDER BY ortholog_group_id
   my $groupIds;
   while (my ($id) = $stmt->fetchrow_array) {
       push(@$groupIds, $id);
+  }
+  if ($fromCmdLine) {
+    my $count = scalar(@$groupIds);
+    print "found $count groups\n";
+    print "$whereClause\n";
   }
 
   return $groupIds;

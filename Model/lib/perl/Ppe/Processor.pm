@@ -16,13 +16,14 @@ sub run {
   my $expression = $cgi->param('expression');
   &error("missing 'expression' param") unless $expression;
 
-  my $groupIds = $self->processPpe($dbh, $expression,$fromCmdLine);
+
+  my $groupIds = $self->processPpe($dbh, $expression, 1);
 
   exit();
 }
 
 sub processPpe {
-  my ($self, $dbh, $ppeExpression) = @_;
+  my ($self, $dbh, $ppeExpression, $fromCmdLine) = @_;
 
   my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
   my $boolean = &parsePpeExpression($ppeExpression);
@@ -41,6 +42,12 @@ ORDER BY ortholog_group_id
   while (my ($id) = $stmt->fetchrow_array) {
       push(@$groupIds, $id);
   }
+  if ($fromCmdLine) {
+    my $count = scalar(@$groupIds);
+    print "found $count groups\n";
+    print "$whereClause\n";
+  }
+
   if ($fromCmdLine) {
     my $count = scalar(@$groupIds);
     print "found $count groups\n";

@@ -28,7 +28,9 @@ function initial() {
 }
 
 function compareTaxons(a, b) {
-    return a.index - b.index;
+    if(!(a.is_species ^ b.is_species)) return a.index - b.index;
+    else if (a.is_species) return -1;
+    else return 1;
 }
 
 function displayNodes() {

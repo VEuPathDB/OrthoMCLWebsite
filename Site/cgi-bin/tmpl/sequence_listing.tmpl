@@ -114,21 +114,16 @@ initial();
   		    <td colspan="7">
 
                       <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-                      <table border="1" cellspacing="0">
+                      <table class="phyletic-category" border="0" cellspacing="0" cellpadding="0">
 
 <script language="javascript">
 <!--//
-var group = {name: "<TMPL_VAR GROUP_ACCESSION>",
-             counts: { } };
+var group = { };
 
 <TMPL_LOOP NAME=TAXON_GENES>
-group.counts["<TMPL_VAR NAME=TAXON_ID>"] = { gene_count: <TMPL_VAR NAME=GENE_COUNT>,
-                                             species_count: 1};
+group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
 </TMPL_LOOP>
 
-groups[group.name] = group;
-
-updateGroup(group);
 displayCategories(group);
 
 //-->

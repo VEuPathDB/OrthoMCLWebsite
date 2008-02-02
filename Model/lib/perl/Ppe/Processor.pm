@@ -38,16 +38,10 @@ ORDER BY ortholog_group_id
 ";
   my $stmt = $dbh->prepare($sql);
   $stmt->execute();
-  my $groupIds;
+  my $groupIds = [];
   while (my ($id) = $stmt->fetchrow_array) {
       push(@$groupIds, $id);
   }
-  if ($fromCmdLine) {
-    my $count = scalar(@$groupIds);
-    print "found $count groups\n";
-    print "$whereClause\n";
-  }
-
   if ($fromCmdLine) {
     my $count = scalar(@$groupIds);
     print "found $count groups\n";

@@ -34,7 +34,7 @@ sub toSqlString {
 
     my $taxaString = $self->getTaxaString($columnMgr);
     my $allCol = $columnMgr->getColumnName('ALL', $self->{proteinOrTaxonFlag});
-    return "$self->{value} $self->{comparator} $allCol - ($taxaString)";
+    return "$allCol - ($taxaString) $self->{comparator} $self->{value}";
 }
 
 1;

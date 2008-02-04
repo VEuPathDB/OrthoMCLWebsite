@@ -111,8 +111,11 @@ function displayCategory(group, category, from, to, content) {
         else if (count == 1) style = "color: white; background-color: gray;";
         else style = "color: white; background-color: black;";
         
-        content.push("<td><div class=\"", category.key, "\" style=\"", style);
-        content.push("\" title=\"", taxon.name, " (", taxon.abbrev, ") = ", count, " gene");
+        content.push("<td><div class=\"", category.key);
+        if (i == from) content.push("_start");
+        else if (i == to - 1) content.push("_end");
+        content.push("\" style=\"", style, "\" title=\"", taxon.name);
+        content.push(" (", taxon.abbrev, ") = ", count, " gene");
         if (count > 1) content.push("s");
         content.push(", ", category.name, ", ", taxon.path ,"\">");
         content.push(taxon.abbrev, "</div></td>");

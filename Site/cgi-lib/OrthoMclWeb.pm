@@ -852,92 +852,115 @@ sub getGroupRows {
     my $count=0;
     
     for (my $x = 0; $x < $rows; $x++) {
-	last if ($offset+$x>$#{$orthogroup_ids_ref});
-	my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
-	#    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
-        
-	$query_orthogroup->execute($orthogroup_id);
-	my @data = $query_orthogroup->fetchrow_array();
+	    last if ($offset+$x>$#{$orthogroup_ids_ref});
 	
-	my %group;
-	$count++;
-	if ($count%2) {
-	    $group{__ODD__}=1;
-	} else {
-	    $group{__EVEN__}=1;
-	}
-	
-	$group{GROUP_NUMBER}=$offset+$x+1;
-	$group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
-	$group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
-	$group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
-        
-	$group{NO_SEQUENCES}=$data[7];
-	
-	if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
-	    $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
-	    $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
-	}
-	
-	$group{GROUP_ACCESSION}=$data[1];
-	$group{NO_MATCH_PAIRS}=$data[6];
-	$group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
-	
-	if ($group{NO_MATCH_PAIRS}==0) {
-	    $group{AVE_EVAL}='N/A';
-	    $group{AVE_PM}='N/A';
-	    $group{AVE_PI}='N/A';
-	} else {
-	    $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
-	    $group{AVE_PM}=sprintf("%.1f", $data[4]);
-	    $group{AVE_PI}=sprintf("%.1f", $data[3]);
-	}
-	#        $group{AVE_DCS}=$data[2];
-	
-	# get taxon and gene counts
-	$query_taxa_by_o->execute($orthogroup_id);
-	my $taxon_count = 0;
-	while (my @data = $query_taxa_by_o->fetchrow_array()) {
-	    push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
-					   GENE_COUNT => $data[1] });
-	    $taxon_count++;
-	}
-	$group{NO_TAXA} = $taxon_count;
-	
-	# about Keywords summary
-	$group{KEYWORDS} = "";
-	if (1) {
-	    $query_keywords_by_o->execute($orthogroup_id);
-	    my %keywords;
-	    while (my @data = $query_keywords_by_o->fetchrow_array()) {
-		$keywords{$data[0]} = $data[1];
-	    }
+        # Timing info
+        #$currentTime = clock_gettime(CLOCK_REALTIME);
+        #print STDERR "Begin group #$x: " . ($currentTime - $startTime) . ".\n";    
 
-	    foreach my $k (keys %keywords) {
-		my $c=sprintf("%X",int((1-$keywords{$k})*255));
-		$group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
+	    my $orthogroup_id=$orthogroup_ids_ref->[$offset+$x];
+	    #    foreach my $orthogroup_id (sort {$a<=>$b} @{$orthogroup_ids_ref}) {
+            
+	    $query_orthogroup->execute($orthogroup_id);
+	    my @data = $query_orthogroup->fetchrow_array();
+	
+	    my %group;
+	    $count++;
+	    if ($count%2) {
+	        $group{__ODD__}=1;
+	    } else {
+	        $group{__EVEN__}=1;
 	    }
-	}
-	# about Pfam domain summary
-	$group{DOMAIN} = "";
-	if (1) {
-	    my %sequence_domain;
-	    $query_domain_by_o->execute($orthogroup_id);
-	    while (my @tmp = $query_domain_by_o->fetchrow_array()) {
-		$sequence_domain{$tmp[0]}->{$tmp[1]}=1;
+	
+	    $group{GROUP_NUMBER}=$offset+$x+1;
+	    $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
+	    $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
+	    $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
+            
+	    $group{NO_SEQUENCES}=$data[7];
+	
+	    if (($group{NO_SEQUENCES} <= 100) && ($group{NO_SEQUENCES} >= 2)) {
+	        $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
+	        $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
 	    }
-	    my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
-	    foreach my $d (keys %domains) {
-		my $c=sprintf("%X",int((1-$domains{$d})*255));
-		$query_ddescription_by_d->execute($d);
-		if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
-		    if ($tmp[0]) {
-			$group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
-		    }
-		}
+	
+	    $group{GROUP_ACCESSION}=$data[1];
+	    $group{NO_MATCH_PAIRS}=$data[6];
+	    $group{PERC_MATCH_PAIRS}=int(1000*$group{NO_MATCH_PAIRS}/($group{NO_SEQUENCES}*($group{NO_SEQUENCES}-1)/2))/10;
+	
+	    if ($group{NO_MATCH_PAIRS}==0) {
+	        $group{AVE_EVAL}='N/A';
+	        $group{AVE_PM}='N/A';
+	        $group{AVE_PI}='N/A';
+	    } else {
+	        $group{AVE_EVAL}=sprintf("%8.2e",$data[5]);
+	        $group{AVE_PM}=sprintf("%.1f", $data[4]);
+	        $group{AVE_PI}=sprintf("%.1f", $data[3]);
 	    }
-	}
-	push(@rows,\%group);
+	    #        $group{AVE_DCS}=$data[2];
+	
+        # Timing info
+        #$currentTime = clock_gettime(CLOCK_REALTIME);
+        #print STDERR "End group #$x Attrs: " . ($currentTime - $startTime) . ".\n";    
+	
+	    # get taxon and gene counts
+	    $query_taxa_by_o->execute($orthogroup_id);
+	    my $taxon_count = 0;
+	    while (my @data = $query_taxa_by_o->fetchrow_array()) {
+	        push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
+					       GENE_COUNT => $data[1] });
+	        $taxon_count++;
+	    }
+	    $group{NO_TAXA} = $taxon_count;
+	
+        # Timing info
+        #$currentTime = clock_gettime(CLOCK_REALTIME);
+        #print STDERR "End group #$x taxons: " . ($currentTime - $startTime) . ".\n";    
+
+	    # about Keywords summary
+	    $group{KEYWORDS} = "";
+	    if (1) {
+	        $query_keywords_by_o->execute($orthogroup_id);
+	        my %keywords;
+	            while (my @data = $query_keywords_by_o->fetchrow_array()) {
+		        $keywords{$data[0]} = $data[1];
+	        }
+
+	        foreach my $k (keys %keywords) {
+		    my $c=sprintf("%X",int((1-$keywords{$k})*255));
+		    $group{KEYWORDS}.="<font color=\"#$c$c$c\">$k</font>; ";
+	        }
+	    }
+	
+        # Timing info
+        #$currentTime = clock_gettime(CLOCK_REALTIME);
+        #print STDERR "End group #$x Keyowrds: " . ($currentTime - $startTime) . ".\n";    
+
+	    # about Pfam domain summary
+	    $group{DOMAIN} = "";
+	    if (1) {
+	        my %sequence_domain;
+	        $query_domain_by_o->execute($orthogroup_id);
+	        while (my @tmp = $query_domain_by_o->fetchrow_array()) {
+		    $sequence_domain{$tmp[0]}->{$tmp[1]}=1;
+	        }
+	        my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
+	        foreach my $d (keys %domains) {
+		        my $c=sprintf("%X",int((1-$domains{$d})*255));
+		        $query_ddescription_by_d->execute($d);
+		        if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
+		            if ($tmp[0]) {
+			            $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
+		            }
+		        }
+	        }
+	    }
+	
+        # Timing info
+        #$currentTime = clock_gettime(CLOCK_REALTIME);
+        #print STDERR "End group #$x pfam: " . ($currentTime - $startTime) . ".\n";    
+
+	    push(@rows,\%group);
     }
 
     # Timing info

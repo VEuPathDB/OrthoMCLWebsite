@@ -209,7 +209,11 @@ displayCategories(group);
        <tr bgcolor="#eeeedd">
   </TMPL_IF>
          <td align="center"><TMPL_VAR SEQUENCE_NUMBER></td>
-         <td align="center"><a href="<TMPL_VAR SEQUENCE_LINK>" onmouseover="return escape('This is OrthoMCL-DB internal sequence accession (varying across versions). Please use the original sequence accession for reference.')"><TMPL_VAR SEQUENCE_ACCESSION></a></td>
+         <td align="center">
+            <a href="<TMPL_VAR SEQUENCE_LINK>">
+                <TMPL_VAR SEQUENCE_TAXON_ABBREV>|<TMPL_VAR SEQUENCE_ACCESSION>
+            </a>
+         </td>
 	<TMPL_IF GROUP_ACCESSION>
 	 <td align="center">
 	 <TMPL_IF GROUP_LINK><a href="<TMPL_VAR GROUP_LINK>"></TMPL_IF>

@@ -873,7 +873,7 @@ sub getGroupRows {
 	    }
 	
 	    $group{GROUP_NUMBER}=$offset+$x+1;
-	    $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[0]";
+	    $group{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$data[1]";
 	    $group{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=$data[1]";
 	    $group{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=$data[1]";
             
@@ -1233,22 +1233,24 @@ sub sequenceList {
       my %sequence;
       $count++;
       if ($count%2) {
-	$sequence{__ODD__}=1;
+        $sequence{__ODD__}=1;
       } else {
-	$sequence{__EVEN__}=1;
+        $sequence{__EVEN__}=1;
       }
+      my $taxon_abbrev = $data[6];
       $sequence{SEQUENCE_NUMBER}=$count;
-      $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+      $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]&taxon=$taxon_abbrev";
       $sequence{SEQUENCE_ACCESSION}=$data[0];
       $sequence{XREF}=$data[1];
       if (defined $data[5]) {
-	$sequence{XREF_LINK}=$data[5].$data[1];
+        $sequence{XREF_LINK}=$data[5].$data[1];
       }
       my @desc_info = split(" ",$data[2]);
       shift @desc_info;
       $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
       $sequence{SEQUENCE_LENGTH}=$data[3];
       $sequence{SEQUENCE_TAXON}=$data[4];
+      $sequence{SEQUENCE_TAXON_ABBREV}=$taxon_abbrev;
       push(@{$para{PAGER_DATA_LIST}},\%sequence);
     }
     $para{NO_GROUPAC}=1;

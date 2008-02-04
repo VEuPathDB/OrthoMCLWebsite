@@ -324,7 +324,7 @@ WHERE db_ref_id = ?
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.name, eas.description,
-eas.length, ot.name, edr.id_url 
+eas.length, ot.name, edr.id_url, ot.three_letter_abbrev
 FROM apidb.OrthologGroupAaSequence ogs,
  dots.ExternalAaSequence eas,
  sres.ExternalDatabaseRelease edr,

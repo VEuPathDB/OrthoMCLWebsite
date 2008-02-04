@@ -25,12 +25,21 @@ use ApiCommonWebsite::Model::SqlXmlParser;
 use FunKeyword;
 use GD;
 use Data::Dumper;
+use Time::HiRes qw( clock_gettime CLOCK_REALTIME );
+
+my $startTime = clock_gettime(CLOCK_REALTIME);
+my $currentTime;
 
 my $debug=0;
 our $config;
 
 sub cgiapp_init {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin cgiapp_init(): " . ($currentTime - $startTime) . ".\n";    
+
   my $q = $self->query();
   my $mode = $q->param("rm");
 
@@ -62,10 +71,19 @@ sub cgiapp_init {
 			  SEND_COOKIE         => 1,
 			 );
   }
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End cgiapp_init(): " . ($currentTime - $startTime) . ".\n";    
 }    
 
 sub setup {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin setup(): " . ($currentTime - $startTime) . ".\n";    
+
   $self->tmpl_path('@cgibinTargetDir@/tmpl');
   $self->start_mode('indx');
   $self->run_modes([qw(indx
@@ -78,10 +96,19 @@ sub setup {
                  MSA BLGraph getSeq
                  querySave queryTransform)
 		   ]);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End setup(): " . ($currentTime - $startTime) . ".\n";    
 }
 
 sub indx {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin indx(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $config = $self->param("config");
   my $tmpl = $self->load_tmpl("index.tmpl");
@@ -119,11 +146,20 @@ sub indx {
   $para{LEFTNAV}=1;
   $tmpl->param(\%para);
 
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End indx(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub groupQueryForm {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin groupQueryForm(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
   my $type=$q->param("type"); # query type: ppexpression, ppform, property
@@ -214,11 +250,20 @@ sub groupQueryForm {
     $tmpl->param(\%para);
   }
 
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End groupQueryForm(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub sequenceQueryForm {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin sequenceQueryForm(): " . ($currentTime - $startTime) . ".\n";    
+
   my $q = $self->query();
   my $type=$q->param("type");	# query type: keyword or blast
 
@@ -235,11 +280,20 @@ sub sequenceQueryForm {
     $tmpl->param(ACKEYWORD => 1);
   }
 
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End sequenceQueryForm(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub querySave {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin querySave(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
   my $file_content;
@@ -270,11 +324,21 @@ sub querySave {
   } else {
     $file_content = "Please specify both type (group/sequence) and querynumber\n";
   }
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End querySave(): " . ($currentTime - $startTime) . ".\n";    
+
   return $file_content;
 }
 
 sub queryTransform {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin queryTransform(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
   my $config = $self->param("config");
@@ -320,6 +384,11 @@ sub queryTransform {
     $self->session->param("GROUP_QUERY_HISTORY",$group_query_history);
     push(@{$group_query_ids_history},\@result_ids);
     $self->session->param("GROUP_QUERY_IDS_HISTORY",$group_query_ids_history);
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End queryTransform(): " . ($currentTime - $startTime) . ".\n";    
+
     return "Redirecting to Group Query History";
   } elsif (($q->param("from") eq 'group') && ($q->param("to") eq 'sequence')) {
     my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
@@ -359,12 +428,22 @@ sub queryTransform {
     $self->session->param("SEQUENCE_QUERY_HISTORY",$sequence_query_history);
     push(@{$sequence_query_ids_history},\@result_ids);
     $self->session->param("SEQUENCE_QUERY_IDS_HISTORY",$sequence_query_ids_history);
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End queryTransform(): " . ($currentTime - $startTime) . ".\n";    
+
     return "Redirecting to Sequence Query History";
   }
 }
 
 sub groupQueryHistory {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin groupQueryHistory(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
   my @select=$q->param("select");
@@ -522,11 +601,21 @@ sub groupQueryHistory {
   my $tmpl = $self->load_tmpl('group_queryhistory.tmpl'); # loading template
   $self->defaults($tmpl);
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End groupQueryHistory(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub groupList {
   my $self = shift;
+  
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin groupList(): " . ($currentTime - $startTime) . ".\n";
+  
   my $q = $self->query();
   my $dbh = $self->dbh();
   my $config = $self->param("config");
@@ -724,13 +813,20 @@ sub groupList {
 				rows => scalar(@{$orthogroup_ids_ref}),
 				page_size => 10,
 			      );
+  
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End groupList(): " . ($currentTime - $startTime) . ".\n";
 
   return $pager->output;
 }
 
 sub getGroupRows {
     my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
-    
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "Begin getGroupRows(): " . ($currentTime - $startTime) . ".\n";    
     
     $tmpl->param(ROWSPERPAGE => $rows);
     $tmpl->param(GROUP_NUM_S => $offset+1);
@@ -843,12 +939,21 @@ sub getGroupRows {
 	}
 	push(@rows,\%group);
     }
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End getGroupRows(): " . ($currentTime - $startTime) . ".\n";    
     
     return \@rows;
 }
 
 sub sequenceQueryHistory {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin sequenceQueryHistory(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
   my @select=$q->param("select");
@@ -1006,12 +1111,22 @@ sub sequenceQueryHistory {
   my $tmpl = $self->load_tmpl('sequence_queryhistory.tmpl'); # loading template
   $self->defaults($tmpl);
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End sequenceQueryHistory(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 
 sub sequenceList {
   my $self   = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin sequenceList(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $q      = $self->query();
   my $dbh    = $self->dbh();
@@ -1270,11 +1385,20 @@ sub sequenceList {
 				rows => scalar(@{$sequence_ids_ref}),
 				page_size => 50,
 			      );
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End sequenceList(): " . ($currentTime - $startTime) . ".\n";    
+
   return $pager->output;
 }
 
 sub getSequenceRows {
   my ($offset, $rows, $sequence_ids_ref, $dbh, $tmpl, $config, $self) = @_;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin getSequenceRows(): " . ($currentTime - $startTime) . ".\n";    
 
   $tmpl->param(ROWSPERPAGE => $rows);
   $tmpl->param(SEQUENCE_NUM_S => $offset+1);
@@ -1326,6 +1450,10 @@ sub getSequenceRows {
     push(@rows,\%sequence);
   }
 
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End getSequenceRows(): " . ($currentTime - $startTime) . ".\n";    
+
   return \@rows;
 }
 
@@ -1333,6 +1461,11 @@ sub getSequenceRows {
 
 sub domarchList {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin domarchList(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $dbh = $self->dbh();
   my $q = $self->query();
@@ -1389,61 +1522,76 @@ sub domarchList {
 
     my @sequence_ids;
     my %domains_seen;
+    my @sequence_ids;
+    my %domains_seen;
     while (my @sequence_data = $query_sequence_by_groupid->fetchrow_array()) {
-  push(@sequence_ids,$sequence_data[0]);
-  my %sequence;
-  $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
-  $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-  $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
-  $sequence{SEQUENCE_TAXON}=$sequence_data[4];
-        
-  my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
+      push(@sequence_ids,$sequence_data[0]);
+      my %sequence;
+        my @sequence_ids;
+        my %domains_seen;
+      $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
+      $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
+      $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
+      $sequence{SEQUENCE_TAXON}=$sequence_data[4];
+            
+      my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
-  #Fetch domains for sequence
-  $query_domains_by_sequenceid->execute($sequence_data[0]);
+      #Fetch domains for sequence
+      $query_domains_by_sequenceid->execute($sequence_data[0]);
 
-  my $num_dom_in_sequence=0;
-  while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
-    if (!exists $domains_seen{$domain_data[1]}) {
-      $domains_seen{$domain_data[1]}='y';
-      my %domain;
-      $domain{DOMAIN_ACCESSION}=$domain_data[1];
-      $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-      $domain{DOMAIN_NAME}=$domain_data[2];
-      $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
-      push(@{$para{LOOP_DOMAIN}},\%domain);
-        
-      my $from = $domain_data[4];
-      my $to = $domain_data[5];
-      my $length=$to-$from;
-      my $source_id = $domain_data[1];
-      $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
+      my $num_dom_in_sequence=0;
+      while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
+        if (!exists $domains_seen{$domain_data[1]}) {
+          $domains_seen{$domain_data[1]}='y';
+          my %domain;
+          $domain{DOMAIN_ACCESSION}=$domain_data[1];
+          $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+          $domain{DOMAIN_NAME}=$domain_data[2];
+          $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
+          push(@{$para{LOOP_DOMAIN}},\%domain);
+            
+          my $from = $domain_data[4];
+          my $to = $domain_data[5];
+          my $length=$to-$from;
+          my $source_id = $domain_data[1];
+          $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
+        }
+
+        $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
+        $num_dom_in_sequence++;
+      }
+            
+      $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
+           
+      push(@{$para{LOOP_DOMARCH}},\%sequence);
     }
-
-    $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
-    $num_dom_in_sequence++;
-  }
         
-  $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
-       
-  push(@{$para{LOOP_DOMARCH}},\%sequence);
-}
-    
-# includes scale image in page  (the heading for the column w/sequence images
-$para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
+    # includes scale image in page  (the heading for the column w/sequence images
+    $para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
 
-unless (keys(%domains_seen)) {
-  $para{NOPFAM}=1;
-}
-    
-my $tmpl = $self->load_tmpl('domarch_listing.tmpl');
-$self->defaults($tmpl);
-$tmpl->param(\%para);
-return $self->done($tmpl);
+    unless (keys(%domains_seen)) {
+      $para{NOPFAM}=1;
+    }
+        
+    my $tmpl = $self->load_tmpl('domarch_listing.tmpl');
+    $self->defaults($tmpl);
+    $tmpl->param(\%para);
+
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End domarchList(): " . ($currentTime - $startTime) . ".\n";    
+
+    return $self->done($tmpl);
 }
 
-  sub sequence {
+sub sequence {
     my $self = shift;
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "Begin sequence(): " . ($currentTime - $startTime) . ".\n";    
+
     my $config = $self->param("config");
     my $dbh = $self->dbh();
     my $q = $self->query();
@@ -1562,11 +1710,21 @@ return $self->done($tmpl);
     my $tmpl = $self->load_tmpl('sequencepage.tmpl');
     $self->defaults($tmpl);
     $tmpl->param(\%para);
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End sequence(): " . ($currentTime - $startTime) . ".\n";    
+
     return $self->done($tmpl);
   }
 
 sub genome {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin genome(): " . ($currentTime - $startTime) . ".\n";    
+
   my $dbh = $self->dbh();
   my $q = $self->query();
 
@@ -1637,11 +1795,21 @@ sub genome {
   my $tmpl = $self->load_tmpl('genomepage.tmpl');
   $self->defaults($tmpl);
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End genome(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub MSA {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin MSA(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $dbh = $self->dbh();
   my $q = $self->query();
@@ -1669,11 +1837,21 @@ sub MSA {
   my $tmpl = $self->load_tmpl('empty.tmpl');
   $self->defaults($tmpl);
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End MSA(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub BLGraph {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin BLGraph(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $dbh = $self->dbh();
   my $q = $self->query();
@@ -1707,6 +1885,11 @@ sub BLGraph {
     my ($svg_content) = $query_content->fetchrow();
             
     $self->header_props(-type=>'image/svg+xml');
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End BLGraph(): " . ($currentTime - $startTime) . ".\n";    
+
     return $svg_content;
   } elsif ($q->param("image")) {
     # read the image of biolayout
@@ -1717,6 +1900,11 @@ sub BLGraph {
     binmode STDOUT;
     print CGI::header("image/png");
     print $bl_image;
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End BLGraph(): " . ($currentTime - $startTime) . ".\n";    
+
     return;
   } else {
     $para{PAGETITLE}="BioLayout Graph for $ac";
@@ -1731,11 +1919,21 @@ sub BLGraph {
   my $tmpl = $self->load_tmpl('empty.tmpl');
   $self->defaults($tmpl);
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End BLGraph(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 
 sub getSeq {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin getSeq(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $dbh = $self->dbh();
   my $q = $self->query();
@@ -1782,6 +1980,11 @@ sub getSeq {
     my $tmpl = $self->load_tmpl('empty.tmpl');
     $self->defaults($tmpl);
     $tmpl->param(\%para);
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End getSeq(): " . ($currentTime - $startTime) . ".\n";    
+
     return $self->done($tmpl);
   } elsif (my $querynumber = $q->param("querynumber")) {
     my $sequence_query_history = $self->session->param("SEQUENCE_QUERY_HISTORY");
@@ -1811,12 +2014,22 @@ sub getSeq {
     $self->header_props(
 			-type=>'text/plain',
 			'-Content-Disposition'=>'attachment; filename="'.$file_name.'"');
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End getSeq(): " . ($currentTime - $startTime) . ".\n";    
+
     return $file_content;
   }
 }
 
 sub blast {
   my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin blast(): " . ($currentTime - $startTime) . ".\n";    
+
   my $config = $self->param("config");
   my $q = $self->query();
   my $dbh = $self->dbh();
@@ -1955,6 +2168,11 @@ sub blast {
 
 
   $tmpl->param(\%para);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End blast(): " . ($currentTime - $startTime) . ".\n";    
+
   return $self->done($tmpl);
 }
 

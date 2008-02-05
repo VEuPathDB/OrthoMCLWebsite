@@ -1485,61 +1485,61 @@ sub getSequenceRows {
 
 
 sub domarchList {
-  my $self = shift;
+    my $self = shift;
 
-  # Timing info
-  $currentTime = clock_gettime(CLOCK_REALTIME);
-  print STDERR "Begin domarchList(): " . ($currentTime - $startTime) . ".\n";    
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "Begin domarchList(): " . ($currentTime - $startTime) . ".\n";    
 
-  my $config = $self->param("config");
-  my $dbh = $self->dbh();
-  my $q = $self->query();
+    my $config = $self->param("config");
+    my $dbh = $self->dbh();
+    my $q = $self->query();
 
-  $dbh->{LongTruncOk} = 0;
-  $dbh->{LongReadLen} = 100000000;
+    $dbh->{LongTruncOk} = 0;
+    $dbh->{LongReadLen} = 100000000;
 
-  my %para;
+    my %para;
 
-  my ($orthogroup_id,$orthogroup_ac);
-  if ($orthogroup_id = $q->param("groupid")) {
-    my $query_orthogroup_by_groupid = $dbh->prepare($self->getSql('group_name_per_group_id'));
-    $query_orthogroup_by_groupid->execute($orthogroup_id);
-    my @tmp = $query_orthogroup_by_groupid->fetchrow_array();
-    $orthogroup_ac = $tmp[0];
-  } elsif ($orthogroup_ac = $q->param("groupac")) {
-    my $query_orthogroup_by_groupac = $dbh->prepare($self->getSql('group_id_per_group_name'));
-    $query_orthogroup_by_groupac->execute($orthogroup_ac);
-    my @tmp = $query_orthogroup_by_groupac->fetchrow_array();
-    $orthogroup_id = $tmp[0];
-  }
+    my ($orthogroup_id,$orthogroup_ac);
+    if ($orthogroup_id = $q->param("groupid")) {
+        my $query_orthogroup_by_groupid = $dbh->prepare($self->getSql('group_name_per_group_id'));
+        $query_orthogroup_by_groupid->execute($orthogroup_id);
+        my @tmp = $query_orthogroup_by_groupid->fetchrow_array();
+        $orthogroup_ac = $tmp[0];
+    } elsif ($orthogroup_ac = $q->param("groupac")) {
+        my $query_orthogroup_by_groupac = $dbh->prepare($self->getSql('group_id_per_group_name'));
+        $query_orthogroup_by_groupac->execute($orthogroup_ac);
+        my @tmp = $query_orthogroup_by_groupac->fetchrow_array();
+        $orthogroup_id = $tmp[0];
+    }
 
-  $para{GROUP_ACCESSION}=$orthogroup_ac;
+    $para{GROUP_ACCESSION}=$orthogroup_ac;
 
-  $para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
-  my $query_sequence_by_groupid = $dbh->prepare($self->getSql('domain_sequence_info_per_group_id'));
+    $para{PAGETITLE}="Protein Domain Architecture for $orthogroup_ac";
+    my $query_sequence_by_groupid = $dbh->prepare($self->getSql('domain_sequence_info_per_group_id'));
 
-  my $query_max_length_by_groupid = $dbh->prepare($self->getSql('max_length_per_group_id'));
-    
-  my $query_domains_by_sequenceid = $dbh->prepare($self->getSql('domains_info_per_sequence_id'));
+    my $query_max_length_by_groupid = $dbh->prepare($self->getSql('max_length_per_group_id'));
 
-  # Fetch max length, set params needed in order to generate images
-  $query_max_length_by_groupid->execute($orthogroup_id);
-  my @length_data=$query_max_length_by_groupid->fetchrow_array();
-  my $length_max=$length_data[0];
-  my $dom_height=14;
-  my $spacer_height=15;
-  my $margin_x = 10;
-  my $margin_y = 40;
+    my $query_domains_by_sequenceid = $dbh->prepare($self->getSql('domains_info_per_sequence_id'));
+
+    # Fetch max length, set params needed in order to generate images
+    $query_max_length_by_groupid->execute($orthogroup_id);
+    my @length_data=$query_max_length_by_groupid->fetchrow_array();
+    my $length_max=$length_data[0];
+    my $dom_height=14;
+    my $spacer_height=15;
+    my $margin_x = 10;
+    my $margin_y = 40;
     my $scale_factor=0.7;
     my $tick_step=50; # generally 50 is used, but when $length_max is too big, ...
-      if ($length_max>=2000) {
+    if ($length_max>=2000) {
         $tick_step = int($length_max/2000)*100;
-      }
-  if ($length_max>1000) {
-    $scale_factor = $scale_factor*(1000/$length_max);
-  }
-  my $size_x = $length_max*$scale_factor+2*$margin_x;
-  my $size_y = $margin_y + $dom_height + $spacer_height;
+    }
+    if ($length_max>1000) {
+        $scale_factor = $scale_factor*(1000/$length_max);
+    }
+    my $size_x = $length_max*$scale_factor+2*$margin_x;
+    my $size_y = $margin_y + $dom_height + $spacer_height;
     my $pos_y = $margin_y + $spacer_height + $dom_height/2;
 
     # Fetch sequences
@@ -1547,50 +1547,50 @@ sub domarchList {
 
     my @sequence_ids;
     my %domains_seen;
-    my @sequence_ids;
-    my %domains_seen;
     while (my @sequence_data = $query_sequence_by_groupid->fetchrow_array()) {
-      push(@sequence_ids,$sequence_data[0]);
-      my %sequence;
-        my @sequence_ids;
-        my %domains_seen;
-      $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
-      $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-      $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
-      $sequence{SEQUENCE_TAXON}=$sequence_data[4];
+        push(@sequence_ids,$sequence_data[0]);
+        my %sequence;
+        #my @sequence_ids;
+        #my %domains_seen;
+        $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
+        $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
+        $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
+        $sequence{SEQUENCE_TAXON}=$sequence_data[4];
             
-      my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
+        my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
-      #Fetch domains for sequence
-      $query_domains_by_sequenceid->execute($sequence_data[0]);
+        #Fetch domains for sequence
+        $query_domains_by_sequenceid->execute($sequence_data[0]);
 
-      my $num_dom_in_sequence=0;
-      while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
-        if (!exists $domains_seen{$domain_data[1]}) {
-          $domains_seen{$domain_data[1]}='y';
-          my %domain;
-          $domain{DOMAIN_ACCESSION}=$domain_data[1];
-          $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
-          $domain{DOMAIN_NAME}=$domain_data[2];
-          $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
-          push(@{$para{LOOP_DOMAIN}},\%domain);
-            
-          my $from = $domain_data[4];
-          my $to = $domain_data[5];
-          my $length=$to-$from;
-          my $source_id = $domain_data[1];
-          $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
+        my $num_dom_in_sequence=0;
+        while (my @domain_data = $query_domains_by_sequenceid->fetchrow_array()) {
+            if (!exists $domains_seen{$domain_data[1]}) {
+                $domains_seen{$domain_data[1]}='y';
+                my %domain;
+                $domain{DOMAIN_ACCESSION}=$domain_data[1];
+                $domain{DOMAIN_LINK}=$config->{PFAM_link}.$domain{DOMAIN_ACCESSION};
+                $domain{DOMAIN_NAME}=$domain_data[2];
+                $domain{DOMAIN_DESCRIPTION}=$domain_data[3];
+                push(@{$para{LOOP_DOMAIN}},\%domain);
+
+                my $from = $domain_data[4];
+                my $to = $domain_data[5];
+                my $length=$to-$from;
+                my $source_id = $domain_data[1];
+                $domain{DOMAIN_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawDomain&length=200&scale_factor=$scale_factor&dom_height=$dom_height&source_id=$source_id";
+            }
+
+            $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
+            $num_dom_in_sequence++;
         }
-
-        $sequence_image = $sequence_image."&domain_from".$num_dom_in_sequence."=".$domain_data[4]."&domain_to".$num_dom_in_sequence."=".$domain_data[5]."&domain_source".$num_dom_in_sequence."=".$domain_data[1];
-        $num_dom_in_sequence++;
-      }
+      
+        print STDERR "domain count: " . $num_dom_in_sequence ."\n";
             
-      $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
+        $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
            
-      push(@{$para{LOOP_DOMARCH}},\%sequence);
+        push(@{$para{LOOP_DOMARCH}},\%sequence);
     }
-        
+    
     # includes scale image in page  (the heading for the column w/sequence images
     $para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=white";
 
@@ -1624,6 +1624,7 @@ sub sequence {
     $dbh->{LongTruncOk} = 0;
     $dbh->{LongReadLen} = 100000000;
 
+    my $taxon_abbrev = $q->param("taxon");
     my $sequence_accession = $q->param("accession");
 
     my %para;
@@ -1632,22 +1633,22 @@ sub sequence {
     # prepare data to fill out sequence page
     my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_source_id'));
 
-    my $query_orthogroup = $dbh->prepare($self->getSql('group_name_per_group_id'));
-
-    $query_sequence->execute($sequence_accession);
+    $query_sequence->execute($taxon_abbrev, $sequence_accession);
     my @data = $query_sequence->fetchrow_array();
     $para{ACCESSION}=$data[0];
-    $para{NAME}=$data[1];
+
+    if (defined $data[1]) {
+      $para{XREF_LINK}=$data[1].$data[0];
+    }
+
     $para{TAXON}=$data[2];
     my $orthogroup_old_ac;
-    if ($data[3]==0) {
-      $para{GROUP_ACCESSION}='not clustered';
-    } else {
-      $query_orthogroup->execute($data[3]);
-      my @data2 = $query_orthogroup->fetchrow_array();
-      $para{GROUP_ACCESSION}=$data2[0];
-      $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[3]";
+    if ($data[3]) {
+      $para{GROUP_ACCESSION}=$data[3];
+      $para{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$data[3]";
       $orthogroup_old_ac = transformOGAC($para{GROUP_ACCESSION});
+    } else {
+      $para{GROUP_ACCESSION}='not clustered';
     }
     
     if ($data[4]) {
@@ -1656,31 +1657,27 @@ sub sequence {
       $para{DESCRIPTION}=join(" ",@desc_info);
     }
 
-    if (defined $data[6]) {
-      $para{XREF_LINK}=$data[6].$data[1];
-    }
-
     my $len = $data[5];
     $para{LENGTH}=$len;
-    my $seq = $data[7];
+    my $seq = $data[6];
 
     # display sequence
-    $para{SEQUENCE} = "<font face=\"Courier\" size=\"2\">&gt;";
-    if ($para{NAME}) {
-      $para{SEQUENCE} .= $para{NAME}." ";
-    }
+    $para{SEQUENCE} = "&gt;";
+
+    $para{SEQUENCE} .= $taxon_abbrev . "|";
+    $para{SEQUENCE} .= $para{ACCESSION} . " ";
+
     if ($para{DESCRIPTION}) {
       $para{SEQUENCE} .= $para{DESCRIPTION}." ";
     }
-    $para{SEQUENCE} .= "[".$para{TAXON}."]<br>";
+    $para{SEQUENCE} .= "[".$para{TAXON}."]\n";
     for (my $i=1;$i<=$len;$i+=60) {
       if ($i+60-1>$len) {
-	$para{SEQUENCE} .= substr($seq, $i) ."<br>";
+	$para{SEQUENCE} .= substr($seq, $i) ."\n";
       } else {
-	$para{SEQUENCE} .= substr($seq, $i,60) . "<br>";
+	$para{SEQUENCE} .= substr($seq, $i,60) . "\n";
       }
     }
-    $para{SEQUENCE}.="</font>";
 
     # prepare data to fill out domain architecture block
     #if (defined $orthogroup_old_ac) {
@@ -1692,7 +1689,7 @@ sub sequence {
     #    my ($a,$b)=split("",$dd);
     #}
     my $query_domarch_by_ac = $dbh->prepare($self->getSql('domain_arch_per_sequence_source_id'));
-    $query_domarch_by_ac->execute($sequence_accession);
+    $query_domarch_by_ac->execute($taxon_abbrev, $sequence_accession);
 
     my $length_max=$data[5];
     my $length=$data[5];

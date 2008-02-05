@@ -575,17 +575,19 @@ AND dbaf.db_ref_id = db.db_ref_id
        <name>sequence_info_per_source_id</name>
        <sql>
 <![CDATA[ 
-SELECT eas.source_id, eas.name, 
-       ot.name, ogs.ortholog_group_id,
-       eas.description, eas.length, 
-       edr.id_url, eas.sequence 
+SELECT eas.source_id, edr.id_url, 
+       ot.name, og.name,
+       eas.description, eas.length, eas.sequence 
 FROM dots.ExternalAaSequence eas,
  apidb.OrthomclTaxon ot,
 sres.ExternalDatabaseRelease edr,
-apidb.OrthologGroupAaSequence ogs
+apidb.OrthologGroupAaSequence ogs,
+apidb.OrthologGroup og
 WHERE eas.taxon_id = ot.taxon_id
+AND og.ortholog_group_id = ogs.ortholog_group_id
 AND eas.external_database_release_id = edr.external_database_release_id
 AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
+AND ot.three_letter_abbrev = ?
 AND eas.source_id = ?
 ]]>
        </sql>
@@ -600,6 +602,7 @@ AND eas.source_id = ?
 SELECT al.start_min, al.end_max, db.primary_identifier,
 db.secondary_identifier, db.remark
 FROM dots.ExternalAaSequence eas,
+apidb.OrthomclTaxon ot,
 dots.DomainFeature df,
 dots.AaLocation al,
 dots.DbRefAaFeature dbaf,
@@ -608,6 +611,8 @@ WHERE eas.aa_sequence_id = df.aa_sequence_id
 AND df.aa_feature_id = al.aa_feature_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
+AND eas.taxon_id = ot.taxon_id
+AND ot.three_letter_abbrev = ?
 AND eas.source_id = ?
 ORDER BY al.start_min ASC, al.end_max DESC
 ]]>

@@ -1878,6 +1878,8 @@ sub BLGraph {
   $dbh->{LongTruncOk} = 0;
   $dbh->{LongReadLen} = 100000000;
 
+  my $tmpl = $self->load_tmpl('empty.tmpl');
+
   my $ac = $q->param("groupac");
   my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
   my %para;
@@ -1897,19 +1899,17 @@ sub BLGraph {
                            on. When you move your mouse over a certain node (or edge), 
                            associated information will be displayed in the \"INFORMATION\" 
                            box, the nodes from the same species will also be highlighted.</p>";
+    $self->defaults($tmpl);
   } elsif ($q->param("svgdata")) {
+    $self->header_props(-type=>'image/svg+xml');
+
     # read the content of the svg
     my $query_content = $dbh->prepare($self->getSql('svg_content_per_group_name'));
     $query_content->execute($ac);
     my ($svg_content) = $query_content->fetchrow();
-            
-    $self->header_props(-type=>'image/svg+xml');
+    $para{SVG_CONTENT}=$svg_content;
 
-    # Timing info
-    $currentTime = clock_gettime(CLOCK_REALTIME);
-    print STDERR "End BLGraph(): " . ($currentTime - $startTime) . ".\n";    
-
-    return $svg_content;
+    $tmpl = $self->load_tmpl('svg.tmpl');
   } elsif ($q->param("image")) {
     # read the image of biolayout
     my $query_image = $dbh->prepare($self->getSql('biolayout_image_per_group_name'));
@@ -1933,10 +1933,8 @@ sub BLGraph {
                         You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">
                         Scalable Vector Graphics Viewer</a></font>.
                         <p><img src=\"$bl_src&image=1\"><p>";
+    $self->defaults($tmpl);
   }
-
-  my $tmpl = $self->load_tmpl('empty.tmpl');
-  $self->defaults($tmpl);
   $tmpl->param(\%para);
 
   # Timing info

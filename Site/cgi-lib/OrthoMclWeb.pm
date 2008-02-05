@@ -1662,15 +1662,12 @@ sub sequence {
     my $seq = $data[6];
 
     # display sequence
-    $para{SEQUENCE} = "&gt;";
-
-    $para{SEQUENCE} .= $taxon_abbrev . "|";
-    $para{SEQUENCE} .= $para{ACCESSION} . " ";
+    $para{SEQUENCE} = "&gt;$taxon_abbrev|" . $para{ACCESSION} . " ";
 
     if ($para{DESCRIPTION}) {
       $para{SEQUENCE} .= $para{DESCRIPTION}." ";
     }
-    $para{SEQUENCE} .= "[".$para{TAXON}."]\n";
+    $para{SEQUENCE} .= "[<i>".$para{TAXON}."</i>]\n";
     for (my $i=1;$i<=$len;$i+=60) {
       if ($i+60-1>$len) {
 	$para{SEQUENCE} .= substr($seq, $i) ."\n";
@@ -1985,7 +1982,7 @@ sub getSeq {
         if ($desc) {
             $para{CONTENT} .= " $desc";
         }
-        $para{CONTENT} .= " [$taxon]\n";
+        $para{CONTENT} .= " [<i>$taxon</i>]\n";
         for (my $i=1;$i<=$len;$i+=60) {
             if ($i+60-1>$len) {
                 $para{CONTENT}.= substr($seq, $i)."\n";

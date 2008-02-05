@@ -716,13 +716,12 @@ WHERE name = ?
      </sqlQuery> 
 
 
-
      <sqlQuery>
        <name>sequence_info_per_group_name</name>
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.description, 
-       ot.name, eas.length, eas.sequence 
+       ot.name, eas.length, eas.sequence, ot.three_letter_abbrev 
 FROM apidb.OrthologGroup og,
 apidb.OrthologGroupAaSequence ogs,
 dots.ExternalAaSequence eas,
@@ -731,24 +730,6 @@ WHERE og.ortholog_group_id = ogs.ortholog_group_id
 AND ogs.aa_sequence_id = eas.aa_sequence_id
 AND eas.taxon_id = ot.taxon_id
 AND og.name = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-
-     <sqlQuery>
-       <name>sequence_info_per_group_id</name>
-       <sql>
-<![CDATA[ 
-SELECT eas.source_id, eas.description, 
-       ot.name, eas.length, eas.sequence 
-FROM apidb.OrthologGroupAaSequence ogs,
- dots.ExternalAaSequence eas,
-  apidb.OrthomclTaxon ot
- WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND eas.taxon_id = ot.taxon_id
- AND ogs.ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 

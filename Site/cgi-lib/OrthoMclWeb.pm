@@ -1553,9 +1553,9 @@ sub domarchList {
         #my @sequence_ids;
         #my %domains_seen;
         $sequence{SEQUENCE_ACCESSION}=$sequence_data[1];
-        $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION};
-        $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
         $sequence{SEQUENCE_TAXON}=$sequence_data[4];
+        $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=".$sequence{SEQUENCE_ACCESSION}."&taxon=".$sequence{SEQUENCE_TAXON};
+        $sequence{SEQUENCE_LENGTH}=$sequence_data[3];
             
         my $sequence_image=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=$margin_x&scale_factor=$scale_factor&pos_y=$pos_y&size_x=$size_x&size_y=$size_y&dom_height=$dom_height&length=$sequence_data[3]&length_max=$length_max&tick_step=$tick_step&margin_y=$margin_y&spacer_height=$spacer_height";
 
@@ -1965,39 +1965,36 @@ sub getSeq {
 
   if ($q->param("groupid") || $q->param("groupac")) {
     my %para;
-    my $query_sequence;
-    if (my $groupac = $q->param("groupac")) {
-      $para{PAGETITLE}="FASTA Sequences for $groupac";
-      $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_name'));
+    my $groupac = $q->param("groupac");
+    $para{PAGETITLE}="FASTA Sequences for $groupac";
+    my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_name'));
 
-      $para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
-      $query_sequence->execute($groupac);
-    } elsif (my $groupid = $q->param("groupid")) {
-      $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_id'));
-      $query_sequence->execute($groupid);
-    }
+    $para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
+    $query_sequence->execute($groupac);
 
-    $para{CONTENT} = "";
+    $para{CONTENT} = "<div class='sequence'><pre>";
     while (my @data = $query_sequence->fetchrow_array()) {
-      my $ac = $data[0];
-      my $desc = $data[1];
-      my $taxon = $data[2];
-      my $len = $data[3];
-      my $seq = $data[4];
-      $para{CONTENT} .= "\n<font face=\"Courier\" size=\"2\">&gt;";
-      if ($desc) {
-	$para{CONTENT} .= $desc;
-      }
-      $para{CONTENT} .= " [$taxon]<br>";
-      for (my $i=1;$i<=$len;$i+=60) {
-	if ($i+60-1>$len) {
-	  $para{CONTENT}.= substr($seq, $i)."<br>";
-	} else {
-	  $para{CONTENT}.= substr($seq, $i, 60)."<br>";
-	}
-      }
-      $para{CONTENT}.="</font>";
+        my $ac = $data[0];
+        my $desc = $data[1];
+        my $taxon = $data[2];
+        my $len = $data[3];
+        my $seq = $data[4];
+        my $taxon_abbrev = $data[5];
+        $para{CONTENT} .= "\n&gt;";
+        $para{CONTENT} .= "$taxon_abbrev|$ac";
+        if ($desc) {
+            $para{CONTENT} .= " $desc";
+        }
+        $para{CONTENT} .= " [$taxon]\n";
+        for (my $i=1;$i<=$len;$i+=60) {
+            if ($i+60-1>$len) {
+                $para{CONTENT}.= substr($seq, $i)."\n";
+            } else {
+                $para{CONTENT}.= substr($seq, $i, 60)."\n";
+            }
+        }
     }
+    $para{CONTENT} .= "</pre></div>";
 
     my $tmpl = $self->load_tmpl('empty.tmpl');
     $self->defaults($tmpl);
@@ -2022,13 +2019,14 @@ sub getSeq {
       my $taxon = $data[2];
       my $len = $data[3];
       my $seq = $data[4];
-      $file_content.=">$desc [$taxon]\r\n";
+      my $taxon_abbrev = $data[5];
+      $file_content.=">$taxon_abbrev|$ac $desc [$taxon]\r\n";
       for (my $i=1;$i<=$len;$i+=60) {
-	if ($i+60-1>$len) {
-	  $file_content.= substr($seq, $i)."\r\n";
-	} else {
-	  $file_content.= substr($seq, $i, 60)."\r\n";
-	}
+	    if ($i+60-1>$len) {
+	      $file_content.= substr($seq, $i)."\r\n";
+	    } else {
+	      $file_content.= substr($seq, $i, 60)."\r\n";
+	    }
       }
     }
 

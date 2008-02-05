@@ -609,6 +609,7 @@ AND df.aa_feature_id = al.aa_feature_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
 AND eas.source_id = ?
+ORDER BY al.start_min ASC, al.end_max DESC
 ]]>
        </sql>
      </sqlQuery> 

@@ -48,10 +48,10 @@ A.nocolor_w:link {
 .phyletic-category * div {
     text-align: center;
     font-size: x-small;
-    font-family: "sans serif", times;
+    font-family: sans-serif, serif;
     margin: 0px;
     padding: 0px;
-    border-width: 3px;
+    border-width: 2px;
     border-style: hidden;
     border-bottom-style: solid;
     border-top-style: solid;
@@ -82,36 +82,36 @@ A.nocolor_w:link {
 .phyletic-category * .BACT_start {
     border-left-style: solid;
     border-color: #ff8800;
-    width: 23px;
+    width: 24px;
 }
 
 .phyletic-category * .BACT_end {
     border-right-style: solid;
     border-color: #ff8800;
-    width: 23px;
+    width: 24px;
 }
 
 .phyletic-category * .ARCH_start {
     border-left-style: solid;
     border-color: #5555ff;
-    width: 23px;
+    width: 24px;
 }
 
 .phyletic-category * .ARCH_end {
     border-right-style: solid;
     border-color: #5555ff;
-    width: 23px;
+    width: 24px;
 }
 .phyletic-category * .EUKA_start {
     border-left-style: solid;
     border-color: #88ff00;
-    width: 23px;
+    width: 24px;
 }
 
 .phyletic-category * .EUKA_end {
     border-right-style: solid;
     border-color: #88ff00;
-    width: 23px;
+    width: 24px;
 }
 
 .sequence {

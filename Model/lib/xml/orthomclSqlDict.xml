@@ -267,14 +267,7 @@ WHERE ortholog_group_id = ?
        <name>taxa_num_genes_per_group</name>
        <sql>
 <![CDATA[ 
-SELECT ot.orthomcl_taxon_id, count(ogs.aa_sequence_id) AS sequence_count
-FROM apidb.OrthologGroupAaSequence ogs, 
-     dots.ExternalAaSequence eas,
-     apidb.OrthomclTaxon ot
-WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-  AND eas.taxon_id = ot.taxon_id
-  AND ogs.ortholog_group_id = ?
-GROUP BY ot.orthomcl_taxon_id
+SELECT * FROM apidb.GroupTaxonMatrix WHERE ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 

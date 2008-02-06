@@ -20,6 +20,7 @@ use CGI::Application::Plugin::DBH qw(dbh_config dbh dbh_default_name);
 use CGI::Application::Plugin::Session;
 use File::Spec ();
 use YAML qw(LoadFile);
+use OrthoMCLData::Load::MatrixColumnManager;
 use OrthoMCLWebsite::Model::Ppe::Processor;
 use ApiCommonWebsite::Model::SqlXmlParser;
 use FunKeyword;
@@ -785,15 +786,26 @@ sub groupList {
   }
     
   # get the taxon tree for phyletic pattern in the group list page
+  my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
+
+  my %species;
   my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
   $query_taxonname->execute();
   while (my @data = $query_taxonname->fetchrow_array()) {
-    push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
+    my $taxon_id = $data[0];
+    my $taxon_abbrev = $data[2];
+    my $is_species = $data[4];
+    push(@{$para{TAXONS}},  { TAXON_ID => $taxon_id,
 			      PARENT_ID => $data[1],
-			      ABBREV => $data[2],
+			      ABBREV => $taxon_abbrev,
 			      NAME => $data[3],
-			      IS_SPECIES => $data[4],
+			      IS_SPECIES => $is_species,
 			      INDEX => $data[5] });
+    if ($is_species != 0) {
+        my $column = $columnMgr->getColumnName($taxon_abbrev, "");
+        $column =~ s/\D//g;
+        $species{$taxon_id} = $column + 1;
+    }
   }
 
   $para{NUM_GROUPS}=scalar(@{$orthogroup_ids_ref});
@@ -808,7 +820,7 @@ sub groupList {
   my $pager = HTML::Pager->new( query => $self->query,
 				template => $tmpl,
 				get_data_callback => [ \&getGroupRows,
-						       $orthogroup_ids_ref, $dbh, $tmpl, $config, $self
+						       $orthogroup_ids_ref, $dbh, $tmpl, $config, \%species, $self
 						     ],
 				rows => scalar(@{$orthogroup_ids_ref}),
 				page_size => 10,
@@ -822,7 +834,7 @@ sub groupList {
 }
 
 sub getGroupRows {
-    my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $self) = @_;
+    my ($offset, $rows, $orthogroup_ids_ref, $dbh, $tmpl, $config, $species_ref, $self) = @_;
 
     # Timing info
     $currentTime = clock_gettime(CLOCK_REALTIME);
@@ -906,10 +918,15 @@ sub getGroupRows {
 	    # get taxon and gene counts
 	    $query_taxa_by_o->execute($orthogroup_id);
 	    my $taxon_count = 0;
-	    while (my @data = $query_taxa_by_o->fetchrow_array()) {
-	        push(@{$group{TAXON_GENES}}, { TAXON_ID => $data[0],
-					       GENE_COUNT => $data[1] });
-	        $taxon_count++;
+	    if (my @data = $query_taxa_by_o->fetchrow_array()) {
+	        while ( my ($taxon_id, $column_id) = each(%$species_ref) ) {
+	            my $gene_count = $data[$column_id];
+	            if ($gene_count > 0) {
+	                push(@{$group{TAXON_GENES}}, { TAXON_ID => $taxon_id,
+					                             GENE_COUNT => $gene_count });
+	                $taxon_count++;
+	            }
+	        }
 	    }
 	    $group{NO_TAXA} = $taxon_count;
 	
@@ -1182,15 +1199,26 @@ sub sequenceList {
     my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
 
     # get the taxon tree for phyletic pattern in the group list page
+    my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
+
+    my %species;
     my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));
     $query_taxonname->execute();
     while (my @data = $query_taxonname->fetchrow_array()) {
-      push(@{$para{TAXONS}},  { TAXON_ID => $data[0],
-				PARENT_ID => $data[1],
-				ABBREV => $data[2],
-				NAME => $data[3],
-			    IS_SPECIES => $data[4],
-			    INDEX => $data[5] });
+        my $taxon_id = $data[0];
+        my $taxon_abbrev = $data[2];
+        my $is_species = $data[4];
+        push(@{$para{TAXONS}},  { TAXON_ID => $taxon_id,
+			          PARENT_ID => $data[1],
+			          ABBREV => $taxon_abbrev,
+			          NAME => $data[3],
+			          IS_SPECIES => $is_species,
+			          INDEX => $data[5] });
+        if ($is_species != 0) {
+            my $column = $columnMgr->getColumnName($taxon_abbrev, "");
+            $column =~ s/\D//g;
+            $species{$taxon_id} = $column + 1;
+        }
     }
 
     $query_orthogroup->execute($orthogroup_id);
@@ -1217,10 +1245,15 @@ sub sequenceList {
     # get taxon and gene counts
     $query_taxa_by_o->execute($orthogroup_id);
     my $taxon_count = 0;
-    while (my @data = $query_taxa_by_o->fetchrow_array()) {
-      push(@{$para{TAXON_GENES}}, { TAXON_ID => $data[0],
-				    GENE_COUNT => $data[1] });
-      $taxon_count++;
+    if (my @data = $query_taxa_by_o->fetchrow_array()) {
+        while ( my ($taxon_id, $column_id) = each(%species) ) {
+            my $gene_count = $data[$column_id];
+            if ($gene_count > 0) {
+                push(@{$para{TAXON_GENES}}, { TAXON_ID => $taxon_id,
+				                            GENE_COUNT => $gene_count });
+                $taxon_count++;
+            }
+        }
     }
     $para{NO_TAXA} = $taxon_count;
 
@@ -1245,8 +1278,11 @@ sub sequenceList {
       if (defined $data[5]) {
         $sequence{XREF_LINK}=$data[5].$data[1];
       }
-      my @desc_info = split(" ",$data[2]);
-      shift @desc_info;
+      my @desc_info;
+      if ($data[2]) {
+        @desc_info = split(" ",$data[2]);
+        shift @desc_info;
+      }
       $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
       $sequence{SEQUENCE_LENGTH}=$data[3];
       $sequence{SEQUENCE_TAXON}=$data[4];
@@ -1255,6 +1291,11 @@ sub sequenceList {
     }
     $para{NO_GROUPAC}=1;
     $tmpl->param(\%para);
+
+    # Timing info
+    $currentTime = clock_gettime(CLOCK_REALTIME);
+    print STDERR "End sequenceList(): " . ($currentTime - $startTime) . ".\n";    
+
     return $self->done($tmpl);
 
   } elsif ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {

@@ -1278,12 +1278,7 @@ sub sequenceList {
       if (defined $data[5]) {
         $sequence{XREF_LINK}=$data[5].$data[1];
       }
-      my @desc_info;
-      if ($data[2]) {
-        @desc_info = split(" ",$data[2]);
-        shift @desc_info;
-      }
-      $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
+      $sequence{SEQUENCE_DESCRIPTION}=$data[2];
       $sequence{SEQUENCE_LENGTH}=$data[3];
       $sequence{SEQUENCE_TAXON}=$data[4];
       $sequence{SEQUENCE_TAXON_ABBREV}=$taxon_abbrev;
@@ -1502,9 +1497,7 @@ sub getSequenceRows {
     if (defined $data[5]) {
       $sequence{XREF_LINK}=$data[5].$data[1];
     }
-    my @desc_info = split(" ",$data[2]);
-    shift @desc_info;
-    $sequence{SEQUENCE_DESCRIPTION}=join(" ",@desc_info);
+    $sequence{SEQUENCE_DESCRIPTION}=$data[2];
     $sequence{SEQUENCE_LENGTH}=$data[3];
     $sequence{SEQUENCE_TAXON}=$data[4];
     if (defined $data[6]) {
@@ -1693,9 +1686,7 @@ sub sequence {
     }
     
     if ($data[4]) {
-      my @desc_info = split(" ",$data[4]);
-      shift @desc_info;
-      $para{DESCRIPTION}=join(" ",@desc_info);
+      $para{DESCRIPTION}=$data[4];
     }
 
     my $len = $data[5];

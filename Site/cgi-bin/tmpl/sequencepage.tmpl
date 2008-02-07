@@ -16,11 +16,16 @@
    <td width="50"></td>
    <td><br><table width="700" border="1" cellspacing="1" cellpadding="0">
       <tr>
-         <td width="50%"><b>Accession</b>:
-		<TMPL_IF XREF_LINK><a href="javascript:window.open('<TMPL_VAR XREF_LINK>');void(0)"></TMPL_IF> 
-		<TMPL_VAR ACCESSION>
-		<TMPL_IF XREF_LINK></a></TMPL_IF>
-	 </td>
+         <td colspan="2"><b>Accession</b>:
+		    <TMPL_IF XREF_LINK><a href="javascript:window.open('<TMPL_VAR XREF_LINK>');void(0)"></TMPL_IF> 
+		    <TMPL_VAR TAXON_ABBREV>|<TMPL_VAR ACCESSION>
+		    <TMPL_IF XREF_LINK></a></TMPL_IF>
+	     </td>
+	  </tr>
+      <tr>
+         <td width="50%"><b>Secondary Accession</b>:
+		    <TMPL_VAR SECONDARY_ACCESSION>
+	    </td>
          <td width="50%"><b>Length</b>: <TMPL_VAR LENGTH></td>
       </tr>
       <tr>

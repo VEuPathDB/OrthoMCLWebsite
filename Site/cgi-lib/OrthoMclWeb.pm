@@ -1489,9 +1489,10 @@ sub getSequenceRows {
     } else {
       $sequence{__EVEN__}=1;
     }
-
+    my $taxon_abbrev = $data[8];
+    $sequence{SEQUENCE_TAXON_ABBREV}=$taxon_abbrev;
     $sequence{SEQUENCE_NUMBER}=$offset+$x+1;;
-    $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]";
+    $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]&taxon=$taxon_abbrev";
     $sequence{SEQUENCE_ACCESSION}=$data[0];
     $sequence{XREF}=$data[1];
     if (defined $data[5]) {
@@ -1663,6 +1664,7 @@ sub sequence {
 
     my %para;
     $para{PAGETITLE}="Sequence $sequence_accession";
+    $para{TAXON_ABBREV}=$taxon_abbrev;
     
     # prepare data to fill out sequence page
     my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_source_id'));
@@ -1691,7 +1693,10 @@ sub sequence {
 
     my $len = $data[5];
     $para{LENGTH}=$len;
-    my $seq = $data[6];
+    
+    $para{SECONDARY_ACCESSION}=$data[6];
+    
+    my $seq = $data[7];
 
     # display sequence
     $para{SEQUENCE} = "&gt;$taxon_abbrev|" . $para{ACCESSION} . " ";

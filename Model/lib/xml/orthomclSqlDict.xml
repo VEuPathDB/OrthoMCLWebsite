@@ -462,7 +462,7 @@ AND ogs.aa_sequence_id=$seq_id
 <![CDATA[ 
 SELECT eas.source_id, eas.secondary_identifier, 
 eas.description, eas.length, ot.name,
- edr.id_url, og.name, og.ortholog_group_id 
+ edr.id_url, og.name, og.ortholog_group_id, ot.three_letter_abbrev
 FROM dots.ExternalAaSequence eas,
  sres.ExternalDatabaseRelease edr,
 apidb.OrthomclTaxon ot,
@@ -570,7 +570,7 @@ AND dbaf.db_ref_id = db.db_ref_id
 <![CDATA[ 
 SELECT eas.source_id, edr.id_url, 
        ot.name, og.name,
-       eas.description, eas.length, eas.sequence 
+       eas.description, eas.length, eas.secondary_identifier, eas.sequence 
 FROM dots.ExternalAaSequence eas,
  apidb.OrthomclTaxon ot,
 sres.ExternalDatabaseRelease edr,

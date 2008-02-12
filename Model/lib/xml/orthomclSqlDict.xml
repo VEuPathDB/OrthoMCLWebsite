@@ -577,7 +577,7 @@ sres.ExternalDatabaseRelease edr,
 apidb.OrthologGroupAaSequence ogs,
 apidb.OrthologGroup og
 WHERE eas.taxon_id = ot.taxon_id
-AND og.ortholog_group_id = ogs.ortholog_group_id
+AND og.ortholog_group_id(+) = ogs.ortholog_group_id
 AND eas.external_database_release_id = edr.external_database_release_id
 AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 AND ot.three_letter_abbrev = ?

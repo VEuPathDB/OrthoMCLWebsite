@@ -751,7 +751,8 @@ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.description, 
-       ot.name, eas.length, eas.sequence
+       ot.name, eas.length, eas.sequence,
+       ot.three_letter_abbrev
 FROM dots.ExternalAaSequence eas,
 apidb.OrthomclTaxon ot
 WHERE eas.taxon_id = ot.taxon_id

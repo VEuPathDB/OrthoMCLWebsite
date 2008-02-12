@@ -114,10 +114,20 @@ function displayCategory(group, category, from, to, content) {
         content.push("<td><div class=\"", category.key);
         if (i == from) content.push("_start");
         else if (i == to - 1) content.push("_end");
-        content.push("\" style=\"", style, "\" title=\"", taxon.name);
-        content.push(" (", taxon.abbrev, ") = ", count, " gene");
-        if (count > 1) content.push("s");
-        content.push(", ", category.name, ", ", taxon.path ,"\">");
-        content.push(taxon.abbrev, "</div></td>");
+        content.push("\" style=\"", style, "\" onmouseover=\"return escape(getPopupHtml(");
+		
+        content.push("'", taxon.name.replace(/'/g, "*"),"','", taxon.abbrev,"','",  count,"','",  category.name,"','",  taxon.path, "')");
+        //content.push(" (", taxon.abbrev, ") = ", count, " gene");
+        //if (count > 1) content.push("s");
+        //content.push(", ", category.name, ", ", taxon.path ,"\">");
+        content.push(");\">", taxon.abbrev, "</div></td>");
     }
+}
+
+function getPopupHtml(name, abbrev, count, category, path) {
+    var popup = "<i>" + name.replace(/\*/g, "'") + "</i> (" + abbrev + ") = " + count + " gene";
+    if (count > 1) popup += "s";
+    popup += ", " + category + ", " + path;
+
+    return popup;
 }

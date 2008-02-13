@@ -317,13 +317,13 @@ WHERE db_ref_id = ?
        <sql>
 <![CDATA[ 
 SELECT eas.source_id, eas.name, eas.description,
-eas.length, ot.name, edr.id_url, ot.three_letter_abbrev
+eas.length, ot.name, orr.linkout_url, ot.three_letter_abbrev
 FROM apidb.OrthologGroupAaSequence ogs,
  dots.ExternalAaSequence eas,
- sres.ExternalDatabaseRelease edr,
+ apidb.OrthomclResource orr,
  apidb.OrthomclTaxon ot
 WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-AND eas.external_database_release_id = edr.external_database_release_id
+AND ot.orthomcl_taxon_id = orr.orthomcl_taxon_id
 AND eas.taxon_id = ot.taxon_id
 AND ogs.ortholog_group_id = ?
 ]]>
@@ -462,13 +462,13 @@ AND ogs.aa_sequence_id=$seq_id
 <![CDATA[ 
 SELECT eas.source_id, eas.secondary_identifier, 
 eas.description, eas.length, ot.name,
- edr.id_url, og.name, og.ortholog_group_id, ot.three_letter_abbrev
+orr.linkout_url, og.name, og.ortholog_group_id, ot.three_letter_abbrev
 FROM dots.ExternalAaSequence eas,
- sres.ExternalDatabaseRelease edr,
+apidb.OrthomclResource orr,
 apidb.OrthomclTaxon ot,
 apidb.OrthologGroup og,
 apidb.OrthologGroupAaSequence ogs
-WHERE eas.external_database_release_id = edr.external_database_release_id
+WHERE ot.orthomcl_taxon_id = orr.orthomcl_taxon_id
 AND eas.taxon_id = ot.taxon_id
  AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 AND ogs.ortholog_group_id = og.ortholog_group_id(+) 
@@ -568,17 +568,17 @@ AND dbaf.db_ref_id = db.db_ref_id
        <name>sequence_info_per_source_id</name>
        <sql>
 <![CDATA[ 
-SELECT eas.source_id, edr.id_url, 
+SELECT eas.source_id, orr.linkout_url, 
        ot.name, og.name,
        eas.description, eas.length, eas.secondary_identifier, eas.sequence 
 FROM dots.ExternalAaSequence eas,
  apidb.OrthomclTaxon ot,
-sres.ExternalDatabaseRelease edr,
+ apidb.OrthomclResource orr,
 apidb.OrthologGroupAaSequence ogs,
 apidb.OrthologGroup og
 WHERE eas.taxon_id = ot.taxon_id
 AND og.ortholog_group_id(+) = ogs.ortholog_group_id
-AND eas.external_database_release_id = edr.external_database_release_id
+AND ot.orthomcl_taxon_id = orr.orthomcl_taxon_id
 AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
 AND ot.three_letter_abbrev = ?
 AND eas.source_id = ?

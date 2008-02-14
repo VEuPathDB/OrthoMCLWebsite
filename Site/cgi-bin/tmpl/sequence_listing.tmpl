@@ -224,12 +224,6 @@ displayCategories(group);
          <td align="center"><i><TMPL_VAR SEQUENCE_TAXON></i></td>
          <td align="center"><TMPL_VAR SEQUENCE_LENGTH></td>
          <td align="center">
-	   <TMPL_IF XREF>
-		<TMPL_IF XREF_LINK><a href="javascript:window.open('<TMPL_VAR XREF_LINK>');void(0)"></TMPL_IF>
-	     <font size="1"><TMPL_VAR XREF></font>
-		<TMPL_IF XREF_LINK></a></TMPL_IF>
-	     <br>
-	   </TMPL_IF>
 	   <TMPL_VAR SEQUENCE_DESCRIPTION>
 	 </td>
       </tr>

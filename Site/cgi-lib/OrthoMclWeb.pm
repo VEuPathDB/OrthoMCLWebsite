@@ -1029,59 +1029,59 @@ sub sequenceQueryHistory {
   if (my $action=$q->param("action")) {
     if ($action eq 'REMOVE') {
       foreach my $querynumber (@select) {
-    $sequence_query_history->[$querynumber-1]->{SHOW}=0;
+        $sequence_query_history->[$querynumber-1]->{SHOW}=0;
       }
     } else {
       if (scalar(@select)<2) {
-    push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
+        push(@{$para{LOOP_ERROR}},{ERROR=>"Please select at least 2 queries for $action!"});
       }
       my $sequence_query_ids_history = $self->session->param("SEQUENCE_QUERY_IDS_HISTORY");
       my @result_ids;
       my $action_description;
 
       if ($action eq 'UNION') {
-    $action_description = $action.' (#'.join("+#",@select).')';
-    my %present_ids;
-    foreach my $querynumber (@select) {
-      foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-        $present_ids{$sequence_id}=1;
-      }
-    }
-    @result_ids=sort {$a<=>$b} keys %present_ids;
+        $action_description = $action.' (#'.join("+#",@select).')';
+        my %present_ids;
+        foreach my $querynumber (@select) {
+          foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+            $present_ids{$sequence_id}=1;
+          }
+        }
+        @result_ids=sort {$a<=>$b} keys %present_ids;
       } elsif ($action eq 'INTERSECT') {
-    $action_description = $action.' (#'.join("+#",@select).')';
-    my %present_ids;
-    foreach my $querynumber (@select) {
-      foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
-        $present_ids{$sequence_id}++;
-      }
-    }
-    foreach (sort {$a<=>$b} keys %present_ids) {
-      if ($present_ids{$_}==scalar(@select)) {
-        push(@result_ids,$_);
-      }
-    }
+        $action_description = $action.' (#'.join("+#",@select).')';
+        my %present_ids;
+        foreach my $querynumber (@select) {
+          foreach my $sequence_id (@{$sequence_query_ids_history->[$querynumber-1]}) {
+            $present_ids{$sequence_id}++;
+          }
+        }
+        foreach (sort {$a<=>$b} keys %present_ids) {
+          if ($present_ids{$_}==scalar(@select)) {
+            push(@result_ids,$_);
+          }
+        }
       } elsif (($action eq 'TOP MINUS BOTTOM') || ($action eq 'BOTTOM MINUS TOP')) {
-    @select = sort {$a<=>$b} @select;
-    my ($a,$b);
-    if ($action eq 'TOP MINUS BOTTOM') {
-      $a = $select[0];
-      $b = $select[$#select];
-    } elsif ($action eq 'BOTTOM MINUS TOP') {
-      $a = $select[$#select];
-      $b = $select[0];
-    }
-    $action_description = "$action (#$a-#$b)";
-    my %b_seqids;
-    foreach (@{$sequence_query_ids_history->[$b-1]}) {
-      $b_seqids{$_}=1;
-    }
-    foreach my $a_seqid (@{$sequence_query_ids_history->[$a-1]}) {
-      next if (defined $b_seqids{$a_seqid});
-      push(@result_ids,$a_seqid);
-    }
+        @select = sort {$a<=>$b} @select;
+        my ($a,$b);
+        if ($action eq 'TOP MINUS BOTTOM') {
+          $a = $select[0];
+          $b = $select[$#select];
+        } elsif ($action eq 'BOTTOM MINUS TOP') {
+          $a = $select[$#select];
+          $b = $select[0];
+        }
+        $action_description = "$action (#$a-#$b)";
+        my %b_seqids;
+        foreach (@{$sequence_query_ids_history->[$b-1]}) {
+          $b_seqids{$_}=1;
+        }
+        foreach my $a_seqid (@{$sequence_query_ids_history->[$a-1]}) {
+          next if (defined $b_seqids{$a_seqid});
+          push(@result_ids,$a_seqid);
+        }
       } else {
-    push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
+        push(@{$para{LOOP_ERROR}},{ERROR=>"$action is not defined as an action!"});
       }
 
       # insert into history as a new query
@@ -1118,6 +1118,10 @@ sub sequenceQueryHistory {
     }
       }
     }
+    
+    # this is necessary in order to convert GLOB into string
+    $filename = "$filename";
+    
     # insert into history as a new query
     my $query_time = $dbh->prepare('SELECT SYSDATE FROM dual');
     $query_time->execute();

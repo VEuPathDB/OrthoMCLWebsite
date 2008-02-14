@@ -1283,10 +1283,6 @@ sub sequenceList {
       $sequence{SEQUENCE_NUMBER}=$count;
       $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]&taxon=$taxon_abbrev";
       $sequence{SEQUENCE_ACCESSION}=$data[0];
-      $sequence{XREF}=$data[1];
-      if (defined $data[5]) {
-        $sequence{XREF_LINK}=$data[5].$data[1];
-      }
       $sequence{SEQUENCE_DESCRIPTION}=$data[2];
       $sequence{SEQUENCE_LENGTH}=$data[3];
       $sequence{SEQUENCE_TAXON}=$data[4];
@@ -1503,10 +1499,6 @@ sub getSequenceRows {
     $sequence{SEQUENCE_NUMBER}=$offset+$x+1;;
     $sequence{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$data[0]&taxon=$taxon_abbrev";
     $sequence{SEQUENCE_ACCESSION}=$data[0];
-    $sequence{XREF}=$data[1];
-    if (defined $data[5]) {
-      $sequence{XREF_LINK}=$data[5].$data[1];
-    }
     $sequence{SEQUENCE_DESCRIPTION}=$data[2];
     $sequence{SEQUENCE_LENGTH}=$data[3];
     $sequence{SEQUENCE_TAXON}=$data[4];

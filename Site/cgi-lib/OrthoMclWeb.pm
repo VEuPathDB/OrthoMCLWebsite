@@ -715,20 +715,20 @@ sub groupList {
                      });
 
       } elsif ((my $prop = $q->param("prop")) && ($number = $q->param("number"))) {
-    my ($querystring,$query_orthogroup);
+    my $querystring;
     if ($prop=~/Pairs/) {
-      my $querystring= $self->getSql('groups_by_num_match_pairs', {number=>$number});
-      $query_orthogroup=$dbh->prepare($querystring);
+      $querystring= $self->getSql('groups_by_num_match_pairs', {number=>$number});
       # } elsif ($prop=~/DCS/) {
-      #     my $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
+      #     $querystring="SELECT orthogroup_id FROM orthogroup WHERE ave_dcs $number";
     } elsif ($prop=~/Identity/) {
-      my $querystring= $self->getSql('groups_by_percent_identity', {number=>$number});
+      $querystring= $self->getSql('groups_by_percent_identity', {number=>$number});
     } elsif ($prop=~/Match/) {
-      my $querystring= $self->getSql('groups_by_percent_match', {number=>$number});
+      $querystring= $self->getSql('groups_by_percent_match', {number=>$number});
     } elsif ($prop=~/BLAST/) {
-      my $querystring= $self->getSql('groups_by_blast_evalue', {number=>$number});
+      $querystring= $self->getSql('groups_by_blast_evalue', {number=>$number});
     }
-    $query_orthogroup=$dbh->prepare($querystring);
+    
+    my $query_orthogroup=$dbh->prepare($querystring);
 
     if ($debug) {
       push(@{$para{LOOP_DEBUG}},{DEBUG=>$querystring});
@@ -1320,18 +1320,18 @@ sub sequenceList {
       open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
       my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
       while (<BLAST>) {
-    if (m/Sequences producing significant alignments/) {
-      <BLAST>;        # empty line
-      while (<BLAST>) {
+        if (m/Sequences producing significant alignments/) {
+          <BLAST>;        # empty line
+          while (<BLAST>) {
             last if m/^\s*$/;
             if (m/^(\S+)/) {
-              $query_sequence->execute($1);
-              while (my @data = $query_sequence->fetchrow_array()) {
+                $query_sequence->execute($1);
+                while (my @data = $query_sequence->fetchrow_array()) {
                 push(@{$sequence_ids_ref},$data[0]);
-              }
+                }
             }
-      }
-    }
+          }
+        }
       }
       close(BLAST);
       unlink($tempfile);
@@ -1339,36 +1339,36 @@ sub sequenceList {
       my @qc = split(" ",$querycode);
       my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
       foreach (@qc) {
-    $query_sequence->execute($_);
-    while (my @data = $query_sequence->fetchrow_array()) {
-      push(@{$sequence_ids_ref},$data[0]);
-    }
+        $query_sequence->execute($_);
+        while (my @data = $query_sequence->fetchrow_array()) {
+          push(@{$sequence_ids_ref},$data[0]);
+        }
       }
     } else {
       my $query_string;
       if ($in eq 'All') {
-    $query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
       } elsif ($in eq 'Keyword') {
-    $query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
       } elsif ($in eq 'Taxon_Abbreviation') {
-    $query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
       } elsif ($in eq 'Pfam_Accession') {
-    $query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
       } elsif ($in eq 'Pfam_Name') {
-    $query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
       } elsif ($in eq 'Pfam_Keyword') {
-    $query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
+        $query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
       }
 
       if ($debug) {
-    push(@{$para{LOOP_DEBUG}},{DEBUG=>"SQL: $query_string"});
+        push(@{$para{LOOP_DEBUG}},{DEBUG=>"SQL: $query_string"});
       }
 
       my $query_sequence = $dbh->prepare($query_string);
       $query_sequence->execute();
 
       while (my @data = $query_sequence->fetchrow_array()) {
-    push(@{$sequence_ids_ref},$data[0]);
+        push(@{$sequence_ids_ref},$data[0]);
       }
     }
 
@@ -1376,24 +1376,24 @@ sub sequenceList {
       $sequence_ids_ref=[];
     } elsif (scalar(@$sequence_ids_ref)==1) {
       if (my $groupredirect=$q->param("groupredirect")) {
-    if ($groupredirect==1) {
-      my $seq_id = $sequence_ids_ref->[0];
-      my $group_qs= $self->getSql('group_name_by_sequence_id', {seq_id=>$seq_id});
-      my $group_q1=$dbh->prepare($group_qs);
-      $group_q1->execute();
-      my @group_ac;
-      while (my @data=$group_q1->fetchrow_array()) {
-        push(@group_ac,$data[0]);
-      }
-      if (scalar(@group_ac)==1) {
-        #                        $para{JS_CODE}="$group_ac[0]";
-        $para{JS_CODE}="<script type=\"text/javascript\" language=\"JavaScript\">
-                                            setTimeout('Redirect()',0);
-                                            function Redirect() {
-                                                location.href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=".$group_ac[0]."';
-                                            }</script>\n";
-      }
-    }    
+        if ($groupredirect==1) {
+          my $seq_id = $sequence_ids_ref->[0];
+          my $group_qs= $self->getSql('group_name_by_sequence_id', {seq_id=>$seq_id});
+          my $group_q1=$dbh->prepare($group_qs);
+          $group_q1->execute();
+          my @group_ac;
+          while (my @data=$group_q1->fetchrow_array()) {
+            push(@group_ac,$data[0]);
+          }
+          if (scalar(@group_ac)==1) {
+            #                        $para{JS_CODE}="$group_ac[0]";
+            $para{JS_CODE}="<script type=\"text/javascript\" language=\"JavaScript\">
+                                                setTimeout('Redirect()',0);
+                                                function Redirect() {
+                                                    location.href='/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=".$group_ac[0]."';
+                                                }</script>\n";
+          }
+        }    
       }
     }
 

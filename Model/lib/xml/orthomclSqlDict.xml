@@ -288,25 +288,9 @@ WHERE ogk.ortholog_group_id = ?
        <name>sequence_domains_per_group</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.aa_sequence_id, dbaf.db_ref_id 
-FROM apidb.OrthologGroupAaSequence ogs, 
-dots.DomainFeature df,
-dots.DbRefAaFeature dbaf
-WHERE ogs.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = dbaf.aa_feature_id
-AND ogs.ortholog_group_id = ?
-]]>
-       </sql>
-     </sqlQuery> 
-
-
-     <sqlQuery>
-       <name>description_per_domain</name>
-       <sql>
-<![CDATA[ 
-SELECT remark
- FROM sres.DbRef 
-WHERE db_ref_id = ?
+SELECT ogd.description, ogd.frequency 
+FROM apidb.OrthomclGroupDomain ogd 
+WHERE ogd.ortholog_group_id = ?
 ]]>
        </sql>
      </sqlQuery> 

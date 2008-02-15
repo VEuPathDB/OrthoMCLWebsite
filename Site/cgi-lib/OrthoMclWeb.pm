@@ -859,8 +859,7 @@ sub getGroupRows {
     my $query_keywords_by_o = $dbh->prepare($self->getSql('keywords_per_group')); # used for summarizing keyword
     
     my $query_domain_by_o = $dbh->prepare($self->getSql('sequence_domains_per_group'));
-    
-    my $query_ddescription_by_d = $dbh->prepare($self->getSql('description_per_domain'));
+
     my $count=0;
     
     for (my $x = 0; $x < $rows; $x++) {
@@ -957,22 +956,10 @@ sub getGroupRows {
 
         # about Pfam domain summary
         $group{DOMAIN} = "";
-        if (1) {
-            my %sequence_domain;
-            $query_domain_by_o->execute($orthogroup_id);
-            while (my @tmp = $query_domain_by_o->fetchrow_array()) {
-            $sequence_domain{$tmp[0]}->{$tmp[1]}=1;
-            }
-            my %domains = %{DomainFreq($group{NO_SEQUENCES},\%sequence_domain)};
-            foreach my $d (keys %domains) {
-                my $c=sprintf("%X",int((1-$domains{$d})*255));
-                $query_ddescription_by_d->execute($d);
-                if (my @tmp = $query_ddescription_by_d->fetchrow_array()) {
-                    if ($tmp[0]) {
-                        $group{DOMAIN}.="<font color=\"#$c$c$c\">$tmp[0]</font>; ";
-                    }
-                }
-            }
+        $query_domain_by_o->execute($orthogroup_id);
+        while (my ($domain_desc, $freq) = $query_domain_by_o->fetchrow_array()) {
+            my $c=sprintf("%X",int((1-$freq)*255));
+            $group{DOMAIN}.="<font color=\"#$c$c$c\">$domain_desc</font>; ";
         }
     
         # Timing info

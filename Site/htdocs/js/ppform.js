@@ -8,13 +8,11 @@ function initial() {
     // resolve the children of each node
     for (var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        taxon.expanded = !taxons.is_species;
+        taxon.expanded = true;
         if (taxon_id != taxon.parent_id) {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
-            taxon.expanded = false;
         } else { 
-            taxon.expanded = true;
             roots.push(taxon); 
         }
     }
@@ -38,37 +36,61 @@ function compareTaxons(a, b) {
 function displayNodes() {
     var content  = [];
     for(var i = 0; i < roots.length; i++) {
-        displayNode(roots[i], content);
+        displayClade(roots[i], content);
     }
     document.write(content.join(""));
 }
 
-function displayNode(node, content) {
-    var hasChild = (node.children.length != 0);
-    var foldImage = hasChild ? (node.expanded ? "minus.png" : "plus.png") : "spacer.gif";
+function displayClade(node, content) {
+    var subClades = [];
+    var subSpecies = [];
+    for(var i = 0; i < node.children.length; i++) {
+        var child = node.children[i];
+        if (child.is_species) subSpecies.push(child);
+        else subClades.push(child);
+    }
+    var foldImage = node.expanded ? "minus.png" : "plus.png";
 
-    content.push("<div id='", node.id, "'>");
-    content.push("<image id='", node.id + "_fold' width='20' height='20' ");
-    content.push(" style=\"cursor:pointer;\" ");
-    content.push(" src=\"images/" + foldImage + "\" ");
-    content.push(" onclick=\"toggleFold('" + node.id + "')\" />");
+    content.push("<table border='0'><tr><td nowrap>");
+    if (subClades.length == 0) {
+        content.push("<image width='20' height='20' src='images/spacer.gif'>");
+    } else {
+        content.push("<image id='", node.id, "_fold' width='20' height='20' ");
+        content.push(" style=\"cursor:pointer;\" ");
+        content.push(" src=\"images/", foldImage, "\" ");
+        content.push(" onclick=\"toggleFold('", node.id, "')\"/>");
+    }
+    content.push("<image id='", node.id, "_check' ");
+    content.push(" src=\"images/", urls[node.state], "\" ");
+    content.push(" onclick=\"toggleState('" + node.id + "')\" />");
     
-    content.push("<image id='" + node.id + "_check' src='images/" + urls[node.state]);
-    content.push("' onclick=\"toggleState('" + node.id + "')\" />");
+    content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
     
-    content.push("<span class='node-" + (hasChild ? "highlight" : "normal") + "'>");
-    content.push(node.name + " (" + node.abbrev + ")</span>");
-    
-    content.push("</div>");
-    if (hasChild) {
+    // display species under the node
+    for (var i = 0; i < subSpecies.length; i++) {
+        displaySpecies(subSpecies[i], content);
+    }
+    content.push("</tr></table>");
+
+    // display sub-clades under the node
+    if (subClades.length > 0) {
         var display = node.expanded ? "" : "display: none;";
-        content.push("<div id='" + node.id + "_child' class='node-indent' ");
+        content.push("<div id='" + node.id + "_child' class=\"indent\" ");
         content.push(" style=\"" + display + "\">");
-        for(var i = 0, j = node.children.length; i < j; i++) {
-            displayNode(node.children[i], content);
+        for(var i = 0; i < subClades.length; i++) {
+            displayClade(subClades[i], content);
         }
         content.push("</div>");
     }
+}
+
+function displaySpecies(node, content) {
+    content.push("<td class=\"species\" onmouseover=\"return escape('<i>");
+    content.push(node.name.replace(/'/g, "\\'"), "</i> (", node.abbrev, ")');\">");
+    content.push("<image id=\"", node.id, "_check\" ");
+    content.push(" src=\"images/", urls[node.state], "\" ");
+    content.push(" onclick=\"toggleState('", node.id, "')\" />");
+    content.push(node.abbrev, "</td>");
 }
 
 function toggleFold(nodeId) {
@@ -227,7 +249,7 @@ function saveState() {
     var content = "";
     for(var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        if (!taxon.is_species && taxon.expanded) {
+        if (!taxon.is_species && !taxon.expanded) {
             if (content.length > 0) content += "|";
             content += taxon.abbrev;
         }
@@ -246,15 +268,15 @@ function loadState() {
         var content = (end >= 0) ? allcookies.substring(pos, end) 
                                  : allcookies.substring(pos);
 
-        var expanded = { };
+        var collapsed = { };
         var parts = content.split("|");
         for (var i = 0; i < parts.length; i++) {
-            expanded[parts[i]] = true;
+            collapsed[parts[i]] = true;
         }
         // update taxons
         for (var taxon_id in taxons) {
             var taxon = taxons[taxon_id];
-            if (taxon.abbrev in expanded) taxon.expanded = true;
+            if (taxon.abbrev in collapsed) taxon.expanded = false;
         }
     }
 }

@@ -31,14 +31,20 @@ A.nocolor_w:link {
     font-weight: normal;
 }
 
-.node-region {
+.phyletic-tree {
     text-align: left;
     background-color: #CCCCCC;
+    font-family: sans-serif, serif;
 }
 
-.node-indent {
+.phyletic-tree .indent, * .indent {
     margin-left: 20px;
     display: block;
+}
+
+.phyletic-tree * .species {
+    background-color: #DDDDDD;
+    text-align: center;
 }
 
 .phyletic-category {

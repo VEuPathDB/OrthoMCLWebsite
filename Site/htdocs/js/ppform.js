@@ -12,7 +12,9 @@ function initial() {
         if (taxon_id != taxon.parent_id) {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
+            taxon.expanded = false;
         } else { 
+            taxon.expanded = true;
             roots.push(taxon); 
         }
     }
@@ -166,7 +168,8 @@ function calcText () {
 
     query = rootStrs.join(" AND ");
 
-    document.getElementById("query").value = query;
+    document.getElementById("query_top").value = query;
+    document.getElementById("query_bottom").value = query;
 }
 
 function nodeText(nodeId) {
@@ -224,7 +227,7 @@ function saveState() {
     var content = "";
     for(var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        if (!taxon.is_species && !taxon.expanded) {
+        if (!taxon.is_species && taxon.expanded) {
             if (content.length > 0) content += "|";
             content += taxon.abbrev;
         }
@@ -243,15 +246,22 @@ function loadState() {
         var content = (end >= 0) ? allcookies.substring(pos, end) 
                                  : allcookies.substring(pos);
 
-        var collapsed = { };
+        var expanded = { };
         var parts = content.split("|");
         for (var i = 0; i < parts.length; i++) {
-            collapsed[parts[i]] = true;
+            expanded[parts[i]] = true;
         }
         // update taxons
         for (var taxon_id in taxons) {
             var taxon = taxons[taxon_id];
-            if (taxon.abbrev in collapsed) taxon.expanded = false;
+            if (taxon.abbrev in expanded) taxon.expanded = true;
         }
     }
+}
+
+function changePPE(fromTop) {
+    var txtTop = document.getElementById("query_top");
+    var txtBottom = document.getElementById("query_bottom")
+    if (fromTop) txtBottom.value = txtTop.value;
+    else txtTop.value = txtBottom.value;
 }

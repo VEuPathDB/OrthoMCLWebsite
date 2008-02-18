@@ -62,6 +62,7 @@ function displayClade(node, content) {
     }
     content.push("<image id='", node.id, "_check' ");
     content.push(" src=\"images/", urls[node.state], "\" ");
+    content.push(" style=\"cursor:pointer;\" ");
     content.push(" onclick=\"toggleState('" + node.id + "')\" />");
     
     content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
@@ -89,6 +90,7 @@ function displaySpecies(node, content) {
     content.push(node.name.replace(/'/g, "\\'"), "</i> (", node.abbrev, ")');\">");
     content.push("<image id=\"", node.id, "_check\" ");
     content.push(" src=\"images/", urls[node.state], "\" ");
+    content.push(" style=\"cursor:pointer;\" ");
     content.push(" onclick=\"toggleState('", node.id, "')\" />");
     content.push(node.abbrev, "</td>");
 }

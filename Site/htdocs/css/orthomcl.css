@@ -37,14 +37,25 @@ A.nocolor_w:link {
     font-family: sans-serif, serif;
 }
 
+.phyletic-tree table, * table {
+    margin: 0;
+    padding: 0;
+}
+
 .phyletic-tree .indent, * .indent {
     margin-left: 20px;
     display: block;
 }
 
+.phyletic-tree * .species-region {
+    position: absolute;
+    left: 400px;
+}
+
 .phyletic-tree * .species {
     background-color: #DDDDDD;
-    text-align: center;
+    width: 55px;
+    white-space: nowrap;
 }
 
 .phyletic-category {

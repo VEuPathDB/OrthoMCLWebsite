@@ -51,7 +51,7 @@ function displayClade(node, content) {
     }
     var foldImage = node.expanded ? "minus.png" : "plus.png";
 
-    content.push("<table border='0'><tr><td nowrap>");
+    content.push("<table><tr><td nowrap>");
     if (subClades.length == 0) {
         content.push("<image width='20' height='20' src='images/spacer.gif'>");
     } else {
@@ -68,15 +68,21 @@ function displayClade(node, content) {
     content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
     
     // display species under the node
-    for (var i = 0; i < subSpecies.length; i++) {
-        displaySpecies(subSpecies[i], content);
+    if (subSpecies.length > 0) {
+        content.push("<td class=\"species-region\">");
+        content.push("<table id=\"", node.id, "_species\">");
+        content.push("<tr>");
+        for (var i = 0; i < subSpecies.length; i++) {
+            displaySpecies(subSpecies[i], content);
+        }
+        content.push("</tr></table></td>");
     }
     content.push("</tr></table>");
 
     // display sub-clades under the node
     if (subClades.length > 0) {
         var display = node.expanded ? "" : "display: none;";
-        content.push("<div id='" + node.id + "_child' class=\"indent\" ");
+        content.push("<div id='" + node.id + "_clades' class=\"indent\" ");
         content.push(" style=\"" + display + "\">");
         for(var i = 0; i < subClades.length; i++) {
             displayClade(subClades[i], content);
@@ -97,12 +103,15 @@ function displaySpecies(node, content) {
 
 function toggleFold(nodeId) {
     var imgFold = document.getElementById(nodeId + "_fold");
-    var divChild = document.getElementById(nodeId + "_child");
+    var divSpecies = document.getElementById(nodeId + "_species");
+    var divClades = document.getElementById(nodeId + "_clades");
     var taxon = taxons[nodeId];
     taxon.expanded = !taxon.expanded;
     
     imgFold.src = "images/" + (taxon.expanded ? "minus.png" : "plus.png");
-    divChild.style.display = (taxon.expanded ? "block" : "none");
+    var display = taxon.expanded ? "block" : "none";
+    if (divClades) divClades.style.display = display;
+    if (divSpecies) divSpecies.style.display = display;
 
     saveState();
 }

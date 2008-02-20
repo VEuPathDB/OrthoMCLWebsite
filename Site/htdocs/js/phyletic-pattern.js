@@ -1,48 +1,87 @@
 var taxons = { };
-var categories = { };
+var categories = [];
 
 function initial() {
-    var roots = [];
+    var taxonMap = { };
+    
     // resolve the children of each node
     for (var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
+        taxonMap[taxon.abbrev] = taxon;
         if (taxon_id != taxon.parent_id) {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
-        } else {
-            roots.push(taxon);
         }
+        getPath(taxon);
     }
 
     // get categories as the children of roots
-    for (var i = 0; i < roots.length; i++) {
-        var children = roots[i].children;
-        for (var j = 0; j < children.length; j++) {
-            var taxon = children[j];
-            var key = taxon.abbrev;
-            if (key != "BACT" && key != "ARCH" && key != "EUKA") key = "OTHER";
-            
-            var category = (key in categories) ? categories[key] : [];
-            buildCategory(taxon, category, "");
-            category.sort(compareTaxons);
-            category.key = key;
-            category.name = taxon.name;
-            categories[key] = category;
+    makeCategories(taxonMap);
+    
+    // order the species in each category
+    for (var row = 0; row < categories.length; row++) {
+        for (var col = 0; col < categories[row].length; col++) {
+            var category = categories[row][col];
+            category.species.sort(compareTaxons);
         }
     }
 }
 
-function buildCategory(taxon, category, prefix) {
-    if (taxon.is_species) {
-        taxon.path = prefix;
-        category.push(taxon);
-    } else {
-        if (prefix.length > 0) prefix += "->";
-        prefix += taxon.abbrev;
-        for (var i = 0; i < taxon.children.length; i++) {
-            buildCategory(taxon.children[i], category, prefix);
+function getPath(taxon) {
+    if (!("path" in taxon)) {
+        if (taxon.id == taxon.parent_id) taxon.path = "";
+        else {
+            var parentPath = getPath(taxons[taxon.parent_id]);
+            if (parentPath != "") parentPath += "->";
+            taxon.path = parentPath + taxon.abbrev;
         }
     }
+    return taxon.path;
+}
+
+function makeCategories(taxonMap) {
+    // the order of each key in the keys array is important, and the parent 
+    // level is always after the children level in order to make correct groups
+    var keys = [["FIRM", 0, 1], ["PROT", 0, 2], ["BACT", 0, 0],
+                ["ARCH", 1, 0], 
+                ["PLAL", 1, 2], ["KINE", 1, 3], ["ALVE", 1, 4],
+                ["FUNG", 2, 0], ["META", 2, 1],
+                ["EUKA", 1, 1]];
+                
+    // prepare category array
+    for (var taxon_id in taxons) {
+        var taxon = taxons[taxon_id];
+        if (!taxon.is_species) continue;
+        
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i][0];
+            var row = keys[i][1];
+            var col = keys[i][2];
+            
+            var category;
+            if (!categories[row] || !categories[row][col]) {
+                category = { root: taxonMap[key],
+                          species: [] };
+                if (!categories[row]) categories[row] = [];
+                categories[row][col] = category;
+            } else category = categories[row][col];
+            
+            if (isAncestor(taxon, category.root)) {
+                category.species.push(taxon);
+                taxon.category = category;
+                break;
+            }
+        }
+    }
+}
+
+function isAncestor(taxon, ancestor) {
+    while (taxon.id != taxon.parent_id) {
+        var parent = taxons[taxon.parent_id];
+        if (parent == ancestor) return true;
+        taxon = parent;
+    }
+    return false;
 }
 
 function compareTaxons(a, b) {
@@ -51,83 +90,58 @@ function compareTaxons(a, b) {
     else return 1;
 }
 
-function displayCategories(group) {
+function displayLegend() {
     var content = [];
-
+    
     content.push("<tr>");
-    
-    // display the first row
-    var key = "BACT";
-    if (key in categories) {
-        var category = categories[key];
-        displayCategory(group, category, 0, category.length, content);
+    var index = 0;
+    for (var row = 0; row < categories.length; row++) {
+        for (var col = 0; col < categories[row].length; col++) {
+            var category = categories[row][col];
+            
+            
+            
+            index++;
+        }
     }
-
     content.push("</tr><tr>");
-   
-    // display the first half of second row
-    key = "ARCH";
-    if (key in categories) {
-        var category = categories[key];
-        displayCategory(group, category, 0, category.length, content);
-    }
-   
-    // display the second half of second row
-    key = "EUKA";
-    if (key in categories) {
-        var category = categories[key];
-        displayCategory(group, category, 0, 25, content);
-    }
-
-    content.push("<td></td></tr><tr>");
-    
-    // display the third row
-    if (key in categories) {
-        var category = categories[key];
-        displayCategory(group, category, 25, category.length, content);
-    }        
-
-    content.push("</tr><tr>");
-    
-    // display the first row
-    var key = "OTHER";
-    if (key in categories) {
-        var category = categories[key];
-        displayCategory(group, category, 0, category.length, content);
-    }
-
-    content.push("<td></td><td></td></tr>");
+    content.push();
 
     document.write(content.join(""));      
 }
 
-function displayCategory(group, category, from, to, content) {
-    to = (category.length >= to) ? to : category.length;
-    for (var i = from; i < to; i++) {
-        var taxon = category[i];
+function displayCategories(group) {
+    var content = [];
+
+    var index = 0;
+    for (var row = 0; row < categories.length; row++) {
+        content.push("<table><tr>");
+        for (var col = 0; col < categories[row].length; col++) {
+            displayCategory(content, group, categories[row][col], index++);
+        }
+        content.push("</tr></table>");
+    }
+
+    document.write(content.join(""));      
+}
+
+function displayCategory(content, group, category, index) {
+    for(var i = 0; i < category.species.length; i++) {
+        var taxon = category.species[i];
         var count = (taxon.id in group) ? group[taxon.id] : 0;
-        var style = "";
-        if (count == 0) style = "color: black; background-color: white;";
-        else if (count == 1) style = "color: white; background-color: gray;";
-        else style = "color: white; background-color: black;";
         
-        content.push("<td><div class=\"", category.key);
-        if (i == from) content.push("_start");
-        else if (i == to - 1) content.push("_end");
-        content.push("\" style=\"", style, "\" onmouseover=\"return escape(getPopupHtml(");
-		
-        content.push("'", taxon.name.replace(/'/g, "*"),"','", taxon.abbrev,"','",  count,"','",  category.name,"','",  taxon.path, "')");
-        //content.push(" (", taxon.abbrev, ") = ", count, " gene");
-        //if (count > 1) content.push("s");
-        //content.push(", ", category.name, ", ", taxon.path ,"\">");
-        content.push(");\">", taxon.abbrev, "</div></td>");
+        content.push("<td><div index=\"", index ,"\" ");
+        content.push(" count=\"", ((count > 1) ? "many" : count) ,"\" ");
+        content.push(" onmouseover=\"return escape(getTaxonDetail(", taxon.id, ", ", count, "));\">");
+        content.push(taxon.abbrev, "</div></td>");
     }
 }
 
-function getPopupHtml(name, abbrev, count, category, path) {
-    var popup = "<i>" + name.replace(/\*/g, "'") + "</i> (" + abbrev + ") = " + count + " gene";
-    if (count > 1) popup += "s";
-    popup += ", " + category + ", " + path;
-
-    return popup;
+function getTaxonDetail(taxon_id, count) {
+    var taxon = taxons[taxon_id];
+    var content = [];
+    content.push("<i>", taxon.name, "</i> (", taxon.abbrev, ") = ", count, " gene");
+    if (count > 1) content.push("s");
+    content.push(", ", taxon.category.root.name, ", ", taxon.path);
+    return content.join("");
 }

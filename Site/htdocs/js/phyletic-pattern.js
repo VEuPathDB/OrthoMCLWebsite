@@ -93,21 +93,28 @@ function compareTaxons(a, b) {
 function displayLegend() {
     var content = [];
     
-    content.push("<tr>");
     var index = 0;
     for (var row = 0; row < categories.length; row++) {
         for (var col = 0; col < categories[row].length; col++) {
             var category = categories[row][col];
             
-            
+            content.push("<td><div index=\"", index ,"\" count=\"many\" ");
+            content.push(" style=\"width: 30px;\" ");
+            content.push(" onmouseover=\"return escape(getLegendDetail(", category.root.id, "));\">");
+            content.push(category.root.abbrev, "</div></td>");
             
             index++;
         }
     }
-    content.push("</tr><tr>");
-    content.push();
 
     document.write(content.join(""));      
+}
+
+function getLegendDetail(taxon_id) {
+    var taxon = taxons[taxon_id];
+    var content = [];
+    content.push("<i>", taxon.name, "</i> (", taxon.abbrev, "), ", taxon.path);
+    return content.join("");
 }
 
 function displayCategories(group) {

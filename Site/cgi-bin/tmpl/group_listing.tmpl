@@ -28,11 +28,35 @@ initial();
 
 <TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
      <tr height="30">
-       <td colspan="2"><H3> Group Query Result</H3></td>
+       <td><H3> Group Query Result</H3></td>
+       <td rowspan="3" class="phyletic-category" style="background-color: white" align="right">
+         <!-- display legend -->
+         <table>
+           <tr>
+             <script language="javascript">
+             <!--//
+             displayLegend();
+             // -->
+             </script>
+           </tr>
+         </table>
+         <table>
+                <tr>
+                    <td><div index='0' count='0'>aae</div></td>
+                    <td class="legend">No gene in the group from 'aae'</td>
+                </tr>
+                <tr>
+                    <td><div index='0' count='1'>aae</div></td>
+                    <td class="legend">One gene in the group from 'aae'</td>
+                <tr>
+                    <td><div index='0' count='many'>aae</div></td>
+                    <td class="legend">More than one genes in the group from 'aae'</td>
+                </tr>
+         </table>
+       </td>
      </tr>
      <tr height="30">
        <td> Your Query is : <strong><TMPL_VAR NAME="QUERY_CODE"></strong> (<TMPL_VAR NAME="QUERY_TYPE">)</td>
-       <td></td>
      </tr>
      <tr height="30">
        <td> Group Search Result : <strong><TMPL_VAR NAME="NUM_GROUPS"></strong> OrthoMCL Groups</td>
@@ -41,7 +65,6 @@ initial();
      <tr>
        <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
      </tr>
-
 
 <!-- DEBUG CONTENT BEGIN -->
   <TMPL_IF NAME="LOOP_DEBUG">
@@ -135,20 +158,20 @@ initial();
 		  <tr>
   		    <td colspan="7">
 		      <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-  		      <div class="phyletic-category" border="0" cellspacing="0" cellpadding="0">
+  		      <div class="phyletic-category">
 
-<script language="javascript">
-<!--//
-var group = { };
+                <script language="javascript">
+                <!--//
+                var group = { };
 
-<TMPL_LOOP NAME=TAXON_GENES>
-group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
-</TMPL_LOOP>
+                <TMPL_LOOP NAME=TAXON_GENES>
+                group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
+                </TMPL_LOOP>
 
-displayCategories(group);
+                displayCategories(group);
 
-//-->
-</script>
+                //-->
+                </script>
 
               </div>
 		      <!-- END PHYLETIC PATTERN BLOCK -->

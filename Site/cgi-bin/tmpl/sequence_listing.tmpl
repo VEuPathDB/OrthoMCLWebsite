@@ -72,18 +72,19 @@ initial();
        <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr>
-        <td colspan="2" align="center"><br><table bgcolor="#ffffff"><tr>
+        <td colspan="2" align="center"><br>
+        <table bgcolor="#ffffff"><tr>
 	    <td width="205" align="center">
-		<table border="0" cellpadding="0" cellspacing="0" bgcolor="#003399" width="195">
-			<tr><td style="padding-left:3px;padding-right:3px;" align="left"><font color="#ffffff" face="arial,helvetica,sans-serif" style="color:#ffffff;font-family:arial,helvetica,sans-serif;font-size:11px;"><b>Links to <TMPL_VAR GROUP_ACCESSION></b></font></td></tr>
-			<tr><td>
-			  <table border="0" cellpadding="3" cellspacing="1" width="100%">
-			    <tr><td bgcolor="#e6ecff" style="text-align:center;padding:3px;" align="center"><font color="#000066" face="arial,helvetica,sans-serif" style="color:#000066;font-family:arial,helvetica,sans-serif;font-size:11px;font-weight:normal;">
-			      <table><tr><td align="center"></td></tr><tr><td align="center"><font size="2"><a href="<TMPL_VAR DOMARCH_LINK>">Pfam Domain Architecture</a></font></td></tr><TMPL_IF BIOLAYOUT_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR BIOLAYOUT_LINK>">BioLayout Graph</a></font></td></tr></TMPL_IF><TMPL_IF MSA_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR MSA_LINK>">Multiple Sequence Alignment</a></font></td></tr></TMPL_IF><tr><td align="center"><font size="2"><a href="<TMPL_VAR SEQUENCE_LINK>">Get Sequences (FASTA)</a></font></td></tr></table>
-			    </font></td></tr>
-			  </table>
-			</td></tr>
-		</table>
+		    <table border="0" cellpadding="0" cellspacing="0" bgcolor="#003399" width="195">
+			    <tr><td style="padding-left:3px;padding-right:3px;" align="left"><font color="#ffffff" face="arial,helvetica,sans-serif" style="color:#ffffff;font-family:arial,helvetica,sans-serif;font-size:11px;"><b>Links to <TMPL_VAR GROUP_ACCESSION></b></font></td></tr>
+			    <tr><td>
+			      <table border="0" cellpadding="3" cellspacing="1" width="100%">
+			        <tr><td bgcolor="#e6ecff" style="text-align:center;padding:3px;" align="center"><font color="#000066" face="arial,helvetica,sans-serif" style="color:#000066;font-family:arial,helvetica,sans-serif;font-size:11px;font-weight:normal;">
+			          <table><tr><td align="center"></td></tr><tr><td align="center"><font size="2"><a href="<TMPL_VAR DOMARCH_LINK>">Pfam Domain Architecture</a></font></td></tr><TMPL_IF BIOLAYOUT_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR BIOLAYOUT_LINK>">BioLayout Graph</a></font></td></tr></TMPL_IF><TMPL_IF MSA_LINK><tr><td align="center"><font size="2"><a href="<TMPL_VAR MSA_LINK>">Multiple Sequence Alignment</a></font></td></tr></TMPL_IF><tr><td align="center"><font size="2"><a href="<TMPL_VAR SEQUENCE_LINK>">Get Sequences (FASTA)</a></font></td></tr></table>
+			        </font></td></tr>
+			      </table>
+			    </td></tr>
+		    </table>
 	    </td>
 	    <td>
 		<table border="1">
@@ -114,22 +115,22 @@ initial();
   		    <td colspan="7">
 
                       <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-                      <table class="phyletic-category" border="0" cellspacing="0" cellpadding="0">
+                      <div class="phyletic-category">
 
-<script language="javascript">
-<!--//
-var group = { };
+                        <script language="javascript">
+                        <!--//
+                        var group = { };
 
-<TMPL_LOOP NAME=TAXON_GENES>
-group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
-</TMPL_LOOP>
+                        <TMPL_LOOP NAME=TAXON_GENES>
+                        group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
+                        </TMPL_LOOP>
 
-displayCategories(group);
+                        displayCategories(group);
 
-//-->
-</script>
+                        //-->
+                        </script>
 
-                      </table>
+                      </div>
                       <!-- END PHYLETIC PATTERN BLOCK -->
 
 		    </td>
@@ -138,8 +139,37 @@ displayCategories(group);
 
 		</table>
 	    </td>
-        </tr></table></td>
-
+        </tr>
+        </table>
+        </td>
+     </tr>
+     <tr>
+        <td class="phyletic-category" style="background-color: white" align="right">
+         <!-- display legend -->
+         <table>
+           <tr>
+             <script language="javascript">
+             <!--//
+             displayLegend();
+             // -->
+             </script>
+           </tr>
+         </table>
+         <table>
+                <tr>
+                    <td><div index='0' count='0'>aae</div></td>
+                    <td class="legend">No gene in the group from 'aae'</td>
+                </tr>
+                <tr>
+                    <td><div index='0' count='1'>aae</div></td>
+                    <td class="legend">One gene in the group from 'aae'</td>
+                <tr>
+                    <td><div index='0' count='many'>aae</div></td>
+                    <td class="legend">More than one genes in the group from 'aae'</td>
+                </tr>
+         </table>
+        </td>
+     </tr>
      <tr>
        <td colspan="2"><br><H3>List of Protein Sequences</strong><H3></td>
      </tr>

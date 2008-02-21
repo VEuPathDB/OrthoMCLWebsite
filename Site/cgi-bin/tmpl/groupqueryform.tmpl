@@ -1,11 +1,7 @@
-
 <TMPL_INCLUDE header.tmpl>
-
 <!-- BEGIN CONTENT -->
-
 <script type="text/javascript">
 <!-- //
-
 function showGenomeAbbrevs() {
 	return "<table border='1'><TMPL_LOOP LOOP_TR><tr width='100%'><TMPL_LOOP LOOP_TD><td width='10%'><font size='1'><TMPL_VAR ABBREV></font></td><td width='40%'><font size='1'><i><TMPL_VAR NAME></i></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>";
 	//return escape('<table border=\'1\'><TMPL_LOOP LOOP_TR><tr width=\'100%\'><TMPL_LOOP LOOP_TD><td width=\'10%\'><font size=\'1\'><TMPL_VAR ABBREV></font></td><td width=\'40%\'><font size=\'1\'><i><TMPL_VAR NAME></i></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>');
@@ -16,95 +12,94 @@ function showGroupAbbrevs() {
 }
 // -->
 </script>
-
 <TABLE height="100%" width="100%" border="0" cellspacing="0" cellpadding="0">
-     <tr>
-       <td colspan="2">&nbsp;</td>
-     </tr>
-    <tr>
-      <td colspan="2">
-      <TMPL_IF ACKEYWORD>
-        <H2> Query OrthoMCL Group By Accession / Keyword <H2>
-      </TMPL_IF>
-      <TMPL_IF PROPERTY>
-        <H2> Query OrthoMCL Group By Group Properties <H2>
-      </TMPL_IF>
-      <TMPL_IF PPEXPRESSION>
-        <H2> Query OrthoMCL Group By PPE (Phyletic Pattern Expression)* <H2>
-      </TMPL_IF>
-      <TMPL_IF PPFORM>
-        <H2> Query OrthoMCL Group By Phyletic Pattern Form <H2>
-      </TMPL_IF>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-    </tr>
-    <tr height=25>
-      <td colspan="2"></td>
-    </tr>
-
-<TMPL_IF ACKEYWORD>
-    <tr>
-       <td colspan="2" align="center"><table width="600">
-          <tr>
-            <form action="cgi-bin/OrthoMclWeb.cgi">
-            <td width="75%" align="right">
-              <input type="hidden" name="rm" value="groupList">
-              <input type="hidden" name="type" value="ackeyword">
-              <input type="text" size=20 name="q" value="tubulin">
+  <tr>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+    <TMPL_IF ACKEYWORD>
+    <h3>Query OrthoMCL Group By Accession / Keyword</h3>
+    </TMPL_IF>
+    <TMPL_IF PROPERTY>
+    <h3>Query OrthoMCL Group By Group Properties</h3>
+    </TMPL_IF>
+    <TMPL_IF PPEXPRESSION>
+    <h3>Query OrthoMCL Group By PPE (Phyletic Pattern Expression)*</h3>
+    </TMPL_IF>
+    <TMPL_IF PPFORM>
+    <h3>Query OrthoMCL Group By Phyletic Pattern Form</h3>
+    </TMPL_IF>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
+  </tr>
+  <tr height=25>
+    <td colspan="2"></td>
+  </tr>
+  <TMPL_IF ACKEYWORD>
+  <tr>
+    <td colspan="2" align="center"><table width="600">
+      <tr>
+        <form action="cgi-bin/OrthoMclWeb.cgi">
+          <td width="75%" align="right">
+            <input type="hidden" name="rm" value="groupList">
+            <input type="hidden" name="type" value="ackeyword">
+            <input type="text" size=20 name="q" value="tubulin">
               &nbsp;in&nbsp;
-              <select name="in">
-                 <option>Keyword</option>
-                 <option>Accession</option>
-		 <option>Pfam_Accession</option>
-		 <option>Pfam_Name</option>
-		 <option>Pfam_Keyword</option>
-              </select>
-            </td>
-            <td align="left"><input type="submit" value="GO!"></td>
-            </form>
-          </tr>
-          <tr height="25"><td colspan="2"></td></tr>
-          <tr>
-            <td colspan="2">
-              <b>Notes</b>:
-              <br>1. Query group by keyword: the group will be listed as long as one member sequence has a match to the keyword; boolean mode is supported, and here are some examples:
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin-conjugating enzyme</font>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain at least one of the three words.
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin +conjugating enzyme</font>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" and the word "conjugating", but rank higher if they also contain "enzyme".
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin -conjugating</font>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" but not "conjugating".
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubi*</font>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain words starting with "ubi".
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"ubiquitin-conjugating enzyme"</font>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the exact phrase "ubiquitin-conjugating enzyme".
-              <br>
-              <br>2. Query group by accession: OrthoMCL group accession is in the form of "OG"+version number+"_"+digits, e.g. "OG1_196".
-            </td>
-          </tr>
-        </table></td>
-      </tr>	
-</TMPL_IF>
-
-<TMPL_IF PROPERTY>
-    <tr>
-       <td colspan="2" align="center"><table width="600">
-          <tr><td colspan="2">Find OrthoMCL Group(s) By Size (Number of  Sequences / Genomes)</td></tr>
+            <select name="in">
+              <option>Keyword</option>
+              <option>Accession</option>
+              <option>Pfam_Accession</option>
+              <option>Pfam_Name</option>
+              <option>Pfam_Keyword</option>
+            </select>
+          </td>
+          <td align="left"><input type="submit" value="GO!"></td>
+        </form>
+      </tr>
+      <tr height="25"><td colspan="2"></td></tr>
+      <tr>
+        <td colspan="2">
+          <b>Notes</b>:
+            <br>1. Query group by keyword: the group will be listed as long as one member sequence has a match to the keyword; boolean mode is supported, and here are some examples:
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin-conjugating enzyme</font>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain at least one of the three words.
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin +conjugating enzyme</font>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" and the word "conjugating", but rank higher if they also contain "enzyme".
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin -conjugating</font>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" but not "conjugating".
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubi*</font>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain words starting with "ubi".
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"ubiquitin-conjugating enzyme"</font>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the exact phrase "ubiquitin-conjugating enzyme".
+            <br>
+            <br>2. Query group by accession: OrthoMCL group accession is in the form of "OG"+version number+"_"+digits, e.g. "OG1_196".
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>	
+  </TMPL_IF>
+  <TMPL_IF PROPERTY>
+  <tr>
+    <td colspan="2" align="center">
+      <table width="600">
+        <tr><td colspan="2">Find OrthoMCL Group(s) By Size (Number of  Sequences / Genomes)</td></tr>
           <tr>
             <form action="cgi-bin/OrthoMclWeb.cgi">
-            <td align="right">
-              Number of&nbsp;
-              <input type="hidden" name="rm" value="groupList">
-              <input type="hidden" name="type" value="property">
-              <select name="sizeof">
-                 <option>Sequences</option>
-                 <option>Genomes</option>
-              </select>
-              <input type="text" size=10 name="number" value=">=10">
-            </td>
-            <td align="left"><input type="submit" value="GO!"></td>
+              <td align="right">
+                Number of&nbsp;
+                <input type="hidden" name="rm" value="groupList">
+                <input type="hidden" name="type" value="property">
+                <select name="sizeof">
+                  <option>Sequences</option>
+                  <option>Genomes</option>
+                </select>
+                <input type="text" size=10 name="number" value=">=10">
+              </td>
+              <td align="left"><input type="submit" value="GO!"></td>
             </form>
           </tr>
           <tr><td colspan="2">Find OrthoMCL Group(s) By Group Properties (such as Average Percent Identity)</td></tr>
@@ -115,18 +110,17 @@ function showGroupAbbrevs() {
               <input type="hidden" name="type" value="property">
               Value of&nbsp;
               <select name="prop">
-                 <option>Percentage Match Pairs (0..100)</option>
-                 <option>Average BLAST E-value (0..1e-5)</option>
+                <option>Percentage Match Pairs (0..100)</option>
+                <option>Average BLAST E-value (0..1e-5)</option>
 <!--                 <option>Average DCS (0..100)</option> -->
-                 <option>Average Pencentage Identity (0..100)</option>
-                 <option>Average Pencentage Match (0..100)</option>
+                <option>Average Pencentage Identity (0..100)</option>
+                <option>Average Pencentage Match (0..100)</option>
               </select>
               <input type="text" size=10 name="number" value=">=10">
             </td>
             <td align="left"><input type="submit" value="GO!"></td>
             </form>
           </tr>
-
           <tr height="25"><td colspan="2"></td></tr>
           <tr>
             <td colspan="2">
@@ -137,14 +131,11 @@ function showGroupAbbrevs() {
           </tr>
        </table></td>
     </tr>
-
 </TMPL_IF>
-
 <TMPL_IF PPEXPRESSION>
     <tr>
       <td colspan="2" align="center">
 <table width="600"><tr><td colspan="2">
-
         <form action="cgi-bin/OrthoMclWeb.cgi">
         <input type="hidden" name="rm" value="groupList">
         <input type="hidden" name="type" value="ppexpression">

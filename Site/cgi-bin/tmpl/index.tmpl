@@ -1,53 +1,42 @@
-
 <TMPL_INCLUDE header.tmpl>
-
 <!-- BEGIN CONTENT -->
-
-  <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-     <tr>
-       <td width=5%></td>
-       <td width=60%>&nbsp;</td>
-       <td width=35%></td>
-     </tr>
-     <tr>
-       <td></td>
-       <td>
-       <H2>Welcome to OrthoMCL DB</H2>
-       </td>
-       <td></td>
-     </tr>
-     <tr>
-       <td></td>
-       <td bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
-       <td bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr height=15>
-       <td colspan="3"></td>
-     </tr>
-     <tr>
-       <td></td>
-       <td align="center">
-	<p><p>
-	&nbsp;&nbsp;&nbsp;Ortholog Grouping for Protein Sequences from Multiple Genomes!
-	<br>&nbsp;&nbsp;&nbsp;Current Release:
-	<br>&nbsp;&nbsp;&nbsp;Version: <font color=red><a href="/cgi-bin/OrthoMclWeb.cgi?rm=genome&type=summary">2</a></font>
-	<br>&nbsp;&nbsp;&nbsp;Number of Genomes: <font color=red><a href="cgi-bin/OrthoMclWeb.cgi?rm=genome"><TMPL_VAR NAME="NUM_TAXA"></a></font>
-	<br>&nbsp;&nbsp;&nbsp;Number of Protein Sequences: <font color=red><TMPL_VAR NAME="NUM_SEQUENCES"></font>
-	<br>&nbsp;&nbsp;&nbsp;Number of Ortholog Groups: <font color=red><TMPL_VAR NAME="NUM_GROUPS"></font>
-	<br><br>
-        <TMPL_IF NAME="LOOP_NEWS">
-          <table>
-          <tr><td><b>NEWS</b></td><td></td>
-          <TMPL_LOOP NAME="LOOP_NEWS">
-          <tr align="left"><td colspan="2"><TMPL_VAR NAME="NEWS"></td></tr>
-          </TMPL_LOOP>
-          </table>
-        </TMPL_IF>
-       </td>
-       <td></td>
-  </table>
-
-
+<table width="830"  border="0" align="center" cellpadding="5" cellspacing="0">
+  <tr>
+    <td width="34%" align="left" valign="top">
+      <div id="redborder">
+        <span class="large node-highlight">NEWS</span>
+        <TMPL_LOOP NAME="LOOP_NEWS">
+        <p><span class="blue node-highlight"><TMPL_VAR NAME="DATE"></span><br><TMPL_VAR NAME="NEWS"></p>
+        </TMPL_LOOP>
+        <p align="right"><a href="news/index.html" class="greynarrow"><em>MORE &gt;&gt;</em></a></p>
+      </div>
+    </td>
+    <td width="66%" align="left" valign="top">
+      <span class="giant">Welcome to Ortho MCL DB </span>
+      <p class="large">Ortholog Grouping for Protein Sequences from Multiple Genomes! <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Release:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&amp;type=summary">2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Genomes: <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome"><TMPL_VAR NAME="NUM_TAXA"></a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Protein Sequences: <span class="blue"><TMPL_VAR NAME="NUM_SEQUENCES"></span> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Ortholog Groups: <span class="blue"><TMPL_VAR NAME="NUM_GROUPS"></span> </p>
+      <span class="larger"><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm">Search Sequence</a> </span>
+      <ul class="bullet_line">
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&amp;type=keyword">by Accession / Keyword</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&amp;type=blast">by BLAST Search</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">History</a></li>
+      </ul>
+      <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm" class="larger">Search Group</a>
+      <ul class="bullet_line">
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ackeyword">by Accession / Keyword</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=property">by Group Properties</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">by Phyletic Pattern Expression</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppform">by Phyletic Pattern Form</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">History</a></li>
+      </ul>
+      <p class="large"><a href="cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Software" class="larger">OrthoMCL Software</a></p>
+      <p class="large"><a href="cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Download" class="larger">Database Download</a></p>
+    </td>
+  </tr>
+</table>
 <!-- END CONTENT -->
-
 <TMPL_INCLUDE footer.tmpl>

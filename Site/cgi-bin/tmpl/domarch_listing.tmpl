@@ -1,22 +1,15 @@
-
 <TMPL_INCLUDE header.tmpl>
-
 <!-- BEGIN CONTENT -->
-
-
-
 <TABLE width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
 <TMPL_IF ERROR>
  <tr><td colspan="2"><font color="red"><TMPL_VAR ERROR></font></td></tr>
 </TMPL_IF>
-
      <tr>
        <td colspan="2"> <br><H3>Protein Domain Architecture for group <font color="red"><TMPL_VAR NAME="GROUP_ACCESSION"></font><H3></td>
      </tr>
      <tr>
        <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
      </tr>
-
 <!-- LIST OF DOMAINS START -->
 <!--     <tr>
        <td colspan="2"><br><font color=red>Please note: Pfam data is in the updating process. If you find any sequence which doesn't have any Pfam domain, it's possible that hmmpfam search hasn't run on that sequence.</font><br></td>
@@ -52,8 +45,6 @@
        </table></td>
      </tr>
 <!-- LIST OF DOMAINS END -->
-
-
 <!-- LIST OF PROTEIN DOMAIN STRUCTURES START -->
      <tr>
        <td colspan="2"><br> List of Protein Domain Architectures <br><br></td>
@@ -78,10 +69,8 @@
 </TMPL_LOOP>
      </table></td></tr>
 <!-- LIST OF PROTEIN DOMAIN STRUCTURES END -->
-
 </TMPL_IF>
 </TABLE>
-
 <!-- END CONTENT -->
 
 <TMPL_INCLUDE footer.tmpl>

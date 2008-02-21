@@ -1,19 +1,16 @@
-
 <TMPL_INCLUDE header.tmpl>
-
 <!-- BEGIN CONTENT -->
-
-<TABLE width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
      <tr>
        <td colspan="2">&nbsp;</td>
      </tr>
     <tr>
       <td colspan="2">
       <TMPL_IF ACKEYWORD>
-        <H2> Query Protein Sequences By Accesion/Keyword <H2>
+        <h3>Query Protein Sequences By Accession/Keyword</h3>
       </TMPL_IF>
       <TMPL_IF BLAST>
-        <H2> Query Protein Sequences By BLAST Search <H2>
+        <h3>Query Protein Sequences By BLAST Search</h3>
       </TMPL_IF>
       </td>
     </tr>
@@ -23,7 +20,6 @@
     <tr height=15>
       <td colspan="2"></td>
     </tr>
-
 <TMPL_IF ACKEYWORD>
     <tr>
        <td colspan="2" align="center"><table width="600">
@@ -68,10 +64,9 @@ OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
        </table></td>
     </tr>
 </TMPL_IF>
-
-</TABLE>
-
 <TMPL_IF BLAST>
+   <tr>
+     <td>
 	<form action="cgi-bin/OrthoMclWeb.cgi" method="post">
 <!--
 	<input type="hidden" name="rm" value="sequenceList">
@@ -83,8 +78,9 @@ OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
 	</textarea>
 	<p><input type="submit" name="blastSeq" value="Search by BLAST">
 	</form>
+     </td>
+   </tr>
 </TMPL_IF>
-
+</table>
 <!-- END CONTENT -->
-
 <TMPL_INCLUDE footer.tmpl>

@@ -1,5 +1,4 @@
-
-H1 {
+h1 {
    font-style : normal; 
    font-weight : bold; 
    font-size : 14pt; 
@@ -12,15 +11,15 @@ H1 {
    margin-right : 1cm;
 }
 
-A.nocolor_b:link {
+a.nocolor_b:link {
    text-decoration : none; color: black;
 }
 
-A.nocolor:link {
+a.nocolor:link {
    text-decoration : none; color: black;
 }
 
-A.nocolor_w:link {
+a.nocolor_w:link {
    text-decoration : none; color: white;
 }
 .node-highlight {
@@ -45,7 +44,7 @@ A.nocolor_w:link {
     font-family: sans-serif, serif;
 }
 
-.phyletic-tree table, * table {
+.phyletic-tree table {
     margin: 0;
     padding: 0;
 }

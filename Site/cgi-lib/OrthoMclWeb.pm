@@ -139,12 +139,13 @@ sub indx {
     open(F,$file);
     while (<F>) {
       $_=~s/\r|\n//g;
-      push(@{$para{LOOP_NEWS}},{NEWS=>$_});
+      my @parts = split(' : ', $_);
+      push(@{$para{LOOP_NEWS}},{DATE=>$parts[0], NEWS=>$parts[1]});
     }
     close(F);
   }
 
-  $para{LEFTNAV}=1;
+  #$para{LEFTNAV}=1;
   $tmpl->param(\%para);
 
   # Timing info

@@ -1,93 +1,94 @@
-
 <TMPL_INCLUDE header.tmpl>
-
 <!-- BEGIN CONTENT -->
-
-  <table width="700" height="100%" border="0" cellspacing="0" cellpadding="0">
-
-     <tr>
-       <td colspan="2">&nbsp;</td>
-     </tr>
-    <tr>
-      <td colspan="2">
-        <H3> Release Summary (V1.0) <H2>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
-    </tr>
-    <tr height=15>
-      <td colspan="2"></td>
-    </tr>
-    <tr>
-       <td colspan="2">
-         In this OrthoMCL clustering of Ortholog sequences, we included <TMPL_VAR NUM_SEQUENCES> sequences from <TMPL_VAR NUM_TAXA> genomes. 
-	<TMPL_IF FLAG_NUMSEQ>
-		Here is the summary of the clustering (including # sequences, # sequences clustered, # groups). There is also another table (<a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/orthomcl_numgroups_shared.xls">xls</a> file) summarizing # groups shared by all the genome pairs.
-	<TMPL_ELSE>
-		Here is the list:
-	</TMPL_IF> 
-       </td>
-    </tr>
-    <tr height=15>
-      <td colspan="2"></td>
-    </tr>
-    <tr>
-       <td width="50"></td>
-       <td><table width="700" border="1">
-          <tr>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">NUMBER</th>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">ABBREV</th>
-             <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">NAME</th>
-             <TMPL_IF FLAG_DESCRIPTION>
-             <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">DESCRIPTION</th>
-             </TMPL_IF>
-             <TMPL_IF FLAG_DATASOURCE>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">DATA SOURCE</th>
-             </TMPL_IF>
-             <TMPL_IF FLAG_URL>
-             <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">URL</th>
-             </TMPL_IF>
-             <TMPL_IF FLAG_NUMSEQ>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Sequences</th>
-             </TMPL_IF>
-             <TMPL_IF FLAG_NUMSEQ_CLUSTERED>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Sequences Clustered</th>
-             </TMPL_IF>
-             <TMPL_IF FLAG_NUMGROUPS>
-             <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Groups</th>
-             </TMPL_IF>
-          </tr>
-          <TMPL_LOOP LOOP_TAXON>
-          <tr>
-             <td align="center"><TMPL_VAR NUMBER></td>
-             <td align="center"><TMPL_VAR ABBREV></td>
-             <td align="center"><i><TMPL_VAR NAME></i></td>
-             <TMPL_IF DESCRIPTION>
-             <td align="center"><TMPL_VAR DESCRIPTION></td>
-             </TMPL_IF>
-             <TMPL_IF DATASOURCE>
-             <td align="center"><TMPL_VAR DATASOURCE></td>
-             </TMPL_IF>
-             <TMPL_IF URL>
-             <td align="left"><TMPL_VAR URL></td>
-             </TMPL_IF>
-             <TMPL_IF NUMSEQ>
-             <td align="center"><TMPL_VAR NUMSEQ></td>
-             </TMPL_IF>
-             <TMPL_IF NUMSEQ_CLUSTERED>
-             <td align="center"><TMPL_VAR NUMSEQ_CLUSTERED></td>
-             </TMPL_IF>
-             <TMPL_IF NUMGROUPS>
-             <td align="center"><TMPL_VAR NUMGROUPS></td>
-             </TMPL_IF>
-          </tr>
-          </TMPL_LOOP>
-       </table></td>
-    </tr>
-
-  </table>
-
+<table align="center">
+<tr>
+<td>
+<table width="700" height="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <h3> Release Summary (V1.0) <h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+  </tr>
+  <tr height=15>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+    In this OrthoMCL clustering of Ortholog sequences, we included <TMPL_VAR NUM_SEQUENCES> sequences from <TMPL_VAR NUM_TAXA> genomes. 
+    <TMPL_IF FLAG_NUMSEQ>
+    Here is the summary of the clustering (including # sequences, # sequences clustered, # groups). There is also another table (<a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/orthomcl_numgroups_shared.xls">xls</a> file) summarizing # groups shared by all the genome pairs.
+    <TMPL_ELSE>
+    Here is the list:
+    </TMPL_IF> 
+    </td>
+  </tr>
+  <tr height=15>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td width="50"></td>
+    <td>
+      <table width="700" border="1">
+        <tr>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">NUMBER</th>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">ABBREV</th>
+          <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">NAME</th>
+          <TMPL_IF FLAG_DESCRIPTION>
+          <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">DESCRIPTION</th>
+          </TMPL_IF>
+          <TMPL_IF FLAG_DATASOURCE>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">DATA SOURCE</th>
+          </TMPL_IF>
+          <TMPL_IF FLAG_URL>
+          <th width="40%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">URL</th>
+          </TMPL_IF>
+          <TMPL_IF FLAG_NUMSEQ>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Sequences</th>
+          </TMPL_IF>
+          <TMPL_IF FLAG_NUMSEQ_CLUSTERED>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Sequences Clustered</th>
+          </TMPL_IF>
+          <TMPL_IF FLAG_NUMGROUPS>
+          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff"># Groups</th>
+          </TMPL_IF>
+        </tr>
+        <TMPL_LOOP LOOP_TAXON>
+        <tr>
+          <td align="center"><TMPL_VAR NUMBER></td>
+          <td align="center"><TMPL_VAR ABBREV></td>
+          <td align="center"><i><TMPL_VAR NAME></i></td>
+          <TMPL_IF DESCRIPTION>
+          <td align="center"><TMPL_VAR DESCRIPTION></td>
+          </TMPL_IF>
+          <TMPL_IF DATASOURCE>
+          <td align="center"><TMPL_VAR DATASOURCE></td>
+          </TMPL_IF>
+          <TMPL_IF URL>
+          <td align="left"><TMPL_VAR URL></td>
+          </TMPL_IF>
+          <TMPL_IF NUMSEQ>
+          <td align="center"><TMPL_VAR NUMSEQ></td>
+          </TMPL_IF>
+          <TMPL_IF NUMSEQ_CLUSTERED>
+          <td align="center"><TMPL_VAR NUMSEQ_CLUSTERED></td>
+          </TMPL_IF>
+          <TMPL_IF NUMGROUPS>
+          <td align="center"><TMPL_VAR NUMGROUPS></td>
+          </TMPL_IF>
+        </tr>
+        </TMPL_LOOP>
+      </table>
+    </td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
 <!-- END CONTENT -->
-
 <TMPL_INCLUDE footer.tmpl>

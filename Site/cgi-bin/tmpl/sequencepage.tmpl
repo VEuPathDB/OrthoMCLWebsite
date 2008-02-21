@@ -17,7 +17,7 @@
    <td><br><table width="700" border="1" cellspacing="1" cellpadding="0">
       <tr>
          <td colspan="2"><b>Accession</b>:
-		    <TMPL_IF XREF_LINK><a href="javascript:window.open('<TMPL_VAR XREF_LINK>');void(0)"></TMPL_IF> 
+		    <TMPL_IF XREF_LINK><a href="<TMPL_VAR XREF_LINK>" target="orthomcl_ext_wnd"></TMPL_IF> 
 		    <TMPL_VAR TAXON_ABBREV>|<TMPL_VAR ACCESSION>
 		    <TMPL_IF XREF_LINK></a></TMPL_IF>
 	     </td>
@@ -58,7 +58,11 @@
              <tr>
                <td align="center"><TMPL_VAR DOMAIN_START></td>
                <td align="center"><TMPL_VAR DOMAIN_END></td>
-               <td align="center"><a href="<TMPL_VAR DOMAIN_LINK>"><TMPL_VAR DOMAIN_ACCESSION></a></td>
+               <td align="center">
+                 <a href="<TMPL_VAR DOMAIN_LINK>" target="orthomcl_ext_wnd">
+                    <TMPL_VAR DOMAIN_ACCESSION>
+                 </a>
+               </td>
                <td align="center"><TMPL_VAR DOMAIN_NAME></td>
                <td align="center"><TMPL_VAR DOMAIN_DESCRIPTION></td>
              </tr>

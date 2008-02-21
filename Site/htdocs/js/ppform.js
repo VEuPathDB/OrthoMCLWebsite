@@ -163,7 +163,7 @@ function fixParent (nodeId) {
     taxons[parentId].state = 0;
 
     for (var i = 0, j = taxons[parentId].children.length; i < j; ++i) {
-        if (taxons[nodeId].state != taxons[parentId].children[i].state) {
+        if (taxons[nodeId].state == 3 || taxons[nodeId].state != taxons[parentId].children[i].state) {
 	    taxons[parentId].state = 4;
             parentImg.src = "images/" + urls[taxons[parentId].state];
             break;

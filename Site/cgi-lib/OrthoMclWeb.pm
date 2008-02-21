@@ -1676,7 +1676,7 @@ sub sequence {
     }
     
     if ($data[4]) {
-      $para{DESCRIPTION}=$data[4];
+      chomp($para{DESCRIPTION}=$data[4]);
     }
 
     my $len = $data[5];
@@ -1995,7 +1995,7 @@ sub getSeq {
     $para{CONTENT} = "<div class='sequence'><pre>";
     while (my @data = $query_sequence->fetchrow_array()) {
         my $ac = $data[0];
-        my $desc = $data[1];
+        chomp(my $desc = $data[1]);
         my $taxon = $data[2];
         my $len = $data[3];
         my $seq = $data[4];
@@ -2035,7 +2035,7 @@ sub getSeq {
       $query_sequence->execute($sequence_id);
       my @data = $query_sequence->fetchrow_array();
       my $ac = $data[0];
-      my $desc = $data[1];
+      chomp(my $desc = $data[1]);
       my $taxon = $data[2];
       my $len = $data[3];
       my $seq = $data[4];

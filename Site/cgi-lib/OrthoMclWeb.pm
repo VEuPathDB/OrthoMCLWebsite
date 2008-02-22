@@ -2143,7 +2143,7 @@ sub blast {
                 $orthogroup_ac = $data[0];
           }
           push(@{$sequence_ids_ref},$sequence_id);
-          $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id">$three_letter_abbrev|$seq_source_id</a>};
+          $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$three_letter_abbrev">$three_letter_abbrev|$seq_source_id</a>};
           for (my $i=1;$i<=length($padding)-length($orthogroup_ac)-1;$i++) {
                 $para{CONTENT}.=' ';
           }

@@ -1663,7 +1663,12 @@ sub sequence {
     $para{ACCESSION}=$data[0];
 
     if (defined $data[1]) {
-      $para{XREF_LINK}=$data[1].$data[0];
+      my $source_id = $data[0];
+      # only do this for pkn
+      if ($taxon_abbrev eq "pkn") {
+          $source_id =~ s/-\d+$//;
+      }
+      $para{XREF_LINK}=$data[1].$source_id;
     }
 
     $para{TAXON}=$data[2];

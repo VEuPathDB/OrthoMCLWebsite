@@ -18,7 +18,7 @@ taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id: "<TMPL_VAR NAME=TAXON_ID>",
     name: "<TMPL_VAR NAME=NAME>",
     is_species: (<TMPL_VAR NAME=IS_SPECIES> == 0) ? false : true,
     index: <TMPL_VAR NAME=INDEX>,
-    children: [] };
+    children: new Array() };
 </TMPL_LOOP>
 
 initial();

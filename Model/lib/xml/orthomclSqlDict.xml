@@ -253,9 +253,12 @@ WHERE avg_evalue_mant * power(10, avg_evalue_exp) $number
        <sql>
 <![CDATA[ 
 SELECT ortholog_group_id, name, 0 AS avg_dcs,
-avg_percent_identity, avg_percent_match,
+round(avg_percent_identity, 2) AS avg_percent_identity, 
+round(avg_percent_match, 2) AS avg_percent_match,
 (avg_evalue_mant * power(10, avg_evalue_exp)) AS evalue,
-number_of_match_pairs, number_of_members
+number_of_match_pairs, number_of_members, 
+decode(length(biolayout_image), null, 0, 0, 0, 1) AS has_bl,
+decode(length(multiple_sequence_alignment), null, 0, 0, 0, 1) AS has_msa
 FROM apidb.OrthologGroup 
 WHERE ortholog_group_id = ?
 ]]>

@@ -891,11 +891,14 @@ sub getGroupRows {
             
         $group{NO_SEQUENCES}=$data[7];
     
-        if (($group{NO_SEQUENCES} <= 500) && ($group{NO_SEQUENCES} >= 2)) {
+        my $has_bl = $data[8];
+        if ($has_bl == 1) {
             $group{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$data[1]";
-            if ($group{NO_SEQUENCES} <= 100) {
-                $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
-            }
+        }
+        
+        my $has_msa = $data[9];
+        if ($has_msa == 1) {
+            $group{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=$data[1]";
         }
     
         $group{GROUP_ACCESSION}=$data[1];
@@ -1230,11 +1233,15 @@ sub sequenceList {
     $para{DOMARCH_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=domarchList&groupac=".$para{GROUP_ACCESSION};
     $para{SEQUENCE_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=getSeq&groupac=".$para{GROUP_ACCESSION};
 
-    if (($para{NO_SEQUENCES} <= 500) && ($para{NO_SEQUENCES} >= 2)) {
+    
+    my $has_bl = $data[8];
+    if ($has_bl == 1) {
         $para{BIOLAYOUT_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=".$para{GROUP_ACCESSION};
-        if ($para{NO_SEQUENCES} <= 100) {
-            $para{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
-        }
+    }
+    
+    my $has_msa = $data[9];
+    if ($has_msa == 1) {
+        $para{MSA_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=MSA&groupac=".$para{GROUP_ACCESSION};
     }
 
     my $query_taxa_by_o = $dbh->prepare($self->getSql('taxa_num_genes_per_group'));

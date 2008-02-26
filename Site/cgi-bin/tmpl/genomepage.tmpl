@@ -9,7 +9,11 @@
   </tr>
   <tr>
     <td colspan="2">
-      <h3> Release Summary (V1.0) <h3>
+    <TMPL_IF FLAG_NUMSEQ>
+      <h3> Release Summary (V<TMPL_VAR VERSION>) <h3>
+    <TMPL_ELSE>
+      <h3> Data Sources (V<TMPL_VAR VERSION>) <h3>
+    </TMPL_IF> 
     </td>
   </tr>
   <tr>

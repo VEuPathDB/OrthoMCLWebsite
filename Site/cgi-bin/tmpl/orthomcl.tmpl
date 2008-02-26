@@ -20,23 +20,21 @@
                 <th width="100%" align="center" bgcolor="#444488"><a name="Background"><FONT COLOR="#ffffff">Background</FONT></a></th>
               </tr>
             </table>
-            <p>Orthologs, as one type of homologs, are proteins which come from speciation events, as contrasted with 
-    paralogs, another type of homologs, which derive from duplication events. Detection of orthologs is becoming
+            <p>Orthologs are homologs seperated by speciation events.  Paralogs are homologs separated by duplication events. Detection of orthologs is becoming
     much more important as the rapid progress in genome sequencing. 
-            <p>OrthoMCL is a genome-scale algorithm for grouping ortholog protein sequences. It provides not only groups
+            <p>OrthoMCL is a genome-scale algorithm for grouping orthologous protein sequences. It provides not only groups
     shared by two or more species/genomes, but also groups representing species-specific gene expansion families.
-    So it serves as an important utility for automated eukaryotic genome annotation. OrthoMCL starts from looking
-    for reciprocal best hits within each genome as putative in-paralog/recent paralog pairs, reciprocal better hits
-    across any two genomes as putative ortholog pairs. As a result, related proteins are interlinked in a similarity
-    graph. Then MCL (Markov Clustering algorithm,Van Dongen 2000; http://micans.org/mcl/) was invoked to split 
-    mega-clusters as an analogous process of manual review in COG construction. However, MCL clustering is based on
+    So it serves as an important utility for automated eukaryotic genome annotation. OrthoMCL starts with reciprocal best hits within each genome as putative in-paralog/recent paralog pairs and reciprocal best hits
+    across any two genomes as putative ortholog pairs.  Related proteins are interlinked in a similarity
+    graph. Then MCL (Markov Clustering algorithm,Van Dongen 2000; http://micans.org/mcl/) is invoked to split 
+    mega-clusters.  This process is analogous to the manual review in COG construction.  MCL clustering is based on
     weights between each pair of proteins, so to correct for differences in evolutionary distance the weights are 
     normalized before running MCL.
-            <p>OrthoMCL performs similarly with the INPARANOID algorithm(Remm, Storm et al. 2001), but can be extended 
+            <p>OrthoMCL is similar to the INPARANOID algorithm (Remm, Storm et al. 2001), but is extended 
     to cluster orthologs from multiple species. OrthoMCL clusters are coherent with groups identified by EGO
-    (Lee, Sultana et al. 2002), but the analysis using EC number suggests a high degree of reliability(Li, 
+    (Lee, Sultana et al. 2002), and an analysis using EC number suggests a high degree of reliability (Li, 
     Stoeckert et al. 2003). 
-            <p>In a recent assessment (Chen, et al. 2007), the performance of seven widely used orthology detection algorithms, representing three kinds of strategies (phylogeny-based, evolutionary distance-based and BLAST-based), are evaluated using a statistical technique Latent Class Analysis (LCA). LCA is useful when there are large data sets available but no gold standard of truth. The results show a overall trade-off between sensitivity and specificity among these algorithms, with INPARANOID and OrthoMCL as two best methods having both False Positive (FP) and False Negative (FN) error rates lower than 20%.
+            <p>In a recent assessment (Chen, et al. 2007), the performance of seven widely used orthology detection algorithms, representing three kinds of strategies (phylogeny-based, evolutionary distance-based and BLAST-based), are evaluated using the statistical technique Latent Class Analysis (LCA). LCA is useful when there are large data sets available but no gold standard. The results show an overall trade-off between sensitivity and specificity among these algorithms, with INPARANOID and OrthoMCL as the two best methods having both False Positive (FP) and False Negative (FN) error rates lower than 20%.
             <p>
           </td>
         </tr>
@@ -47,17 +45,15 @@
                 <th width="100%" align="center" bgcolor="#444488"><a name="Software"><FONT COLOR="#ffffff">Software</FONT></a></th>
               </tr>
             </table>
-          <p>OrthoMCL was originally designed as a database-based pipeline by Li Li: all the data used by OrthoMCL was 
-    stored in the GUS relational database(Genomic Unified Schema; (Davidson, Crabtree et al. 2001)). Lots of MySQL
-    queries were used to retrieve BLAST data. To satisfy the request to run ortholog clustering without depositing 
-    data into GUS database, the Stand-alone version of OrthoMCL was developed as a stand-alone PERL package,
-    which is available at <a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL/">http://orthomcl.cbil.upenn.edu/ORTHOMCL/</a>.
-          <p>Stand-alone OrthoMCL requires protein FASTA files for each genomes, and it calls for an all-against-all BLAST 
-    analysis. Alternatively, OrthoMCL can start analysis by reading a BPO file (Blast Parsing Out) which describes 
-    genes paired by BLAST matches, the E-value, and the identity percentage and the related HSP information.
-          <p>As a perl package stand-alone OrthoMCL doesn't need compilation. However it requires some softwares and perl 
+          <p>OrthoMCL was originally implemented by Li Li.  The data used by OrthoMCL was 
+    stored in the GUS relational database (Genomic Unified Schema (Davidson, Crabtree et al. 2001)). To meet the demand for a stand-alone version, OrthoMCL was then was developed as a PERL package,
+    which is available at the <a href="http://www.orthomcl.org/download">OrthoMCL Download Site</a>.
+          <p>Stand-alone OrthoMCL requires protein FASTA files for each genome, and it calls for an all-against-all BLAST 
+    analysis. Alternatively, OrthoMCL can start its analysis by reading a BPO file (Blast Parsing Output) which describes 
+    genes paired by BLAST matches, their E-value, the percent identity and the related HSP information.
+          <p>As a perl package stand-alone OrthoMCL doesn't need compilation. However it requires some software and perl 
     modules to run: 
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Softwares:      1. BLAST (NCBI-BLAST, WU-BLAST, etc.)
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Software:      1. BLAST (NCBI-BLAST, WU-BLAST, etc.)
                 2. MCL (Markov Clustering algorithm), available at <a href="http://micans.org/mcl/">http://micans.org/mcl/</a>;
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perl Modules:   1. Bio::SearchIO (part of BioPerl, <a href="http://bioperl.org">http://bioperl.org</a>)
                 2. Storable
@@ -71,9 +67,7 @@
               <th width="100%" align="center" bgcolor="#444488"><a name="Download"><FONT COLOR="#ffffff">Database Download</FONT></a></th>
             </tr>
           </table>
-          <p> The clustering data of this release (55 genomes) is available at <a href="http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/">http://orthomcl.cbil.upenn.edu/ORTHOMCL_DB/</a>
-          <p> Currently, we are updating the database with Pfam data and BioLayout graphs for OrthoMCL Groups. 
-        So these data are unavailable.
+          <p> The protein sequences, ortholog groups and all versus all BLAST results are available on the <a href="http://www.orthomcl.org/download">OrthoMCL Download Site</a>
           <p>
         </td>
       </tr>

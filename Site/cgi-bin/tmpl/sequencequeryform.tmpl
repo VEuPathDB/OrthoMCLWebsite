@@ -47,19 +47,9 @@
 <!--
 OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
 -->
-	  <p> By using this tool, you can query by sequence accession (e.g. <font color="#ff00ff">gi|19074542</font>), keyword (case insensitive), taxon abbreviation (e.g. <font color="#ff00ff">sce</font>), Pfam domain accession (e.g. <font color="#ff00ff">PF00018</font>), Pfam domain name (e.g. <font color="#ff00ff">SH3_1</font>) and Pfam domain keyword (case insensitive).
-	  <p> Keyword search supports boolean mode, and here are some examples:
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin-conjugating enzyme</font>
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain at least one of the three words.
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin +conjugating enzyme</font>
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" and the word "conjugating", but rank higher if they also contain "enzyme".
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin -conjugating</font>
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" but not "conjugating".
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubi*</font>
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain words starting with "ubi".
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"ubiquitin-conjugating enzyme"</font>
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the exact phrase "ubiquitin-conjugating enzyme".
-	<br>
+	  <p> Using this tool, you can query by keyword (case insensitive), sequence accession (e.g. <font color="#ff00ff">At1g20570.1</font>), taxon abbreviation (e.g. <font color="#ff00ff">sce</font>), Pfam domain accession (e.g. <font color="#ff00ff">PF00018</font>), Pfam domain name (e.g. <font color="#ff00ff">SH3_1</font>) and Pfam domain keyword (case insensitive).
+          <p> Sequence accessions used in OrthoMCL-DB are those obtained from the source of the genome.  The source is not always Genbank/EMBL/DDBJ, so the accessions are not necessarily from there.  To be sure which type of accession you should use to find a sequence, refer to the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">Data Sources</a> which lists the sources of each genome.
+	  <p>To combine the results of Sequence Searches (using union, intersect and minus), go to your <a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History</a>.
 	  </td></tr>
        </table></td>
     </tr>
@@ -77,6 +67,7 @@ OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
 	<textarea name="q" rows=10 cols=70>
 	</textarea>
 	<p><input type="submit" name="blastSeq" value="Search by BLAST">
+	  <p>To combine the results of Sequence Searches (using union, intersect and minus), go to your <a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History</a>.
 	</form>
      </td>
    </tr>

@@ -33,6 +33,7 @@ my $currentTime;
 
 my $debug=0;
 our $config;
+our $VERSION = '2';
 
 sub cgiapp_init {
   my $self = shift;
@@ -116,6 +117,7 @@ sub indx {
   $self->defaults($tmpl);
 
   my %para;
+  $para{VERSION}=$VERSION;
   my @tmp;
 
   my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
@@ -1787,6 +1789,7 @@ sub genome {
 
   my %para;
   $para{PAGETITLE}="Release Summary";
+  $para{VERSION} = "2";
 
   my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
   $query_num_taxa->execute();

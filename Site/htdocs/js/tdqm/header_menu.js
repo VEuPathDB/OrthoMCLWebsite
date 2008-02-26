@@ -508,18 +508,21 @@ Specific Sub Menu Settings
 
 	dqm__subdesc1_0 = "Background"
 	dqm__subdesc1_1 = "Software"
-	dqm__subdesc1_2 = "Publication"
-	dqm__subdesc1_3 = "Contact"
+	dqm__subdesc2_2 = "FAQ"
+	dqm__subdesc1_3 = "Publications"
+	dqm__subdesc1_4 = "Contact"
 	
 	dqm__url1_0 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Background"
 	dqm__url1_1 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Software"
-	dqm__url1_2 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Publication"
-	dqm__url1_3 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Contact"
+	dqm__url1_2 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#FAQ"
+	dqm__url1_3 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Publication"
+	dqm__url1_4 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Contact"
 
 	dqm__icon_index1_0 = 0
 	dqm__icon_index1_1 = 0
 	dqm__icon_index1_2 = 0
 	dqm__icon_index1_3 = 0
+	dqm__icon_index1_4 = 0
 	
     //Sub Menu 2
 
@@ -528,18 +531,15 @@ Specific Sub Menu Settings
 
 	dqm__subdesc2_0 = "Data Sources" 
 	dqm__subdesc2_1 = "Release Summary"
-	dqm__subdesc2_2 = "FAQ"
-	dqm__subdesc2_3 = "Download"
+	dqm__subdesc2_2 = "Download"
 	
 	dqm__url2_0 = "/cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data"
 	dqm__url2_1 = "/cgi-bin/OrthoMclWeb.cgi?rm=genome&type=summary"
-	dqm__url2_2 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#FAQ"
-	dqm__url2_3 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Download"
+	dqm__url2_2 = "/cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Download"
 
 	dqm__icon_index2_0 = 0
 	dqm__icon_index2_1 = 0
 	dqm__icon_index2_2 = 0
-	dqm__icon_index2_3 = 0
 
 
     //Sub Menu 3
@@ -566,7 +566,7 @@ Specific Sub Menu Settings
 
 	dqm__subdesc3_0_0 = "By Accession / Keyword"
 	dqm__subdesc3_0_1 = "By BLAST Search"
-	dqm__subdesc3_0_2 = "History"
+	dqm__subdesc3_0_2 = "Query History"
 	
 	dqm__icon_index3_0_0 = 0
 	dqm__icon_index3_0_1 = 0
@@ -585,7 +585,7 @@ Specific Sub Menu Settings
 	dqm__subdesc3_1_1 = "By Group Properties"
 	dqm__subdesc3_1_2 = "By Phyletic Pattern Expression"
 	dqm__subdesc3_1_3 = "By Phyletic Pattern Form"
-	dqm__subdesc3_1_4 = "History"
+	dqm__subdesc3_1_4 = "Query History"
 	
 	dqm__icon_index3_1_0 = 0
 	dqm__icon_index3_1_1 = 0

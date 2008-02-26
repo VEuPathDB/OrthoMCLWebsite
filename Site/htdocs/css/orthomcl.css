@@ -84,45 +84,27 @@ a.nocolor_w:link {
     border-style: solid;
     width: 26px;
     background-color: #FFFFFF;
+    white-space: nowrap;
 }
 
-.phyletic-category *[index="0"] { border-color: #FF3333; }
-.phyletic-category *[index="0"][count="many"] { background-color: #FF3333; }
-.phyletic-category *[index="0"][count="1"] { background-color: #FF9999; }
+.phyletic-category *[count="many"] { 
+    color: white;
+    background-color: black;
+}
 
-.phyletic-category *[index="1"] { border-color: #AA44FF; }
-.phyletic-category *[index="1"][count="many"] { background-color: #AA44FF; }
-.phyletic-category *[index="1"][count="1"] { background-color: #DDAAFF; }
+.phyletic-category *[count="1"] { 
+    color: yellow;
+    background-color: gray; 
+}
 
-.phyletic-category *[index="2"] { border-color: #33CC33; }
-.phyletic-category *[index="2"][count="many"] { background-color: #33CC33; }
-.phyletic-category *[index="2"][count="1"] { background-color: #99FF99; }
-
-.phyletic-category *[index="3"] { border-color: #33CCCC; }
-.phyletic-category *[index="3"][count="many"] { background-color: #33CCCC; }
-.phyletic-category *[index="3"][count="1"] { background-color: #99FFFF; }
-
-.phyletic-category *[index="4"] { border-color: #7777FF; }
-.phyletic-category *[index="4"][count="many"] { background-color: #7777FF; }
-.phyletic-category *[index="4"][count="1"] { background-color: #BBBBFF; }
-
-.phyletic-category *[index="5"] { border-color: #FF33FF; }
-.phyletic-category *[index="5"][count="many"] { background-color: #FF33FF; }
-.phyletic-category *[index="5"][count="1"] { background-color: #FF99FF; }
-
-.phyletic-category *[index="6"] { border-color: #FF9933; }
-.phyletic-category *[index="6"][count="many"] { background-color: #FF9933; }
-.phyletic-category *[index="6"][count="1"] { background-color: #FFCC99; }
-
-.phyletic-category *[index="7"] { border-color: #99DD33; }
-.phyletic-category *[index="7"][count="many"] { background-color: #99DD33; }
-.phyletic-category *[index="7"][count="1"] { background-color: #CCFF77; }
-
-.phyletic-category *[index="8"] { border-color: #33EE99; }
-.phyletic-category *[index="8"][count="many"] { background-color: #33EE99; }
-.phyletic-category *[index="8"][count="1"] { background-color: #88FFCC; }
-
-.phyletic-category *[index="9"] { border-color: #3399FF; }
-.phyletic-category *[index="9"][count="many"] { background-color: #3399FF; }
-.phyletic-category *[index="9"][count="1"] { background-color: #99CCFF; }
+.phyletic-category *[index="0"] { border-color: #FF0000; }
+.phyletic-category *[index="1"] { border-color: #00FF00; }
+.phyletic-category *[index="2"] { border-color: #0000FF; }
+.phyletic-category *[index="3"] { border-color: #FF33FF; }
+.phyletic-category *[index="4"] { border-color: #00FFFF; }
+.phyletic-category *[index="5"] { border-color: #FF7700; }
+.phyletic-category *[index="6"] { border-color: #0077FF; }
+.phyletic-category *[index="7"] { border-color: #CC0055; }
+.phyletic-category *[index="8"] { border-color: #7700FF; }
+.phyletic-category *[index="9"] { border-color: #00FF77; }
 

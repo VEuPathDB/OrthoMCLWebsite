@@ -74,14 +74,20 @@ a.nocolor_w:link {
     padding: 0px;
 }
 
-.phyletic-category * div {
+.phyletic-category * .species {
     text-align: center;
     font-size: x-small;
     font-family: sans-serif, serif;
     margin: 0px;
+    margin-top: 1px;
+    margin-bottom: 1px;
     padding: 0px;
-    border-width: 2px;
-    border-style: solid;
+    border-style: none;
+    border-width: 2;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-right-style: dotted;
+    border-right-width: 1px;
     width: 26px;
     background-color: #FFFFFF;
     white-space: nowrap;
@@ -93,8 +99,26 @@ a.nocolor_w:link {
 }
 
 .phyletic-category *[count="1"] { 
-    color: yellow;
+    color: white;
     background-color: gray; 
+}
+
+.phyletic-category *[location="head"] { 
+    border-left-style: solid;
+    width: 25px;
+}
+
+.phyletic-category *[location="tail"] { 
+    border-right-style: solid;
+    border-right-width: 2px;
+    width: 25px;
+}
+
+.phyletic-category *[location="head-tail"] { 
+    border-left-style: solid;
+    border-right-style: solid;
+    border-right-width: 2px;
+    width: 23px;
 }
 
 .phyletic-category *[index="0"] { border-color: #FF0000; }

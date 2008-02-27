@@ -12,6 +12,10 @@ function initial() {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
         }
+        // modify display names
+        if (taxon.abbrev == "EUKA" || taxon.abbrev == "BACT") 
+            taxon.name = "Other " + taxon.name;
+            
         getPath(taxon);
     }
 
@@ -122,11 +126,13 @@ function displayCategories(group) {
 
     var index = 0;
     for (var row = 0; row < categories.length; row++) {
-        content.push("<table><tr>");
+        content.push("<tr>");
+        if (row == 2) content.push("<td></td><td></td>");
         for (var col = 0; col < categories[row].length; col++) {
+            if (row == 1 && col == 1) content.push("<td></td>");
             displayCategory(content, group, categories[row][col], index++);
         }
-        content.push("</tr></table>");
+        content.push("</tr>");
     }
 
     document.write(content.join(""));      
@@ -136,9 +142,16 @@ function displayCategory(content, group, category, index) {
     for(var i = 0; i < category.species.length; i++) {
         var taxon = category.species[i];
         var count = (taxon.id in group) ? group[taxon.id] : 0;
+        var position = "";
+        if (i == 0 && i == category.species.length - 1) position = "head-tail";
+        else if (i == 0) position = "head";
+        else if (i == category.species.length - 1) position = "tail";
         
-        content.push("<td><div index=\"", index ,"\" ");
-        content.push(" count=\"", ((count > 1) ? "many" : count) ,"\" ");
+        content.push("<td>");
+        
+        content.push("<div class='species' index='", index ,"' ");
+        if (position != "") content.push(" location='", position ,"' ");
+        content.push(" count='", ((count > 1) ? "many" : count) ,"' ");
         content.push(" onmouseover=\"return escape(getTaxonDetail(", taxon.id, ", ", count, "));\">");
         content.push(taxon.abbrev, "</div></td>");
     }

@@ -51,11 +51,11 @@ function displayClade(node, content) {
     }
     var foldImage = node.expanded ? "minus.png" : "plus.png";
 
-    content.push("<table><tr><td nowrap>");
+    content.push("<table><tr><td class='clade'>");
     if (subClades.length == 0) {
-        content.push("<image width='20' height='20' src='images/spacer.gif'>");
+        content.push("<image width='20' src='images/spacer.gif'>");
     } else {
-        content.push("<image id='", node.id, "_fold' width='20' height='20' ");
+        content.push("<image id='", node.id, "_fold' width='20' ");
         content.push(" style=\"cursor:pointer;\" ");
         content.push(" src=\"images/", foldImage, "\" ");
         content.push(" onclick=\"toggleFold('", node.id, "')\"/>");

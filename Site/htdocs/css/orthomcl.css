@@ -40,13 +40,20 @@ a.nocolor_w:link {
 
 .phyletic-tree {
     text-align: left;
-    background-color: #CCCCCC;
-    font-family: sans-serif, serif;
+    background-color: white;
 }
 
-.phyletic-tree table {
+.phyletic-tree * table {
     margin: 0;
     padding: 0;
+}
+
+.phyletic-tree * .clade {
+    white-space: nowrap;
+    font-family: sans-serif, serif;
+    font-size: small;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .phyletic-tree .indent, * .indent {
@@ -61,8 +68,12 @@ a.nocolor_w:link {
 
 .phyletic-tree * .species {
     background-color: #DDDDDD;
-    width: 55px;
+    width: 48px;
     white-space: nowrap;
+    font-family: sans-serif, serif;
+    font-size: small;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .phyletic-category {

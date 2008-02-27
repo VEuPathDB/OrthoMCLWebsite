@@ -331,6 +331,20 @@ WHERE source_id = ?
      </sqlQuery> 
 
 
+     <sqlQuery>
+       <name>sequence_per_source_id_and_taxon</name>
+       <sql>
+<![CDATA[ 
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence s, apidb.OrthomclTaxon t
+WHERE s.source_id = ?
+AND t.three_letter_abbrev = ?
+AND t.taxon_id = s.taxon_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
 
      <sqlQuery>
        <name>sequence_id_like_id_and_descrip_keyword</name>
@@ -749,21 +763,24 @@ AND eas.aa_sequence_id = ?
      </sqlQuery> 
 
 
-
      <sqlQuery>
-       <name>group_id_per_sequence_id</name>
+       <name>group_name_per_sequence_source_id</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.aa_sequence_id, ogs.ortholog_group_id, t.three_letter_abbrev 
+SELECT g.name 
 FROM apidb.OrthologGroupAaSequence ogs,
-     dots.externalaasequence s,
-     apidb.OrthomclTaxon t
-WHERE ogs.aa_sequence_id = ?
-  AND s.aa_sequence_id = ogs.aa_sequence_id
-  AND t.taxon_id = s.taxon_id
+     apidb.OrthologGroup g,
+     apidb.OrthomclTaxon t,
+     dots.externalaasequence s
+WHERE s.source_id = ?
+  AND t.three_letter_abbrev = ?
+  AND s.taxon_id = t.taxon_id
+  AND ogs.aa_sequence_id = s.aa_sequence_id
+  AND g.ortholog_group_id  = ogs.ortholog_group_id
 ]]>
        </sql>
      </sqlQuery> 
+
   </module>
 </sqlDictionary>
 

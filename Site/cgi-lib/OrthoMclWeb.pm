@@ -247,7 +247,11 @@ sub groupQueryForm {
 						   ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3]}
 						 ]});
     }
+    my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
+    $query_num_taxa->execute();
+    my ($numgenomes) = $query_num_taxa->fetchrow_array();
 
+    $tmpl->param(NUMGENOMES => $numgenomes);
     $tmpl->param(\%para);
   }
 
@@ -1312,14 +1316,14 @@ sub sequenceList {
       close($fh);
       $ENV{BLASTMAT} = $config->{BLASTMAT};
       open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
-      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
+      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
       while (<BLAST>) {
         if (m/Sequences producing significant alignments/) {
           <BLAST>;		# empty line
           while (<BLAST>) {
             last if m/^\s*$/;
-            if (m/^(\S+)/) {
-	      $query_sequence->execute($1);
+            if (m/^([a-z]{3})\|(\S+)/) {
+	      $query_sequence->execute($2,$1);
 	      while (my @data = $query_sequence->fetchrow_array()) {
                 push(@{$sequence_ids_ref},$data[0]);
 	      }
@@ -1786,7 +1790,7 @@ sub genome {
 
   my %para;
   $para{PAGETITLE}="Release Summary";
-  $para{VERSION} = "2";
+  $para{VERSION} = $VERSION;
 
   my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
   $query_num_taxa->execute();
@@ -2120,75 +2124,43 @@ sub blast {
     my $blastcmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5";
     open(BLAST, "$blastcmd |") or die $!;
     
-    my $query_sequence = $dbh->prepare($self->getSql('group_id_per_sequence_id'));
+    my $query_group = $dbh->prepare($self->getSql('group_name_per_sequence_source_id'));
 
-    my $query_orthogroup = $dbh->prepare($self->getSql('group_name_per_group_id'));
+    my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
     
+    my %already_seen;
     while (<BLAST>) {
       $_=~s/\r|\n//g;
-      if (/Sequences producing significant alignments/) {
-        <BLAST>;		# empty line
-        $para{CONTENT}.="\n";
-        while (<BLAST>) {
-	  $_=~s/\r|\n//g;
-	  if (m/^\s*$/) {
-	    $para{CONTENT}.="$_\n";last;
-	  }
+      my $line = $_;
 
-          # handle a line in this format:
-	  # 149456 PY07337                                                        632   e-180
-	  if (m/^(\S+) (\S+)(\s+)(\S+.*)/) {
-            my $aa_sequence_id = $1;
-            my $seq_source_id = $2;
-            my $padding = $3;
-            my $the_rest = $4;
-            $query_sequence->execute($aa_sequence_id);
-            my ($sequence_id,$orthogroup_id,$orthogroup_ac,$three_letter_abbrev);
-            while (my @data = $query_sequence->fetchrow_array()) {
-	      $sequence_id = $data[0];
-	      $orthogroup_id = $data[1];
-	      $three_letter_abbrev = $data[2];
-            }
-            if (($sequence_id ne '') && ($orthogroup_id != 0)) {
-	      $query_orthogroup->execute($orthogroup_id);
-	      while (my @data = $query_orthogroup->fetchrow_array()) {
-                $orthogroup_ac = $data[0];
-	      }
-	      push(@{$sequence_ids_ref},$sequence_id);
-	      $para{CONTENT}.=qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id">$orthogroup_ac</a> <a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$three_letter_abbrev">$three_letter_abbrev|$seq_source_id</a>};
-	      for (my $i=1;$i<=length($padding)-length($orthogroup_ac)-1;$i++) {
-                $para{CONTENT}.=' ';
-	      }
-	      $para{CONTENT}.="$the_rest\n";
-            } elsif ($sequence_id ne '') {
-	      $para{CONTENT}.="<a href=\"" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id\">$seq_source_id</a>$padding$the_rest\n";
-            } else {
-	      $para{CONTENT}.="$seq_source_id$padding$the_rest\n";
-            }
-	  }
-        }
-      } elsif (/^\>(\S+)/) {
-        $query_sequence->execute($1);
-        my ($sequence_id,$orthogroup_ac,$orthogroup_id);
-        while (my @data = $query_sequence->fetchrow_array()) {
-	  $sequence_id = $data[0];
-	  $orthogroup_id = $data[1];
-        }
-        if (($sequence_id ne '') && ($orthogroup_id != 0)) {
-	  $query_orthogroup->execute($orthogroup_id);
-	  while (my @data = $query_orthogroup->fetchrow_array()) {
-            $orthogroup_ac = $data[0];
-	  }
-	  $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a> 
-                              <a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$orthogroup_id'>$orthogroup_ac</a>\n";
-        } elsif ($sequence_id ne '') {
-	  $para{CONTENT}.="><a href='" . $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$1'>$1</a>\n";
-        } else {
-	  $para{CONTENT}.=">$1\n";
-        }
-      } else {
-        $para{CONTENT}.="$_\n";
+      my $taxon_abbrev;
+      my $seq_source_id;
+      my $full_seq_source_id;
+      # replace abbrev|source_id with hyperlink
+      if ($line =~ /([a-z]{3})\|(\S+)/) {
+	$taxon_abbrev = $1;
+	$seq_source_id = $2;
+	$full_seq_source_id = "$taxon_abbrev|$seq_source_id";
+	my $full_seq_source_id_href =qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$taxon_abbrev">$full_seq_source_id</a>};
+	$line =~ s/$taxon_abbrev\|$seq_source_id/$full_seq_source_id_href/;
       }
+
+      # replace group source_id w/ hyperlink and register sequence_id
+      if ($line =~ /(OG${VERSION}_\d+)/) {
+	my $grp_source_id = $1;
+	my $grp_source_id_href =  qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$grp_source_id">$grp_source_id</a>};;
+	$line =~ s/$grp_source_id/$grp_source_id_href/g;
+
+	# register sequence_id for history (unless already registered)
+	if ($full_seq_source_id && !$already_seen{$full_seq_source_id}) {
+	  my $sequence_id;
+	  $query_sequence->execute($seq_source_id, $taxon_abbrev);
+	  while (($sequence_id) = $query_sequence->fetchrow_array()){};
+	  push(@{$sequence_ids_ref}, $sequence_id);
+	  $already_seen{$full_seq_source_id} = 1;
+	}
+      }
+      $para{CONTENT} .= "$line\n";
     }
 
     close(BLAST);

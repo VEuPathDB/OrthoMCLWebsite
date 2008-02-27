@@ -63,19 +63,9 @@ function showGroupAbbrevs() {
       <tr>
         <td colspan="2">
           <b>Notes</b>:
-            <br>1. Query group by keyword: the group will be listed as long as one member sequence has a match to the keyword; boolean mode is supported, and here are some examples:
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin-conjugating enzyme</font>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain at least one of the three words.
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin +conjugating enzyme</font>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" and the word "conjugating", but rank higher if they also contain "enzyme".
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">+ubiquitin -conjugating</font>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" but not "conjugating".
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubi*</font>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain words starting with "ubi".
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"ubiquitin-conjugating enzyme"</font>
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the exact phrase "ubiquitin-conjugating enzyme".
+            <br>1. Query group by keyword: the group will be listed as long as one member sequence has a match to the keyword.
             <br>
-            <br>2. Query group by accession: OrthoMCL group accession is in the form of "OG"+version number+"_"+digits, e.g. "OG1_196".
+            <br>2. To combine the results of Group Searches (using union, intersect and minus), go to your <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Group Query History</a>
           </td>
         </tr>
       </table>
@@ -127,6 +117,7 @@ function showGroupAbbrevs() {
               <font size=-1><b>Notes</b>:
               <br>1. To specify a query please use a logical comparison operator (such as >, <, =, >=, <=), followed by a number.
               <br>2. Query group by property: The Percentage Match Pairs was calculated as the number of protein pairs that can align (in the all-against-all BLASTP search for initial clustering, E-value cutoff = 1e-5) over the number of all possible protein pairs within a certain group. Then the other properties were calculated based on these aligned protein pairs only.
+              <br>3. To combine the results of Group Searches (using union, intersect and minus), go to your <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Group Query History</a>
             </td>
           </tr>
        </table></td>
@@ -161,14 +152,14 @@ function showGroupAbbrevs() {
 	and the number of copies (i.e. how many duplicates certain gene has in a specific genome).
 	<P>
 	<strong>*PPE Grammar</strong>: Individual grammatical units of PPE expressions are composed of two parts:
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;1. A species specification, composed of a three-letter species abbreviation (e.g. "tgo"), or a list of species abbreviations linked by plus sign "+" (e.g. "tgo+pfa+hsa"). Several abbreviations are also permitted, such as "BAC" for all Eubacteria genomes, "EUK" for all eukaryotic genomes, "API" for all apicomplexan genomes, "ALL" to represent all 55 genomes, and "OTHER" to represent all other genomes not already specified anywhere in the composite expression (clade abbreviations are indicated on the form).
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;1. A species specification, composed of a three-letter species abbreviation (e.g. "tgo"), or a list of species abbreviations linked by plus sign "+" (e.g. "tgo+pfa+hsa"). Several abbreviations are also permitted, such as "BAC" for all Eubacteria genomes, "EUK" for all eukaryotic genomes, "API" for all apicomplexan genomes, "ALL" to represent all <TMPL_VAR NUMGENOMES> genomes, and "OTHER" to represent all other genomes not already specified anywhere in the composite expression (clade abbreviations are indicated on the form).
 	<br>&nbsp;&nbsp;&nbsp;&nbsp;2. A logical comparison operator, such as >, <, =, >=, or <=, and a number representing the number of sequences from these species that must be present in the ortholog group (e.g. "tgo>5" specifies ortholog groups containing at least 5 in-paralogs from <i>Toxoplasma gondii</i>. Alternatively, when appended with the character "T" (for Taxa), this number represents the number of species that must be represented in the ortholog group. 
 	<br>Multiple expression units may be combined using "AND" or "OR", and may use parentheses to provide explicit execution ordering.
 	<P>
 	<strong>Examples & Explanations</strong>: 
         <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsa+eco=2T</i>" would generate ortholog groups in which both human and E. coli are present. 
         <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsa+eco=1T</i>" would generate ortholog groups in which only one species of human and E. coli is present. 
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>ALL=55T</i>" would generate ortholog groups representing all 55 species.
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>ALL=<TMPL_VAR NUMGENOMES>T</i>" would generate ortholog groups representing all <TMPL_VAR NUMGENOMES> species.
 	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK>=1T AND OTHER=0T</i>" would generate Eukaryota-specific ortholog groups (representing at least one eukaryotic species and containing no non-eukaryota species).
 	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK=35T</i>" would generate Eukaryota-universal ortholog groups (representing all 35 eukaryotic species).
 	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK>=5T AND hsa>=10</i>" would generate all ortholog groups representing at least five eukaryotic species and containing at least 10 human proteins.

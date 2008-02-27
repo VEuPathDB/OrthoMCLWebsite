@@ -102,7 +102,7 @@ function displayLegend() {
         for (var col = 0; col < categories[row].length; col++) {
             var category = categories[row][col];
             
-            content.push("<td><div index=\"", index ,"\" count=\"0\" ");
+            content.push("<td><div index=\"", index ,"\" count=\"0\" location='head-tail'");
             content.push(" style=\"width: 30px;\" ");
             content.push(" onmouseover=\"return escape(getLegendDetail(", category.root.id, "));\">");
             content.push(category.root.abbrev, "</div></td>");

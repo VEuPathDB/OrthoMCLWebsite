@@ -102,6 +102,7 @@ a.nocolor_w:link {
     width: 26px;
     background-color: #FFFFFF;
     white-space: nowrap;
+    line-height: 100%;
 }
 
 .phyletic-category *[count="many"] { 

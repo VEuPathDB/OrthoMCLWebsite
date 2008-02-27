@@ -153,7 +153,7 @@ function displayCategory(content, group, category, index) {
         if (position != "") content.push(" location='", position ,"' ");
         content.push(" count='", ((count > 1) ? "many" : count) ,"' ");
         content.push(" onmouseover=\"return escape(getTaxonDetail(", taxon.id, ", ", count, "));\">");
-        content.push(taxon.abbrev, "</div></td>");
+        content.push(taxon.abbrev, "<br>", count, "</div></td>");
     }
 }
 

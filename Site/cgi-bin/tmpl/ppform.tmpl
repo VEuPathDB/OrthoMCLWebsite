@@ -25,12 +25,14 @@ initial();
 <input type="hidden" name="rm" value="groupList">
 <input type="hidden" name="type" value="ppexpression">
 <p>
-    <b>Key:</b> <img border=0 src="images/dc.gif"> no constraint, 
-    <img border=0 src="images/yes.gif"> must be present in group, 
-    <img border=0 src="images/no.gif"> must be excluded from group, 
-    <img border=0 src="images/maybe.gif"> at least one must be present, 
-    <img border=0 src="images/unk.gif"> mixture of constraints
-</p>
+  <table>
+    <tr>
+    <td nowrap><b>Key:</b> <img border=0 src="images/dc.gif"> =no constraints | </td>
+    <td nowrap><img border=0 src="images/yes.gif"> =must be in group | </td>
+    <td nowrap><img border=0 src="images/no.gif"> =must not be in group | </td>
+    <td nowrap><img border=0 src="images/maybe.gif"> =at least one subtaxon must be in group | </td>
+    <td nowrap><img border=0 src="images/unk.gif"> =mixture of constraints</td>
+  </table>
 <p>
 <input type="text" id="query_top" name="q" value="" size="100" 
        onchange="changePPE(true)">

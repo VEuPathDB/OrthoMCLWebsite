@@ -68,11 +68,10 @@ function displayClade(node, content) {
     content.push(" onclick=\"toggleState('" + node.id + "')\" />");
     
     content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
-
-    var display = node.expanded ? "" : "display: none;";
     
     // display species under the node
     if (subSpecies.length > 0) {
+        var display = node.expanded || (subClades.length == 0) ? "" : "display: none;";
         content.push("<td class=\"species-region\">");
         content.push("<table id=\"", node.id, "_species\" ");
         content.push(" style=\"" + display + "\">");
@@ -86,6 +85,7 @@ function displayClade(node, content) {
 
     // display sub-clades under the node
     if (subClades.length > 0) {
+        var display = node.expanded ? "" : "display: none;";
         content.push("<div id='" + node.id + "_clades' class=\"indent\" ");
         content.push(" style=\"" + display + "\">");
         for(var i = 0; i < subClades.length; i++) {

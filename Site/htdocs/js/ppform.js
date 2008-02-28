@@ -264,7 +264,7 @@ function saveState() {
     var content = "";
     for(var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        if (!taxon.is_species && !taxon.expanded) {
+        if (!taxon.is_species && taxon.expanded) {
             if (content.length > 0) content += "|";
             content += taxon.abbrev;
         }
@@ -283,15 +283,15 @@ function loadState() {
         var content = (end >= 0) ? allcookies.substring(pos, end) 
                                  : allcookies.substring(pos);
 
-        var collapsed = { };
+        var expanded = { };
         var parts = content.split("|");
         for (var i = 0; i < parts.length; i++) {
-            collapsed[parts[i]] = true;
+            expanded[parts[i]] = true;
         }
         // update taxons
         for (var taxon_id in taxons) {
             var taxon = taxons[taxon_id];
-            if (taxon.abbrev in collapsed) taxon.expanded = false;
+            if (taxon.abbrev in expanded) taxon.expanded = true;
         }
     }
 }

@@ -8,15 +8,17 @@ function initial() {
     // resolve the children of each node
     for (var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        taxon.expanded = true;
         if (taxon_id != taxon.parent_id) {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
+            taxon.expanded = false;
         } else { 
             roots.push(taxon); 
+            taxon.expanded = true;
         }
     }
     roots.sort(compareTaxons);
+    
     
     // sort children
     for (var taxon_id in taxons) {
@@ -66,11 +68,14 @@ function displayClade(node, content) {
     content.push(" onclick=\"toggleState('" + node.id + "')\" />");
     
     content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
+
+    var display = node.expanded ? "" : "display: none;";
     
     // display species under the node
     if (subSpecies.length > 0) {
         content.push("<td class=\"species-region\">");
-        content.push("<table id=\"", node.id, "_species\">");
+        content.push("<table id=\"", node.id, "_species\" ");
+        content.push(" style=\"" + display + "\">");
         content.push("<tr>");
         for (var i = 0; i < subSpecies.length; i++) {
             displaySpecies(subSpecies[i], content);
@@ -81,7 +86,6 @@ function displayClade(node, content) {
 
     // display sub-clades under the node
     if (subClades.length > 0) {
-        var display = node.expanded ? "" : "display: none;";
         content.push("<div id='" + node.id + "_clades' class=\"indent\" ");
         content.push(" style=\"" + display + "\">");
         for(var i = 0; i < subClades.length; i++) {

@@ -71,7 +71,7 @@ function displayClade(node, content) {
     
     // display species under the node
     if (subSpecies.length > 0) {
-        var display = node.expanded || (subClades.length == 0) ? "" : "display: none;";
+        var display = (node.expanded || (subClades.length == 0)) ? "" : "display: none;";
         content.push("<td class=\"species-region\">");
         content.push("<table id=\"", node.id, "_species\" ");
         content.push(" style=\"" + display + "\">");

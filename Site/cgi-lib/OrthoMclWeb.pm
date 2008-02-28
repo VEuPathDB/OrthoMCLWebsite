@@ -2132,7 +2132,7 @@ sub blast {
 
     my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
     
-    my %already_seen;
+    my %seqsAlreadySeen;
     while (<BLAST>) {
       $_=~s/\r|\n//g;
       my $line = $_;
@@ -2140,30 +2140,43 @@ sub blast {
       my $taxon_abbrev;
       my $seq_source_id;
       my $full_seq_source_id;
-      # replace abbrev|source_id with hyperlink
+      my $grp_source_id;
+
+      # grab seq source id
       if ($line =~ /([a-z]{3})\|(\S+)/) {
 	$taxon_abbrev = $1;
 	$seq_source_id = $2;
 	$full_seq_source_id = "$taxon_abbrev|$seq_source_id";
-	my $full_seq_source_id_href =qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$taxon_abbrev">$full_seq_source_id</a>};
-	$line =~ s/$taxon_abbrev\|$seq_source_id/$full_seq_source_id_href/;
       }
 
-      # replace group source_id w/ hyperlink and register sequence_id
+      # grab group source id, and register seq as having a group
       if ($line =~ /(OG${VERSION}_\d+)/) {
-	my $grp_source_id = $1;
-	my $grp_source_id_href =  qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$grp_source_id">$grp_source_id</a>};;
-	$line =~ s/$grp_source_id/$grp_source_id_href/g;
-
+	$grp_source_id = $1;
 	# register sequence_id for history (unless already registered)
-	if ($full_seq_source_id && !$already_seen{$full_seq_source_id}) {
+	if (!$seqsAlreadySeen{$full_seq_source_id}) {
 	  my $sequence_id;
 	  $query_sequence->execute($seq_source_id, $taxon_abbrev);
-	  while (($sequence_id) = $query_sequence->fetchrow_array()){};
+	  ($sequence_id) = $query_sequence->fetchrow_array();
 	  push(@{$sequence_ids_ref}, $sequence_id);
-	  $already_seen{$full_seq_source_id} = 1;
+	  $seqsAlreadySeen{$full_seq_source_id} = 1;
 	}
+      } elsif  ($line =~ /(no_group)/ || $line =~ /(no group)/) {
+	$grp_source_id = "$1 ";
       }
+
+      # swap position of group and seq source ids
+      $line =~ s/$taxon_abbrev\|$seq_source_id/GROUP_SRC_ID/;
+      $line =~ s/$grp_source_id/SEQ_SRC_ID/;
+
+      # replace abbrev|source_id with hyperlink
+      my $full_seq_source_id_href =qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$taxon_abbrev">$full_seq_source_id</a>};
+      $line =~ s/SEQ_SRC_ID/$full_seq_source_id_href/;
+
+      # replace group source_id w/ hyperlink and register sequence_id 
+      my $grp_source_id_href =  qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$grp_source_id">$grp_source_id</a>};
+      $grp_source_id_href = $grp_source_id if $grp_source_id =~ 'no';
+      $line =~ s/GROUP_SRC_ID/$grp_source_id_href/;
+
       $para{CONTENT} .= "$line\n";
     }
 

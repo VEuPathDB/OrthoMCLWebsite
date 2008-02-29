@@ -101,10 +101,9 @@ WHERE ortholog_group_id = ?
 <![CDATA[ 
 SELECT ogs.ortholog_group_id
 FROM apidb.OrthologGroupAaSequence ogs,
-     dots.ExternalAaSequence eas,
      dots.AaSequenceImp asi
-WHERE ogs.aa_sequence_id = eas.aa_sequence_id
-  AND eas.aa_sequence_id = asi.aa_sequence_id
+WHERE ogs.aa_sequence_id = asi.aa_sequence_id
+  AND asi.subclass_view = 'ExternalAASequence'
   AND ogs.ortholog_group_id != 0
   AND CATSEARCH(asi.description, '$querycode', '')>0
 GROUP BY ogs.ortholog_group_id
@@ -146,7 +145,7 @@ WHERE ogs.aa_sequence_id = df.aa_sequence_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
 AND ogs.ortholog_group_id != 0 
-AND db.secondary_identifier LIKE '%$querycode%'
+AND CATSEARCH(db.secondary_identifier, '$querycode', '') > 0
 GROUP BY ogs.ortholog_group_id
 ]]>
        </sql>
@@ -166,7 +165,7 @@ sres.DbRef db
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
 AND ogs.ortholog_group_id != 0
-AND db.remark LIKE '%$querycode%'
+AND CATSEARCH(db.remark, '$querycode', '') > 0
 GROUP BY ogs.ortholog_group_id
 ]]>
        </sql>
@@ -352,11 +351,10 @@ AND t.taxon_id = s.taxon_id
        <name>sequence_id_like_id_and_descrip_keyword</name>
        <sql>
 <![CDATA[ 
-SELECT eas.aa_sequence_id 
-FROM dots.ExternalAaSequence eas
-     dots.AaSequenceImp asi
-WHERE eas.aa_sequence_id = asi.aa_sequence_id
- AND (eas.source_id = '$querycode'
+SELECT asi.aa_sequence_id 
+FROM dots.AaSequenceImp asi
+WHERE asi.subclass_view = 'ExternalAASequence'
+ AND (asi.source_id = '$querycode'
       OR CATSEARCH(asi.description, '$querycode', '') > 0 )
 ]]>
        </sql>
@@ -368,10 +366,9 @@ WHERE eas.aa_sequence_id = asi.aa_sequence_id
        <name>sequence_id_like_descrip_keyword</name>
        <sql>
 <![CDATA[ 
-SELECT eas.aa_sequence_id 
-FROM dots.ExternalAaSequence eas,
-     dots.AaSequenceImp asi
-WHERE eas.aa_sequence_id = asi.aa_sequence_id
+SELECT asi.aa_sequence_id 
+FROM dots.AaSequenceImp asi
+WHERE asi.subclass_view = 'ExternalAASequence'
   AND CATSEARCH(asi.description, '$querycode', '') > 0
 ]]>
        </sql>
@@ -415,15 +412,13 @@ AND db.primary_identifier = '$querycode'
        <name>sequence_id_like_pfam_name</name>
        <sql>
 <![CDATA[ 
-SELECT eas.aa_sequence_id 
-FROM dots.ExternalAaSequence eas,
-dots.DomainFeature df,
-dots.DbRefAaFeature dbaf,
-sres.DbRef db
- WHERE eas.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = dbaf.aa_feature_id
-AND dbaf.db_ref_id = db.db_ref_id
-AND db.secondary_identifier LIKE '%$querycode%'
+SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ df.aa_sequence_id 
+FROM dots.DomainFeature df,
+    dots.DbRefAaFeature dbaf,
+    sres.DbRef db
+WHERE df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+  AND CATSEARCH(db.secondary_identifier, '$querycode', '') > 0
 ]]>
        </sql>
      </sqlQuery> 
@@ -434,15 +429,13 @@ AND db.secondary_identifier LIKE '%$querycode%'
        <name>sequence_id_like_pfam_keyword</name>
        <sql>
 <![CDATA[ 
-SELECT eas.aa_sequence_id 
-FROM dots.ExternalAaSequence eas,
-dots.DomainFeature df,
-dots.DbRefAaFeature dbaf,
-sres.DbRef db
-WHERE eas.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = dbaf.aa_feature_id
+SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ df.aa_sequence_id 
+FROM dots.DomainFeature df,
+    dots.DbRefAaFeature dbaf,
+    sres.DbRef db
+WHERE df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
-AND db.remark LIKE '%$querycode%'
+AND CATSEARCH(db.remark, '$querycode', '') > 0
 ]]>
        </sql>
      </sqlQuery> 

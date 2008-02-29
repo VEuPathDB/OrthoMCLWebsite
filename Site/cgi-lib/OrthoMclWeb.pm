@@ -662,11 +662,21 @@ sub groupList {
       if ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
 	if ($in eq 'Accession') {
 	  my @qc=split(" ",$querycode);
-	  foreach (@qc) {
-	    my $query_orthogroup = $dbh->prepare('SELECT og.ortholog_group_id 
-                                                              FROM apidb.OrthologGroup og 
-                                                              WHERE og.name = ?');
-	    $query_orthogroup->execute($_);
+	  foreach my $userAc (@qc) {
+	    my $sqlName;
+	    my @args;
+	    if ($userAc =~ /^OG\d\d?_\d+$/) {
+	      $sqlName = 'group_per_group_name';
+	      @args = ($userAc);
+	    } elsif ($userAc =~ /^([a-z]{3})\|(\S+)$/) {
+	      $sqlName = 'group_per_seq_source_id_and_taxon';
+	      @args = ($2, $1);
+	    } else {
+	      $sqlName = 'group_per_seq_source_id';
+	      @args = ($userAc);
+	    }
+	    my $query_orthogroup = $dbh->prepare($self->getSql($sqlName));
+	    $query_orthogroup->execute(@args);
 	    while (my @data = $query_orthogroup->fetchrow_array()) {
 	      push(@{$orthogroup_ids_ref},$data[0]);
 	    }
@@ -1337,9 +1347,18 @@ sub sequenceList {
       unlink($tempfile);
     } elsif ($in eq 'Accession') {
       my @qc = split(" ",$querycode);
-      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id'));
-      foreach (@qc) {
-        $query_sequence->execute($_);
+      my $sqlName;
+      foreach my $userAcc (@qc) {
+	my @args;
+	if ($userAcc =~ /^([a-z]{3})\|(\S+)$/) {
+	  $sqlName = 'sequence_per_source_id_and_taxon';
+	  @args = ($2, $1);
+	} else {
+	  @args = ($userAcc);
+	  $sqlName = 'sequence_per_source_id';
+	}
+	my $query_sequence = $dbh->prepare($self->getSql($sqlName));
+        $query_sequence->execute(@args);
         while (my @data = $query_sequence->fetchrow_array()) {
           push(@{$sequence_ids_ref},$data[0]);
         }

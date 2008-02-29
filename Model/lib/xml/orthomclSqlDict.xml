@@ -569,6 +569,47 @@ AND dbaf.db_ref_id = db.db_ref_id
        </sql>
      </sqlQuery> 
 
+     <sqlQuery>
+       <name>group_per_group_name</name>
+       <sql>
+<![CDATA[ 
+SELECT og.ortholog_group_id
+FROM apidb.OrthologGroup og
+WHERE og.name = ?
+]]>
+       </sql>
+     </sqlQuery> 
+
+     <sqlQuery>
+       <name>group_per_seq_source_id_and_taxon</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id
+FROM dots.ExternalAaSequence s,
+     apidb.OrthologGroupAaSequence ogs,
+     apidb.OrthomclTaxon t
+WHERE s.source_id = ?
+  AND t.three_letter_abbrev = ?
+  AND s.taxon_id = t.taxon_id
+ AND ogs.aa_sequence_id = s.aa_sequence_id
+]]>
+       </sql>
+     </sqlQuery> 
+
+
+     <sqlQuery>
+       <name>group_per_seq_source_id</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.ortholog_group_id
+FROM dots.ExternalAaSequence s,
+     apidb.OrthologGroupAaSequence ogs
+WHERE s.source_id = ?
+ AND ogs.aa_sequence_id = s.aa_sequence_id
+]]>
+       </sql>
+     </sqlQuery> 
+
 
 
      <sqlQuery>

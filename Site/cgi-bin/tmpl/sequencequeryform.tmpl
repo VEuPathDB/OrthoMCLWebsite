@@ -49,6 +49,21 @@ OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
 -->
 	  <p> Using this tool, you can query by keyword (case insensitive), sequence accession (e.g. <font color="#ff00ff">At1g20570.1</font>), taxon abbreviation (e.g. <font color="#ff00ff">sce</font>), Pfam domain accession (e.g. <font color="#ff00ff">PF00018</font>), Pfam domain name (e.g. <font color="#ff00ff">SH3_1</font>) and Pfam domain keyword (case insensitive).
           <p> Sequence accessions used in OrthoMCL-DB are those obtained from the source of the genome.  The source is not always Genbank/EMBL/DDBJ, so the accessions are not necessarily from there.  To be sure which type of accession you should use to find a sequence, refer to the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">Data Sources</a> which lists the sources of each genome.
+	  <p> Keyword search supports boolean mode, and here are some examples:
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin | conjugating | enzyme</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain either one of the three words.
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin conjugating enzyme</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain all three words of "ubiquitin", "conjugating", "enzyme", in any order.
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin - conjugating</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin" but not "conjugating". The spaces on both sides of the Hyphen are necessary.
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin-conjugating</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the word "ubiquitin-conjugating", where the the Hyphen is treated as regular character.
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubi*</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain words starting with "ubi". The wildcard can be at the end of the keyword ("ubi*"), or within it ("ubi*tin"), but cannot by at the beginning of the keyword.
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"ubiquitin-conjugating enzyme"</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the exact phrase "ubiquitin-conjugating enzyme".
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">"(ubiquitin conjugating) | enzyme"</font>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain the either "enzyme", or both "ubiquitin" and "conjugating".
 	  <p>To combine the results of Sequence Searches (using union, intersect and minus), go to your <a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History</a>.
 	  </td></tr>
        </table></td>

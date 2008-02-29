@@ -8,13 +8,12 @@ function initial() {
     // resolve the children of each node
     for (var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
+            taxon.expanded = true;
         if (taxon_id != taxon.parent_id) {
             var parent = taxons[taxon.parent_id];
             parent.children.push(taxon);
-            taxon.expanded = false;
         } else { 
             roots.push(taxon); 
-            taxon.expanded = true;
         }
     }
     roots.sort(compareTaxons);
@@ -54,7 +53,7 @@ function displayClade(node, content) {
     var foldImage = node.expanded ? "minus.png" : "plus.png";
 
     content.push("<table><tr><td class='clade'>");
-    if (subClades.length == 0) {
+    if (subClades.length == 0 || node.id == node.parent_id) {
         content.push("<image width='20' src='images/spacer.gif'>");
     } else {
         content.push("<image id='", node.id, "_fold' width='20' ");
@@ -264,7 +263,7 @@ function saveState() {
     var content = "";
     for(var taxon_id in taxons) {
         var taxon = taxons[taxon_id];
-        if (!taxon.is_species && taxon.expanded) {
+        if (!taxon.is_species && !taxon.expanded) {
             if (content.length > 0) content += "|";
             content += taxon.abbrev;
         }
@@ -283,15 +282,15 @@ function loadState() {
         var content = (end >= 0) ? allcookies.substring(pos, end) 
                                  : allcookies.substring(pos);
 
-        var expanded = { };
+        var collapsed = { };
         var parts = content.split("|");
         for (var i = 0; i < parts.length; i++) {
-            expanded[parts[i]] = true;
+            collapsed[parts[i]] = true;
         }
         // update taxons
         for (var taxon_id in taxons) {
             var taxon = taxons[taxon_id];
-            if (taxon.abbrev in expanded) taxon.expanded = true;
+            if (taxon.abbrev in collapsed) taxon.expanded = false;
         }
     }
 }

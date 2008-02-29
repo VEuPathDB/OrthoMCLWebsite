@@ -17,6 +17,17 @@
             <br>
             <table cellpadding="2" cellspacing="0" border="0" width="100%">
               <tr>
+                <td>
+                  <table cellpadding="2" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <th width="100%" align="center" bgcolor="#444488"><a name="Current"><FONT COLOR="#ffffff">Current Release</FONT></a></th>
+                    </tr>
+                  </table>
+                  <p> Click for <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=summary">summary statistics</a>, <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">data sources</a>, or to <a href="common/downloads">download</a> the protein sequences and ortholog groups. To obtain all-versus-all BLAST results, contact &lt;help@orthomcl.org&gt;.
+                  <p>
+                </td>
+              </tr>
+              <tr>
                 <th width="100%" align="center" bgcolor="#444488"><a name="Background"><FONT COLOR="#ffffff">Background</FONT></a></th>
               </tr>
             </table>
@@ -35,6 +46,36 @@
     (Lee, Sultana et al. 2002), and an analysis using EC number suggests a high degree of reliability (Li, 
     Stoeckert et al. 2003). 
             <p>In a recent assessment (Chen, et al. 2007), the performance of seven widely used orthology detection algorithms, representing three kinds of strategies (phylogeny-based, evolutionary distance-based and BLAST-based), are evaluated using the statistical technique Latent Class Analysis (LCA). LCA is useful when there are large data sets available but no gold standard. The results show an overall trade-off between sensitivity and specificity among these algorithms, with INPARANOID and OrthoMCL as the two best methods having both False Positive (FP) and False Negative (FN) error rates lower than 20%.
+            <p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table cellpadding="2" cellspacing="0" border="0" width="100%">
+              <tr>
+                <th width="100%" align="center" bgcolor="#444488"><a name="FAQ"><FONT COLOR="#ffffff">Frequently Asked Questions</FONT></a></th>
+              </tr>
+            </table>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>1. What group information is provided?</i>
+            <p>For each ortholog group, we provide basic information and other useful data about the group:
+            <br>&nbsp;&nbsp;<i>a)</i>. Size of the group, in terms of both number of sequences and number of taxa.
+            <br>&nbsp;&nbsp;<i>b)</i>. Sequence similarity info, indicating the degree of conservation within the group: % Match Pairs (percentage of all possible pairs within the group that are matched through BLAST under the default cutoff, and the rest of similarity info is calculated based on these matched pairs only), Average E-value, Average % Coverage, and Average % Identity.
+            <br>&nbsp;&nbsp;<i>c)</i>. Phyletic profile, displaying #sequences from each species that belong to this ortholog group; black box indicates presence (with the number below the genome abbreviation representing #sequences) while white box stands for absence.
+            <br>&nbsp;&nbsp;<i>d)</i>. Keywords: the most frequently occurring keywords in the annotations of the member sequences.
+            <br>&nbsp;&nbsp;<i>e)</i>. Pfam domains: the most frequently occurring Pfam domains in the member sequences.
+            <br>&nbsp;&nbsp;<i>f)</i>. Pfam domain architecture: useful to compare among group members and to identify outliers (due to evolution or sequencing/gene model errors).
+            <br>&nbsp;&nbsp;<i>e)</i>. BioLayout graph, displaying the sequence similarity relationship between group members together with OrthoMCL edge information (in the SVG version of the graph).
+            <br>&nbsp;&nbsp;<i>f)</i>. Multiple Sequence Alignment of the ortholog group.
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>2. Which software was used to generate the MSAs (multiple sequence alignments) and BioLayout graphs?</i>
+            <p>MUSCLE (3.52), and a special version of BioLayout (from Leon Goldovsky, EBI) which can generate PNG figures.
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>3. Why do some groups have no links to an MSA or BioLayout graph?</i>
+            <p>For big groups (size>100), we don't provide them because there are difficulties running MSA and BioLayout softwares for big groups. However, you can still download fasta sequences from our database and run alignment by yourself. As for BioLayout graph, you can contact us at help@orthomcl.org to request BioLayout input files.
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>4. How can I find all E. coli genes which have human orthologs?</i>
+            <p>OrthoMCL-DB is designed to provide complicated query features. In this case, several steps are required to find the answer:
+            <br>&nbsp;&nbsp;<i>Step a)</i>. Identify the groups that satisfy this phyletic pattern criteria, using "eco+hsa=2T" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpression">Phyletic Pattern Expression (PPE) Group Query page</a> (eco and hsa are the abbreviation names for E. coli and H. sapiens).
+            <br>&nbsp;&nbsp;<i>Step b)</i>. Identify all genes belonging to the groups identified in Step (a), by selecting the group query result from Step a and clicking on "GROUP QUERY INTO SEQUENCE QUERY" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Group Query History page</a>. This will automatically redirect you to the Sequence Query History page, where all genes belonging to the groups identified in Step (a) are deposited as a new sequence query.
+            <br>&nbsp;&nbsp;<i>Step c)</i>. Identify all E. coli genes, by searching for "eco" in "Taxon_Abbreviation" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&type=ackeyword">Accession/Keyword Sequence Query page</a>.
+            <br>&nbsp;&nbsp;<i>Step d)</i>. Find the answer to the original question by merging the sequence query results from Steps (c) and (d) using INTERSECTION at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History page</a>. You can further download the list of gene IDs or sequences from this page.
             <p>
           </td>
         </tr>
@@ -64,48 +105,7 @@
         <td>
           <table cellpadding="2" cellspacing="0" border="0" width="100%">
             <tr>
-              <th width="100%" align="center" bgcolor="#444488"><a name="Download"><FONT COLOR="#ffffff">Database Download</FONT></a></th>
-            </tr>
-          </table>
-          <p> The protein sequences, ortholog groups and all versus all BLAST results are available on the <a href="common/downloads">OrthoMCL Download Site</a>
-          <p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table cellpadding="2" cellspacing="0" border="0" width="100%">
-            <tr>
-              <th width="100%" align="center" bgcolor="#444488"><a name="FAQ"><FONT COLOR="#ffffff">Frequently Asked Questions</FONT></a></th>
-            </tr>
-          </table>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>1. What group information is provided?</i>
-          <p>For each ortholog group, we provide basic information and other useful data about the group:
-            <br>&nbsp;&nbsp;<i>a)</i>. Size of the group, in terms of both number of sequences and number of taxa.
-            <br>&nbsp;&nbsp;<i>b)</i>. Sequence similarity info, indicating the degree of conservation within the group: % Match Pairs (percentage of all possible pairs within the group that are matched through BLAST under the default cutoff, and the rest of similarity info is calculated based on these matched pairs only), Average E-value, Average % Coverage, and Average % Identity.
-            <br>&nbsp;&nbsp;<i>c)</i>. Phyletic profile, displaying #sequences from each species that belong to this ortholog group; black box indicates presence (with the number below the genome abbreviation representing #sequences) while white box stands for absence.
-            <br>&nbsp;&nbsp;<i>d)</i>. Keywords: the most frequently occurring keywords in the annotations of the member sequences.
-            <br>&nbsp;&nbsp;<i>e)</i>. Pfam domains: the most frequently occurring Pfam domains in the member sequences.
-            <br>&nbsp;&nbsp;<i>f)</i>. Pfam domain architecture: useful to compare among group members and to identify outliers (due to evolution or sequencing/gene model errors).
-            <br>&nbsp;&nbsp;<i>e)</i>. BioLayout graph, displaying the sequence similarity relationship between group members together with OrthoMCL edge information (in the SVG version of the graph).
-            <br>&nbsp;&nbsp;<i>f)</i>. Multiple Sequence Alignment of the ortholog group.
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>2. Which software was used to generate the MSAs (multiple sequence alignments) and BioLayout graphs?</i>
-          <p>MUSCLE (3.52), and a special version of BioLayout (from Leon Goldovsky, EBI) which can generate PNG figures.
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>3. Why do some groups have no links to an MSA or BioLayout graph?</i>
-          <p>For big groups (size>100), we don't provide them because there are difficulties running MSA and BioLayout softwares for big groups. However, you can still download fasta sequences from our database and run alignment by yourself. As for BioLayout graph, you can contact us at help@orthomcl.org to request BioLayout input files.
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;<i>4. How can I find all E. coli genes which have human orthologs?</i>
-          <p>OrthoMCL-DB is designed to provide complicated query features. In this case, several steps are required to find the answer:
-            <br>&nbsp;&nbsp;<i>Step a)</i>. Identify the groups that satisfy this phyletic pattern criteria, using "eco+hsa=2T" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpression">Phyletic Pattern Expression (PPE) Group Query page</a> (eco and hsa are the abbreviation names for E. coli and H. sapiens).
-            <br>&nbsp;&nbsp;<i>Step b)</i>. Identify all genes belonging to the groups identified in Step (a), by selecting the group query result from Step a and clicking on "GROUP QUERY INTO SEQUENCE QUERY" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Group Query History page</a>. This will automatically redirect you to the Sequence Query History page, where all genes belonging to the groups identified in Step (a) are deposited as a new sequence query.
-            <br>&nbsp;&nbsp;<i>Step c)</i>. Identify all E. coli genes, by searching for "eco" in "Taxon_Abbreviation" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&type=ackeyword">Accession/Keyword Sequence Query page</a>.
-            <br>&nbsp;&nbsp;<i>Step d)</i>. Find the answer to the original question by merging the sequence query results from Steps (c) and (d) using INTERSECTION at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History page</a>. You can further download the list of gene IDs or sequences from this page.
-          <p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table cellpadding="2" cellspacing="0" border="0" width="100%">
-            <tr>
-              <th width="100%" align="center" bgcolor="#444488"><a name="Publication"><FONT COLOR="#ffffff">Publication</FONT></a></th>
+              <th width="100%" align="center" bgcolor="#444488"><a name="Publication"><FONT COLOR="#ffffff">Publications</FONT></a></th>
             </tr>
           </table>
           <p>&nbsp;&nbsp;1. Li Li, Christian J. Stoeckert, Jr., and David S. Roos <br>
@@ -127,7 +127,7 @@
          <td>
            <table cellpadding="2" cellspacing="0" border="0" width="100%">
              <tr>
-               <th width="100%" align="center" bgcolor="#444488"><a name="Acknowledgement"\><FONT COLOR="#ffffff">Acknowledgement</FONT></a></th>
+               <th width="100%" align="center" bgcolor="#444488"><a name="Acknowledgement"\><FONT COLOR="#ffffff">Acknowledgements</FONT></a></th>
              </tr>
            </table>
            <p>&nbsp;&nbsp;&nbsp;&nbsp; This project has been funded in whole or in part with Federal funds from the National Institute of Allergy and Infectious Diseseases, National Institutes of Health, Department of Health and Human Services, under Contract No. HHSN266200400037C. The major PIs are Drs. David Roos and Chris Stoeckert.<br>

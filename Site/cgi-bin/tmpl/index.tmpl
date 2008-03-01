@@ -19,19 +19,19 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Genomes: <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome"><TMPL_VAR NAME="NUM_TAXA"></a><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Protein Sequences: <span class="blue"><TMPL_VAR NAME="NUM_SEQUENCES"></span> <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Ortholog Groups: <span class="blue"><TMPL_VAR NAME="NUM_GROUPS"></span> </p>
-      <span class="larger"><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm">Search Sequence</a> </span>
+      <span class="larger"><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm">Search for Groups</a> </span>
+      <ul class="bullet_line">
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ackeyword">by Accession / Keyword</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppform">by Phyletic Pattern</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">by Phyletic Pattern - Advanced</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=property">by Group Properties</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Query History</a></li>
+      </ul>
+      <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm" class="larger">Search for Sequences</a>
       <ul class="bullet_line">
         <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&amp;type=keyword">by Accession / Keyword</a></li>
         <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&amp;type=blast">by BLAST Search</a></li>
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">History</a></li>
-      </ul>
-      <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm" class="larger">Search Group</a>
-      <ul class="bullet_line">
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ackeyword">by Accession / Keyword</a></li>
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=property">by Group Properties</a></li>
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">by Phyletic Pattern Expression</a></li>
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppform">by Phyletic Pattern Form</a></li>
-        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">History</a></li>
+        <li><a href="cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Query History</a></li>
       </ul>
       <p class="large"><a href="cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Software" class="larger">OrthoMCL Software</a></p>
       <p class="large"><a href="cgi-bin/OrthoMclWeb.cgi?rm=orthomcl#Download" class="larger">Database Download</a></p>

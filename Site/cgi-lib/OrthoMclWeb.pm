@@ -1993,11 +1993,17 @@ sub BLGraph {
   } else {
     $para{PAGETITLE}="BioLayout Graph for $ac";
     $para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
-    $para{CONTENT}="Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
+    $para{CONTENT}="<p>Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
                         <b>Interactive Graph (SVG)</b></a></font> <font size=\"1\">.    
                         You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">
-                        Scalable Vector Graphics Viewer</a></font>.
-                        <p><img src=\"$bl_src&image=1\"><p>";
+                        Scalable Vector Graphics Viewer</a></font>.</p>
+                    <p><b>Notes</b>: In this image, nodes represent proteins, and proteins from the same 
+                        species have identical color code; <br>
+                        If two proteins form an edge (e-value better than 1e-5), the color
+                        of the edge reflects how good the match is: scales from red to blue,
+                        where pure red is the best match in the group, and pure blue is the
+                        worst match.</p>
+                    <p><img src=\"$bl_src&image=1\"><p>";
     $self->defaults($tmpl);
   }
   $tmpl->param(\%para);

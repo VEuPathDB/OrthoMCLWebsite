@@ -99,7 +99,7 @@ a.nocolor_w:link {
     margin-bottom: 1px;
     padding: 0px;
     border-style: none;
-    border-width: 3;
+    border-width: 2;
     border-top-style: solid;
     border-bottom-style: solid;
     border-right-style: dotted;
@@ -126,20 +126,20 @@ a.nocolor_w:link {
 
 .phyletic-category *[location="head"] { 
     border-left-style: solid;
-    width: 23px;
+    width: 25px;
 }
 
 .phyletic-category *[location="tail"] { 
     border-right-style: solid;
-    border-right-width: 3px;
-    width: 24px;
+    border-right-width: 2px;
+    width: 25px;
 }
 
 .phyletic-category *[location="head-tail"] { 
     border-left-style: solid;
     border-right-style: solid;
-    border-right-width: 3px;
-    width: 21px;
+    border-right-width: 2px;
+    width: 23px;
 }
 
 .phyletic-category *[index="0"] { border-color: #FF33cc; } /* BACT */

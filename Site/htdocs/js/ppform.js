@@ -269,12 +269,12 @@ function saveState() {
         }
     }
 
-    document.cookie = "phyletic-tree=" + content + "; max-age=" + (60*60*24*365);
+    document.cookie = "phyletic-tree-v2=" + content + "; max-age=" + (60*60*24*365);
 }
 
 function loadState() {
     var allcookies = document.cookie;
-    var key = "phyletic-tree=";
+    var key = "phyletic-tree-v2=";
     var pos = allcookies.indexOf(key);
     if (pos >= 0) {
         pos += key.length;

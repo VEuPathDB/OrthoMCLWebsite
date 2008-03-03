@@ -7,14 +7,14 @@
   <target name="ApiCommonWebsite-Installation">
     <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite-Installation">
       <property name="project" value="ApiCommonWebsite"/>
-      <property name="version" value="2.0"/>
+      <property name="version" value="api-mar-08"/>
     </ant>
   </target>  
 
   <target name="OrthoMCLData/Load-Installation">
     <ant antfile="../OrthoMCLData/build.xml" target="OrthoMCLData/Load-Installation">
       <property name="project" value="OrthoMCLData"/>
-      <property name="version" value="2.0"/>
+      <property name="version" value="api-mar-08"/>
     </ant>
   </target>
   
@@ -23,7 +23,7 @@
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/ApiCommonWebsite"/>
       <property name="project" value="ApiCommonWebsite"/>
-      <property name="version" value="dec-2007"/>
+      <property name="version" value="api-mar-08"/>
     </ant>
   </target>
     
@@ -31,7 +31,7 @@
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLData"/>
       <property name="project" value="OrthoMCLData"/>
-      <property name="version" value="2.0"/>
+      <property name="version" value="api-mar-08"/>
       <property name="excludeChildren" value="true"/>
     </ant>
   </target>

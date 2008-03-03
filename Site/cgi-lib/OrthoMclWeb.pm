@@ -685,8 +685,6 @@ sub groupList {
 	  my $query_string;
 	  if ($in eq 'Keyword') {
 	    $query_string = $self->getSql('groups_like_seq_descrip_keyword', {querycode=>$querycode});
-	    # replace any '*' wildcards w/ '%' SQL wildcard
-	    $query_string =~ s/\*/%/g;
 	  } elsif ($in eq 'Pfam_Accession') {
 	    $query_string = $self->getSql('groups_by_pfam_accession', {querycode=>$querycode});
 	  } elsif ($in eq 'Pfam_Name') {
@@ -1369,8 +1367,6 @@ sub sequenceList {
         $query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
       } elsif ($in eq 'Keyword') {
         $query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
-        # replace any '*' wildcards w/ '%' SQL wildcard
-	$query_string =~ s/\*/%/g;
       } elsif ($in eq 'Taxon_Abbreviation') {
         $query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
       } elsif ($in eq 'Pfam_Accession') {

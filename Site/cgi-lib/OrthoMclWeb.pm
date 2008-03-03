@@ -1906,7 +1906,7 @@ sub MSA {
     my $query_msa = $dbh->prepare($self->getSql('msa_per_group_name'));
     $query_msa->execute($ac);
     if (my @data = $query_msa->fetchrow_array()) {
-      $para{T}="Multiple Sequence Alignment for Group <font color=\"red\">$ac</font>";
+      $para{T}="Multiple Sequence Alignment for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
       $para{CONTENT}.=$data[0];
     } else {
       # $para{ERROR}="The file '$file' doesn't exist. Please check it later because we are updating data currently."
@@ -1943,10 +1943,11 @@ sub BLGraph {
 
   my $ac = $q->param("groupac");
   my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
+  my $group_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$ac";
   my %para;
   if ($q->param("svg")) {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
-    $para{T} = "BioLayout Graph (SVG) for Group <font color=\"red\">$ac</font>";
+    $para{T} = "BioLayout Graph (SVG) for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
     $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
                                height=\"800\" type=\"image/svg+xml\"></embed>
                         <p>Notes: In this graph, nodes represent proteins (species are 
@@ -1988,7 +1989,7 @@ sub BLGraph {
     return;
   } else {
     $para{PAGETITLE}="BioLayout Graph for $ac";
-    $para{T}="BioLayout Graph for Group <font color=\"red\">$ac</font>";
+    $para{T}="BioLayout Graph for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
     $para{CONTENT}="<p>Link to <a href=\"cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac&svg=1\">
                         <b>Interactive Graph (SVG)</b></a></font> <font size=\"1\">.    
                         You may need a <a href=\"http://www.adobe.com/svg/viewer/install/main.html\">

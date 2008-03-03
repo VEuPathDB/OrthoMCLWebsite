@@ -30,14 +30,14 @@ initial();
 <!-- DEBUG CONTENT BEGIN -->
   <TMPL_IF NAME="LOOP_DEBUG">
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr><td><strong><font color="red">DEBUG INFORMATION</font></strong></td></tr>
   <TMPL_LOOP NAME="LOOP_DEBUG">
      <tr><td colspan="2"><TMPL_VAR NAME="DEBUG"></td></tr>
   </TMPL_LOOP>
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
   </TMPL_IF>
 <!-- DEBUG CONTENT END-->
@@ -45,14 +45,14 @@ initial();
 <!-- ERROR MESSAGE BEGIN -->
   <TMPL_IF NAME="LOOP_ERROR">
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr><td><strong><font color="red">ERROR MESSAGE</font></strong></td></tr>
   <TMPL_LOOP NAME="LOOP_ERROR">
      <tr><td colspan="2"><TMPL_VAR NAME="ERROR"></td></tr>
   </TMPL_LOOP>
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
   </TMPL_IF>
 <!-- ERROR MESSAGE END-->
@@ -69,7 +69,7 @@ initial();
        <td colspan="2"><br><H3>Group Summary (<font color="red"><TMPL_VAR NAME="GROUP_ACCESSION"></font>)</H3></td>
      </tr>
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr>
         <td colspan="2" align="left"><br>
@@ -204,14 +204,14 @@ initial();
        <td colspan="2"> Sequence Search Result : <strong><TMPL_VAR NAME="NUM_SEQUENCES"></strong> Protein Sequences</td>
      </tr>
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
 
     <FORM action="cgi-bin/OrthoMclWeb.cgi?">
-         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <tr><td BGCOLOR=#eceff5 COLSPAN='2' ALIGN=CENTER>
            <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
          </td></tr>
-         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <tr><td BGCOLOR=#eceff5 COLSPAN='2' ALIGN=CENTER>
          <TMPL_UNLESS ONEPAGE>
             <TMPL_VAR PAGER_PREV>
             <TMPL_VAR PAGER_JUMP>
@@ -229,12 +229,12 @@ initial();
 
 <!-- LIST OF PROTEIN SEQUENCES START -->
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr>
        <td width="800" colspan="2">
        <br>
-       <table border="1">
+       <table border="1" cellspacing="0" cellpadding="2">
        <tr bgcolor="#aaaaaa">
          <th width="5%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Number</th>
          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Accession</th>
@@ -248,10 +248,10 @@ initial();
 
 <TMPL_LOOP NAME="PAGER_DATA_LIST">
   <TMPL_IF NAME="__ODD__">
-       <tr bgcolor="#ddeeee">
+       <tr bgcolor="#dddfee">
   </TMPL_IF>
   <TMPL_IF NAME="__EVEN__">
-       <tr bgcolor="#eeeedd">
+       <tr bgcolor="#eceff5">
   </TMPL_IF>
          <td align="center"><TMPL_VAR SEQUENCE_NUMBER></td>
          <td align="center">
@@ -280,16 +280,16 @@ initial();
        <td colspan="2"><br></td>
      </tr>
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
 
 <!-- SEQUENCE PAGER START -->
   <TMPL_UNLESS NAME="GROUP">
     <FORM action="cgi-bin/OrthoMclWeb.cgi?">
-         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <tr><td BGCOLOR=#eceff5 COLSPAN=3 ALIGN=CENTER>
            <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
          </td></tr>
-         <tr><td BGCOLOR=#DDDDDD COLSPAN=3 ALIGN=CENTER>
+         <tr><td BGCOLOR=#eceff5 COLSPAN=3 ALIGN=CENTER>
          <TMPL_UNLESS ONEPAGE>
             <TMPL_VAR PAGER_PREV>
             <TMPL_VAR PAGER_JUMP>
@@ -303,7 +303,7 @@ initial();
   </TMPL_UNLESS>
 <!-- SEQUENCE PAGER END -->
      <tr>
-       <td colspan="2" bgcolor="#326495"><img src="/images/spacer.gif" width="1" height="1"></td>
+       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
      </tr>
      <tr>
        <td colspan="2"><br></td>

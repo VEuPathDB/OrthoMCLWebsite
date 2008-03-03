@@ -1902,6 +1902,8 @@ sub MSA {
     # in order to read clobs correctly
     $dbh->{LongTruncOk} = 0;
     $dbh->{LongReadLen} = 100000000;
+
+    my $group_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$ac";
         
     my $query_msa = $dbh->prepare($self->getSql('msa_per_group_name'));
     $query_msa->execute($ac);
@@ -1942,8 +1944,8 @@ sub BLGraph {
   my $tmpl = $self->load_tmpl('empty.tmpl');
 
   my $ac = $q->param("groupac");
-  my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
   my $group_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$ac";
+  my $bl_src = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=BLGraph&groupac=$ac";
   my %para;
   if ($q->param("svg")) {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
@@ -2032,7 +2034,9 @@ sub getSeq {
     $para{PAGETITLE}="FASTA Sequences for $groupac";
     my $query_sequence = $dbh->prepare($self->getSql('sequence_info_per_group_name'));
 
-    $para{T}='FASTA Sequences for Group <font color="red">'.$groupac.'</font>';
+    my $group_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$groupac";
+
+    $para{T}="FASTA Sequences for Group <a href='$group_url'><font color='red'>$groupac</font></a>";
     $query_sequence->execute($groupac);
 
     $para{CONTENT} = "<div class='sequence'><pre>";

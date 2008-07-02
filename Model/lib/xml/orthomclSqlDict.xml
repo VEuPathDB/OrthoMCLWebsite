@@ -99,7 +99,7 @@ WHERE ortholog_group_id = ?
        <name>groups_like_seq_descrip_keyword</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.ortholog_group_id
+SELECT DISTINCT ogs.ortholog_group_id
 FROM apidb.OrthologGroupAaSequence ogs,
      dots.AaSequenceImp asi
 WHERE ogs.aa_sequence_id = asi.aa_sequence_id
@@ -116,7 +116,7 @@ GROUP BY ogs.ortholog_group_id
        <name>groups_by_pfam_accession</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.ortholog_group_id 
+SELECT DISTINCT ogs.ortholog_group_id 
 FROM apidb.OrthologGroupAaSequence ogs,
 dots.DomainFeature df,
 dots.DbRefAaFeature dbaf,
@@ -136,7 +136,7 @@ GROUP BY ogs.ortholog_group_id
        <name>groups_like_pfam_name</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.ortholog_group_id 
+SELECT DISTINCT ogs.ortholog_group_id 
 FROM apidb.OrthologGroupAaSequence ogs,
 dots.DomainFeature df, 
 dots.DbRefAaFeature dbaf,
@@ -156,7 +156,7 @@ GROUP BY ogs.ortholog_group_id
        <name>groups_like_pfam_description</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.ortholog_group_id
+SELECT DISTINCT ogs.ortholog_group_id
 FROM apidb.OrthologGroupAaSequence ogs,
  dots.DomainFeature df,
 dots.DbRefAaFeature dbaf,
@@ -189,7 +189,7 @@ AND og.number_of_members  $number
        <name>groups_by_num_species</name>
        <sql>
 <![CDATA[ 
-SELECT ogs.ortholog_group_id 
+SELECT DISTINCT ogs.ortholog_group_id 
 FROM apidb.OrthologGroupAaSequence ogs,
 dots.ExternalAaSequence eas
 WHERE ogs.ortholog_group_id != 0
@@ -336,7 +336,7 @@ WHERE source_id = ?
        <name>sequence_per_source_id_and_taxon</name>
        <sql>
 <![CDATA[ 
-SELECT aa_sequence_id 
+SELECT DISTINCT aa_sequence_id 
 FROM dots.ExternalAaSequence s, apidb.OrthomclTaxon t
 WHERE s.source_id = ?
 AND t.three_letter_abbrev = ?
@@ -395,7 +395,7 @@ AND ot.three_letter_abbrev = '$querycode'
        <name>sequence_id_by_pfam_accession</name>
        <sql>
 <![CDATA[ 
-SELECT df.aa_sequence_id 
+SELECT DISTINCT df.aa_sequence_id 
 FROM dots.DomainFeature df,
 dots.DbRefAaFeature dbaf,
 sres.DbRef db
@@ -412,7 +412,7 @@ AND db.primary_identifier = '$querycode'
        <name>sequence_id_like_pfam_name</name>
        <sql>
 <![CDATA[ 
-SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ df.aa_sequence_id 
+SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ DISTINCT df.aa_sequence_id 
 FROM dots.DomainFeature df,
     dots.DbRefAaFeature dbaf,
     sres.DbRef db
@@ -429,7 +429,7 @@ WHERE df.aa_feature_id = dbaf.aa_feature_id
        <name>sequence_id_like_pfam_keyword</name>
        <sql>
 <![CDATA[ 
-SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ df.aa_sequence_id 
+SELECT /*+use_nl(db, dbaf) use_nl(dbaf, df)*/ DISTINCT df.aa_sequence_id 
 FROM dots.DomainFeature df,
     dots.DbRefAaFeature dbaf,
     sres.DbRef db

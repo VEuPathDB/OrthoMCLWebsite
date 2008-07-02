@@ -395,7 +395,7 @@ AND ot.three_letter_abbrev = '$querycode'
        <name>sequence_id_by_pfam_accession</name>
        <sql>
 <![CDATA[ 
-SELECT df.aa_sequence_id 
+SELECT DISTINCT df.aa_sequence_id 
 FROM dots.DomainFeature df,
 dots.DbRefAaFeature dbaf,
 sres.DbRef db

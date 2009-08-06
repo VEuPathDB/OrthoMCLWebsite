@@ -45,9 +45,9 @@ SELECT orthomcl_taxon_id AS taxon_id,
        nvl(parent_id, orthomcl_taxon_id) AS parent_id,
        three_letter_abbrev AS abbrev,
        name, is_species, 
-       order_num AS sort_index
+       species_order AS sort_index
 FROM apidb.OrthomclTaxon
-ORDER BY parent_id ASC, order_num ASC
+ORDER BY parent_id ASC, species_order ASC
 ]]>
        </sql>
      </sqlQuery> 

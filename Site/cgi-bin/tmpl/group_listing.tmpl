@@ -5,31 +5,35 @@
 
 <!-- BEGIN CONTENT -->
 <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.tooltip.min.js"></script>
 <script type="text/javascript" src="js/phyletic-pattern.js"></script>
+<link href="css/group.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
 
 <div id="phyletic-data">
-    <TMPL_LOOP NAME=TAXONS>
-        <taxon taxon-id="<TMPL_VAR NAME=TAXON_ID>"
-               parent="<TMPL_VAR NAME=PARENT_ID>"
-               abbrev="<TMPL_VAR NAME=ABBREV>"
-               leaf-node="<TMPL_VAR NAME=IS_SPECIES>"
-               index="<TMPL_VAR NAME=INDEX>" >
-            <TMPL_VAR NAME=INDEX>
-        </taxon>
-    </TMPL_LOOP>
+<TMPL_LOOP NAME=TAXONS>
+<taxon taxon-id="<TMPL_VAR NAME=TAXON_ID>" parent="<TMPL_VAR NAME=PARENT_ID>" abbrev="<TMPL_VAR NAME=ABBREV>" leaf-node="<TMPL_VAR NAME=IS_SPECIES>" index="<TMPL_VAR NAME=INDEX>" ><TMPL_VAR NAME=NAME></taxon>
+</TMPL_LOOP>
 </div>
 
 <h3 class="caption">Group Query Result</h3>
 
 <div id="legend">
-    <div><b>Legend</b></div>
-    <div id="taxon-legend"></div>
+    <div id="taxon-legend">
+        <div><b>Show/Hide branches</b></div>
+    </div>
     <div id="count-legend"></div>
 </div>
 
 <div id="query">
     <p>Your Query is : <b><TMPL_VAR NAME="QUERY_CODE"></b> (<TMPL_VAR NAME="QUERY_TYPE">)</p>
     <p>Group Search Result : <b><TMPL_VAR NAME="NUM_GROUPS"></b> OrthoMCL Groups</p>
+</div>
+
+<div align="center">
+    <input id="showDetail" type="checkbox" checked="true" />Show Group Details &nbsp;&nbsp;
+    <input id="showPhyletic" type="checkbox" checked="true" />Show Phyletic Patterns &nbsp;&nbsp;
+    <input id="showCount" type="checkbox" checked="true" />Show Labels &amp; Counts &nbsp;&nbsp;
 </div>
 
 <div id="result">
@@ -54,10 +58,10 @@
 
   <div id="groups">
     <TMPL_LOOP NAME="PAGER_DATA_LIST">
-      <table class="group" <TMPL_IF NAME="__EVEN__">even="true"</TMPL_IF> >
+      <table class="group" width="100%" <TMPL_IF NAME="__EVEN__">even="true"</TMPL_IF> >
         <tr>
-	      <td width="100" align="center">
-	        Group #<TMPL_VAR NAME="GROUP_NUMBER"><br><br>
+              <td align="center" valign="top" width="30">#<TMPL_VAR NAME="GROUP_NUMBER"></td>
+	      <td align="center" valign="top" width="50">
 		    <a href="<TMPL_VAR GROUP_LINK>" 
 		       onmouseover="this.T_STICKY=true;this.T_OFFSETY=-150;this.T_OFFSETX=-80;this.T_TITLE='Links to <TMPL_VAR GROUP_ACCESSION>';this.T_WIDTH=200;return escape('<table><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR GROUP_LINK>\'>List of Proteins</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR DOMARCH_LINK>\'>Pfam Domain Architecture</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF BIOLAYOUT_LINK><a href=\'<TMPL_VAR BIOLAYOUT_LINK>\'>BioLayout Graph</a><TMPL_ELSE><font color=\'#666666\'>No Biolayout Graph (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF MSA_LINK><a href=\'<TMPL_VAR MSA_LINK>\'>Multiple Sequence Alignment</a><TMPL_ELSE><font color=\'#666666\'>No Multiple Seq. Alignment (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR SEQUENCE_LINK>\'>Get Sequences (FASTA)</a></font></td></tr></table>')">
 		       <TMPL_VAR GROUP_ACCESSION>
@@ -109,7 +113,6 @@
     	  </td>
         </tr>
       </table>
-      <HR>
     
     </TMPL_LOOP>
 

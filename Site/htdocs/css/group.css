@@ -1,0 +1,89 @@
+#phyletic-data {
+    display: none;
+}
+
+#legend {
+    float: right;
+    overflow: visible;
+}
+
+
+#legend #taxon-legend .children {
+    margin-left: 20px;
+}
+
+#result {
+    clear: both;
+}
+
+#groups .group[even="true"] {
+    background-color:#DCDCDC;
+}
+
+#groups .group .phyletic-pattern {
+    clear: both;
+}
+
+#groups .group .phyletic-pattern .count-data {
+    display: none;
+}
+
+#groups .group .phyletic-pattern .branch {
+    border: 0px solid black;
+}
+
+#legend #taxon-legend .node[taxon="BACT"], #groups .group .phyletic-pattern .branch[taxon="BACT"] { color: #FF33cc; }
+#legend #taxon-legend .node[taxon="FIRM"], #groups .group .phyletic-pattern .branch[taxon="FIRM"] { color: #cc0000; }
+#legend #taxon-legend .node[taxon="PROT"], #groups .group .phyletic-pattern .branch[taxon="PROT"] { color: #cc00ff; }
+#legend #taxon-legend .node[taxon="ARCH"], #groups .group .phyletic-pattern .branch[taxon="ARCH"] { color: #ff9900; }
+#legend #taxon-legend .node[taxon="EUKA"], #groups .group .phyletic-pattern .branch[taxon="EUKA"] { color: #66ffff; }
+#legend #taxon-legend .node[taxon="PLAL"], #groups .group .phyletic-pattern .branch[taxon="PLAL"] { color: #009933; }
+#legend #taxon-legend .node[taxon="KINE"], #groups .group .phyletic-pattern .branch[taxon="KINE"] { color: #3399ff; }
+#legend #taxon-legend .node[taxon="ALVE"], #groups .group .phyletic-pattern .branch[taxon="ALVE"] { color: #3300cc; }
+#legend #taxon-legend .node[taxon="FUNG"], #groups .group .phyletic-pattern .branch[taxon="FUNG"] { color: #ccff33; }
+#legend #taxon-legend .node[taxon="META"], #groups .group .phyletic-pattern .branch[taxon="META"] { color: #33ff00; }
+
+#groups .group .phyletic-pattern .node {
+    border-size: 1px;
+    text-align: center;
+    width: 25px;
+    font-family: sans-serif, serif;
+    font-size: 7pt;
+    float: left;
+    overflow: hidden;
+    border: 1px solid;
+    margin-right:1px;
+    margin-bottom: 1px;
+    line-height: normal;
+    background-color: white;
+    cursor: pointer;
+}
+
+#groups .group .phyletic-pattern .node .name {
+    padding-left: 1px;
+    padding-right: 1px;
+    color: black;
+}
+#groups .group .phyletic-pattern .node .count {
+    background-color: #AAAAAA;
+    color: black;
+    height: 12px;
+}
+
+#groups .group .phyletic-pattern .description {
+    display: none;
+    position: absolute;
+    max-width: 300px;
+    border: 1px solid #A99B45;
+    color: black;
+    background-color: #FAFB98;
+}
+
+#groups .group .phyletic-pattern .children {
+    display: block;
+}
+
+
+#groups .group .group-detail {
+    clear: both;
+}

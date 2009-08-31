@@ -5,6 +5,7 @@
 
 #legend .count span {
     width: 20px;
+    border: 1px solid black;
 }
 
 #taxon-tree #tree-data {

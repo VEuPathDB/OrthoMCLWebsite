@@ -58,12 +58,12 @@ function GroupManager() {
         $("#taxon-tree #container").draggable();
         
         // register other events
-        $("#showDetail").change(function() {
+        $("#showDetail").click(function() {
             var checked = $(this).attr("checked");
             if (checked) $("#groups .group .group-detail").show();
             else $("#groups .group .group-detail").hide();
         });
-        $("#showPhyletic").change(function() {
+        $("#showPhyletic").click(function() {
             var checked = $(this).attr("checked");
             if (checked) {
                 $("#groups .group .phyletic-pattern").show();
@@ -73,7 +73,7 @@ function GroupManager() {
                 $("#taxon-tree").hide();
             }
         });
-        $("#showCount").change(function() {
+        $("#showCount").click(function() {
             var checked = $(this).attr("checked");
             $("#groups .group .phyletic-pattern .node").each(function() {
                 var node = $(this);

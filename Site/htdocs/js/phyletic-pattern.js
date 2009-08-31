@@ -169,7 +169,7 @@ function GroupManager() {
         });
 
         // register selection events
-        stub.find(".node .select").change(function() {
+        stub.find(".node .select").click(function() {
             // select branch
             var checked = $(this).attr("checked");
             $(this).siblings(".children").find(".select").each(function() {

@@ -68,11 +68,9 @@ function GroupManager() {
             if (checked) {
                 $("#groups .group .phyletic-pattern").show();
                 $("#taxon-tree").show();
-                $("#showCount").show();
             } else {
                 $("#groups .group .phyletic-pattern").hide();
                 $("#taxon-tree").hide();
-                $("#showCount").hide();
             }
         });
         $("#showCount").change(function() {

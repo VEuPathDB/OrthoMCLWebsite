@@ -1,15 +1,41 @@
-#phyletic-data {
-    display: none;
-}
-
 #legend {
     float: right;
     overflow: visible;
 }
 
+#legend .count span {
+    width: 20px;
+}
 
-#legend #taxon-legend .children {
+#taxon-tree #tree-data {
+    display: none;
+}
+
+#taxon-tree #container {
+    position: absolute;
+    overflow: visible;
+    display: none;
+    cursor: move;
+    border: 3px groove black;
+    background: #BABAFA;
+}
+
+#taxon-tree #container #close-handle {
+    cursor: pointer;
+}
+
+#taxon-tree #tree-display {
+    overflow: auto;
+    width: 250px;
+    height: 500px;
+}
+
+#taxon-tree #tree-display .children {
     margin-left: 20px;
+}
+
+#taxon-tree #tree-display .handle {
+    cursor: pointer;
 }
 
 #result {
@@ -24,50 +50,60 @@
     clear: both;
 }
 
-#groups .group .phyletic-pattern .count-data {
+#groups .group .count-data {
     display: none;
 }
 
-#groups .group .phyletic-pattern .branch {
-    border: 0px solid black;
+#taxon-tree #tree-display .node .name, #groups .group .phyletic-pattern .node .count {
+    border-bottom: 3px solid white;
 }
 
-#legend #taxon-legend .node[taxon="BACT"], #groups .group .phyletic-pattern .branch[taxon="BACT"] { color: #FF33cc; }
-#legend #taxon-legend .node[taxon="FIRM"], #groups .group .phyletic-pattern .branch[taxon="FIRM"] { color: #cc0000; }
-#legend #taxon-legend .node[taxon="PROT"], #groups .group .phyletic-pattern .branch[taxon="PROT"] { color: #cc00ff; }
-#legend #taxon-legend .node[taxon="ARCH"], #groups .group .phyletic-pattern .branch[taxon="ARCH"] { color: #ff9900; }
-#legend #taxon-legend .node[taxon="EUKA"], #groups .group .phyletic-pattern .branch[taxon="EUKA"] { color: #66ffff; }
-#legend #taxon-legend .node[taxon="PLAL"], #groups .group .phyletic-pattern .branch[taxon="PLAL"] { color: #009933; }
-#legend #taxon-legend .node[taxon="KINE"], #groups .group .phyletic-pattern .branch[taxon="KINE"] { color: #3399ff; }
-#legend #taxon-legend .node[taxon="ALVE"], #groups .group .phyletic-pattern .branch[taxon="ALVE"] { color: #3300cc; }
-#legend #taxon-legend .node[taxon="FUNG"], #groups .group .phyletic-pattern .branch[taxon="FUNG"] { color: #ccff33; }
-#legend #taxon-legend .node[taxon="META"], #groups .group .phyletic-pattern .branch[taxon="META"] { color: #33ff00; }
+#taxon-tree #tree-display .node[taxon="BACT"] .name, #groups .group .phyletic-pattern .branch[taxon="BACT"] .node .count { border-bottom-color: #FF33cc; }
+#taxon-tree #tree-display .node[taxon="FIRM"] .name, #groups .group .phyletic-pattern .branch[taxon="FIRM"] .node .count { border-bottom-color: #cc0000; }
+#taxon-tree #tree-display .node[taxon="PROT"] .name, #groups .group .phyletic-pattern .branch[taxon="PROT"] .node .count { border-bottom-color: #cc00ff; }
+#taxon-tree #tree-display .node[taxon="ARCH"] .name, #groups .group .phyletic-pattern .branch[taxon="ARCH"] .node .count { border-bottom-color: #ff9900; }
+#taxon-tree #tree-display .node[taxon="EUKA"] .name, #groups .group .phyletic-pattern .branch[taxon="EUKA"] .node .count { border-bottom-color: #66ffff; }
+#taxon-tree #tree-display .node[taxon="PLAL"] .name, #groups .group .phyletic-pattern .branch[taxon="PLAL"] .node .count { border-bottom-color: #009933; }
+#taxon-tree #tree-display .node[taxon="KINE"] .name, #groups .group .phyletic-pattern .branch[taxon="KINE"] .node .count { border-bottom-color: #3399ff; }
+#taxon-tree #tree-display .node[taxon="ALVE"] .name, #groups .group .phyletic-pattern .branch[taxon="ALVE"] .node .count { border-bottom-color: #3300cc; }
+#taxon-tree #tree-display .node[taxon="FUNG"] .name, #groups .group .phyletic-pattern .branch[taxon="FUNG"] .node .count { border-bottom-color: #ccff33; }
+#taxon-tree #tree-display .node[taxon="META"] .name, #groups .group .phyletic-pattern .branch[taxon="META"] .node .count { border-bottom-color: #33ff00; }
 
 #groups .group .phyletic-pattern .node {
-    border-size: 1px;
     text-align: center;
-    width: 25px;
+    width: 26px;
+    height: 26px;
     font-family: sans-serif, serif;
     font-size: 7pt;
     float: left;
     overflow: hidden;
-    border: 1px solid;
-    margin-right:1px;
     margin-bottom: 1px;
+    margin-right: 1px;
     line-height: normal;
-    background-color: white;
-    cursor: pointer;
+    border: 1px solid black;
+    border-bottom-size: 0px;
 }
 
 #groups .group .phyletic-pattern .node .name {
-    padding-left: 1px;
-    padding-right: 1px;
+    color: black;
+    background-color: white;
+    height: 12px;
+}
+
+#legend .count span,            #groups .group .phyletic-pattern .node .count {
+    background-color: black;
+    color: white;
+    height: 11px;
+}
+
+#legend .count span[count="0"], #groups .group .phyletic-pattern .node[count="0"] .count {
+    background-color: white;
     color: black;
 }
-#groups .group .phyletic-pattern .node .count {
-    background-color: #AAAAAA;
+
+#legend .count span[count="1"], #groups .group .phyletic-pattern .node[count="1"] .count {
+    background-color: #ABABAB;
     color: black;
-    height: 12px;
 }
 
 #groups .group .phyletic-pattern .description {
@@ -78,11 +114,6 @@
     color: black;
     background-color: #FAFB98;
 }
-
-#groups .group .phyletic-pattern .children {
-    display: block;
-}
-
 
 #groups .group .group-detail {
     clear: both;

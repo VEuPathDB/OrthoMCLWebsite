@@ -32,7 +32,18 @@ function TreeNode(id, parentId, isLeaf, abbrev, index, name) {
             if (!this.children[i].isLeaf) return true;
         }
         return false;
-    }
+    };
+
+    this.getCount = function(counts) {
+        var count = counts[this.id];
+        if (typeof(count) != 'undefined') return count;
+        if (this.isLeaf) return 0;
+        count = 0;
+        for(var i = 0; i < this.children.length; i++) {
+            count += this.children[i].getCount(counts);
+        }
+        return count;
+    };
 }
 
 function GroupManager() {
@@ -43,7 +54,8 @@ function GroupManager() {
         this.buildTree();
         this.createTreeLayout();
         this.createGroupLayout();
-        this.fillInCounts();
+        
+        $("#taxon-tree #container").draggable();
         
         // register other events
         $("#showDetail").change(function() {
@@ -55,40 +67,61 @@ function GroupManager() {
             var checked = $(this).attr("checked");
             if (checked) {
                 $("#groups .group .phyletic-pattern").show();
-                $("#legend #taxon-legend").show();
+                $("#taxon-tree").show();
+                $("#showCount").show();
             } else {
                 $("#groups .group .phyletic-pattern").hide();
-                $("#legend #taxon-legend").hide();
+                $("#taxon-tree").hide();
+                $("#showCount").hide();
             }
         });
         $("#showCount").change(function() {
             var checked = $(this).attr("checked");
             $("#groups .group .phyletic-pattern .node").each(function() {
+                var node = $(this);
                 if (checked) {
-                    $(this).css("width", "25px");
-                    $(this).css("height", "24px");
-                    $(this).children(".name").show();
-                    $(this).children(".count").children("span").show();
+                    node.css("width", "26px");
+                    node.css("height", "26px");
+                    node.children(".name").show();
+                    node.children(".count").children("span").show();
                 } else {
-                    $(this).css("width", "10px");
-                    $(this).css("height", "10px");
-                    $(this).children(".name").hide();
-                    $(this).children(".count").children("span").hide();
+                    node.css("width", "10px");
+                    node.css("height", "14px");
+                    node.children(".name").hide();
+                    node.children(".count").children("span").hide();
                 }
             });            
+        });
+        $("#taxon-tree #tree-handle").click(function() {
+            var open = $(this).val();
+            if (open == '0') {
+                $(this).val('1');
+                $(this).text("Hide taxon tree");
+                $("#taxon-tree #container").show();
+            } else {
+                $(this).val('0');
+                $(this).text("Show taxon tree");
+                $("#taxon-tree #container").hide();
+            }
+        });
+        $("#taxon-tree #container #close-handle").click(function() {
+            $("#taxon-tree #container").hide();
+            $("#taxon-tree #tree-handle").val('0');
+            $("#taxon-tree #tree-handle").text("Show taxon tree");
         });
     }
 
     this.buildTree = function() {
         var builder = this;
 
-        $("#phyletic-data taxon").each(function() {
-            var taxonId = $(this).attr("taxon-id");
-            var parentId = $(this).attr("parent");
-            var abbrev = $(this).attr("abbrev");
-            var isLeaf = $(this).attr("leaf-node") == "1" ? true : false;
-            var index = $(this).attr("index");
-            var name = $(this).html();
+        $("#taxon-tree #tree-data .taxon").each(function() {
+            var taxon= $(this);
+            var taxonId = taxon.attr("taxon-id");
+            var parentId = taxon.attr("parent");
+            var abbrev = taxon.attr("abbrev");
+            var isLeaf = taxon.attr("leaf-node") == "1" ? true : false;
+            var index = taxon.attr("index");
+            var name = taxon.html();
             var node = new TreeNode(taxonId, parentId, isLeaf, abbrev, index, name);
             builder.nodes[taxonId] = node;
         });
@@ -106,16 +139,18 @@ function GroupManager() {
     }
 
     this.createTreeLayout = function() {
-        var stub = $("#legend #taxon-legend");
+        var stub = $("#taxon-tree #tree-display");
         for(var i = 0; i < this.roots.length; i++) {
             var root = this.roots[i];
-            div = this.createTreeNode(root, 2);
+            div = this.createTreeNode(root);
             stub.append(div);
         }
 
         // register collapse events
-        $("#legend #taxon-legend .node .handle").click(function() {
+        stub.find(".node .handle").click(function() {
+            // collapse branch, and boxes
             var minus = $(this).attr("src").lastIndexOf("minus");
+            var taxon = $(this).parent(".node").attr("taxon");
             if (minus >= 0) {
                 $(this).attr("src", "images/plus.png");
                 $(this).siblings(".children").hide();
@@ -123,9 +158,20 @@ function GroupManager() {
                 $(this).attr("src", "images/minus.png");
                 $(this).siblings(".children").show();
             }                
+            $("#groups .group .phyletic-pattern .branch[taxon=\"" + taxon + "\"]").each(function() {
+                if (minus >= 0) {
+                    $(this).children(".node").show();
+                    $(this).children(".children").hide();
+                } else {
+                    $(this).children(".node").hide();
+                    $(this).children(".children").show();
+                }
+            });
+
         });
+
         // register selection events
-        $("#legend #taxon-legend .node .select").change(function() {
+        stub.find(".node .select").change(function() {
             // select branch
             var checked = $(this).attr("checked");
             $(this).siblings(".children").find(".select").each(function() {
@@ -136,107 +182,89 @@ function GroupManager() {
             var taxon = $(this).parent(".node").attr("taxon");
             $("#groups .group .phyletic-pattern .branch[taxon=\"" + taxon + "\"]").each(function() {
                 if (checked) {
-                    $(this).children(".node").hide();
-                    $(this).children(".children").show();
+                    $(this).show();
                 } else {
-                    $(this).children(".node").show();
-                    $(this).children(".children").hide();
+                    $(this).hide();
                 }
             });
         });
     }
 
-    this.createTreeNode = function(node, level) {
+    this.createTreeNode = function(node) {
         // the node are create for the internal ones; leaves are skipped.
         if (node.isLeaf) return "";
         
-        var hidden = "";
         var div = "<div class=\"node\" taxon=\"" + node.abbrev + "\" title=\"" + node.abbrev + "\">";
         if (node.hasBranch()) {
-            if (level > 1) { // expand the children
-                div += "<img class=\"handle\" src=\"images/minus.png\">";
-            } else { // collapse the children
-                div += "<img class=\"handle\" src=\"images/plus.png\">";
-                hidden = "style=\"display: none;\"";
-            }
+            div += "<img class=\"handle\" src=\"images/minus.png\">";
         } else {    // no branch under it
             div += "<img src=\"images/spacer.gif\" width=\"20\" height=\"20\">";
         }
         div += "<input class=\"select\" type=\"checkbox\" checked=\"yes\" />";
-        div += node.name;
-        div += "<div class=\"children\" " + hidden + ">"
+        div += "<span class=\"name\">" + node.name + "</span>";
+        div += "<div class=\"children\">"
         for(var i = 0; i < node.children.length; i++) {
-            div += this.createTreeNode(node.children[i], level - 1);
+            div += this.createTreeNode(node.children[i]);
         }
         div += "</div></div>";
         return div;
     }
 
     this.createGroupLayout = function() {
-        var stub = $("#groups .group:first .phyletic-pattern");
-        for(var i = 0; i < this.roots.length; i++) {
-            var root = this.roots[i];
-            div = this.createFlatNode(root);
-            stub.append(div);
-        }
-
-        var index = 0;
-        $("#groups .group .phyletic-pattern").each(function() {
-            if (index++ == 0) return;
-            $(this).append(stub.clone());
+        var manager = this;
+        $("#groups .group").each(function() {
+            var groupId = $(this).attr("id");
+            var counts = manager.getCounts(groupId);
+            $(this).find(".phyletic-pattern").each(function() {
+                for(var i = 0; i < manager.roots.length; i++) {
+                    var root = manager.roots[i];
+                    div = manager.createFlatNode(root, counts);
+                    this.innerHTML = div;
+                }
+            });
         });
+
         // register mouse over events
         $("#groups .group .phyletic-pattern .node").tooltip({ 
             showURL: false, 
             bodyHandler: function() { 
-                return $(this).siblings(".description").html(); 
+                return $(this).children(".description").html(); 
             } 
         });
     }
 
-    this.createFlatNode = function(node) {
+    this.createFlatNode = function(node, counts) {
         var div = "";
-        var hidden = "";
+        var style = "";
         if (!node.isLeaf) {
             div += "<div class=\"branch\" taxon=\"" + node.abbrev + "\">";
-            hidden = "style=\"display: none;\"";
+            style = "style=\"display: none;\"";
         }
-        div += "<div class=\"node\" taxon=\"" + node.id + "\" " + hidden + ">";
-        div += "<div class=\"name\">" + node.abbrev + "</div>";
-        div += "<div class=\"count\"><span>0</span></div></div>";
-        div += "<div class=\"description\">" + node.getPath() + "<br /><i>" + node.name + "</i></div>";
-        div += "<div class=\"children\">"
-        for(var i = 0; i < node.children.length; i++) {
-            div += this.createFlatNode(node.children[i]);
-        }
+        var count = node.getCount(counts);
+        div += "<div class=\"node\" taxon=\"" + node.id + "\" " + style + " count=\"" + count + "\">";
+        div += "  <div class=\"name\">" + node.abbrev + "</div>";
+        div += "  <div class=\"count\"><span>" + count + "</span></div>";
+        div += "  <div class=\"description\">" + node.getPath() + "<br /><i>" + node.name + "</i></div>";
         div += "</div>";
-        if (!node.isLeaf) div += "</div>";
+        
+        if (!node.isLeaf) {
+            div += "<div class=\"children\">"
+            for(var i = 0; i < node.children.length; i++) {
+                div += this.createFlatNode(node.children[i], counts);
+            }
+            div += "</div></div>";
+        }
         return div;
     }
 
-    this.fillInCounts = function() {
-        $("#groups .group .phyletic-pattern").each(function () {
-            var counts = { };
-            $(this).find(".count-data group").each(function () {
-                var taxonId = $(this).attr("taxon-id");
-                var count = $(this).attr("count");
-                counts[taxonId] = count;
-            });
-            for (var taxonId in this.nodes) {
-                var count = this.getCount(node, counts);
-                $(this).find(".node[taxon=" + taxonId + "]").children(".count span").text(count);
-            }
+    this.getCounts = function(groupId) {
+        var counts = { };
+        $("#groups #" + groupId).find(".count-data .count").each(function () {
+            var group = $(this);
+            var taxonId = group.attr("taxon-id");
+            var count = group.html();
+            counts[taxonId] = Number(count);
         });
-    }
-    
-    this.getCount = function(node, counts) {
-        if (node.isLeaf) return counts[node.taxonId];
-        else {
-            var count = 0;
-            for (var i = 0; i < node.children.length; i++) {
-                count += this.getCount(node.children[i], counts);
-            }
-            return count;
-        }
+        return counts; 
     }
 }

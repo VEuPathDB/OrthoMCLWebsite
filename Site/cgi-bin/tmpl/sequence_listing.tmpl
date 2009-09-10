@@ -2,78 +2,49 @@
 <TMPL_INCLUDE header.tmpl>
 
 <!-- BEGIN CONTENT -->
-<script type="text/javascript" src="js/phyletic-pattern.js"></script>
+<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/js/jquery.tooltip.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie-1.0.0.js"></script>
+<script type="text/javascript" src="/js/group.js"></script>
+<link href="/css/group.css" rel="stylesheet" type="text/css" />
+<link href="/css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
 
-<script language="javascript">
-<!--//
-var taxons = { };
-var groups = { };
-
+<div id="taxons">
 <TMPL_LOOP NAME=TAXONS>
-taxons["<TMPL_VAR NAME=TAXON_ID>"] = { id: "<TMPL_VAR NAME=TAXON_ID>",
-    parent_id: "<TMPL_VAR NAME=PARENT_ID>",
-    abbrev: "<TMPL_VAR NAME=ABBREV>",
-    name: "<TMPL_VAR NAME=NAME>",
-    is_species: (<TMPL_VAR NAME=IS_SPECIES> == 0) ? false : true,
-    index: <TMPL_VAR NAME=INDEX>,
-    children: [] };
+<div class="taxon" taxon-id="<TMPL_VAR NAME=TAXON_ID>" parent="<TMPL_VAR NAME=PARENT_ID>" abbrev="<TMPL_VAR NAME=ABBREV>" 
+     leaf="<TMPL_VAR NAME=IS_SPECIES>" index="<TMPL_VAR NAME=INDEX>"><TMPL_VAR NAME=NAME></div>
 </TMPL_LOOP>
+</div>
 
-initial();
+<div id="groups">
 
-//-->
-</script>
+    <!-- error message -->
+    <div id="error">
+    <!-- ERROR MESSAGE BEGIN -->
+      <TMPL_IF NAME="LOOP_ERROR">
+      <p align="center"><strong><font color="red">ERROR MESSAGE</font></strong></p>
+      <TMPL_LOOP NAME="LOOP_ERROR">
+        <p><TMPL_VAR NAME="ERROR"></p>
+      </TMPL_LOOP>
+    </TMPL_IF>
 
-<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+    <!-- JS CODE BEGIN -->
+    <div id="js-code">
+      <TMPL_IF NAME="JS_CODE">
+        <TMPL_VAR NAME="JS_CODE">
+      </TMPL_IF>
+    </div>
 
-
-<!-- DEBUG CONTENT BEGIN -->
-  <TMPL_IF NAME="LOOP_DEBUG">
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr><td><strong><font color="red">DEBUG INFORMATION</font></strong></td></tr>
-  <TMPL_LOOP NAME="LOOP_DEBUG">
-     <tr><td colspan="2"><TMPL_VAR NAME="DEBUG"></td></tr>
-  </TMPL_LOOP>
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-  </TMPL_IF>
-<!-- DEBUG CONTENT END-->
-
-<!-- ERROR MESSAGE BEGIN -->
-  <TMPL_IF NAME="LOOP_ERROR">
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr><td><strong><font color="red">ERROR MESSAGE</font></strong></td></tr>
-  <TMPL_LOOP NAME="LOOP_ERROR">
-     <tr><td colspan="2"><TMPL_VAR NAME="ERROR"></td></tr>
-  </TMPL_LOOP>
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-  </TMPL_IF>
-<!-- ERROR MESSAGE END-->
-
-<!-- JS CODE BEGIN -->
-  <TMPL_IF NAME="JS_CODE">
-    <TMPL_VAR NAME="JS_CODE">
-  </TMPL_IF>
-<!-- JS CODE END-->
-
-<!-- GROUP SUMMARY START -->
   <TMPL_IF NAME="GROUP">
-     <tr>
-       <td colspan="2"><br><H3>Group Summary (<font color="red"><TMPL_VAR NAME="GROUP_ACCESSION"></font>)</H3></td>
-     </tr>
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr>
-        <td colspan="2" align="left"><br>
-		    <table border="1">
+  <div class="group" id="group_1">
+
+    <h3 class="caption">Group Summary (<font color="red"><TMPL_VAR NAME="GROUP_ACCESSION"></font>)</H3>
+    <hr />
+    
+    <div id="taxon-display"></div>
+
+    <div align="center">
+      <table class="group-detail" border="1" cellspacing="0" cellpadding="2">
 		      <tr>
 		        <td bgcolor="#ffeeee" align="center"># Sequences</td>
 		        <td bgcolor="#ffeeee" align="center"># Taxa</td>
@@ -94,36 +65,11 @@ initial();
     <!--		    <td bgcolor="#eeffff" align="center"><TMPL_VAR NAME="AVE_DCS"></td>
     -->
 		      </tr>
-		      <tr>
-		        <td colspan="7" align="center">Phyletic Pattern</td>
-		      </tr>
-		      <tr>
-      		    <td colspan="7">
-                    <!-- BEGIN PHYLETIC PATTERN BLOCK -->
-                    <table class="phyletic-category" border='0' cellspacing='0' cellpadding='0'>
-                        <script language="javascript">
-                        <!--//
-                        var group = { };
+      </table>
+    </div>
 
-                        <TMPL_LOOP NAME=TAXON_GENES>
-                            group["<TMPL_VAR NAME=TAXON_ID>"] = <TMPL_VAR NAME=GENE_COUNT>;
-                        </TMPL_LOOP>
-
-                        displayCategories(group);
-                        //-->
-                        </script>
-                      </table>
-                      <!-- END PHYLETIC PATTERN BLOCK -->
-		        </td>
-		      </tr>
-		    </table>
-        </td>
-     </tr>
-     <tr>
-        <!-- display link shortcut -->
-	    <td align="left">
-	        <br>
-		    <table border="0" cellpadding="0" cellspacing="0" bgcolor="#003399" width="195">
+     <!-- display link shortcut -->
+    <table class="shortcut" border="0" cellpadding="0" cellspacing="0" bgcolor="#003399" width="195">
 			    <tr>
 			        <td style="padding-left:3px;padding-right:3px;color:#ffffff;font-family:arial,helvetica,sans-serif;font-size:11px;" align="left">
 			            <b>Links to <TMPL_VAR GROUP_ACCESSION></b>
@@ -162,52 +108,49 @@ initial();
 			            </table>
 			        </td>
 			    </tr>
-		    </table>
-	    </td>
-        <td class="phyletic-category" style="background-color: white" align="center">
-         <!-- display legend -->
-         <div><b>Legend<b></div>
-         <table>
-           <tr>
-             <script language="javascript">
-             <!--//
-             displayLegend();
-             // -->
-             </script>
-           </tr>
-         </table>
-         <table>
-            <tr>
-                <td width="70" class="legend" count='0'>no orthologs</td>
-                <td width="70" class="legend" count='1'>one ortholog</td>
-                <td width="70" class="legend" count='many'>many orthologs</td>
-            </tr>
-         </table>
-        </td>
-     </tr>
-     <tr>
-       <td colspan="2"><br><H3>List of Protein Sequences</strong><H3></td>
-     </tr>
+    </table>
 
+    <div id="legend">
+      <div class="count"><span count="0">&nbsp;0&nbsp;</span> no ortholog; </div>
+      <div class="count"><span count="1">&nbsp;1&nbsp;</span> one ortholog; </div>
+      <div class="count"><span count="2">&nbsp;n&nbsp;</span> more than one ortholog; </div>
+    </div>
+
+    <div id="control">
+       <input id="showDetail" type="checkbox" checked="true" />group details <br />
+       <input id="showPhyletic" type="checkbox" checked="true" />phyletic patterns <br />
+       <input id="showCount" type="checkbox" checked="true" />pattern labels &amp; counts <br />
+    </div>
+
+    <div class="count-data">
+<TMPL_LOOP NAME=TAXON_GENES>
+<div class="count" taxon-id="<TMPL_VAR NAME=TAXON_ID>"><TMPL_VAR NAME=GENE_COUNT></div>
+</TMPL_LOOP>
+    </div>
+
+    <div class="phyletic-pattern"></div>
+
+  </div> <!-- end of group -->
   </TMPL_IF>
-<!-- GROUP SUMMARY END -->
 
-<!-- SEQUENCE PAGER START -->
+
+<div id="sequences">
+  <!-- SEQUENCE PAGER START -->
+  <hr />
+  <H3>List of Protein Sequences</strong></H3>
+
   <TMPL_UNLESS NAME="GROUP">
-     <tr height="30">
-       <td colspan="2"><H3> Sequence Query Result</H3></td>
-     </tr>
-     <tr height="30">
-       <td colspan="2"> Your Query is : <strong><TMPL_VAR NAME="QUERY_CODE"></strong> (<TMPL_VAR NAME="QUERY_TYPE">)</td>
-     </tr>
-     <tr height="30">
-       <td colspan="2"> Sequence Search Result : <strong><TMPL_VAR NAME="NUM_SEQUENCES"></strong> Protein Sequences</td>
-     </tr>
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
+    <div id="query">
+      <H3> Sequence Query Result</H3>
+      <p> Your Query is : <strong><TMPL_VAR NAME="QUERY_CODE"></strong> (<TMPL_VAR NAME="QUERY_TYPE">)</p>
+      <p> Sequence Search Result : <strong><TMPL_VAR NAME="NUM_SEQUENCES"></strong> Protein Sequences</p>
+    </div>
 
-    <FORM action="cgi-bin/OrthoMclWeb.cgi?">
+    <hr />
+
+    <div class="pager">
+
+      <FORM action="cgi-bin/OrthoMclWeb.cgi?">
          <tr><td BGCOLOR=#eceff5 COLSPAN='2' ALIGN=CENTER>
            <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
          </td></tr>
@@ -221,20 +164,19 @@ initial();
             <TMPL_VAR NAME="PAGER_HIDDEN">
          </TMPL_UNLESS>
          </td></tr>
-    </FORM>
+      </FORM>
+
+    </div>
+
+    <hr />
+
   </TMPL_UNLESS>
 <!-- SEQUENCE PAGER END -->
 
 
 
 <!-- LIST OF PROTEIN SEQUENCES START -->
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr>
-       <td width="800" colspan="2">
-       <br>
-       <table border="1" cellspacing="0" cellpadding="2">
+     <table border="1" cellspacing="0" cellpadding="2">
        <tr bgcolor="#aaaaaa">
          <th width="5%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Number</th>
          <th width="10%" align="center" bgcolor="#444488"><FONT COLOR="#ffffff">Accession</th>
@@ -273,19 +215,18 @@ initial();
 	 </td>
       </tr>
 </TMPL_LOOP>
-     </table></td></tr>
+     </table>
 <!-- LIST OF PROTEIN SEQUENCES END -->
 
-     <tr>
-       <td colspan="2"><br></td>
-     </tr>
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
 
 <!-- SEQUENCE PAGER START -->
   <TMPL_UNLESS NAME="GROUP">
-    <FORM action="cgi-bin/OrthoMclWeb.cgi?">
+
+    <hr />
+
+    <div class="pager">
+
+      <FORM action="cgi-bin/OrthoMclWeb.cgi?">
          <tr><td BGCOLOR=#eceff5 COLSPAN=3 ALIGN=CENTER>
            <strong>SEQUENCE #<TMPL_VAR SEQUENCE_NUM_S> ~ #<TMPL_VAR SEQUENCE_NUM_E> / <TMPL_VAR NUM_SEQUENCES></strong>
          </td></tr>
@@ -299,18 +240,16 @@ initial();
             <TMPL_VAR NAME="PAGER_HIDDEN">
          </TMPL_UNLESS>
          </td></tr>
-    </FORM>
+      </FORM>
+
+    </div>
+
   </TMPL_UNLESS>
 <!-- SEQUENCE PAGER END -->
-     <tr>
-       <td colspan="2" bgcolor="#326495"><img src="images/spacer.gif" width="1" height="1"></td>
-     </tr>
-     <tr>
-       <td colspan="2"><br></td>
-     </tr>
 
+</div> <!-- end of sequences -->
 
-</TABLE>
+</div> <!-- end of groups -->
 
 <!-- END CONTENT -->
 

@@ -1,60 +1,49 @@
 <TMPL_INCLUDE header.tmpl>
 
-<div id="debug">&nbsp;</div>
-
 <!-- BEGIN CONTENT -->
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="js/jquery.ui.core-1.7.2.js"></script>
-<script type="text/javascript" src="js/jquery.ui.draggable-1.7.2.js"></script>
-<script type="text/javascript" src="js/jquery.tooltip.min.js"></script>
-<script type="text/javascript" src="js/phyletic-pattern.js"></script>
-<link href="css/group.css" rel="stylesheet" type="text/css" />
-<link href="css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/js/jquery.tooltip.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie-1.0.0.js"></script>
+<script type="text/javascript" src="/js/group.js"></script>
+<link href="/css/group.css" rel="stylesheet" type="text/css" />
+<link href="/css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
 
+<div id="taxons">
+<TMPL_LOOP NAME=TAXONS>
+<div class="taxon" taxon-id="<TMPL_VAR NAME=TAXON_ID>" parent="<TMPL_VAR NAME=PARENT_ID>" abbrev="<TMPL_VAR NAME=ABBREV>" 
+     leaf="<TMPL_VAR NAME=IS_SPECIES>" index="<TMPL_VAR NAME=INDEX>"><TMPL_VAR NAME=NAME></div>
+</TMPL_LOOP>
+</div>
+
+<div id="taxon-display"></div>
 
 <h3 class="caption">Group Query Result</h3>
 
-<div id="legend">
-    <div class="count"><span count="0">&nbsp;0&nbsp;</span> no ortholog</div>
-    <div class="count"><span count="1">&nbsp;1&nbsp;</span> one ortholog</div>
-    <div class="count"><span count="2">&nbsp;n&nbsp;</span> more than one ortholog</div>
-</div>
-
 <div id="query">
     <p>Your Query is : <b><TMPL_VAR NAME="QUERY_CODE"></b> (<TMPL_VAR NAME="QUERY_TYPE">)</p>
-    <p>Group Search Result : <b><TMPL_VAR NAME="NUM_GROUPS"></b> OrthoMCL Groups</p>
 </div>
 
-<table align="center">
-  <tr>
-    <td><input id="showDetail" type="checkbox" checked="true" />Show group details</td>
-    <td><input id="showPhyletic" type="checkbox" checked="true" />Show phyletic patterns</td>
-    <td><input id="showCount" type="checkbox" checked="true" />Show labels &amp; counts</td>
-    <td id="taxon-tree">
-        <button id="tree-handle" title="You can use taxon to show/hide species" value="0">Show taxon tree</button>
-        <div id="tree-data">
-<TMPL_LOOP NAME=TAXONS>
-<div class="taxon" taxon-id="<TMPL_VAR NAME=TAXON_ID>" parent="<TMPL_VAR NAME=PARENT_ID>" abbrev="<TMPL_VAR NAME=ABBREV>" leaf-node="<TMPL_VAR NAME=IS_SPECIES>" index="<TMPL_VAR NAME=INDEX>" ><TMPL_VAR NAME=NAME></div>
-</TMPL_LOOP>
-        </div>
-        <div id="container">
-          <div align="right"><img id="close-handle" src="images/no.gif" /></div>
-          <div id="tree-display">
-            <p>You can collapse a branch, and the species in that branch will be also collapsed into one cell 
-               in the phyletic pattern graph, with the number as the sum of all orthologs in the branch.</p>
-            <p>If you uncheck a branch, all species in that branch will also disappear from the phyletic pattern.</p>
-          </div>
-        </div>
-    </td>
-  </tr>
-</table>
+<div id="legend">
+    <div class="count"><span count="0">&nbsp;0&nbsp;</span> no ortholog; </div>
+    <div class="count"><span count="1">&nbsp;1&nbsp;</span> one ortholog; </div>
+    <div class="count"><span count="2">&nbsp;n&nbsp;</span> more than one ortholog; </div>
+</div>
+
+<div id="control">
+  <input id="showDetail" type="checkbox" checked="true" />group details <br />
+  <input id="showPhyletic" type="checkbox" checked="true" />phyletic patterns <br />
+  <input id="showCount" type="checkbox" checked="true" />pattern labels &amp; counts <br />
+</div>
+
+<!-- terminate content div -->
+</div>
 
 <div id="result">
 
+  <hr />
   <div class="pager">
     <FORM action="cgi-bin/OrthoMclWeb.cgi?">
-      <div><strong>Group #<TMPL_VAR GROUP_NUM_S> ~ #<TMPL_VAR GROUP_NUM_E> / <TMPL_VAR NUM_GROUPS></strong></div>
-      <div>
+        <strong>Group #<TMPL_VAR GROUP_NUM_S> ~ #<TMPL_VAR GROUP_NUM_E> / <TMPL_VAR NUM_GROUPS></strong>: 
         <TMPL_UNLESS ONEPAGE>
         <TMPL_VAR PAGER_PREV>
         <TMPL_VAR PAGER_JUMP>
@@ -65,31 +54,28 @@
                onClick="PAGER_set_offset_and_submit((parseInt(this.form['PAGE_JUMP_BOTTOM'].value) - 1) * <TMPL_VAR ROWSPERPAGE>);">
         <TMPL_VAR NAME="PAGER_HIDDEN">
         </TMPL_UNLESS>
-      </div>
     </FORM>
   </div>
+  <hr />
 
-  <div id="groups">
+  <table id="groups" width="100%" cellspacing="0" cellpadding="2">
     <TMPL_LOOP NAME="PAGER_DATA_LIST">
-      <table class="group" id="group_<TMPL_VAR NAME="GROUP_NUMBER">" width="100%" <TMPL_IF NAME="__EVEN__">even="true"</TMPL_IF> >
-        <tr>
-              <td align="center" valign="top" width="30">#<TMPL_VAR NAME="GROUP_NUMBER"></td>
-	      <td align="center" valign="top" width="50">
-		    <a href="<TMPL_VAR GROUP_LINK>" 
-		       onmouseover="this.T_STICKY=true;this.T_OFFSETY=-150;this.T_OFFSETX=-80;this.T_TITLE='Links to <TMPL_VAR GROUP_ACCESSION>';this.T_WIDTH=200;return escape('<table><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR GROUP_LINK>\'>List of Proteins</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR DOMARCH_LINK>\'>Pfam Domain Architecture</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF BIOLAYOUT_LINK><a href=\'<TMPL_VAR BIOLAYOUT_LINK>\'>BioLayout Graph</a><TMPL_ELSE><font color=\'#666666\'>No Biolayout Graph (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF MSA_LINK><a href=\'<TMPL_VAR MSA_LINK>\'>Multiple Sequence Alignment</a><TMPL_ELSE><font color=\'#666666\'>No Multiple Seq. Alignment (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR SEQUENCE_LINK>\'>Get Sequences (FASTA)</a></font></td></tr></table>')">
-		       <TMPL_VAR GROUP_ACCESSION>
-		    </a>
-	      </td>
-	      <td>
-                  <div class="count-data">
+      <tr class="group" id="group_<TMPL_VAR NAME="GROUP_NUMBER">" width="100%" <TMPL_IF NAME="__EVEN__">even="true"</TMPL_IF> >
+        <td class="index" width="20">#<TMPL_VAR NAME="GROUP_NUMBER"></td>
+	<td class="name" width="100">
+            <a href="<TMPL_VAR GROUP_LINK>" 
+               onmouseover="this.T_STICKY=true;this.T_OFFSETY=-150;this.T_OFFSETX=-80;this.T_TITLE='Links to <TMPL_VAR GROUP_ACCESSION>';this.T_WIDTH=200;return escape('<table><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR GROUP_LINK>\'>List of Proteins</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR DOMARCH_LINK>\'>Pfam Domain Architecture</a></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF BIOLAYOUT_LINK><a href=\'<TMPL_VAR BIOLAYOUT_LINK>\'>BioLayout Graph</a><TMPL_ELSE><font color=\'#666666\'>No Biolayout Graph (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><TMPL_IF MSA_LINK><a href=\'<TMPL_VAR MSA_LINK>\'>Multiple Sequence Alignment</a><TMPL_ELSE><font color=\'#666666\'>No Multiple Seq. Alignment (too big)</font></TMPL_IF></font></td></tr><tr><td align=\'center\'><font size=\'2\'><a href=\'<TMPL_VAR SEQUENCE_LINK>\'>Get Sequences (FASTA)</a></font></td></tr></table>')">
+               <TMPL_VAR GROUP_ACCESSION>
+            </a>
+	</td>
+        <td>
+          <div class="count-data">
 <TMPL_LOOP NAME=TAXON_GENES>
 <div class="count" taxon-id="<TMPL_VAR NAME=TAXON_ID>"><TMPL_VAR NAME=GENE_COUNT></div>
 </TMPL_LOOP>
-                  </div>
+          </div>
 	    
-                  <div class="phyletic-pattern">&nbsp;</div>
-
-            <div class="group-detail">
+          <div class="group-detail">
         		<table width="100%" border="1" cellspacing="0">
         		  <tr>
         		    <td bgcolor="#ffeeee" align="center"># Sequences</td>
@@ -121,19 +107,22 @@
         		  </TMPL_IF>
         
         		</table>
-        	</div>	
-    	  </td>
-        </tr>
-      </table>
+          </div> <!-- end of group-detail -->
+
+          <div class="phyletic-pattern"></div>
+
+        </td>
+
+      </tr> <!-- end of group -->
     
     </TMPL_LOOP>
 
-  </div>
-  
+  </table> <!-- end of groups -->
+
+  <hr />
   <div class="pager">
     <FORM action="cgi-bin/OrthoMclWeb.cgi?">
-      <div><strong>Group #<TMPL_VAR GROUP_NUM_S> ~ #<TMPL_VAR GROUP_NUM_E> / <TMPL_VAR NUM_GROUPS></strong></div>
-      <div>
+        <strong>Group #<TMPL_VAR GROUP_NUM_S> ~ #<TMPL_VAR GROUP_NUM_E> / <TMPL_VAR NUM_GROUPS></strong>: 
         <TMPL_UNLESS ONEPAGE>
         <TMPL_VAR PAGER_PREV>
         <TMPL_VAR PAGER_JUMP>
@@ -144,11 +133,14 @@
                onClick="PAGER_set_offset_and_submit((parseInt(this.form['PAGE_JUMP_BOTTOM'].value) - 1) * <TMPL_VAR ROWSPERPAGE>);">
         <TMPL_VAR NAME="PAGER_HIDDEN">
         </TMPL_UNLESS>
-      </div>
     </FORM>
   </div>
+  <hr />
 
 </div>
+
+<!-- start a new div to match old content closing tag -->
+<div>
 
 <!-- END CONTENT -->
 

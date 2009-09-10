@@ -33,7 +33,7 @@ my $currentTime;
 
 my $debug=0;
 our $config;
-our $VERSION = '2';
+our $VERSION = '30';
 
 sub cgiapp_init {
   my $self = shift;
@@ -1948,8 +1948,8 @@ sub BLGraph {
   if ($q->param("svg")) {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
     $para{T} = "BioLayout Graph (SVG) for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
-    $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
-                               height=\"800\" type=\"image/svg+xml\"></embed>
+    $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1054\" 
+                               height=\"663\" type=\"image/svg+xml\"></embed>
                         <p>Notes: In this graph, nodes represent proteins (species are 
                            color-coded); edges stand for three edge relationships: 
                            <font color=\"red\">Ortholog edges</font>, 

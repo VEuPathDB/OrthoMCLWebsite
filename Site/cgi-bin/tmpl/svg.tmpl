@@ -2,8 +2,8 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      version="1.1"
      baseProfile="full"
-     height="690" 
-     width="947">
+     height="663" 
+     width="1054">
 
     <g id="edge_general" style="stroke:grey;stroke-width:2;"></g>
     <g id="edge_rbetterh" style="stroke:green;stroke-width:2;"></g>
@@ -194,27 +194,27 @@ function highlightSwitch(switchId, flag) {
 
 <TMPL_VAR NAME="SVG_CONTENT">
 
-    <rect id="control" x="647" y="0" width="300" height="80" fill="rgb(150,200,200)"/>
-    <text id="text_control" x="657" y="20" style="font-size: 11px">
+    <rect id="control" x="800" y="0" width="254" height="80" fill="rgb(150,200,200)"/>
+    <text id="text_control" x="810" y="20" style="font-size: 11px">
         EDGE CONTROL
-        <tspan x="667" dy="5" onclick="showAllEdges()"> </tspan>
-        <tspan id="switch_best" x="667" dy="15"
+        <tspan x="840" dy="5" onclick="showAllEdges()"> </tspan>
+        <tspan id="switch_best" x="840" dy="15"
             onclick="switchEdges('rbesth')"
             onmouseover="highlightSwitch('switch_best', true)"
             onmouseout="highlightSwitch('switch_best', false)"> -- SHOW/REMOVE Ortholog Edges </tspan>
-        <tspan id="switch_better" x="667" dy="15"
+        <tspan id="switch_better" x="840" dy="15"
             onclick="switchEdges('rbetterh')"
             onmouseover="highlightSwitch('switch_better', true)"
             onmouseout="highlightSwitch('switch_better', false)"> -- SHOW/REMOVE Inparalog Edges </tspan>
-        <tspan id="switch_general" x="667" dy="15"
+        <tspan id="switch_general" x="840" dy="15"
             onclick="switchEdges('general')"
             onmouseover="highlightSwitch('switch_general', true)"
             onmouseout="highlightSwitch('switch_general', false)"> -- SHOW/REMOVE General Edges </tspan>
     </text>
 
-    <rect id="info" x="0" y="0" width="647" height="80" fill="rgb(200,150,200)"/>
+    <rect id="info" x="0" y="0" width="800" height="80" fill="rgb(200,150,200)"/>
     <text id="text_info" x="10" y="20" style="font-size: 11px"> EDGE/NODE INFORMATION </text>
     <text id="info1" x="15" y="40" style="font-size: 11px"> </text>
     <text id="info2" x="15" y="55" style="font-size: 11px"> </text>
-    <text id="info3" x="300" y="40" style="font-size: 11px"> </text>
+    <text id="info3" x="400" y="40" style="font-size: 11px"> </text>
 </svg>

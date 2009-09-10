@@ -1,6 +1,16 @@
+.caption, #query, .pager {
+    text-align: center;
+}
+
 #legend {
-    float: right;
-    overflow: visible;
+    float: left;
+    width: 200px;
+    margin: 2px;
+    margin-left: 20px;
+}
+
+#legend .count {
+    line-height: 20px;
 }
 
 #legend .count span {
@@ -8,38 +18,40 @@
     border: 1px solid black;
 }
 
-#taxon-tree #tree-data {
+#taxons {
     display: none;
 }
 
-#taxon-tree #container {
-    position: absolute;
-    overflow: visible;
+#taxon-display {
+    float: right;
+}
+
+#taxon-display .taxon {
+    font-size: 8pt;
+}
+
+#taxon-display .taxon .name {
+    border: 1px solid;
+    width: 32px;
+    float: right;
+    text-align: center;
+}
+
+#taxon-display .taxon .description {
     display: none;
-    cursor: move;
-    border: 3px groove black;
-    background: #BABAFA;
 }
 
-#taxon-tree #container #close-handle {
+#taxon-display .taxon .expand-handle, #taxon-display .taxon .collapse-handle, #taxon-display .taxon .hide-handle {
     cursor: pointer;
-}
-
-#taxon-tree #tree-display {
-    overflow: auto;
-    width: 250px;
-    height: 500px;
-}
-
-#taxon-tree #tree-display .children {
-    margin-left: 20px;
-}
-
-#taxon-tree #tree-display .handle {
-    cursor: pointer;
+    margin-top: 4px;
 }
 
 #result {
+    clear: both;
+    width: 90%;
+}
+
+#groups .group{
     clear: both;
 }
 
@@ -48,6 +60,7 @@
 }
 
 #groups .group .phyletic-pattern {
+    margin-top: 3px;
     clear: both;
 }
 
@@ -55,59 +68,56 @@
     display: none;
 }
 
-#taxon-tree #tree-display .node .name, #groups .group .phyletic-pattern .node .count {
-    border-bottom: 3px solid white;
-}
+#taxon-display .taxon[abbrev="BACT"] .name, #groups .group .phyletic-pattern .branch[abbrev="BACT"] .taxon { background-color: #33CCCC; }
+#taxon-display .taxon[abbrev="FIRM"] .name, #groups .group .phyletic-pattern .branch[abbrev="FIRM"] .taxon { background-color: #99CC66; }
+#taxon-display .taxon[abbrev="PROT"] .name, #groups .group .phyletic-pattern .branch[abbrev="PROT"] .taxon { background-color: #99CC99; }
+#taxon-display .taxon[abbrev="ARCH"] .name, #groups .group .phyletic-pattern .branch[abbrev="ARCH"] .taxon { background-color: #9999CC; }
+#taxon-display .taxon[abbrev="EUKA"] .name, #groups .group .phyletic-pattern .branch[abbrev="EUKA"] .taxon { background-color: #CCCC33; }
+#taxon-display .taxon[abbrev="VIRI"] .name, #groups .group .phyletic-pattern .branch[abbrev="VIRI"] .taxon { background-color: #CCCC99; }
+#taxon-display .taxon[abbrev="EUGL"] .name, #groups .group .phyletic-pattern .branch[abbrev="EUGL"] .taxon { background-color: #CC9955; }
+#taxon-display .taxon[abbrev="ALVE"] .name, #groups .group .phyletic-pattern .branch[abbrev="ALVE"] .taxon { background-color: #CC3333; }
+#taxon-display .taxon[abbrev="FUNG"] .name, #groups .group .phyletic-pattern .branch[abbrev="FUNG"] .taxon { background-color: #CC66CC; }
+#taxon-display .taxon[abbrev="META"] .name, #groups .group .phyletic-pattern .branch[abbrev="META"] .taxon { background-color: #CC88AA; }
 
-#taxon-tree #tree-display .node[taxon="BACT"] .name, #groups .group .phyletic-pattern .branch[taxon="BACT"] .node .count { border-bottom-color: #FF33cc; }
-#taxon-tree #tree-display .node[taxon="FIRM"] .name, #groups .group .phyletic-pattern .branch[taxon="FIRM"] .node .count { border-bottom-color: #cc0000; }
-#taxon-tree #tree-display .node[taxon="PROT"] .name, #groups .group .phyletic-pattern .branch[taxon="PROT"] .node .count { border-bottom-color: #cc00ff; }
-#taxon-tree #tree-display .node[taxon="ARCH"] .name, #groups .group .phyletic-pattern .branch[taxon="ARCH"] .node .count { border-bottom-color: #ff9900; }
-#taxon-tree #tree-display .node[taxon="EUKA"] .name, #groups .group .phyletic-pattern .branch[taxon="EUKA"] .node .count { border-bottom-color: #66ffff; }
-#taxon-tree #tree-display .node[taxon="PLAL"] .name, #groups .group .phyletic-pattern .branch[taxon="PLAL"] .node .count { border-bottom-color: #009933; }
-#taxon-tree #tree-display .node[taxon="KINE"] .name, #groups .group .phyletic-pattern .branch[taxon="KINE"] .node .count { border-bottom-color: #3399ff; }
-#taxon-tree #tree-display .node[taxon="ALVE"] .name, #groups .group .phyletic-pattern .branch[taxon="ALVE"] .node .count { border-bottom-color: #3300cc; }
-#taxon-tree #tree-display .node[taxon="FUNG"] .name, #groups .group .phyletic-pattern .branch[taxon="FUNG"] .node .count { border-bottom-color: #ccff33; }
-#taxon-tree #tree-display .node[taxon="META"] .name, #groups .group .phyletic-pattern .branch[taxon="META"] .node .count { border-bottom-color: #33ff00; }
-
-#groups .group .phyletic-pattern .node {
+#groups .group .phyletic-pattern .taxon {
     text-align: center;
     width: 26px;
-    height: 26px;
     font-family: sans-serif, serif;
     font-size: 7pt;
-    float: left;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 1px;
     margin-right: 1px;
-    line-height: normal;
     border: 1px solid black;
-    border-bottom-size: 0px;
+    float: left;
 }
 
-#groups .group .phyletic-pattern .node .name {
+#groups .group .phyletic-pattern .taxon .name {
     color: black;
-    background-color: white;
     height: 12px;
+    line-height: 12px;
 }
 
-#legend .count span,            #groups .group .phyletic-pattern .node .count {
+#groups .group .phyletic-pattern .taxon .count {
+    line-height: 12px;
+    height: 10px;
+}
+
+#legend .count span,            #groups .group .phyletic-pattern .taxon .count {
     background-color: black;
     color: white;
-    height: 11px;
 }
 
-#legend .count span[count="0"], #groups .group .phyletic-pattern .node[count="0"] .count {
+#legend .count span[count="0"], #groups .group .phyletic-pattern .taxon[count="0"] .count {
     background-color: white;
     color: black;
 }
 
-#legend .count span[count="1"], #groups .group .phyletic-pattern .node[count="1"] .count {
+#legend .count span[count="1"], #groups .group .phyletic-pattern .taxon[count="1"] .count {
     background-color: #ABABAB;
     color: black;
 }
 
-#groups .group .phyletic-pattern .description {
+#groups .group .phyletic-pattern .taxon .description {
     display: none;
     position: absolute;
     max-width: 300px;
@@ -116,6 +126,16 @@
     background-color: #FAFB98;
 }
 
+#groups .group .shortcut {
+    float: left;
+    margin: 2px;
+}
+
 #groups .group .group-detail {
+    margin: 2px;
+    text-align: center;
+}
+
+#sequences {
     clear: both;
 }

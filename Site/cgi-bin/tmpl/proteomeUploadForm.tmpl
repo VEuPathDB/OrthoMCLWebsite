@@ -1,0 +1,49 @@
+<TMPL_INCLUDE header.tmpl>
+
+<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/js/proteome.js"></script>
+
+
+<!-- BEGIN CONTENT -->
+
+<TMPL_IF UPLOAD>
+
+<h3 align="center">Upload Your Own Proteome sequences</h3>
+
+<form id="upload_form" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
+      enctype="multipart/form-data">
+  <input type="hidden" name="rm" value="proteomeQuery">
+  <table align="center">
+    <tr>
+      <td>Sequence file to Upload: </td>
+      <td><input id="seq_file" type="file" name="seq_file" required="true" /></td>
+    </tr>
+    <tr>
+      <td>Your Email Address: </td>
+      <td><input id="email" type="text" name="email" required="true" size="33" maxlength="255"/></td>
+    </tr>
+    <tr>
+      <td>Job Name(option): </td>
+      <td><input id="job_name" type="text" name="job_name" size="33" maxlength="100"/></td>
+    </tr>
+
+    <tr>
+      <td colspan="2" align="center"><input type="submit" name="Submit" value="Upload" /></td>
+    </tr>
+  </table>
+</form> 
+
+</TMPL_IF> <!-- end of UPLOAD -->
+
+<TMPL_IF RESULT>
+
+  <h3 align="center">Proteome Analysis Being Processed</h3>
+  <TMPL_IF JOB_NAME><p>Proteome Job: <b><TMPL_VAR JOB_NAME></b></p></TMPL_IF>
+  <p>Your proteome sequence file (<TMPL_VAR FILE_NAME>) been uploaded successfully, and now are being analyzed. An email will be sent to (<TMPL_VAR EMAIL>) when the analysis is finished.</p>
+ 
+</TMPL_IF> <!-- end of RESULT -->
+
+
+<!-- END CONTENT -->
+
+<TMPL_INCLUDE footer.tmpl>

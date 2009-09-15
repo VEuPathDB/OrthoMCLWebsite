@@ -40,6 +40,7 @@
     mm_menu_0229082941_0.menuBorder=1;
     mm_menu_0229082941_0.menuLiteBgColor='';
     mm_menu_0229082941_0.menuBorderBgColor='#AEB0D0';
+
     window.mm_menu_0229083228_0 = new Menu("root",200,18,"",12,"#333333","#FFFFFF","#9798CC","#343584","left","middle",3,0,1000,-5,7,true,true,true,0,false,true);
     mm_menu_0229083228_0.addMenuItem("<strong>Search&nbsp;for&nbsp;Groups</strong>","location='/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ackeyword'");
     mm_menu_0229083228_0.addMenuItem("&nbsp;&nbsp;&nbsp;&nbsp;by&nbsp;Accession/Keyword","location='/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ackeyword'");
@@ -56,7 +57,17 @@
     mm_menu_0229083228_0.menuLiteBgColor='';
     mm_menu_0229083228_0.menuBorderBgColor='#AEB0D0';
 
-    mm_menu_0229083228_0.writeMenus();
+    // mm_menu_0229083228_0.writeMenus();
+
+    window.mm_menu_0229084000_0 = new Menu("root",200,18,"",12,"#333333","#FFFFFF","#9798CC","#343584","left","middle",3,0,1000,-5,7,true,true,true,0,false,true);
+    mm_menu_0229084000_0.addMenuItem("Upload Proteome","location='/cgi-bin/OrthoMclWeb.cgi?rm=proteomeUploadForm'");
+    mm_menu_0229084000_0.hideOnMouseOut=true;
+    mm_menu_0229084000_0.bgColor='#555555';
+    mm_menu_0229084000_0.menuBorder=1;
+    mm_menu_0229084000_0.menuLiteBgColor='';
+    mm_menu_0229084000_0.menuBorderBgColor='#AEB0D0';
+
+    mm_menu_0229084000_0.writeMenus();
   } // mmLoadMenus()
   //-->
   </script>

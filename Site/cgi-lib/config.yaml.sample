@@ -3,6 +3,8 @@ user: orthomcl
 password: orthomcl
 
 basehref: http://orthomcl.cbil.upenn.edu
+proteome_job_dir: <the_job_dir_for_proteome_uploads>
+
 
 NEWS_file: /home/fengchen/www/orthomcl-web/cgi-lib/news
 

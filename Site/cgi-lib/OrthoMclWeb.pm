@@ -27,6 +27,7 @@ use FunKeyword;
 use GD;
 use Data::Dumper;
 use Time::HiRes qw( clock_gettime CLOCK_REALTIME );
+use File::Basename;
 
 my $startTime = clock_gettime(CLOCK_REALTIME);
 my $currentTime;
@@ -89,14 +90,15 @@ sub setup {
   $self->tmpl_path('@cgibinTargetDir@/tmpl');
   $self->start_mode('indx');
   $self->run_modes([qw(indx
-                         groupQueryForm sequenceQueryForm
+                 groupQueryForm sequenceQueryForm
                  groupList sequenceList
                  domarchList
                  sequence blast genome
                  groupQueryHistory sequenceQueryHistory
                  orthomcl drawScale drawDomain drawProtein
                  MSA BLGraph getSeq
-                 querySave queryTransform)
+                 querySave queryTransform
+                 proteomeUploadForm proteomeQuery)
 		   ]);
 
   # Timing info
@@ -2482,6 +2484,104 @@ sub getQueryNameHash {
   }
   return ($qnh,\@qna);
 }
+
+
+sub proteomeUploadForm {
+  my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin proteomeUploadForm(): " . ($currentTime - $startTime) . ".\n";
+
+  my $q = $self->query();
+
+  my $tmpl = $self->load_tmpl("proteomeUploadForm.tmpl");
+  $self->defaults($tmpl);
+
+  $tmpl->param(PAGETITLE => "Upload your own Proteome");
+  $tmpl->param(UPLOAD => 1);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End proteomeUploadForm(): " . ($currentTime - $startTime) . ".\n";
+
+  return $self->done($tmpl);
+
+}
+
+
+sub proteomeQuery {
+  my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin proteomeQuery(): " . ($currentTime - $startTime) . ".\n";
+
+  my $q = $self->query();
+  my $file_name = $q->param("seq_file");
+  my $email = $q->param("email");
+  my $job_name = $q->param("job_name");
+
+  if ( !$file_name ) {
+    print $q->header ( );
+    print "There was a problem uploading your photo (try a smaller file).";
+    exit;
+  }
+
+  # determine a new job directory
+  my $q = $self->query();
+  my $config = $self->param("config");
+  my $job_dir = $config->{proteome_job_dir};
+  my $user = (split(/@/, $email))[0];
+  $user =~ s/[^\w@]/_/g;
+  my $upload_dir = $job_dir . "/" . $user . "-" . time();
+  my $dir = $upload_dir;
+  my $count = 0;
+  while (-d $dir) { $dir = $upload_dir . '-' . (++$count); }
+
+  print STDERR "making job dir: " . $dir . "\n";
+
+  mkdir $dir, 0777;
+  #my @args = ("mkdir", "$dir");
+  #system(@args);
+  #@args = ("chmod", "a+rwx", "$dir");
+  #system(@args);
+  $upload_dir = $dir;
+
+  # upload sequence file
+  my $seq_file_handle = $q->upload("seq_file");
+  open ( UPLOADFILE, ">$upload_dir/orig_proteome.fasta" ) or die "$!";
+  binmode UPLOADFILE;
+
+  while ( <$seq_file_handle> ) {
+    print UPLOADFILE;
+  }
+  close UPLOADFILE;
+
+  # create index file 
+  open ( INDEXFILE, ">$upload_dir/info.txt" ) or die "$!";
+  print INDEXFILE "email=$email\n";
+  print INDEXFILE "fastaFileName=$file_name\n";
+  print INDEXFILE "jobName=$job_name\n";
+  close INDEXFILE;
+
+  my $tmpl = $self->load_tmpl("proteomeUploadForm.tmpl");
+  $self->defaults($tmpl);
+
+  $tmpl->param(PAGETITLE => "Your Proteome sequence is uploaded");
+  $tmpl->param(RESULT => 1);
+  $tmpl->param(EMAIL => $email);
+  $tmpl->param(FILE_NAME => $file_name);
+  $tmpl->param(JOB_NAME => $job_name);
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End proteomeQuery(): " . ($currentTime - $startTime) . ".\n";
+
+  return $self->done($tmpl);
+
+}
+
 
 
 1;			# Perl requires this at the end of all modules

@@ -1294,6 +1294,7 @@ sub sequenceList {
       $sequence{SEQUENCE_DESCRIPTION}=$data[2];
       $sequence{SEQUENCE_LENGTH}=$data[3];
       $sequence{SEQUENCE_TAXON}=$data[4];
+      $sequence{PREVIOUS_GROUPS}=$data[7];
       $sequence{SEQUENCE_TAXON_ABBREV}=$taxon_abbrev;
       push(@{$para{PAGER_DATA_LIST}},\%sequence);
     }
@@ -1519,6 +1520,7 @@ sub getSequenceRows {
     $sequence{SEQUENCE_DESCRIPTION}=$data[2];
     $sequence{SEQUENCE_LENGTH}=$data[3];
     $sequence{SEQUENCE_TAXON}=$data[4];
+    $sequence{PREVIOUS_GROUPS}=$data[9];
     if (defined $data[6]) {
       $sequence{GROUP_LINK}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupid=$data[7]";
       $sequence{GROUP_ACCESSION}=$data[6];

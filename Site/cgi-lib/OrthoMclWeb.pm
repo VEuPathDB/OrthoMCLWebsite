@@ -670,7 +670,7 @@ sub groupList {
 	    my @args;
 	    if ($userAc =~ /^OG\d\d?_\d+$/) {
 	      $sqlName = 'group_per_group_name';
-	      @args = ($userAc);
+	      @args = ($userAc, $userAc);
 	    } elsif ($userAc =~ /^([a-z]{3})\|(\S+)$/) {
 	      $sqlName = 'group_per_seq_source_id_and_taxon';
 	      @args = ($2, $1);
@@ -1354,7 +1354,7 @@ sub sequenceList {
 	  $sqlName = 'sequence_per_source_id_and_taxon';
 	  @args = ($2, $1);
 	} else {
-	  @args = ($userAcc);
+	  @args = ($userAcc, $userAcc);
 	  $sqlName = 'sequence_per_source_id';
 	}
 	my $query_sequence = $dbh->prepare($self->getSql($sqlName));

@@ -337,6 +337,15 @@ WHERE ogs.aa_sequence_id = eas.aa_sequence_id
 SELECT aa_sequence_id 
 FROM dots.ExternalAaSequence 
 WHERE source_id = ?
+UNION
+SELECT seqref.aa_sequence_id
+FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Seqs'
+  AND ref.primary_identifier = ?
 ]]>
        </sql>
      </sqlQuery> 
@@ -589,6 +598,18 @@ AND dbaf.db_ref_id = db.db_ref_id
 SELECT og.ortholog_group_id
 FROM apidb.OrthologGroup og
 WHERE og.name = ?
+UNION
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs,
+     Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Groups'
+  AND ref.primary_identifier = ?
+
 ]]>
        </sql>
      </sqlQuery> 

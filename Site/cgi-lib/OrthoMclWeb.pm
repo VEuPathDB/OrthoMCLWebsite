@@ -2564,6 +2564,7 @@ sub proteomeQuery {
   open ( INDEXFILE, ">$upload_dir/info.txt" ) or die "$!";
   print INDEXFILE "email=$email\n";
   print INDEXFILE "fastaFileName=$file_name\n";
+  print INDEXFILE "submitted=" . localtime() . "\n";
   print INDEXFILE "jobName=$job_name\n";
   close INDEXFILE;
 

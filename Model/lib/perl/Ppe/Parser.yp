@@ -49,7 +49,7 @@ sub Lexer {
     } elsif ($parser->YYData()->{INPUT} =~ s/^OR\s*//i) {
           @tokenDescriptor = ('OR', 'OR');
 
-    } elsif ($parser->YYData()->{INPUT} =~ s/^([a-z]{3})\s*//) {
+    } elsif ($parser->YYData()->{INPUT} =~ s/^([a-z]{4})\s*//) {
           @tokenDescriptor = ('TAXON', $1);
        
     } elsif ($parser->YYData()->{INPUT} =~ s/^(ALL|[A-Z]{4})\s*//) {

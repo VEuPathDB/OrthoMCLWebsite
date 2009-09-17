@@ -35,7 +35,7 @@ sub cgiapp_init {
     
     $job_id = $q->path_info();
     $job_id =~ s;[^A-Za-z0-9];;g;
-    $resultfile_basename =  $svc_cfg{'resultfilePrefix'} . $job_id . '.zip';
+    $resultfile_basename =  $svc_cfg{'resultfilePrefix'} . $job_id . $svc_cfg{'resultfileExt'};
     $full_resultfile_path = $svc_cfg{'resultsDir'} . '/' . $resultfile_basename ;
     $self_url = $q->self_url;
 

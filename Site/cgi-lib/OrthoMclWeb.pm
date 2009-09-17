@@ -34,7 +34,7 @@ my $currentTime;
 
 my $debug=0;
 our $config;
-our $VERSION = '30';
+our $VERSION = '3';
 
 sub cgiapp_init {
   my $self = shift;
@@ -98,7 +98,8 @@ sub setup {
                  orthomcl drawScale drawDomain drawProtein
                  MSA BLGraph getSeq
                  querySave queryTransform
-                 proteomeUploadForm proteomeQuery)
+                 proteomeUploadForm proteomeQuery
+                 edgeList)
 		   ]);
 
   # Timing info
@@ -1722,6 +1723,7 @@ return $self->done($tmpl);
     $para{SECONDARY_ACCESSION}=$data[6];
     
     my $seq = $data[7];
+    my $previous_groups = $data[8];
 
     # display sequence
     $para{SEQUENCE} = "&gt;$taxon_abbrev|" . $para{ACCESSION} . " ";
@@ -1787,6 +1789,8 @@ return $self->done($tmpl);
 
     $para{SCALE_IMAGE}=$config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=drawScale&size_x=$size_x&margin_x=$margin_x&scale_factor=$scale_factor&length_max=$length_max&tick_step=$tick_step&scale_color=black";
     $para{SEQUENCE_IMAGE}=$config->{basehref} . $sequence_image . "&num_domains=" . $num_dom_in_sequence;
+
+    $para{PREVIOUS_GROUPS}=$previous_groups;
 
     my $tmpl = $self->load_tmpl('sequencepage.tmpl');
     $self->defaults($tmpl);
@@ -2178,7 +2182,7 @@ sub blast {
       }
 
       # grab group source id, and register seq as having a group
-      if ($line =~ /(OG${VERSION}_\d+)/) {
+      if ($line =~ /(OG${VERSION}0_\d+)/) {
 	$grp_source_id = $1;
 	# register sequence_id for history (unless already registered)
 	if (!$seqsAlreadySeen{$full_seq_source_id}) {
@@ -2534,21 +2538,22 @@ sub proteomeQuery {
   my $q = $self->query();
   my $config = $self->param("config");
   my $job_dir = $config->{proteome_job_dir};
-  my $user = (split(/@/, $email))[0];
-  $user =~ s/[^\w@]/_/g;
-  my $upload_dir = $job_dir . "/" . $user . "-" . time();
-  my $dir = $upload_dir;
-  my $count = 0;
-  while (-d $dir) { $dir = $upload_dir . '-' . (++$count); }
 
-  print STDERR "making job dir: " . $dir . "\n";
+  my $job_id;
+  while(1) {
+    $job_id = '';
+    for (my $i = 0; $i < 12; $i++) {
+      my $number = int(rand(36));
+      my $digit = chr(($number < 10) ? $number + 48 : $number + 55); 
+      $job_id = $job_id . $digit;
+    }
+    if (-d "$job_dir/$job_id") { ; } else { last; };
+  }
+  my $upload_dir = $job_dir . "/" . $job_id;
 
-  mkdir $dir, 0777;
-  #my @args = ("mkdir", "$dir");
-  #system(@args);
-  #@args = ("chmod", "a+rwx", "$dir");
-  #system(@args);
-  $upload_dir = $dir;
+  print STDERR "making job dir: " . $upload_dir . "\n";
+
+  mkdir $upload_dir, 0777;
 
   # upload sequence file
   my $seq_file_handle = $q->upload("seq_file");
@@ -2566,6 +2571,7 @@ sub proteomeQuery {
   print INDEXFILE "fastaFileName=$file_name\n";
   print INDEXFILE "submitted=" . localtime() . "\n";
   print INDEXFILE "jobName=$job_name\n";
+  print INDEXFILE "jobId=$job_id\n";
   close INDEXFILE;
 
   my $tmpl = $self->load_tmpl("proteomeUploadForm.tmpl");
@@ -2580,6 +2586,55 @@ sub proteomeQuery {
   # Timing info
   $currentTime = clock_gettime(CLOCK_REALTIME);
   print STDERR "End proteomeQuery(): " . ($currentTime - $startTime) . ".\n";
+
+  return $self->done($tmpl);
+
+}
+
+sub edgeList {
+  my $self = shift;
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "Begin edgeList(): " . ($currentTime - $startTime) . ".\n";
+
+  my $q = $self->query();
+
+  my $tmpl = $self->load_tmpl("edge_list.tmpl");
+  $self->defaults($tmpl);
+  my %para;
+
+  my $config = $self->param("config");
+  my $dbh = $self->dbh();
+  my $q = $self->query();
+
+  $dbh->{LongTruncOk} = 0;
+  $dbh->{LongReadLen} = 100000000;
+
+  my $ac = $q->param("groupac");
+                                     
+  # read the content of the svg
+  my $query_edges_by_group = $dbh->prepare($self->getSql('edges_per_group_name'));
+  $query_edges_by_group->execute($ac);
+  while (my @data = $query_edges_by_group->fetchrow_array()) {
+    my %edge;
+    $edge{QUERY_SEQ}=$data[0];
+    $edge{SUBJECT_SEQ}=$data[1];
+    $edge{QUERY_TAXON}=$data[2];
+    $edge{SUBJECT_TAXON}=$data[3];
+    $edge{SCORE}=$data[4];
+    $edge{NORMALIZED_SCORE}=$data[5];
+    $edge{EVALUE_MANT}=$data[6];
+    $edge{EVALUE_EXP}=$data[7];
+    $edge{TYPE}=$data[8];
+    push(@{$para{LOOP_EDGE}},\%edge);
+  }
+  $tmpl->param(\%para);
+
+
+  # Timing info
+  $currentTime = clock_gettime(CLOCK_REALTIME);
+  print STDERR "End edgeList(): " . ($currentTime - $startTime) . ".\n";
 
   return $self->done($tmpl);
 

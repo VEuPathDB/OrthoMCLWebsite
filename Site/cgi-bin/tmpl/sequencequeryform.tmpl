@@ -33,6 +33,7 @@
               <select name="in">
                  <option>Keyword</option>
                  <option>Accession</option>
+                 <option>Old Group Accession</option>
                  <option>Taxon_Abbreviation</option>
 		 <option>Pfam_Accession</option>
 		 <option>Pfam_Name</option>
@@ -51,7 +52,8 @@ OrthoMCL-DB internal sequence accession, e.g. <font color="#ff00ff">tgo1</font>,
 
           <p>You can query by keyword (case insensitive), sequence accession (e.g. <font color="#ff00ff">At1g20570.1</font> or <font color="#ff00ff">ath|At1g20570.1</font>), taxon abbreviation (e.g. <font color="#ff00ff">sce</font>), Pfam domain accession (e.g. <font color="#ff00ff">PF00018</font>), Pfam domain name (e.g. <font color="#ff00ff">SH3_1</font>) and Pfam domain keyword (case insensitive).
           <p> Sequence accessions used in OrthoMCL-DB are those obtained from the source of the genome.  The source is not always Genbank/EMBL/DDBJ, so the accessions are not necessarily from there.  To be sure which type of accession you should use to find a sequence, refer to the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">Data Sources</a> which lists the sources of each genome.
-          <p> Accession search supports a space delimited list of accessions, (e.g. <font color="#ff00ff">NP_227932.1 aae|NP_214494.1 NP_662282.1</font>).
+          <p> Accession search supports a space delimited list of accessions, (e.g. <font color="#ff00ff">NP_227932.1 aae|NP_214494.1 NP_662282.1</font>).</p>
+          <p> Old Group Accession supports a single group accesion from version 2 or version 1.(e.g. <font color="#ff00ff">OG2_76859, OG1_6765</font>).
 	  <p> Keyword search supports boolean mode, and here are some examples:
       <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin | conjugating | enzyme</font>
       <br>&nbsp;&nbsp;&nbsp;&nbsp;Find sequences whose descriptions contain either one of the three words.

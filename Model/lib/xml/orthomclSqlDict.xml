@@ -350,6 +350,25 @@ WHERE seqref.db_ref_id = ref.db_ref_id
        </sql>
      </sqlQuery> 
 
+     <sqlQuery>
+       <name>sequence_per_group_ac</name>
+       <sql>
+<![CDATA[ 
+SELECT ogs.aa_sequence_id 
+FROM apidb.OrthologGroupAaSequence ogs, apidb.OrthologGroup og
+WHERE og.name = ?
+UNION
+SELECT seqref.aa_sequence_id
+FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Groups'
+  AND ref.primary_identifier = ?
+]]>
+       </sql>
+     </sqlQuery>
 
      <sqlQuery>
        <name>sequence_per_source_id_and_taxon</name>

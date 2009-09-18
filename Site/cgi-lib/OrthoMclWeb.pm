@@ -1196,6 +1196,7 @@ sub sequenceList {
 
     my ($orthogroup_id,$orthogroup_ac);
     if ($orthogroup_ac = $q->param("groupac")) {
+      # support a wrong group name
       my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
       $query_orthogroupid->execute($orthogroup_ac);
       my @tmp = $query_orthogroupid->fetchrow_array();
@@ -1358,6 +1359,19 @@ sub sequenceList {
 	  $sqlName = 'sequence_per_source_id';
 	}
 	my $query_sequence = $dbh->prepare($self->getSql($sqlName));
+        $query_sequence->execute(@args);
+        while (my @data = $query_sequence->fetchrow_array()) {
+          push(@{$sequence_ids_ref},$data[0]);
+        }
+      }
+    } elsif ($in eq 'Old Group Accession') {
+      my @qc = split(" ",$querycode);
+      my $sqlName;
+      foreach my $userAcc (@qc) {
+        my @args;
+        @args = ($userAcc, $userAcc);
+        $sqlName = 'sequence_per_group_ac';
+        my $query_sequence = $dbh->prepare($self->getSql($sqlName));
         $query_sequence->execute(@args);
         while (my @data = $query_sequence->fetchrow_array()) {
           push(@{$sequence_ids_ref},$data[0]);

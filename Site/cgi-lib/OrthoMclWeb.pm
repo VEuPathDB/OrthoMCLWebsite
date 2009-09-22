@@ -671,12 +671,12 @@ sub groupList {
 	    if ($userAc =~ /^OG\d\d?_\d+$/) {
 	      $sqlName = 'group_per_group_name';
 	      @args = ($userAc, $userAc);
-	    } elsif ($userAc =~ /^([a-z]{3})\|(\S+)$/) {
+	    } elsif ($userAc =~ /^([a-z]{3,4})\|(\S+)$/) {
 	      $sqlName = 'group_per_seq_source_id_and_taxon';
-	      @args = ($2, $1);
+	      @args = ($2, $1, $userAc);
 	    } else {
 	      $sqlName = 'group_per_seq_source_id';
-	      @args = ($userAc);
+	      @args = ($userAc, $userAc);
 	    }
 	    my $query_orthogroup = $dbh->prepare($self->getSql($sqlName));
 	    $query_orthogroup->execute(@args);
@@ -1335,8 +1335,10 @@ sub sequenceList {
           <BLAST>;		# empty line
           while (<BLAST>) {
             last if m/^\s*$/;
-            if (m/^([a-z]{3})\|(\S+)/) {
-	      $query_sequence->execute($2,$1);
+            if (m/^([a-z]{3,4})\|(\S+)/) {
+              my $abbrev = $1;
+              my $seqAc = $2;
+	      $query_sequence->execute($seqAc, $abbrev, "$abbrev|$seqAc");
 	      while (my @data = $query_sequence->fetchrow_array()) {
                 push(@{$sequence_ids_ref},$data[0]);
 	      }
@@ -1351,9 +1353,11 @@ sub sequenceList {
       my $sqlName;
       foreach my $userAcc (@qc) {
 	my @args;
-	if ($userAcc =~ /^([a-z]{3})\|(\S+)$/) {
+	if ($userAcc =~ /^([a-z]{3,4})\|(\S+)$/) {
+          my $abbrev = $1;
+          my $seqAc = $2;
 	  $sqlName = 'sequence_per_source_id_and_taxon';
-	  @args = ($2, $1);
+	  @args = ($seqAc, $abbrev, "$abbrev|$seqAc");
 	} else {
 	  @args = ($userAcc, $userAcc);
 	  $sqlName = 'sequence_per_source_id';
@@ -2189,14 +2193,14 @@ sub blast {
       my $grp_source_id;
 
       # grab seq source id
-      if ($line =~ /([a-z]{3})\|(\S+)/) {
+      if ($line =~ /([a-z]{3,4})\|(\S+)/) {
 	$taxon_abbrev = $1;
 	$seq_source_id = $2;
 	$full_seq_source_id = "$taxon_abbrev|$seq_source_id";
       }
 
       # grab group source id, and register seq as having a group
-      if ($line =~ /(OG${VERSION}0_\d+)/) {
+      if ($line =~ /(OG${VERSION}_\d+)/) {
 	$grp_source_id = $1;
 	# register sequence_id for history (unless already registered)
 	if (!$seqsAlreadySeen{$full_seq_source_id}) {

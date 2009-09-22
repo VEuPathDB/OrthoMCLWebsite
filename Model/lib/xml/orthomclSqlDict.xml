@@ -379,6 +379,15 @@ FROM dots.ExternalAaSequence s, apidb.OrthomclTaxon t
 WHERE s.source_id = ?
 AND t.three_letter_abbrev = ?
 AND t.taxon_id = s.taxon_id
+UNION
+SELECT seqref.aa_sequence_id
+FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Seqs'
+  AND ref.secondary_identifier = ?
 ]]>
        </sql>
      </sqlQuery> 
@@ -645,6 +654,17 @@ WHERE s.source_id = ?
   AND t.three_letter_abbrev = ?
   AND s.taxon_id = t.taxon_id
  AND ogs.aa_sequence_id = s.aa_sequence_id
+UNION
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs,
+     Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Seqs'
+  AND ref.secondary_identifier = ?
 ]]>
        </sql>
      </sqlQuery> 
@@ -659,6 +679,18 @@ FROM dots.ExternalAaSequence s,
      apidb.OrthologGroupAaSequence ogs
 WHERE s.source_id = ?
  AND ogs.aa_sequence_id = s.aa_sequence_id
+UNION
+SELECT ogs.ortholog_group_id
+FROM apidb.OrthologGroupAaSequence ogs,
+     Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Seqs'
+  AND ref.primary_identifier = ?
+
 ]]>
        </sql>
      </sqlQuery> 

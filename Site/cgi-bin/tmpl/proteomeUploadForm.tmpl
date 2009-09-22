@@ -10,10 +10,10 @@
 
 <h3 align="center">Assign your proteins to OrthoMCL Groups</h3>
 
-Use this tool to provisionally assign the proteins in a genome to OrthoMCL Grops.  Upload your genome's proteins as a FASTA file.  
+Use this tool to provisionally assign the proteins in a genome to OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.  
 
 <br><br>The process takes between 6 to 24 hours depending upon server load.  
-
+<br><br>
 <form id="upload_form" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
       enctype="multipart/form-data">
   <input type="hidden" name="rm" value="proteomeQuery">
@@ -36,10 +36,12 @@ Use this tool to provisionally assign the proteins in a genome to OrthoMCL Grops
     </tr>
   </table>
 </form> 
-
+<br><br>
 <h3>Details</h3>
 <b>Input:</b> Your proteins in FASTA format.
+<p>
 <b>Output:</b> A gzip file containing the following files:
+<p>
 <pre>
 orthomclResults/
   orthologGroups    # a map between your proteins and OrthoMCL groups
@@ -50,6 +52,7 @@ orthomclResults/
 </pre>
 <br><br>
 <b>Algorithm</b>
+<p>
 this is the algorthm
 
 

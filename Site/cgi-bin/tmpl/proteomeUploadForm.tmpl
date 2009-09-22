@@ -27,7 +27,7 @@ Use this tool to provisionally assign the proteins in a genome to OrthoMCL Group
       <td><input id="email" type="text" name="email" required="true" size="33" maxlength="255"/></td>
     </tr>
     <tr>
-      <td>Job Name(option): </td>
+      <td>Job Name(optional): </td>
       <td><input id="job_name" type="text" name="job_name" size="33" maxlength="100"/></td>
     </tr>
 
@@ -72,7 +72,9 @@ Please refer to the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">Or
 
   <h3 align="center">Proteins Submitted</h3>
   <TMPL_IF JOB_NAME><p>Job name: <b><TMPL_VAR JOB_NAME></b></p></TMPL_IF>
-  <p>Your proteins sequence file <TMPL_VAR FILE_NAME> has been uploaded successfully. You will receive an email soon at <TMPL_VAR EMAIL> indicating that the job has been submitted to the queue.  You will receive another email in many hours when the job is complete.  Thanks for submitting your proteins.</p>
+  <p>Your proteins sequence file <TMPL_VAR FILE_NAME> has been uploaded. You will receive an email soon at <TMPL_VAR EMAIL> indicating that the job has been submitted to the queue.  You will receive another email in many hours when the job is complete.  
+<p>
+Thanks for submitting your proteins.
  
 </TMPL_IF> <!-- end of RESULT -->
 

@@ -34,16 +34,16 @@ body {
 ==========================================*/
 
 a:link {
-	color: #a20000; text-decoration: none;
+	color: #b20000; text-decoration: none;
 }
 a:visited {
-	color: #4f0000; text-decoration: none;
+	color: #b20090; text-decoration: none;
 }
 a:hover {
 	color: #ff0000; text-decoration: underline;
 }
 a:active {
-	color: #bb9595; text-decoration: none;
+	color: #db9595; text-decoration: none;
 }
 a.white:link {
 	color: #FFFFFF; text-decoration: none;

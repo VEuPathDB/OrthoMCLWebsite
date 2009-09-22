@@ -177,7 +177,7 @@ sub groupQueryForm {
   #    $tmpl->param(LEFTNAV => 1);
 
   if ($type eq 'ackeyword') {
-    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Accession / Keyword");
+    $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By IDs / Keyword / PFam domain");
     $tmpl->param(ACKEYWORD => 1);
   } elsif ($type eq 'ppform') {
     $tmpl->param(PAGETITLE => "Query OrthoMCL Groups By Phyletic Pattern Form");
@@ -284,7 +284,7 @@ sub sequenceQueryForm {
     $tmpl->param(PAGETITLE => "Query Protein Sequences By BLAST Search");
     $tmpl->param(BLAST => 1);
   } else {
-    $tmpl->param(PAGETITLE => "Query Protein Sequences By Accession/Keyword");
+    $tmpl->param(PAGETITLE => "Query Protein Sequences By IDs / Keyword / Taxon / PFam domain");
     $tmpl->param(ACKEYWORD => 1);
   }
 

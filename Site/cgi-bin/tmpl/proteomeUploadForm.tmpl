@@ -10,7 +10,9 @@
 
 <h3 align="center">Assign your proteins to OrthoMCL Groups</h3>
 
-Use this tool to provisionally assign the proteins in a proteome to OrthoMCL Grops.  Upload your proteome as a FASTA file.  The process takes between 6 to 24 hours depending upon server load.  
+Use this tool to provisionally assign the proteins in a genome to OrthoMCL Grops.  Upload your genome's proteins as a FASTA file.  
+
+<br><br>The process takes between 6 to 24 hours depending upon server load.  
 
 <form id="upload_form" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
       enctype="multipart/form-data">
@@ -35,13 +37,29 @@ Use this tool to provisionally assign the proteins in a proteome to OrthoMCL Gro
   </table>
 </form> 
 
+<h3>Details</h3>
+<b>Input:</b> Your proteins in FASTA format.
+<b>Output:</b> A gzip file containing the following files:
+<pre>
+orthomclResults/
+  orthologGroups    # a map between your proteins and OrthoMCL groups
+  paralogPairs      # reciprocal best hits among those proteins in your genome
+                    # that were not mapped to OrthoMCL groups
+  paralogGroups     # the proteins in paralogPairs clustered into groups by
+                    # the mcl program
+</pre>
+<br><br>
+<b>Algorithm</b>
+this is the algorthm
+
+
 </TMPL_IF> <!-- end of UPLOAD -->
 
 <TMPL_IF RESULT>
 
-  <h3 align="center">Proteome Analysis Being Processed</h3>
-  <TMPL_IF JOB_NAME><p>Proteome Job: <b><TMPL_VAR JOB_NAME></b></p></TMPL_IF>
-  <p>Your proteome sequence file (<TMPL_VAR FILE_NAME>) been uploaded successfully, and now are being analyzed. An email will be sent to (<TMPL_VAR EMAIL>) when the analysis is finished.</p>
+  <h3 align="center">Proteins Submitted</h3>
+  <TMPL_IF JOB_NAME><p>Job name: <b><TMPL_VAR JOB_NAME></b></p></TMPL_IF>
+  <p>Your proteins sequence file <TMPL_VAR FILE_NAME> has been uploaded successfully. You will receive an email soon at <TMPL_VAR EMAIL> indicating that the job has been submitted to the queue.  You will receive another email in many hours when the job is complete.  Thanks for submitting your proteins.</p>
  
 </TMPL_IF> <!-- end of RESULT -->
 

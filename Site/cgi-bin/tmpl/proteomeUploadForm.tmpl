@@ -40,20 +40,30 @@ Use this tool to provisionally assign the proteins in a genome to OrthoMCL Group
 <h3>Details</h3>
 <b>Input:</b> Your proteins in FASTA format.
 <p>
-<b>Output:</b> A gzip file containing the following files:
+<b>Output:</b> A .zip file containing the following text files:
 <p>
 <pre>
 orthomclResults/
-  orthologGroups    # a map between your proteins and OrthoMCL groups
+  orthologGroups    # a map between your proteins and OrthoMCL groups. Tab 
+                      delimited.  Columns: your_protein, orthomcl_group, 
+                      seq_id_of_best_hit, evalue_mantissa, evalue_exponent,
+                      percent_identity, percent_match
   paralogPairs      # reciprocal best hits among those proteins in your genome
-                    # that were not mapped to OrthoMCL groups
+                    # that were not mapped to OrthoMCL groups, as described
+                    # below in the Algorithms section
   paralogGroups     # the proteins in paralogPairs clustered into groups by
-                    # the mcl program
+                    # the mcl program, as described below in the Algorithms
+                    # section
 </pre>
 <br><br>
 <b>Algorithm</b>
 <p>
-this is the algorthm
+Please refer to the OrthoMCL Algorithm Document for details about how OrthoMCL-DB is created.
+<ul>
+<li>BLASTP of your proteins against self and against OrthoMCL proteins.  Cutoff of e-5, and 50% match. 
+<li>For each protein that has an above-threshold match to an OrthoMCL protein, assign that protein to the group of the OrthoMCL protein.  If the OrthoMCL protein does not have a group, assign it to NO_GROUP.
+<li>For remaining proteins, use the InParalog algorithm described in the OrthoMCL Algorithm Document to find potential paralog pairs.  
+<li>Submit those pairs to the MCL program (see ).
 
 
 </TMPL_IF> <!-- end of UPLOAD -->

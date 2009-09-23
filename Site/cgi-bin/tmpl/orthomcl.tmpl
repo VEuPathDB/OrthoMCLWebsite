@@ -26,7 +26,7 @@
                   <p> The genome data for this release was acquired from these <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">data sources</a>.  The number of sequences and groups in each genome is shown in the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=summary">release summary</a>.
                   <br />
 		  <p><strong>Downloads:</strong>
-                  <p>Go to the <a href="common/downloads">download site</a> to get the protein sequences used in this release, and the ortholog groups.  To get the (huge) file of all-vs-all blast contact us at help@orthomcl.org.
+                  Go to the <a href="common/downloads">download site</a> to get the protein sequences used in this release, and the ortholog groups.  To get the (huge) file of all-vs-all blast contact us at help@orthomcl.org.
                   <p>
                 </td>
               </tr>
@@ -34,10 +34,21 @@
                 <td>
                   <table cellpadding="2" cellspacing="0" border="0" width="100%">
                     <tr>
-                      <th width="100%" align="center" bgcolor="#444488"><a name="Previous"><FONT COLOR="#ffffff">Previous Release</FONT></a></th>
+                      <th width="100%" align="center" bgcolor="#444488"><a name="Previous"><FONT COLOR="#ffffff">Previous Releases</FONT></a></th>
                     </tr>
                   </table>
                   <p> The previous releases of OrthoMCL, Version 1.0 and 2.0, can be found here, respectively: <a href="http://v1.orthomcl.org">http://v1.orthomcl.org</a> &nbsp; <a href="http://v2.orthomcl.org">http://v2.orthomcl.org</a>
+                  <p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table cellpadding="2" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <th width="100%" align="center" bgcolor="#444488"><a name="Algorithm"><FONT COLOR="#ffffff">Algorithm</FONT></a></th>
+                    </tr>
+                  </table>
+                  <p>The algorithm used to build OrthoMCL-DB is formally described in  the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a>
                   <p>
                 </td>
               </tr>
@@ -46,11 +57,11 @@
               </tr>
             </table>
             <p>Orthologs are homologs seperated by speciation events.  Paralogs are homologs separated by duplication events. Detection of orthologs is becoming
-    much more important as the rapid progress in genome sequencing. 
+    much more important with the rapid progress in genome sequencing. 
             <p>OrthoMCL is a genome-scale algorithm for grouping orthologous protein sequences. It provides not only groups
     shared by two or more species/genomes, but also groups representing species-specific gene expansion families.
-    So it serves as an important utility for automated eukaryotic genome annotation. OrthoMCL starts with reciprocal best hits within each genome as putative in-paralog/recent paralog pairs and reciprocal best hits
-    across any two genomes as putative ortholog pairs.  Related proteins are interlinked in a similarity
+    So it serves as an important utility for automated eukaryotic genome annotation. OrthoMCL starts with reciprocal best hits within each genome as potential in-paralog/recent paralog pairs and reciprocal best hits
+    across any two genomes as potential ortholog pairs.  Related proteins are interlinked in a similarity
     graph. Then MCL (Markov Clustering algorithm,Van Dongen 2000; <a href="http://micans.org/mcl/">www.micans.org/mcl</a>) is invoked to split 
     mega-clusters.  This process is analogous to the manual review in COG construction.  MCL clustering is based on
     weights between each pair of proteins, so to correct for differences in evolutionary distance the weights are 
@@ -100,19 +111,9 @@
                 <th width="100%" align="center" bgcolor="#444488"><a name="Software"><FONT COLOR="#ffffff">Software</FONT></a></th>
               </tr>
             </table>
-          <p>OrthoMCL was originally implemented by Li Li.  The data used by OrthoMCL was 
-    stored in the GUS relational database (Genomic Unified Schema (Davidson, Crabtree et al. 2001)). To meet the demand for a stand-alone version, OrthoMCL was then was developed as a PERL package,
-    which is available at the <a href=""http://v1.orthomcl.org/ORTHOMCL/">OrthoMCL Download Site</a>.
-          <p>Stand-alone OrthoMCL requires protein FASTA files for each genome, and it calls for an all-against-all BLAST 
-    analysis. Alternatively, OrthoMCL can start its analysis by reading a BPO file (Blast Parsing Output) which describes 
-    genes paired by BLAST matches, their E-value, the percent identity and the related HSP information.
-          <p>As a perl package stand-alone OrthoMCL doesn't need compilation. However it requires some software and perl 
-    modules to run: 
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Software:      1. BLAST (NCBI-BLAST, WU-BLAST, etc.)
-                2. MCL (Markov Clustering algorithm), available at <a href="http://micans.org/mcl/">www.micans.org/mcl</a>;
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perl Modules:   1. Bio::SearchIO (part of BioPerl, <a href="http://bioperl.org">http://bioperl.org</a>)
-                2. Storable
-          <p>
+          <p>OrthoMCL was originally implemented by Li Li.  The software was not available for download.
+          <p><a href="http://v1.orthomcl.org/ORTHOMCL/">Version 1.4</a> was developed as publicly available software by Feng Chen.  (This version is now not supported.)
+          <p><a href="http://v1.orthomcl.org/ORTHOMCL/">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau  
         </td>
       </tr>
       <tr>

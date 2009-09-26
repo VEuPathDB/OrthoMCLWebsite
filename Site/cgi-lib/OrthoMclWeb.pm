@@ -2571,7 +2571,9 @@ sub proteomeQuery {
 
   print STDERR "making job dir: " . $upload_dir . "\n";
 
-  mkdir $upload_dir, 0777;
+  my $old_umask = umask 0;
+  mkdir $upload_dir;
+  umask $old_umask;
 
   # upload sequence file
   my $seq_file_handle = $q->upload("seq_file");

@@ -20,7 +20,7 @@ use CGI::Application::Plugin::DBH qw(dbh_config dbh dbh_default_name);
 use CGI::Application::Plugin::Session;
 use File::Spec ();
 use YAML qw(LoadFile);
-use OrthoMCLData::Load::MatrixColumnManager;
+use OrthoMCLShared::Ppe::MatrixColumnManager;
 use OrthoMCLWebsite::Model::Ppe::Processor;
 use ApiCommonWebsite::Model::SqlXmlParser;
 use FunKeyword;
@@ -803,7 +803,7 @@ sub groupList {
   }
     
   # get the taxon tree for phyletic pattern in the group list page
-  my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
+  my $columnMgr = OrthoMCLShared::Ppe::MatrixColumnManager->new($dbh);
 
   my %species;
   my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));

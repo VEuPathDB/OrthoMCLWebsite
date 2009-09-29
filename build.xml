@@ -11,9 +11,9 @@
     </ant>
   </target>  
 
-  <target name="OrthoMCLData/Load-Installation">
-    <ant antfile="../OrthoMCLData/build.xml" target="OrthoMCLData/Load-Installation">
-      <property name="project" value="OrthoMCLData"/>
+  <target name="OrthoMCLShared-Installation">
+    <ant antfile="../OrthoMCLShared/build.xml" target="OrthoMCLShared-Installation">
+      <property name="project" value="OrthoMCLShared"/>
       <property name="version" value="api-mar-2008"/>
     </ant>
   </target>
@@ -27,10 +27,10 @@
     </ant>
   </target>
     
-  <target name="OrthoMCLData-Checkout" unless="OrthoMCLData.present"> 
+  <target name="OrthoMCLShared-Checkout" unless="OrthoMCLShared.present"> 
     <ant target="defaultProjectCheckout" inheritAll="false">
-      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLData"/>
-      <property name="project" value="OrthoMCLData"/>
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLShared"/>
+      <property name="project" value="OrthoMCLShared"/>
       <property name="version" value="api-mar-2008"/>
       <property name="excludeChildren" value="true"/>
     </ant>
@@ -41,9 +41,9 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildCheckout">
     <available file="../ApiCommonWebsite" type="dir"  property="ApiCommonWebsite.present" />
-    <available file="../OrthoMCLData" type="dir"  property="OrthoMCLData.present" />
+    <available file="../OrthoMCLShared" type="dir"  property="OrthoMCLShared.present" />
     <antcall target="ApiCommonWebsite-Checkout"/>
-    <antcall target="OrthoMCLData-Checkout"/>
+    <antcall target="OrthoMCLShared-Checkout"/>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
@@ -54,7 +54,7 @@
       <property name="project" value="ApiCommonWebsite"/>
     </ant>
     <ant target="defaultProjectUpdate">
-      <property name="project" value="OrthoMCLData"/>
+      <property name="project" value="OrthoMCLShared"/>
     </ant>
   </target>
 
@@ -63,7 +63,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="OrthoMCLWebsite-Installation" depends="ApiCommonWebsite-Installation,
-                                                       OrthoMCLData/Load-Installation,
+                                                       OrthoMCLShared-Installation,
                                                        OrthoMCLWebsite/Site-Installation,
                                                        OrthoMCLWebsite/Model-Installation">
     <ant target="defaultProjectInstall"/>

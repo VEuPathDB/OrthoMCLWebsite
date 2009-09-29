@@ -1211,7 +1211,7 @@ sub sequenceList {
     my $query_orthogroup = $dbh->prepare($self->getSql('group_attributes_per_group'));
 
     # get the taxon tree for phyletic pattern in the group list page
-    my $columnMgr = OrthoMCLData::Load::MatrixColumnManager->new($dbh);
+    my $columnMgr = OrthoMCLShared::Ppe::MatrixColumnManager->new($dbh);
 
     my %species;
     my $query_taxonname = $dbh->prepare($self->getSql('all_taxa_info'));

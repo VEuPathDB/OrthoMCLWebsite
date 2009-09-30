@@ -65,8 +65,11 @@ function displayClade(node, content) {
     content.push(" src=\"images/", urls[node.state], "\" ");
     content.push(" style=\"cursor:pointer;\" ");
     content.push(" onclick=\"toggleState('" + node.id + "')\" />");
-    
-    content.push("<b>", node.name, " (", node.abbrev, ")</b>:</td>");
+
+    if (node.common_name) content.push("<span title=\"", node.common_name, "\">");    
+    content.push("<b>", node.name, " (", node.abbrev, ")</b>");
+    if (node.common_name) content.push("</span>");
+    content.push(":</td>");
     
     // display species under the node
     if (subSpecies.length > 0) {

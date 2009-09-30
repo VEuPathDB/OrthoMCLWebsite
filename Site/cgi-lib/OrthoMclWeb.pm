@@ -192,7 +192,8 @@ sub groupQueryForm {
 			       ABBREV=>$data[2],
 			       NAME=>$data[3], 
 			       IS_SPECIES => $data[4],
-			       INDEX => $data[5] });
+			       INDEX => $data[5],
+                               COMMON_NAME => $data[6] });
     }
     $tmpl->param(\%para);
   } elsif ($type eq 'property') {
@@ -218,17 +219,17 @@ sub groupQueryForm {
       if ($count_species==2) {	# which means every tr has two td
         push(@{$para{LOOP_TR}},{LOOP_TD=>[
 					  {
-					   ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3]},
+					   ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3], COMMON_NAME => $prev_specie_data[6] },
 					  {
-					   ABBREV=>$data[2],NAME=>$data[3]}
+					   ABBREV=>$data[2],NAME=>$data[3], COMMON_NAME => $data[6] }
 					 ]});
         $count_species=0;
       } elsif ($count_groups==2) { # which means every tr has two td
         push(@{$para{LOOP_GROUPTR}},{LOOP_GROUPTD=>[
 						    {
-						     ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3]},
+						     ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3], COMMON_NAME => $prev_group_data[6] },
 						    {
-						     ABBREV=>$data[2],NAME=>$data[3]}
+						     ABBREV=>$data[2],NAME=>$data[3], COMMON_NAME => $data[6] }
 						   ]});
         $count_groups=0;
       }
@@ -241,13 +242,13 @@ sub groupQueryForm {
     if ($count_species%2) {
       push(@{$para{LOOP_TR}},{LOOP_TD=>[
 					{
-					 ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3]}
+					 ABBREV=>$prev_specie_data[2],NAME=>$prev_specie_data[3], COMMON_NAME => $prev_specie_data[6] }
 				       ]});
     }
     if ($count_groups%2) {
       push(@{$para{LOOP_GROUPTR}},{LOOP_GROUPTD=>[
 						  {
-						   ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3]}
+						   ABBREV=>$prev_group_data[2],NAME=>$prev_group_data[3], COMMON_NAME => $prev_group_data[6] }
 						 ]});
     }
     my $query_num_taxa = $dbh->prepare($self->getSql('all_taxa_count'));
@@ -817,7 +818,8 @@ sub groupList {
 			      ABBREV => $taxon_abbrev,
 			      NAME => $data[3],
 			      IS_SPECIES => $is_species,
-			      INDEX => $data[5] });
+			      INDEX => $data[5],
+                              COMMON_NAME => $data[6] });
     if ($is_species != 0) {
       my $column = $columnMgr->getColumnName($taxon_abbrev, "");
       $column =~ s/\D//g;
@@ -1225,7 +1227,8 @@ sub sequenceList {
 				ABBREV => $taxon_abbrev,
 				NAME => $data[3],
 				IS_SPECIES => $is_species,
-				INDEX => $data[5] });
+				INDEX => $data[5],
+                                COMMON_NAME => $data[6] });
       if ($is_species != 0) {
 	my $column = $columnMgr->getColumnName($taxon_abbrev, "");
 	$column =~ s/\D//g;
@@ -1328,7 +1331,11 @@ sub sequenceList {
       print $fh $querycode;
       close($fh);
       $ENV{BLASTMAT} = $config->{BLASTMAT};
-      open(BLAST, "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |") or die $!;
+      my $cmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |";
+
+      print STDERR "BLAST: " . $cmd . '\n';
+
+      open(BLAST, $cmd) or die $!;
       my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
       while (<BLAST>) {
         if (m/Sequences producing significant alignments/) {
@@ -2176,8 +2183,11 @@ sub blast {
     close($fh);
     $ENV{BLASTMAT} = $config->{BLASTMAT};
     my $blastcmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5";
+
+    print STDERR "BLAST: " . $blastcmd . '\n';
+
     open(BLAST, "$blastcmd |") or die $!;
-    
+
     my $query_group = $dbh->prepare($self->getSql('group_name_per_sequence_source_id'));
 
     my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
@@ -2553,7 +2563,6 @@ sub proteomeQuery {
   }
 
   # determine a new job directory
-  my $q = $self->query();
   my $config = $self->param("config");
   my $job_dir = $config->{proteome_job_dir};
 
@@ -2617,8 +2626,6 @@ sub edgeList {
   # Timing info
   $currentTime = clock_gettime(CLOCK_REALTIME);
   print STDERR "Begin edgeList(): " . ($currentTime - $startTime) . ".\n";
-
-  my $q = $self->query();
 
   my $tmpl = $self->load_tmpl("edge_list.tmpl");
   $self->defaults($tmpl);

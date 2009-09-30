@@ -15,6 +15,7 @@ function Taxon(id) {
     this.isLeaf = true;
     this.index = null;
     this.name = null;
+    this.common_name = null;
     this.abbrev = null;
     this.children = new Array();
 
@@ -126,6 +127,7 @@ function GroupManager() {
             taxon.abbrev = taxonTag.attr("abbrev");
             taxon.isLeaf = taxonTag.attr("leaf") == "1" ? true : false;
             taxon.index = taxonTag.attr("index");
+            taxon.common_name = taxonTag.attr("common-name");
             taxon.name = taxonTag.html();
             manager.taxonMap[taxon.id] = taxon;
         });
@@ -176,7 +178,9 @@ function GroupManager() {
             div += " <img class=\"expand-handle\" src=\"/images/expand" + exp + ".gif\" title=\"Display all species of " + root.name + "\" />";
             div += " <img class=\"collapse-handle\" src=\"/images/collapse" + col + ".gif\"  title=\"Display only summary of " + root.name + "\" />";
             div += " <img class=\"hide-handle\" src=\"/images/hide" + hid + ".gif\"  title=\"Hide all species of " + root.name + "\" />";
-            div += "&nbsp;<div class=\"description\">" +  root.getPath() + "<br /><i>" + root.name + "</i></div>";
+            div += "&nbsp;<div class=\"description\">" +  root.getPath() + "<br /><i>" + root.name;
+            if (root.common_name) div += " (" + root.common_name + ")";
+            div += "</i></div>";
             div += "</td>"
         }
         div += "</tr></table>";
@@ -322,7 +326,9 @@ function GroupManager() {
         div += "     style=\"" + display + width + "\" count=\"" + count + "\">";
         div += "  <div class=\"name\" " + childStyle+ "><span " + grandChildStyle+ ">" + taxon.abbrev + "</span></div>";
         div += "  <div class=\"count\" " + childStyle+ "><span " + grandChildStyle+ ">" + count + "</span></div>";
-        div += "  <div class=\"description\">" + taxon.getPath() + "<br /><i>" + taxon.name + "</i></div>";
+        div += "  <div class=\"description\">" + taxon.getPath() + "<br /><i>" + taxon.name;
+        if (taxon.common_name) div += " (" + taxon.common_name + ")";
+        div += "</i></div>";
         div += "</div>";
         return div;
     }

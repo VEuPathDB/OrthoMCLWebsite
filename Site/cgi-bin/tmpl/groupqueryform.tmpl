@@ -3,12 +3,11 @@
 <script type="text/javascript">
 <!-- //
 function showGenomeAbbrevs() {
-	return "<table border='1'><TMPL_LOOP LOOP_TR><tr width='100%'><TMPL_LOOP LOOP_TD><td width='10%'><font size='1'><TMPL_VAR ABBREV></font></td><td width='40%'><font size='1'><i><TMPL_VAR NAME></i></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>";
-	//return escape('<table border=\'1\'><TMPL_LOOP LOOP_TR><tr width=\'100%\'><TMPL_LOOP LOOP_TD><td width=\'10%\'><font size=\'1\'><TMPL_VAR ABBREV></font></td><td width=\'40%\'><font size=\'1\'><i><TMPL_VAR NAME></i></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>');
+	return "<table border='1'><TMPL_LOOP LOOP_TR><tr width='100%'><TMPL_LOOP LOOP_TD><td width='10%'><font size='1'><TMPL_VAR ABBREV></font></td><td width='40%'><font size='1'><i><TMPL_VAR NAME> <TMPL_IF COMMON_NAME>(<TMPL_VAR COMMON_NAME>)</TMPL_IF></i></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>";
 }
 	
 function showGroupAbbrevs() {
-	return "<table border='1'><TMPL_LOOP LOOP_GROUPTR><tr><TMPL_LOOP LOOP_GROUPTD><td width='10%'><font size='1'><TMPL_VAR ABBREV></font></td><td width='90%'><font size='1'><TMPL_VAR NAME></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>";
+	return "<table border='1'><TMPL_LOOP LOOP_GROUPTR><tr><TMPL_LOOP LOOP_GROUPTD><td width='10%'><font size='1'><TMPL_VAR ABBREV></font></td><td width='90%'><font size='1'><TMPL_VAR NAME> <TMPL_IF COMMON_NAME>(<TMPL_VAR COMMON_NAME>)</TMPL_IF></font></td></TMPL_LOOP></tr></TMPL_LOOP></table>";
 }
 // -->
 </script>
@@ -156,8 +155,18 @@ function showGroupAbbrevs() {
       <td colspan="2"></td>
     </tr>
     <tr>
-      <td align="center"><a href="javascript:void(0);" onmouseover="this.T_TITLE='GENOME ABBREVIATIONS';this.T_WIDTH=400;this.T_STICKY=1;this.T_FIX=(400,0);return escape(showGenomeAbbrevs());">GENOME ABBREVIATIONS</td>
-      <td align="center"><a href="javascript:void(0);" onmouseover="this.T_TITLE='GENOME GROUP ABBREVIATIONS';this.T_WIDTH=250;this.T_STICKY=1;this.T_FIX=(250,0);return escape(showGroupAbbrevs());">GENOME GROUP ABBREVIATIONS</td>
+      <td align="center">
+        <a href="javascript:void(0);" 
+           onmouseover="this.T_TITLE='GENOME ABBREVIATIONS';this.T_WIDTH=400;this.T_STICKY=1;this.T_FIX=(400,0);return escape(showGenomeAbbrevs());">
+          GENOME ABBREVIATION
+        </a>
+      </td>
+      <td align="center">
+        <a href="javascript:void(0);" 
+           onmouseover="this.T_TITLE='GENOME GROUP ABBREVIATIONS';this.T_WIDTH=250;this.T_STICKY=1;this.T_FIX=(250,0);return escape(showGroupAbbrevs());">
+          GENOME GROUP ABBREVIATION
+        </a>
+      </td>
     </tr>
     <tr height=10>
       <td colspan="2"></td>
@@ -169,21 +178,29 @@ function showGroupAbbrevs() {
 	and the number of copies (i.e. how many duplicates certain gene has in a specific genome).
 	<P>
 	<strong>*PPE Grammar</strong>: Individual grammatical units of PPE expressions are composed of two parts:
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;1. A species specification, composed of a three-letter species abbreviation (e.g. "tgo"), or a list of species abbreviations linked by plus sign "+" (e.g. "tgo+pfa+hsa"). Several abbreviations are also permitted, such as "BAC" for all Eubacteria genomes, "EUK" for all eukaryotic genomes, "API" for all apicomplexan genomes, "ALL" to represent all <TMPL_VAR NUMGENOMES> genomes, and "OTHER" to represent all other genomes not already specified anywhere in the composite expression (clade abbreviations are indicated on the form).
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;2. A logical comparison operator, such as >, <, =, >=, or <=, and a number representing the number of sequences from these species that must be present in the ortholog group (e.g. "tgo>5" specifies ortholog groups containing at least 5 in-paralogs from <i>Toxoplasma gondii</i>. Alternatively, when appended with the character "T" (for Taxa), this number represents the number of species that must be represented in the ortholog group. 
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;1. A species specification, composed of a three-letter species abbreviation (e.g. "tgon"), 
+        or a list of species abbreviations linked by plus sign "+" (e.g. "tgon+pfal+hsap"). Several abbreviations are also permitted, 
+        such as "BACT" for all Eubacteria genomes, "EUKA" for all eukaryotic genomes, "APIC" for all apicomplexan genomes, 
+        "ALL" to represent all <TMPL_VAR NUMGENOMES> genomes, and "OTHER" to represent all other genomes not already specified 
+        anywhere in the composite expression (clade abbreviations are indicated on the form).
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;2. A logical comparison operator, such as &gt;, &lt;, =, &gt;=, or &lt;=, and a number 
+        representing the number of sequences from these species that must be present in the ortholog group (e.g. "tgon&gt;5" 
+        specifies ortholog groups containing at least 5 in-paralogs from <i>Toxoplasma gondii</i>. Alternatively, when appended 
+        with the character "T" (for Taxa), this number represents the number of species that must be represented in the ortholog group. 
 	<br>Multiple expression units may be combined using "AND" or "OR", and may use parentheses to provide explicit execution ordering.
 	<P>
 	<strong>Examples & Explanations</strong>: 
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsa+eco=2T</i>" would generate ortholog groups in which both human and E. coli are present. 
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsa+eco=1T</i>" would generate ortholog groups in which only one species of human and E. coli is present. 
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsap+ecol=2T</i>" would generate ortholog groups in which both human and E. coli are present. 
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>hsap+ecol=1T</i>" would generate ortholog groups in which only one species of human and E. coli is present. 
 	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>ALL=<TMPL_VAR NUMGENOMES>T</i>" would generate ortholog groups representing all <TMPL_VAR NUMGENOMES> species.
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK>=1T AND OTHER=0T</i>" would generate Eukaryota-specific ortholog groups (representing at least one eukaryotic species and containing no non-eukaryota species).
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK=35T</i>" would generate Eukaryota-universal ortholog groups (representing all 35 eukaryotic species).
-	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUK>=5T AND hsa>=10</i>" would generate all ortholog groups representing at least five eukaryotic species and containing at least 10 human proteins.
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUKA>=1T AND OTHER=0T</i>" would generate Eukaryota-specific ortholog groups (representing at least one eukaryotic species and containing no non-eukaryota species).
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUKA=35T</i>" would generate Eukaryota-universal ortholog groups (representing all 35 eukaryotic species).
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;"<i>EUKA>=5T AND hsap>=10</i>" would generate all ortholog groups representing at least five eukaryotic species and containing at least 10 human proteins.
 	<P>
 	<strong>Tips</strong>: 
-	<br>&nbsp;&nbsp;&nbsp;&nbsp; Please prevent redundancy in your PPE query, e.g. "<i>hsa>=1</i>" is equal to "<i>hsa=1T</i>", so no need to mention them twice.
-	<br>&nbsp;&nbsp;&nbsp;&nbsp; Please merge different PPE units to save time in query, e.g. "<i>hsa=1T AND mmu=1T</i>" can be merged as "<i>hsa+mmu=2T</i>".
+	<br>&nbsp;&nbsp;&nbsp;&nbsp; Please prevent redundancy in your PPE query, e.g. "<i>hsap>=1</i>" is equal to "<i>hsap=1T</i>", so no need to mention them twice.
+	<br>&nbsp;&nbsp;&nbsp;&nbsp; Please merge different PPE units to save time in query, e.g. "<i>hsap=1T AND mmus=1T</i>"
+         can be merged as "<i>hsap+mmus=2T</i>".
       </td>
     </tr>
 </table></td></tr>

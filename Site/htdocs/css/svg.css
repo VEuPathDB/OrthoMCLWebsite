@@ -7,6 +7,11 @@ line {
     stroke-width: 2;
 }
 
+circle {
+   stroke-width: 1;
+   stroke: black;
+}
+
 #Ortholog line {
     stroke: red;
 }

@@ -54,8 +54,7 @@ sub cgiapp_init {
 		      [ $config->{database}, 
 			$config->{user}, 
 			$config->{password},
-			{
-			 RaiseError => 1, PrintWarn => 1, PrintError => 1}
+			{ RaiseError => 1, PrintWarn => 0, PrintError => 0 }
 		      ]);
     $self->dbh_default_name("orthomcl");
     $self->dbh()->{LongTruncOk} = 0;
@@ -69,8 +68,7 @@ sub cgiapp_init {
     $self->session_config(
 			  CGI_SESSION_OPTIONS => [ "driver:File",
 						   $self->query,
-						   {
-						    Directory=>File::Spec->tmpdir} ],
+						   { Directory=>File::Spec->tmpdir } ],
 			  SEND_COOKIE         => 1,
 			 );
   }
@@ -105,6 +103,13 @@ sub setup {
   # Timing info
   $currentTime = clock_gettime(CLOCK_REALTIME);
   print STDERR "End setup(): " . ($currentTime - $startTime) . ".\n";    
+}
+
+sub error {
+  my $self = shift;
+  my $tmpl = $self->load_tmpl("error.tmpl");
+  $self->defaults($tmpl);
+  return $self->done($tmpl);
 }
 
 sub indx {
@@ -652,7 +657,7 @@ sub groupList {
     my $time=$tmp[0];
     if ($querytype eq 'ppexpression') {
       if ($querycode = $q->param("q")) {
-	print STDERR "exp: $querycode.\n";
+	#print STDERR "exp: $querycode.\n";
 	$orthogroup_ids_ref=OrthoMCLWebsite::Model::Ppe::Processor->processPpe($dbh, $querycode);
 	push(@{$group_query_history},{
 				      CODE   => $querycode,
@@ -1333,7 +1338,7 @@ sub sequenceList {
       $ENV{BLASTMAT} = $config->{BLASTMAT};
       my $cmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |";
 
-      print STDERR "BLAST: " . $cmd . '\n';
+      #print STDERR "BLAST: " . $cmd . '\n';
 
       open(BLAST, $cmd) or die $!;
       my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
@@ -1665,7 +1670,7 @@ sub domarchList {
     $num_dom_in_sequence++;
   }
       
-  print STDERR "domain count: " . $num_dom_in_sequence ."\n";
+  #print STDERR "domain count: " . $num_dom_in_sequence ."\n";
             
   $sequence{SEQUENCE_IMAGE}=$sequence_image."&num_domains=".$num_dom_in_sequence;
            
@@ -1890,12 +1895,20 @@ sub genome {
 	$query_numseq->execute($taxonId);
 	my @tmp = $query_numseq->fetchrow_array();
 	$taxon{NUMSEQ}=$tmp[0];
+
+print STDERR '++++++++++++++++ num_seq: ' . $taxon{NUMSEQ} . '\n';
+
 	$query_numseqclustered->execute($taxonId);
 	@tmp = $query_numseqclustered->fetchrow_array();
 	$taxon{NUMSEQ_CLUSTERED}=$tmp[0];
+
+print STDERR '++++++++++++++++ num_seq clustered: ' . $taxon{NUMSEQ_CLUSTERED} . '\n';
+
 	$query_numgroup->execute($taxonId);
 	@tmp = $query_numgroup->fetchrow_array();
 	$taxon{NUMGROUPS}=$tmp[0];
+
+print STDERR '++++++++++++++++ num_groups: ' . $taxon{NUMGROUPS} . '\n';
       }
     } else {
       $taxon{DESCRIPTION}=$data[5];
@@ -1981,19 +1994,23 @@ sub BLGraph {
   if ($q->param("svg")) {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
     $para{T} = "BioLayout Graph (SVG) for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
-    $para{CONTENT}="<embed src=\"$bl_src&svgdata=1\" width=\"1054\" 
-                               height=\"663\" type=\"image/svg+xml\"></embed>
+    $para{CONTENT}="<div align=\"center\">
+                        <embed src=\"$bl_src&svgdata=1\" width=\"800\" 
+                               height=\"700\" type=\"image/svg+xml\"></embed>
+                    </div>
                         <p>Notes: In this graph, nodes represent proteins (species are 
-                           color-coded); edges stand for three edge relationships: 
-                           <font color=\"red\">Ortholog edges</font>, 
+                           color-coded); edges stand for four edge relationships: 
+                           <font color=\"red\">Ortholog edges</font>, <font color=\"yellow\">Coortholog edges</font>, 
                            <font color=\"green\">Inparalog edges</font>, 
-                           and <font color=\"#888888\">Co-ortholog edges</font>. You can 
+                           and <font color=\"#555555\">Other edges</font>. You can 
                            switch these edges on and off by clicking the text in 
                            \"EDGES CONTROL\" box. Due to the large number of general 
                            edges, by default they are not shown until you switch them 
                            on. When you move your mouse over a certain node (or edge), 
                            associated information will be displayed in the \"INFORMATION\" 
-                           box, the nodes from the same species will also be highlighted.</p>";
+                           box, the nodes from the same species will also be highlighted.</p>
+                        <p>Click on a gene will show all edges from the gene, and hide the
+                           rest of the edges.</p>";
     $self->defaults($tmpl);
   } elsif ($q->param("svgdata")) {
     $self->header_props(-type=>'image/svg+xml');
@@ -2184,7 +2201,7 @@ sub blast {
     $ENV{BLASTMAT} = $config->{BLASTMAT};
     my $blastcmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5";
 
-    print STDERR "BLAST: " . $blastcmd . '\n';
+    #print STDERR "BLAST: " . $blastcmd . '\n';
 
     open(BLAST, "$blastcmd |") or die $!;
 
@@ -2202,41 +2219,44 @@ sub blast {
       my $full_seq_source_id;
       my $grp_source_id;
 
+      # fix the invalid group name
+      $line =~ s/OG${VERSION}0_/OG${VERSION}_/g;
+
       # grab seq source id
       if ($line =~ /([a-z]{3,4})\|(\S+)/) {
 	$taxon_abbrev = $1;
 	$seq_source_id = $2;
 	$full_seq_source_id = "$taxon_abbrev|$seq_source_id";
+
+        # grab group source id, and register seq as having a group
+        if ($line =~ /(OG${VERSION}_\d+)/) {
+          $grp_source_id = $1;
+          # register sequence_id for history (unless already registered)
+          if (!$seqsAlreadySeen{$full_seq_source_id}) {
+            my $sequence_id;
+            $query_sequence->execute($seq_source_id, $taxon_abbrev, $full_seq_source_id);
+            ($sequence_id) = $query_sequence->fetchrow_array();
+            push(@{$sequence_ids_ref}, $sequence_id);
+            $seqsAlreadySeen{$full_seq_source_id} = 1;
+          }
+        } elsif  ($line =~ /(no_group)/ || $line =~ /(no group)/) {
+          $grp_source_id = "$1 ";
+        }
+
+        # swap position of group and seq source ids
+        $line =~ s/$taxon_abbrev\|$seq_source_id/GROUP_SRC_ID/;
+        $line =~ s/$grp_source_id/SEQ_SRC_ID/;
+
+        # replace abbrev|source_id with hyperlink
+        my $full_seq_source_id_href =qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$taxon_abbrev">$full_seq_source_id</a>};
+        $line =~ s/SEQ_SRC_ID/$full_seq_source_id_href/;
+
+        # replace group source_id w/ hyperlink and register sequence_id 
+        my $grp_source_id_href =  qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$grp_source_id">$grp_source_id</a>};
+        $grp_source_id_href = $grp_source_id if $grp_source_id =~ 'no';
+        $line =~ s/GROUP_SRC_ID/$grp_source_id_href/;
       }
-
-      # grab group source id, and register seq as having a group
-      if ($line =~ /(OG${VERSION}_\d+)/) {
-	$grp_source_id = $1;
-	# register sequence_id for history (unless already registered)
-	if (!$seqsAlreadySeen{$full_seq_source_id}) {
-	  my $sequence_id;
-	  $query_sequence->execute($seq_source_id, $taxon_abbrev);
-	  ($sequence_id) = $query_sequence->fetchrow_array();
-	  push(@{$sequence_ids_ref}, $sequence_id);
-	  $seqsAlreadySeen{$full_seq_source_id} = 1;
-	}
-      } elsif  ($line =~ /(no_group)/ || $line =~ /(no group)/) {
-	$grp_source_id = "$1 ";
-      }
-
-      # swap position of group and seq source ids
-      $line =~ s/$taxon_abbrev\|$seq_source_id/GROUP_SRC_ID/;
-      $line =~ s/$grp_source_id/SEQ_SRC_ID/;
-
-      # replace abbrev|source_id with hyperlink
-      my $full_seq_source_id_href =qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequence&accession=$seq_source_id&taxon=$taxon_abbrev">$full_seq_source_id</a>};
-      $line =~ s/SEQ_SRC_ID/$full_seq_source_id_href/;
-
-      # replace group source_id w/ hyperlink and register sequence_id 
-      my $grp_source_id_href =  qq{<a href="$config->{basehref}/cgi-bin/OrthoMclWeb.cgi?rm=sequenceList&groupac=$grp_source_id">$grp_source_id</a>};
-      $grp_source_id_href = $grp_source_id if $grp_source_id =~ 'no';
-      $line =~ s/GROUP_SRC_ID/$grp_source_id_href/;
-
+      
       $para{CONTENT} .= "$line\n";
     }
 
@@ -2578,7 +2598,7 @@ sub proteomeQuery {
   }
   my $upload_dir = $job_dir . "/" . $job_id;
 
-  print STDERR "making job dir: " . $upload_dir . "\n";
+  #print STDERR "making job dir: " . $upload_dir . "\n";
 
   my $old_umask = umask 0;
   mkdir $upload_dir;
@@ -2640,7 +2660,7 @@ sub edgeList {
 
   my $ac = $q->param("groupac");
                                      
-  # read the content of the svg
+  # read all edges
   my $query_edges_by_group = $dbh->prepare($self->getSql('edges_per_group_name'));
   $query_edges_by_group->execute($ac);
   while (my @data = $query_edges_by_group->fetchrow_array()) {

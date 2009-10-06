@@ -1,0 +1,26 @@
+#info1, #info2, #info3 {
+  font-weight: bold;
+  fill: blue;
+}
+
+line {
+    stroke-width: 2;
+}
+
+#Ortholog line {
+    stroke: red;
+}
+
+#Cortholog line {
+    stroke: yellow;
+}
+
+#Inparalog line {
+    stroke: green;
+}
+
+#Normal line {
+    display: none;
+    stroke: #555555;
+}
+

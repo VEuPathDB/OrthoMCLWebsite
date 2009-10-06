@@ -926,22 +926,77 @@ WHERE s.source_id = ?
 
 
      <sqlQuery>
-       <name>edges_per_group_name</name>
+       <name>orthologs_per_group_name</name>
        <sql>
 <![CDATA[ 
-SELECT g.name 
-FROM apidb.OrthologGroupAaSequence ogs,
-     apidb.OrthologGroup g,
-     apidb.OrthomclTaxon t,
-     dots.externalaasequence s
-WHERE s.source_id = ?
-  AND t.three_letter_abbrev = ?
-  AND s.taxon_id = t.taxon_id
-  AND ogs.aa_sequence_id = s.aa_sequence_id
-  AND g.ortholog_group_id  = ogs.ortholog_group_id
+WITH ogs AS
+  (SELECT os.aa_sequence_id 
+   FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence os
+   WHERE og.ortholog_group_id = os.ortholog_group_id
+     AND og.name = ?)
+SELECT o.sequence_id_a as query_id, o.sequence_id_b as subject_id
+FROM apidb.Ortholog o, ogs ogs1, ogs ogs2
+WHERE o.sequence_id_a = ogs1.aa_sequence_id
+  AND o.sequence_id_b = ogs2.aa_sequence_id
 ]]>
        </sql>
      </sqlQuery>
+
+
+     <sqlQuery>
+       <name>coorthologs_per_group_name</name>
+       <sql>
+<![CDATA[ 
+WITH ogs AS
+  (SELECT os.aa_sequence_id 
+   FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence os
+   WHERE og.ortholog_group_id = os.ortholog_group_id
+     AND og.name = ?)
+SELECT o.sequence_id_a as query_id, o.sequence_id_b as subject_id
+FROM apidb.Coortholog o, ogs ogs1, ogs ogs2
+WHERE o.sequence_id_a = ogs1.aa_sequence_id
+  AND o.sequence_id_b = ogs2.aa_sequence_id
+]]>
+       </sql>
+     </sqlQuery>
+
+
+     <sqlQuery>
+       <name>inparalogs_per_group_name</name>
+       <sql>
+<![CDATA[ 
+WITH ogs AS
+  (SELECT os.aa_sequence_id 
+   FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence os
+   WHERE og.ortholog_group_id = os.ortholog_group_id
+     AND og.name = ?)
+SELECT o.sequence_id_a as query_id, o.sequence_id_b as subject_id
+FROM apidb.Inparalog o, ogs ogs1, ogs ogs2
+WHERE o.sequence_id_a = ogs1.aa_sequence_id
+  AND o.sequence_id_b = ogs2.aa_sequence_id
+]]>
+       </sql>
+     </sqlQuery>
+
+
+     <sqlQuery>
+       <name>edges_per_group_name</name>
+       <sql>
+<![CDATA[ 
+WITH ogs AS
+  (SELECT os.aa_sequence_id 
+   FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence os
+   WHERE og.ortholog_group_id = os.ortholog_group_id
+     AND og.name = ?)
+SELECT o.query_id, o.subject_id, o.evalue_mant, o.evalue_exp 
+FROM apidb.SimilarSequences o, ogs ogs1, ogs ogs2
+WHERE o.query_id = ogs1.aa_sequence_id
+  AND o.subject_id = ogs2.aa_sequence_id
+  AND o.query_id < o.subject_id
+]]>
+       </sql>
+     </sqlQuery>
+
 
 
   </module>

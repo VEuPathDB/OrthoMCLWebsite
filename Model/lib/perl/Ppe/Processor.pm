@@ -36,6 +36,7 @@ FROM apidb.GroupTaxonMatrix
 WHERE $whereClause
 ORDER BY ortholog_group_id
 ";
+
   my $stmt = $dbh->prepare($sql);
   $stmt->execute();
   my $groupIds = [];

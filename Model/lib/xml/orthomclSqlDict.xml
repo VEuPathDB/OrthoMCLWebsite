@@ -784,7 +784,7 @@ WHERE taxon_id = ?
      </sqlQuery> 
 
 
-
+<!--
      <sqlQuery>
        <name>num_clustered_sequences_per_species</name>
        <sql>
@@ -797,14 +797,15 @@ AND eas.taxon_id = ?
 ]]>
        </sql>
      </sqlQuery> 
-
+-->
 
 
      <sqlQuery>
        <name>num_groups_per_species</name>
        <sql>
 <![CDATA[ 
-SELECT COUNT(DISTINCT(ogs.ortholog_group_id)) 
+SELECT COUNT(DISTINCT(ogs.ortholog_group_id)) as group_count,
+       COUNT(ogs.aa_sequence_id) as sequence_count
 FROM dots.ExternalAASequence eas,
 apidb.OrthologGroupAaSequence ogs
 WHERE eas.aa_sequence_id = ogs.aa_sequence_id

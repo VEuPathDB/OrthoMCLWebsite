@@ -1875,8 +1875,6 @@ sub genome {
 
   my $query_numseq = $dbh->prepare($self->getSql('num_sequences_per_species'));
 
-  my $query_numseqclustered = $dbh->prepare($self->getSql('num_clustered_sequences_per_species'));
-    
   my $query_numgroup = $dbh->prepare($self->getSql('num_groups_per_species'));
   $query_taxon->execute();
   my $count=0;
@@ -1892,23 +1890,15 @@ sub genome {
 	$taxon{URL}=$data[4];
       } elsif ($type eq 'summary') {
 	my $taxonId = $data[0];
+
 	$query_numseq->execute($taxonId);
 	my @tmp = $query_numseq->fetchrow_array();
 	$taxon{NUMSEQ}=$tmp[0];
 
-print STDERR '++++++++++++++++ num_seq: ' . $taxon{NUMSEQ} . '\n';
-
-	$query_numseqclustered->execute($taxonId);
-	@tmp = $query_numseqclustered->fetchrow_array();
-	$taxon{NUMSEQ_CLUSTERED}=$tmp[0];
-
-print STDERR '++++++++++++++++ num_seq clustered: ' . $taxon{NUMSEQ_CLUSTERED} . '\n';
-
 	$query_numgroup->execute($taxonId);
 	@tmp = $query_numgroup->fetchrow_array();
 	$taxon{NUMGROUPS}=$tmp[0];
-
-print STDERR '++++++++++++++++ num_groups: ' . $taxon{NUMGROUPS} . '\n';
+        $taxon{NUMSEQ_CLUSTERED}=$tmp[1];
       }
     } else {
       $taxon{DESCRIPTION}=$data[5];

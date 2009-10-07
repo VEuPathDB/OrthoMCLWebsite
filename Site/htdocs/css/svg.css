@@ -16,7 +16,7 @@ circle {
     stroke: red;
 }
 
-#Cortholog line {
+#Coortholog line {
     stroke: yellow;
 }
 
@@ -25,7 +25,6 @@ circle {
 }
 
 #Normal line {
-    display: none;
     stroke: #555555;
 }
 

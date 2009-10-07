@@ -1,6 +1,9 @@
 #info1, #info2, #info3 {
-  font-weight: bold;
   fill: blue;
+}
+
+#info1, #info2 {
+  font-weight: bold;
 }
 
 line {
@@ -21,7 +24,7 @@ circle {
 }
 
 #Inparalog line {
-    stroke: green;
+    stroke: #33FF33;
 }
 
 #Normal line {

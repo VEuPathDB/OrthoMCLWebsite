@@ -49,6 +49,7 @@ function Svg() {
             var subjectId = $(this).attr("subject");
             var query = $("circle#" + queryId);
             var subject = $("circle#" + subjectId);
+            var type = $(this).parent().attr("id");
             $(this).hover(function() {
                     this.setAttributeNS(null,"style","stroke-width:4;");
                     $(this).attr("stroke-width", "5");
@@ -56,7 +57,8 @@ function Svg() {
                     subject.attr("r", "7");
                     svg.info1.text(query.attr("name"));
                     svg.info2.text(subject.attr("name"));
-                    svg.info3.text($(this).attr("evalue"));
+                    var info = type + " edge - BLASTP evalue: " + $(this).attr("evalue");
+                    svg.info3.text(info);
                 },
                 function() {
                     this.setAttributeNS(null,"style","stroke-width:2;");

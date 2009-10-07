@@ -669,7 +669,7 @@ sub groupList {
       }
     } elsif ($querytype eq 'ackeyword') {
       if ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
-	if ($in eq 'Group or Seq Accessions') {
+	if ($in eq 'Group or Seq Accession(s)') {
 	  my @qc=split(" ",$querycode);
 	  foreach my $userAc (@qc) {
 	    my $sqlName;
@@ -1360,7 +1360,7 @@ sub sequenceList {
       }
       close(BLAST);
       unlink($tempfile);
-    } elsif ($in eq 'Sequence Accessions') {
+    } elsif ($in eq 'Sequence Accession(s)') {
       my @qc = split(" ",$querycode);
       my $sqlName;
       foreach my $userAcc (@qc) {

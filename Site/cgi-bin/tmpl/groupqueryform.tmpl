@@ -49,10 +49,10 @@ function showGroupAbbrevs() {
               &nbsp;in&nbsp;
             <select name="in">
               <option>Keyword</option>
-              <option>Accession</option>
-              <option>Pfam_Accession</option>
-              <option>Pfam_Name</option>
-              <option>Pfam_Keyword</option>
+              <option>Group or Seq Accessions</option>
+              <option>Pfam Accession</option>
+              <option>Pfam Name</option>
+              <option>Pfam Keyword</option>
             </select>
           </td>
           <td align="left"><input type="submit" value="GO!"></td>
@@ -64,7 +64,7 @@ function showGroupAbbrevs() {
 	  <p> Use this tool to <b>find ortholog groups</b>. To find all the protein sequences that belong to a set of groups, run a query here, go to <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Query History - Groups</a> and click on <b>GROUP QUERY INTO SEQUENCE QUERY</b> to find the associated sequences.
 
           <p>You can query by keyword (case insensitive), group accession (e.g., <font color="#ff00ff">OG2_71221</font>) sequence accession (e.g. <font color="#ff00ff">At1g20570.1</font> or <font color="#ff00ff">ath|At1g20570.1</font>), Pfam domain accession (e.g. <font color="#ff00ff">PF00018</font>), Pfam domain name (e.g. <font color="#ff00ff">SH3_1</font>) and Pfam domain keyword (case insensitive).
-          <p> Sequence accessions used in OrthoMCL-DB are those obtained from the source of the genome.  The source is not always Genbank/EMBL/DDBJ, so the accessions are not necessarily from there.  To be sure which type of accession you should use to find a sequence, refer to the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">Data Sources</a> which lists the sources of each genome.
+          <p> Sequence accessions in OrthoMCL-DB are obtained from the source of the genome.  The source is not always Genbank/EMBL/DDBJ, so the accessions are not necessarily from there.  To be sure which type of accession you should use to find a sequence, refer to the <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&type=data">Data Sources</a> which lists the sources of each genome.
           <p> Accession search supports a space delimited list of accessions, (e.g. <font color="#ff00ff">OG2_71221 OG2_71472 aae|NP_214494.1 NP_662282.1</font>).
 	  <p> Keyword search supports boolean mode, and here are some examples:
       <br>&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/bullet.gif"><font color="#ff00ff">ubiquitin | conjugating | enzyme</font>

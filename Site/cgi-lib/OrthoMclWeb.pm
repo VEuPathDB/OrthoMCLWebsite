@@ -669,7 +669,7 @@ sub groupList {
       }
     } elsif ($querytype eq 'ackeyword') {
       if ((my $querycode = $q->param("q")) && (my $in = $q->param("in"))) {
-	if ($in eq 'Accession') {
+	if ($in eq 'Group or Seq Accessions') {
 	  my @qc=split(" ",$querycode);
 	  foreach my $userAc (@qc) {
 	    my $sqlName;
@@ -694,11 +694,11 @@ sub groupList {
 	  my $query_string;
 	  if ($in eq 'Keyword') {
 	    $query_string = $self->getSql('groups_like_seq_descrip_keyword', {querycode=>$querycode});
-	  } elsif ($in eq 'Pfam_Accession') {
+	  } elsif ($in eq 'Pfam Accession') {
 	    $query_string = $self->getSql('groups_by_pfam_accession', {querycode=>$querycode});
-	  } elsif ($in eq 'Pfam_Name') {
+	  } elsif ($in eq 'Pfam Name') {
 	    $query_string = $self->getSql('groups_like_pfam_name', {querycode=>$querycode});
-	  } elsif ($in eq 'Pfam_Keyword') {
+	  } elsif ($in eq 'Pfam Keyword') {
 	    $query_string = $self->getSql('groups_like_pfam_description', {querycode=>$querycode});
 	  }
 	  my $query_orthogroup = $dbh->prepare($query_string);
@@ -1360,7 +1360,7 @@ sub sequenceList {
       }
       close(BLAST);
       unlink($tempfile);
-    } elsif ($in eq 'Accession') {
+    } elsif ($in eq 'Sequence Accessions') {
       my @qc = split(" ",$querycode);
       my $sqlName;
       foreach my $userAcc (@qc) {
@@ -1399,13 +1399,13 @@ sub sequenceList {
         $query_string = $self->getSql('sequence_id_like_id_and_descrip_keyword', {querycode=>$querycode});
       } elsif ($in eq 'Keyword') {
         $query_string = $self->getSql('sequence_id_like_descrip_keyword', {querycode=>$querycode});
-      } elsif ($in eq 'Taxon_Abbreviation') {
+      } elsif ($in eq 'Taxon Abbreviation') {
         $query_string = $self->getSql('sequence_id_by_three_letter_abbrev', {querycode=>$querycode});
-      } elsif ($in eq 'Pfam_Accession') {
+      } elsif ($in eq 'Pfam Accession') {
         $query_string = $self->getSql('sequence_id_by_pfam_accession', {querycode=>$querycode});
-      } elsif ($in eq 'Pfam_Name') {
+      } elsif ($in eq 'Pfam Name') {
         $query_string = $self->getSql('sequence_id_like_pfam_name', {querycode=>$querycode});
-      } elsif ($in eq 'Pfam_Keyword') {
+      } elsif ($in eq 'Pfam Keyword') {
         $query_string = $self->getSql('sequence_id_like_pfam_keyword', {querycode=>$querycode});
       }
 

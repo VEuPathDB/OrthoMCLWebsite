@@ -1987,12 +1987,13 @@ sub BLGraph {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
     $para{T} = "BioLayout Graph (SVG) for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
     $para{CONTENT}="<div align=\"center\">
-                        <embed src=\"$bl_src&svgdata=1\" width=\"900\" 
+                        <embed src=\"$bl_src&svgdata=1\" width=\"1000\" 
                                height=\"700\" type=\"image/svg+xml\"></embed>
                     </div>
                         <p>Notes: In this graph, nodes represent proteins (species are 
                            color-coded); edges stand for four edge relationships: 
-                           <font color=\"red\">Ortholog edges</font>, <font color=\"yellow\">Coortholog edges</font>, 
+                           <font color=\"red\">Ortholog edges</font>, 
+                           <font color=\"#CCCC00\">Coortholog edges</font>, 
                            <font color=\"green\">Inparalog edges</font>, 
                            and <font color=\"#555555\">Other edges</font>. You can 
                            switch these edges on and off by clicking the text in 

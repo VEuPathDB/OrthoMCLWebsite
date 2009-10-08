@@ -4,6 +4,7 @@ $(document).ready(function() {
     document.svg.addNodeMotion();
     document.svg.addEdgeMotion();
     document.svg.addControlMotion();
+    document.svg.showLegend();
 });
 
 function Svg() {
@@ -14,17 +15,19 @@ function Svg() {
 
     this.addNodeMotion = function() {
         var svg = this;
-        $("circle").each(function() {
+        $("#All circle").each(function() {
             var gene = $(this).attr("id");
             var taxon = $(this).parent();
             $(this).hover(function() {
                     taxon.children("circle").attr("r", "7");
+                    $("#legend #" + taxon.attr("id")).attr("r", "7");
                     svg.info1.text($(this).attr("name"));
                     svg.info2.text(taxon.attr("name") + " (" + taxon.attr("abbrev") + ")");
                     svg.info3.text($(this).attr("description"));
                 },
                 function() {
                     taxon.children("circle").attr("r", "5");
+                    $("#legend #" + taxon.attr("id")).attr("r", "5");
                     svg.info1.text("");
                     svg.info2.text("");
                     svg.info3.text("");
@@ -32,7 +35,7 @@ function Svg() {
             );
             $(this).click(function() {
                 var gene = $(this).attr("id");
-                $("line").each(function() {
+                $("#All line").each(function() {
                     var query = $(this).attr("query");
                     var subject = $(this).attr("subject");
                     var display = (gene == query || gene == subject) ? "block" : "none";
@@ -44,7 +47,7 @@ function Svg() {
 
     this.addEdgeMotion = function() {
         var svg = this;
-        $("line").each(function() {
+        $("#All line").each(function() {
             var queryId = $(this).attr("query");
             var subjectId = $(this).attr("subject");
             var query = $("circle#" + queryId);
@@ -77,6 +80,7 @@ function Svg() {
         this.addControlMotionByType("Coortholog");
         this.addControlMotionByType("Inparalog");
         this.addControlMotionByType("Normal");
+        this.addControlMotionByType("All");
     };
 
     this.addControlMotionByType = function(type) {
@@ -97,6 +101,57 @@ function Svg() {
                     $(this).attr("display", display);
                 });
             });
+        });
+    };
+
+    this.showLegend = function() {
+        var svg = this;
+        var y = 35;
+        var legend = document.getElementById("legend");
+        $("#All g[class=taxon]").each(function() {
+            var taxon = $(this);
+            var id = taxon.attr("id");
+            var abbrev = taxon.attr("abbrev");
+            var name = taxon.attr("name");
+            var genes = taxon.children("circle");
+            var color = genes.attr("fill");
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var circle = document.createElementNS(svgNS,"circle");
+            circle.setAttributeNS(null, "id", id);
+            circle.setAttributeNS(null, "class", "taxon");
+            circle.setAttributeNS(null, "cx", "820");
+            circle.setAttributeNS(null, "cy", y);
+            circle.setAttributeNS(null, "r", "5");
+            circle.setAttributeNS(null, "abbrev", abbrev);
+            circle.setAttributeNS(null, "name", name);
+            circle.setAttributeNS(null, "fill", color);
+            legend.appendChild(circle);
+
+            var text = document.createElementNS(svgNS,"text");
+            text.setAttributeNS(null, "x", "830");
+            text.setAttributeNS(null, "y", y + 3);
+            legend.appendChild(text);
+            text.appendChild(document.createTextNode(abbrev));
+
+            // add events
+            $("#legend #" + id).hover(function() {
+                    $(this).attr("r", "7");
+                    genes.attr("r", "7");
+                    svg.info1.text(abbrev);
+                    svg.info2.text(name);
+                    svg.info3.text(genes.length + " genes");
+                },
+                function() {
+                    $(this).attr("r", "5");
+                    genes.attr("r", "5");
+                    svg.info1.text("");
+                    svg.info2.text("");
+                    svg.info3.text("");
+                }
+            );
+
+            y += 17;
         });
     };
 }

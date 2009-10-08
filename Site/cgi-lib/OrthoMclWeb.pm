@@ -1204,6 +1204,8 @@ sub sequenceList {
     my ($orthogroup_id,$orthogroup_ac);
     if ($orthogroup_ac = $q->param("groupac")) {
       # support a wrong group name
+      # change the OG30 to OG3 if needed
+      $orthogroup_ac =~ s/OG30_/OG3_/g;
       my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
       $query_orthogroupid->execute($orthogroup_ac);
       my @tmp = $query_orthogroupid->fetchrow_array();
@@ -1985,7 +1987,7 @@ sub BLGraph {
     $para{PAGETITLE}="BioLayout Graph (SVG) for $ac";
     $para{T} = "BioLayout Graph (SVG) for Group <a href='$group_url'><font color=\"red\">$ac</font></a>";
     $para{CONTENT}="<div align=\"center\">
-                        <embed src=\"$bl_src&svgdata=1\" width=\"800\" 
+                        <embed src=\"$bl_src&svgdata=1\" width=\"900\" 
                                height=\"700\" type=\"image/svg+xml\"></embed>
                     </div>
                         <p>Notes: In this graph, nodes represent proteins (species are 

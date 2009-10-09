@@ -54,15 +54,14 @@ function Svg() {
             var query = $("circle#" + queryId);
             var subject = $("circle#" + subjectId);
             var type = $(this).parent().attr("id");
-            if (type == "Normal") type = "Other Similar";
+            if (type == "Normal") type = "Other Similar match";
             $(this).hover(function() {
                     this.setAttributeNS(null,"style","stroke-width:4;");
                     $(this).attr("stroke-width", "5");
                     query.attr("r", "7");
                     subject.attr("r", "7");
-                    svg.info1.text("Query Gene: " + query.attr("name"));
-                    svg.info2.text("Subject Gene: " + subject.attr("name"));
-                    svg.info3.text("Type: " + type + " edge");
+                    svg.info1.text("Edge between: " + query.attr("name") + " - " + subject.attr("name"));
+                    svg.info3.text("Edge type: " + type + " edge");
                     svg.info4.text("BLASTP evalue: " + $(this).attr("evalue"));
                 },
                 function() {

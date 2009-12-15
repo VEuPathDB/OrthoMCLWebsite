@@ -34,7 +34,7 @@ my $currentTime;
 
 my $debug=0;
 our $config;
-our $VERSION = '3';
+our $VERSION = '4';
 
 sub cgiapp_init {
   my $self = shift;

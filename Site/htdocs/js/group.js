@@ -243,30 +243,44 @@ function GroupManager() {
             var parts = color.split(/[\(\),]\s*/);
             if (parts.length == 1) {
                 // code for IE, color format: #FFFFFF
-                var red = parseInt("0x" + color.substring(1,3)) + 50;
-                var green = parseInt("0x" + color.substring(3,5)) + 50;
-                var blue = parseInt("0x" + color.substring(5,7)) + 50;
+                var red = parseInt("0x" + color.substring(1,3));
+                var green = parseInt("0x" + color.substring(3,5));
+                var blue = parseInt("0x" + color.substring(5,7));
             } else {
                 // code for firefox, color format rgb(xxx, xxx, xxx)
-                var red = Number(parts[1]) + 50;
-                var green = Number(parts[2]) + 50;
-                var blue = Number(parts[3]) + 50;
+                var red = Number(parts[1]);
+                var green = Number(parts[2]);
+                var blue = Number(parts[3]);
             }
-            if (red > 255) red = 255;
-            if (green > 255) green = 255;
-            if (blue > 255) blue = 255;
-            color = "rgb(" + red + ", " + green + ", " + blue + ")";
-            var invcolor = "rgb(" + (255-red) + ", " + (255-green) + ", " + (255-blue) + ")";
-            $(this).children(".name").css("background-color", color)
-                                     .css("border-color", "silver");
-            $(this).css("color", invcolor);
-            var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
-            taxon.css("background-color", color)
-                 .css("border-color", "silver");
+            var inc = 0;
+            var step = 5;
+            $(this).everyTime(40, function() {
+                inc += step;
+                var ired = red + inc;
+                var igreen = green + inc;
+                var iblue = blue + inc;
+                if (ired > 255) ired = 255;
+                else if (ired < 0) ired = 0;
+                if (igreen > 255) igreen = 255;
+                else if (igreen < 0) igreen = 0;
+                if (iblue > 255) iblue = 255;
+                else if (iblue < 0) iblue = 0;
+                color = "rgb(" + ired + ", " + igreen + ", " + iblue + ")";
+                var invcolor = "rgb(" + (255-ired) + ", " + (255-igreen) + ", " + (255-iblue) + ")";
+                $(this).children(".name").css("background-color", color)
+                                         .css("border-color", "silver");
+                $(this).css("color", invcolor);
+                var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
+                taxon.css("background-color", color)
+                     .css("border-color", "silver");
+                if (inc >= 50) step = -5;
+                else if (inc <= -50) step = 5; 
+            }, 0);
         }, function() {
             if (!$(this).attr("color-backup")) return;
 
-           $(this).css("color", "black");
+            $(this).stopTime();
+            $(this).css("color", "black");
 
             var abbrev = $(this).attr("abbrev");
             var color = $(this).attr("color-backup");

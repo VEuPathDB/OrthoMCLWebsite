@@ -266,21 +266,20 @@ function GroupManager() {
                 if (iblue > 255) iblue = 255;
                 else if (iblue < 0) iblue = 0;
                 color = "rgb(" + ired + ", " + igreen + ", " + iblue + ")";
-                var invcolor = "rgb(" + (255-ired) + ", " + (255-igreen) + ", " + (255-iblue) + ")";
+                var bcolor = 40 + inc * 2;
+                border = "rgb(" + bcolor + ", " + bcolor + ", " + bcolor + ")";
                 $(this).children(".name").css("background-color", color)
-                                         .css("border-color", "silver");
-                $(this).css("color", invcolor);
+                                         .css("border-color", border);
                 var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
                 taxon.css("background-color", color)
                      .css("border-color", "silver");
-                if (inc >= 50) step = -5;
-                else if (inc <= -50) step = 5; 
+                if (inc >= 60) step = -5;
+                else if (inc <= -20) step = 5; 
             }, 0);
         }, function() {
             if (!$(this).attr("color-backup")) return;
 
             $(this).stopTime();
-            $(this).css("color", "black");
 
             var abbrev = $(this).attr("abbrev");
             var color = $(this).attr("color-backup");
@@ -288,7 +287,7 @@ function GroupManager() {
                                      .css("border-color", "black");
             var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
             taxon.css("background-color", color)
-                 .css("border-color", "black");   
+                 .css("border-color", "black");
             $(this).removeAttr("color-backup");
         });
     }

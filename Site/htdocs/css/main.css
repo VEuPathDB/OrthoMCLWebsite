@@ -349,3 +349,12 @@ A.nocolor_w:link {
 .sequence {
     font-family: Courier New, monospace;
 }
+
+.announcebox {
+    background: #FFFFFF url(../images/infobox.jpg) repeat-x scroll bottom;
+    text-align: center;
+    color:#093C8A;
+    width: 740px;
+    padding: 5px;
+}
+

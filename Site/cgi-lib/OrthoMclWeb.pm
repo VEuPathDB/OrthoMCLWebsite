@@ -1764,8 +1764,8 @@ return $self->done($tmpl);
       $para{SEQUENCE} .= $para{DESCRIPTION}." ";
     }
     $para{SEQUENCE} .= "[<i>".$para{TAXON}."</i>]\n";
-    for (my $i=1;$i<=$len;$i+=60) {
-      if ($i+60-1>$len) {
+    for (my $i=0;$i<$len;$i+=60) {
+      if ($i+60>$len) {
 	$para{SEQUENCE} .= substr($seq, $i) ."\n";
       } else {
 	$para{SEQUENCE} .= substr($seq, $i,60) . "\n";

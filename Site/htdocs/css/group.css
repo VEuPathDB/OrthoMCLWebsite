@@ -68,11 +68,11 @@
     display: none;
 }
 
-#taxon-display .taxon[abbrev="BACT"] .name, #groups .group .phyletic-pattern .branch[abbrev="BACT"] .taxon { background-color: #9999CC; }
+#taxon-display .taxon[abbrev="OBAC"] .name, #groups .group .phyletic-pattern .branch[abbrev="OBAC"] .taxon { background-color: #9999CC; }
 #taxon-display .taxon[abbrev="FIRM"] .name, #groups .group .phyletic-pattern .branch[abbrev="FIRM"] .taxon { background-color: #33CC99; }
 #taxon-display .taxon[abbrev="PROT"] .name, #groups .group .phyletic-pattern .branch[abbrev="PROT"] .taxon { background-color: #99CC66; }
 #taxon-display .taxon[abbrev="ARCH"] .name, #groups .group .phyletic-pattern .branch[abbrev="ARCH"] .taxon { background-color: #44AADD; }
-#taxon-display .taxon[abbrev="EUKA"] .name, #groups .group .phyletic-pattern .branch[abbrev="EUKA"] .taxon { background-color: #CC9999; }
+#taxon-display .taxon[abbrev="OEUK"] .name, #groups .group .phyletic-pattern .branch[abbrev="OEUK"] .taxon { background-color: #CC9999; }
 #taxon-display .taxon[abbrev="VIRI"] .name, #groups .group .phyletic-pattern .branch[abbrev="VIRI"] .taxon { background-color: #CC9933; }
 #taxon-display .taxon[abbrev="EUGL"] .name, #groups .group .phyletic-pattern .branch[abbrev="EUGL"] .taxon { background-color: #CCCC66; }
 #taxon-display .taxon[abbrev="ALVE"] .name, #groups .group .phyletic-pattern .branch[abbrev="ALVE"] .taxon { background-color: #CC3399; }

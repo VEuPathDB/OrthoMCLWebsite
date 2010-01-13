@@ -47,8 +47,8 @@ function Taxon(id) {
 
 function GroupManager() {
     this.taxonMap = { };
-    this.rootMap = {BACT: {}, FIRM: {}, PROT: {}, ARCH: {}, EUKA: {},
-                    EUGL: {}, VIRI: {}, ALVE: {}, FUNG: {}, META: {}}; 
+    this.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, 
+                    VIRI: {}, ALVE: {}, FUNG: {}, META: {}, OEUK: {}}; 
 
     this.initialize = function() {
         this.applyCookie();

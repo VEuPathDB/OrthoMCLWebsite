@@ -2094,8 +2094,8 @@ sub getSeq {
 	$para{CONTENT} .= " $desc";
       }
       $para{CONTENT} .= " [<i>$taxon</i>]\n";
-      for (my $i=1;$i<=$len;$i+=60) {
-	if ($i+60-1>$len) {
+      for (my $i=0;$i<$len;$i+=60) {
+	if ($i+60>$len) {
 	  $para{CONTENT}.= substr($seq, $i)."\n";
 	} else {
 	  $para{CONTENT}.= substr($seq, $i, 60)."\n";
@@ -2129,8 +2129,8 @@ sub getSeq {
       my $seq = $data[4];
       my $taxon_abbrev = $data[5];
       $file_content.=">$taxon_abbrev|$ac $desc [$taxon]\r\n";
-      for (my $i=1;$i<=$len;$i+=60) {
-        if ($i+60-1>$len) {
+      for (my $i=0;$i<$len;$i+=60) {
+        if ($i+60>$len) {
           $file_content.= substr($seq, $i)."\r\n";
         } else {
           $file_content.= substr($seq, $i, 60)."\r\n";

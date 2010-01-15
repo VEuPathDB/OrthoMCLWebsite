@@ -1,0 +1,12 @@
+#!/bin/bash
+
+Bin="$( readlink -f -- "${0%/*}" )"
+
+export BASE_GUS="${Bin%%gus_home/bin}"
+export GUS_HOME=$BASE_GUS/gus_home
+export PATH=$GUS_HOME/bin:$PROJECT_HOME/install/bin:$PATH
+export PERL5LIB=$GUS_HOME/lib/perl
+export CGILIB=$BASE_GUS/cgi-lib
+
+
+$Bin/orthomclManageUserProteomeJob $CGILIB/proteomeJobConfig.txt

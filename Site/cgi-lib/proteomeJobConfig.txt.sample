@@ -1,0 +1,28 @@
+#
+# these change with each OrthoMCL Release
+#
+resultBaseUrl=http://orthomcl.org/cgi-bin/orthomclresult/   
+blastDbFilePath=/genomics/binf/scratch/orthoMCL/4/proteinsBlastDb/proteinSeqs
+groupsFile=/files/cbil/data/cbil/apiSiteFiles/downloadSite/OrthoMCL/release-4/groups_OrthoMCL-4.txt.gz
+
+#
+# these are static across releases
+#
+controlDir=/var/www/Common/tmp/orthomclProteomeJob         
+resultDir=/var/www/Common/tmp/orthomclProteomeJob/results
+clusterServerDir=/genomics/binf/scratch/orthoMCL/orthomclProteomeJob
+clusterUserName=sfischer    
+#clusterServer=beta.genomics.upenn.edu
+# clusterServer corresponds to a Host in executor's ~/.ssh/config
+clusterServer=orthomclProteomeJob-cluster
+clusterQueue=apidb
+numNodes=10
+slotsPerNode=2
+ppn=2
+nodePath=/scratch/user/sfischer
+nodeClass=DJob::DistribJob::SgeNode
+taskSize=100
+taskClass=DJob::DistribJobTasks::BlastSimilarityTask
+blastArgs=-F 'm S' -v 1000 -b 1000  -e 1e-5 -a 2
+blastBinDir=/genomics/share/pkg/bio/ncbi/current
+mclBin=$GUS_HOME/bin/mcl

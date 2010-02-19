@@ -47,7 +47,7 @@ function Taxon(id) {
 
 function GroupManager() {
     this.taxonMap = { };
-    this.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, 
+    this.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, AMOE: {}, 
                     VIRI: {}, ALVE: {}, FUNG: {}, META: {}, OEUK: {}}; 
 
     this.initialize = function() {

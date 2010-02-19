@@ -78,6 +78,7 @@
 #taxon-display .taxon[abbrev="ALVE"] .name, #groups .group .phyletic-pattern .branch[abbrev="ALVE"] .taxon { background-color: #CC3399; }
 #taxon-display .taxon[abbrev="FUNG"] .name, #groups .group .phyletic-pattern .branch[abbrev="FUNG"] .taxon { background-color: #AA44DD; }
 #taxon-display .taxon[abbrev="META"] .name, #groups .group .phyletic-pattern .branch[abbrev="META"] .taxon { background-color: #CC6666; }
+#taxon-display .taxon[abbrev="AMOE"] .name, #groups .group .phyletic-pattern .branch[abbrev="AMOE"] .taxon { background-color: #3399CC; }
 
 #groups .group .phyletic-pattern .taxon {
     text-align: center;

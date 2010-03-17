@@ -1121,7 +1121,7 @@ sub sequenceQueryHistory {
       $_=~s/\r|\n//g;
       next if (/^\#/);
       if (/^(\S+)/) {
-	$query_sequenceid->execute($1);
+	$query_sequenceid->execute($1, $1);
 	my @data = $query_sequenceid->fetchrow_array();
 	if ($data[0]) {
 	  push(@result_ids,$data[0]);

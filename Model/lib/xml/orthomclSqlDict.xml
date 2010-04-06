@@ -394,12 +394,12 @@ WHERE seqref.db_ref_id = ref.db_ref_id
      </sqlQuery> 
 
      <sqlQuery>
-       <name>sequence_per_source_id_internal</name>
+       <name>sequence_per_secondary_identifier</name>
        <sql>
 <![CDATA[ 
 SELECT aa_sequence_id
 FROM dots.ExternalAaSequence
-WHERE source_id = ?
+WHERE secondary_identifier = ?
 ]]>
        </sql>
      </sqlQuery> 

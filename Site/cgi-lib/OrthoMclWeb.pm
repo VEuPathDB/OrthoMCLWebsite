@@ -1343,7 +1343,7 @@ sub sequenceList {
       print STDERR "BLAST: " . $cmd . '\n';
 
       open(BLAST, $cmd) or die $!;
-      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_internal'));
+      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_secondary_identifier'));
       while (<BLAST>) {
         if (m/Sequences producing significant alignments/) {
           <BLAST>;		# empty line
@@ -2200,7 +2200,7 @@ sub blast {
 
     my $query_group = $dbh->prepare($self->getSql('group_name_per_sequence_source_id'));
 
-    my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_internal'));
+    my $query_sequence = $dbh->prepare($self->getSql('sequence_per_secondary_identifier'));
     
     my %seqsAlreadySeen;
     while (<BLAST>) {

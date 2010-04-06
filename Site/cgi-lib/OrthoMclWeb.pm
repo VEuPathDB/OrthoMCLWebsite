@@ -1340,10 +1340,10 @@ sub sequenceList {
       $ENV{BLASTMAT} = $config->{BLASTMAT};
       my $cmd = "$config->{BLAST} -p blastp -i $tempfile -d $config->{FA_file} -e 1e-5 -b 0 |";
 
-      #print STDERR "BLAST: " . $cmd . '\n';
+      print STDERR "BLAST: " . $cmd . '\n';
 
       open(BLAST, $cmd) or die $!;
-      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
+      my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_internal'));
       while (<BLAST>) {
         if (m/Sequences producing significant alignments/) {
           <BLAST>;		# empty line
@@ -1352,7 +1352,7 @@ sub sequenceList {
             if (m/^([a-z]{3,4})\|(\S+)/) {
               my $abbrev = $1;
               my $seqAc = $2;
-	      $query_sequence->execute($seqAc, $abbrev, "$abbrev|$seqAc");
+	      $query_sequence->execute("$abbrev|$seqAc");
 	      while (my @data = $query_sequence->fetchrow_array()) {
                 push(@{$sequence_ids_ref},$data[0]);
 	      }
@@ -2200,7 +2200,7 @@ sub blast {
 
     my $query_group = $dbh->prepare($self->getSql('group_name_per_sequence_source_id'));
 
-    my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_and_taxon'));
+    my $query_sequence = $dbh->prepare($self->getSql('sequence_per_source_id_internal'));
     
     my %seqsAlreadySeen;
     while (<BLAST>) {
@@ -2227,7 +2227,7 @@ sub blast {
           # register sequence_id for history (unless already registered)
           if (!$seqsAlreadySeen{$full_seq_source_id}) {
             my $sequence_id;
-            $query_sequence->execute($seq_source_id, $taxon_abbrev, $full_seq_source_id);
+            $query_sequence->execute($full_seq_source_id);
             ($sequence_id) = $query_sequence->fetchrow_array();
             push(@{$sequence_ids_ref}, $sequence_id);
             $seqsAlreadySeen{$full_seq_source_id} = 1;

@@ -2580,6 +2580,7 @@ sub proteomeQuery {
   my $job_dir = $config->{proteome_job_dir};
 
   my $job_id;
+  srand();  # re-seed because apache using mod_perl hands out stale seeds
   while(1) {
     $job_id = '';
     for (my $i = 0; $i < 12; $i++) {

@@ -561,8 +561,13 @@ sub groupQueryHistory {
     }
   } elsif (my $filehandle = $q->upload("file")) {
     my $filename=$q->param("file");
-    #        $q->param(-file=>'');
-    #        $q->clear("file");#otherwise, there will be errors generated like "Do not know how to reconstitute blessed object of base type GLOB"
+    print STDERR "Uploading groups from file: " . $filename . "\n";
+    # $q->param(-file=>'');
+    # $self->session->clear("file");#otherwise, there will be errors generated like "Do not know how to reconstitute blessed object of base type GLOB"
+    
+    # this is necessary in order to convert GLOB into string
+    $filename = "$filename";
+
     $filename=~s/.*[\/\\](.*)/$1/g;
     my $group_query_ids_history = $self->session->param("GROUP_QUERY_IDS_HISTORY");
     my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
@@ -570,7 +575,7 @@ sub groupQueryHistory {
     while (<$filehandle>) {
       $_=~s/\r|\n//g;
       next if (/^\#/);
-      if (/^(OG1_\d+)/) {
+      if (/^(OG\d+_\d+)/) {
 	$query_orthogroupid->execute($1);
 	my @data = $query_orthogroupid->fetchrow_array();
 	if ($data[0]) {

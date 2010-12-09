@@ -157,16 +157,23 @@ GROUP BY ogs.ortholog_group_id
        <name>groups_like_pfam_description</name>
        <sql>
 <![CDATA[ 
-SELECT DISTINCT ogs.ortholog_group_id
-FROM apidb.OrthologGroupAaSequence ogs,
- dots.DomainFeature df,
-dots.DbRefAaFeature dbaf,
-sres.DbRef db
- WHERE ogs.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = dbaf.aa_feature_id
-AND dbaf.db_ref_id = db.db_ref_id
-AND ogs.ortholog_group_id != 0
-AND CATSEARCH(db.remark, '$querycode', '') > 0
+SELECT
+       DISTINCT ogs.ortholog_group_id
+FROM (  select db_ref_id
+        from sres.DbRef
+        where CATSEARCH(secondary_identifier, '$querycode', '') > 0
+     union
+       select db_ref_id
+        from sres.DbRef
+        where CATSEARCH(remark, '$querycode', '') > 0
+     ) db,
+     apidb.OrthologGroupAaSequence ogs,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf
+WHERE ogs.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+  AND ogs.ortholog_group_id != 0
 GROUP BY ogs.ortholog_group_id
 ]]>
        </sql>

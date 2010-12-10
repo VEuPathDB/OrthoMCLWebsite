@@ -161,7 +161,7 @@ SELECT
        DISTINCT ogs.ortholog_group_id
 FROM (  select db_ref_id
         from sres.DbRef
-        where CATSEARCH(secondary_identifier, '$querycode', '') > 0
+        where CATSEARCH(secondary_identifier, 'CANNOT_HAVE_TWO_QUERYCODES', '') > 0
      union
        select db_ref_id
         from sres.DbRef

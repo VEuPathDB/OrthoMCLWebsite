@@ -403,7 +403,7 @@ sub queryTransform {
     $currentTime = clock_gettime(CLOCK_REALTIME);
     print STDERR "End queryTransform(): " . ($currentTime - $startTime) . ".\n";    
 
-    return "Redirecting to Group Query History";
+    return undef;
   } elsif (($q->param("from") eq 'group') && ($q->param("to") eq 'sequence')) {
     my $new_url = $config->{basehref} . "/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory";
     $self->header_type('redirect');
@@ -447,7 +447,7 @@ sub queryTransform {
     $currentTime = clock_gettime(CLOCK_REALTIME);
     print STDERR "End queryTransform(): " . ($currentTime - $startTime) . ".\n";    
 
-    return "Redirecting to Sequence Query History";
+    return undef;
   }
 }
 
@@ -470,7 +470,7 @@ sub groupQueryHistory {
     }
     $self->header_type('redirect');
     $self->header_props(-url=>$new_url);
-    return "Redirecting to Query Transform";
+    return undef;
   }
 
   my $action=$q->param("action");
@@ -1025,7 +1025,7 @@ sub sequenceQueryHistory {
     }
     $self->header_type('redirect');
     $self->header_props(-url=>$new_url);
-    return "Redirecting to Query Transform";
+    return undef;
   }
 
   my $action=$q->param("action");

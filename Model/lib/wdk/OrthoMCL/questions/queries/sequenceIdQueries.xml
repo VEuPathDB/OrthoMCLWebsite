@@ -29,19 +29,20 @@
             <column name="source_id"/>
             <sql>
                 <![CDATA[
-SELECT aa_sequence_id 
-FROM dots.ExternalAaSequence eas, ($$sequence_ids$$) ds
+SELECT eas.source_id 
+FROM dots.ExternalAaSequence eas, ($$source_ids$$) ds
 WHERE lower(eas.source_id) = lower(ds.source_id)
 UNION
-SELECT seqref.aa_sequence_id
-FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+SELECT eas.source_id
+FROM dots.ExternalAaSequence eas, Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
      Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr,
-	 ($$sequence_ids$$) ds
-WHERE seqref.db_ref_id = ref.db_ref_id
+	 ($$source_ids$$) ds
+WHERE eas.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
   AND ref.external_database_release_id = dbr.external_database_release_id
   AND dbr.external_database_id = db.external_database_id
   AND db.name = 'OrthoMCL Old Seqs'
-  AND lower(ref.primary_identifier) = lower(ds.source_id);
+  AND lower(ref.primary_identifier) = lower(ds.source_id)
 				]]>
             </sql>
         </sqlQuery>  

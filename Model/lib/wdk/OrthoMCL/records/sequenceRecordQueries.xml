@@ -52,7 +52,7 @@
 			<![CDATA[
                 SELECT eas.source_id, eas.length, eas.description AS product,
 					   eas.molecular_weight, eas.secondary_identifier AS full_source_id
-                FROM apidb.ExternalAaSequence eas
+                FROM dots.ExternalAaSequence eas
  			]]>
             </sql>
         </sqlQuery>
@@ -63,7 +63,7 @@
             <sql>
 			<![CDATA[
                 SELECT eas.source_id, ot.name AS organism
-                FROM apidb.OrthomclTaxon ot, apidb.ExternalAaSequence eas
+                FROM apidb.OrthomclTaxon ot, dots.ExternalAaSequence eas
 				WHERE eas.taxon_id = ot.taxon_id
  			]]>
             </sql>
@@ -75,7 +75,7 @@
             <sql>
 			<![CDATA[
                 SELECT eas.source_id, og.name AS group_name
-                FROM apidb.ExternalAaSequence eas
+                FROM dots.ExternalAaSequence eas
 				LEFT JOIN apidb.OrthologGroupAaSequence ogs
 					ON eas.aa_sequence_id = ogs.aa_sequence_id
 				LEFT JOIN apidb.OrthologGroup og

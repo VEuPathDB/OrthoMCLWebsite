@@ -30,21 +30,21 @@
             <sql>
                 <![CDATA[
 SELECT og.name AS group_name
-FROM apidb.OrthologGroup og, ($$group_ids$$) ds
-WHERE og.name = ds.name
+FROM apidb.OrthologGroup og, ($$group_names$$) ds
+WHERE og.name = ds.group_name
 UNION
-SELECT ogs.name AS group_name
+SELECT og.name AS group_name
 FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence ogs,
      Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
      Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr,
-	 ($$group_ids$$) ds
+	 ($$group_names$$) ds
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = seqref.aa_sequence_id
   AND seqref.db_ref_id = ref.db_ref_id
   AND ref.external_database_release_id = dbr.external_database_release_id
   AND dbr.external_database_id = db.external_database_id
   AND db.name = 'OrthoMCL Old Groups'
-  AND ref.primary_identifier = ds.name
+  AND ref.primary_identifier = ds.group_name
 				]]>
             </sql>
         </sqlQuery>  

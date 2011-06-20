@@ -4,12 +4,29 @@
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="ApiCommonWebsite-Installation">
-    <ant antfile="../ApiCommonWebsite/build.xml" target="ApiCommonWebsite-Installation">
-      <property name="project" value="ApiCommonWebsite"/>
-      <property name="version" value="api-mar-2008"/>
+
+  <target name="WDK-Installation">
+    <ant antfile="../WDK/build.xml" target="WDK-Installation">
+      <property name="project" value="WDK"/>
+      <property name="version" value="WDK_version_2-0"/>
     </ant>
-  </target>  
+  </target>
+
+  <target name="WDK-WebInstallation">
+    <ant antfile="../WDK/build.xml" target="WDK-WebInstallation">
+      <property name="project" value="WDK"/>
+      <property name="version" value="WDK_version_2-0"/>
+    </ant>
+  </target>
+
+  <target name="WDK-Checkout" unless="WDK.present">
+    <ant target="defaultProjectCheckout" inheritAll="false">
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/gus/WDK"/>
+      <property name="project" value="WDK"/>
+      <property name="version" value="WDK_version_2-0"/>
+      <property name="excludeChildren" value="false"/>
+    </ant>
+  </target>
 
   <target name="OrthoMCLShared-Installation">
     <ant antfile="../OrthoMCLShared/build.xml" target="OrthoMCLShared-Installation">
@@ -19,14 +36,6 @@
   </target>
   
      
-  <target name="ApiCommonWebsite-Checkout" unless="ApiCommonWebsite.present"> 
-    <ant target="defaultProjectCheckout" inheritAll="false">
-      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/ApiCommonWebsite"/>
-      <property name="project" value="ApiCommonWebsite"/>
-      <property name="version" value="api-mar-2008"/>
-    </ant>
-  </target>
-    
   <target name="OrthoMCLShared-Checkout" unless="OrthoMCLShared.present"> 
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLShared"/>
@@ -40,9 +49,9 @@
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildCheckout">
-    <available file="../ApiCommonWebsite" type="dir"  property="ApiCommonWebsite.present" />
+    <available file="../WDK" type="dir"  property="WDK.present" />
+    <antcall target="WDK-Checkout"/>
     <available file="../OrthoMCLShared" type="dir"  property="OrthoMCLShared.present" />
-    <antcall target="ApiCommonWebsite-Checkout"/>
     <antcall target="OrthoMCLShared-Checkout"/>
   </target>
 
@@ -51,7 +60,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildUpdate">
     <ant target="defaultProjectUpdate">
-      <property name="project" value="ApiCommonWebsite"/>
+      <property name="project" value="WDK"/>
     </ant>
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLShared"/>
@@ -62,7 +71,7 @@
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-Installation" depends="ApiCommonWebsite-Installation,
+  <target name="OrthoMCLWebsite-Installation" depends="WDK-Installation,
                                                        OrthoMCLShared-Installation,
                                                        OrthoMCLWebsite/Site-Installation,
                                                        OrthoMCLWebsite/Model-Installation">
@@ -110,7 +119,8 @@
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebsite-Installation,
+  <target name="OrthoMCLWebsite-WebInstallation" depends="WDK-WebInstallation,
+                                                          OrthoMCLWebsite-Installation,
                                                           OrthoMCLWebsite/Site-WebInstallation">
   </target>
 

@@ -22,70 +22,69 @@
 
     <!-- Queries that retrieve attributes of ESTs -->
     
-    <querySet name="EstAttributes" queryType="attribute">
+    <querySet name="SequenceAttributes" queryType="attribute">
 
        <defaultTestParamValues>
-            <paramValue name="est_id">9644248</paramValue>
+            <paramValue name="source_id">PF11_0344</paramValue>
        </defaultTestParamValues>
 
         <testRowCountSql>
-            SELECT count(*) FROM WDKTestEst
+            SELECT count(*) FROM dots.ExternalAaSequence
         </testRowCountSql>
 
-        <sqlQuery name="EstAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="na_sequence_id"/>
+        <sqlQuery name="AllSequences">
             <column name="source_id"/>
             <sql>
-                <!-- union with self for federation simulation -->
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       e.accession as source_id, 
-                       e.na_sequence_id
-                from WDKTestEst e
+            <![CDATA[
+                SELECT eas.source_id
+                FROM dots.ExternalAaSequence eas
+			]]>
             </sql>
         </sqlQuery>
 
-        <sqlQuery name="NullAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="assembly_id"/>
+        <sqlQuery name="SequenceAttrs">
+            <column name="source_id"/>
+            <column name="length"/>
+            <column name="product"/>
+            <column name="molecular_weight"/>
+            <column name="full_source_id"/>
             <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       a.na_sequence_id as assembly_id
-                from WDKTestEst e, 
-                     WDKTestAssemblySequence aseq, 
-                     WdkTestAssembly a
-                where e.na_sequence_id = aseq.na_sequence_id
-                  and aseq.assembly_na_sequence_id = a.na_sequence_id
+			<![CDATA[
+                SELECT eas.source_id, eas.length, eas.description AS product,
+					   eas.molecular_weight, eas.secondary_identifier AS full_source_id
+                FROM apidb.ExternalAaSequence eas
+ 			]]>
             </sql>
         </sqlQuery>
 
-
-        <sqlQuery name="LibAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="dbest_name"/>
-            <column name="anatomy_id"/>
+        <sqlQuery name="SequenceOrganism">
+            <column name="source_id"/>
+            <column name="organism"/>
             <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       l.dbest_name, 
-                       l.anatomy_id 
-                from WDKTestEst e, 
-                     WDKTestLibrary l 
-                where e.library_id = l.library_id 
+			<![CDATA[
+                SELECT eas.source_id, ot.name AS organism
+                FROM apidb.OrthomclTaxon ot, apidb.ExternalAaSequence eas
+				WHERE eas.taxon_id = ot.taxon_id
+ 			]]>
             </sql>
         </sqlQuery>
 
-
-        <sqlQuery name="AllEsts">
-            <column name="est_id"/>
-            <column name="project_id"/>
+        <sqlQuery name="SequenceGroup">
+            <column name="source_id"/>
+            <column name="group_name"/>
             <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id
-                from WDKTestEst e 
+			<![CDATA[
+                SELECT eas.source_id, og.name AS group_name
+                FROM apidb.ExternalAaSequence eas
+				LEFT JOIN apidb.OrthologGroupAaSequence ogs
+					ON eas.aa_sequence_id = ogs.aa_sequence_id
+				LEFT JOIN apidb.OrthologGroup og
+					ON ogs.ortholog_group_id = og.ortholog_group_id
+ 			]]>
             </sql>
         </sqlQuery>
-    </querySet>
+
+
+	</querySet>
 
 </wdkModel>

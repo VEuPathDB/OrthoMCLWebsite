@@ -26,20 +26,20 @@
     <querySet name="GroupIds" queryType="id">
         <sqlQuery name="ByName" isCacheable="true">
             <paramRef ref="groupParams.group_names"/>
-            <column name="name"/>
+            <column name="group_name"/>
             <sql>
-                <!-- use CDATA because query includes angle brackets -->
                 <![CDATA[
-SELECT og.name
+SELECT og.name AS group_name
 FROM apidb.OrthologGroup og, ($$group_ids$$) ds
 WHERE og.name = ds.name
 UNION
-SELECT ogs.ortholog_group_id
-FROM apidb.OrthologGroupAaSequence ogs,
+SELECT ogs.name AS group_name
+FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence ogs,
      Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
      Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr,
 	 ($$group_ids$$) ds
-WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+  AND ogs.aa_sequence_id = seqref.aa_sequence_id
   AND seqref.db_ref_id = ref.db_ref_id
   AND ref.external_database_release_id = dbr.external_database_release_id
   AND dbr.external_database_id = db.external_database_id
@@ -49,11 +49,12 @@ WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
             </sql>
         </sqlQuery>  
 
+
+<!--
         <sqlQuery name="ByKeyword">
             <paramRef ref="sharedParams.keyword"/>
             <column name="name"/>
             <sql>
-                <!-- use CDATA because query includes angle brackets -->
                 <![CDATA[
 SELECT DISTINCT ogs.ortholog_group_id
 FROM apidb.OrthologGroupAaSequence ogs,
@@ -66,28 +67,7 @@ GROUP BY ogs.ortholog_group_id
                 ]]>
             </sql>
         </sqlQuery>
-
-        <sqlQuery name="EstParent">
-            <column name="na_sequence_id"/>
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <sql>
-                   select a.na_sequence_id, a.na_sequence_id AS est_id, '@PROJECT_ID@' || '' AS project_id
-                   from WDKTestAssembly a, WDKTestAssemblySequence aseq
-                        where aseq.assembly_na_sequence_id = a.na_sequence_id
-            </sql>
-        </sqlQuery>
-
- <processQuery name="ByMotifSearch" 
-             processName="org.apidb.apicomplexa.wsfplugin.motifsearch.MotifSearchPlugin">
-       <paramRef ref="params.motif_expression" />
-       <paramRef ref="params.motif_organism" quote="false" />
-       <wsColumn name="na_sequence_id" width="32" wsName="GeneID"/>
-       <wsColumn name="project_id" width="32" wsName="ProjectId"/>
-       <wsColumn name="Locations" width="3999"/>
-       <wsColumn name="MatchCount" width="10"/>
-       <wsColumn name="Sequence" width="3999"/>
-    </processQuery>
+-->
 
     </querySet>
 

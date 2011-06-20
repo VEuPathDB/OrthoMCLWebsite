@@ -28,19 +28,19 @@
         ]]>
 		</description>
 
-        <question name="ById" queryRef="GroupIds.ByName" 
-				  displayName="Group Id"
+        <question name="ByName" queryRef="GroupIds.ByName" 
+				  displayName="Group Name"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
 			<![CDATA[
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
-
+<!--
         <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
 				  displayName="Keyword"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
@@ -91,7 +91,7 @@
             <attributesList summary="name, num_of_members"
                            sorting="num_of_members desc"/>
         </question>
-
+-->
 
 	</questionSet>
 

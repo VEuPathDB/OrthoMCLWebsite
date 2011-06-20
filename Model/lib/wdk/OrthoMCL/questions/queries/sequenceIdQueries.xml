@@ -23,67 +23,28 @@
 
     <!-- Queries that return RNA primary keys (for use in questions and nested records.). -->
 
-    <querySet name="RnaIds" queryType="id">
-        <sqlQuery name="ByNumSeqs" isCacheable="true">
-            <paramRef ref="params.NumSeqs" default="10"/>
-            <paramRef ref="params.ApiTaxon"/>
-            <column name="na_sequence_id"/>
-            <column name="project_id"/>
-            <column name="score"/>
+    <querySet name="SequenceIds" queryType="id">
+        <sqlQuery name="ById" isCacheable="true">
+            <paramRef ref="sequenceParams.source_ids"/>
+            <column name="source_id"/>
             <sql>
-                <!-- use CDATA because query includes angle brackets -->
                 <![CDATA[
-                    select distinct a.na_sequence_id, '@project_id@' || '' AS project_id,
-                           a.number_of_contained_sequences as score
-                    from WDKTestAssembly a
-                    where a.number_of_contained_sequences > $$NumSeqs$$
-                    and a.taxon_id in ($$ApiTaxon$$)
-                ]]>
+SELECT aa_sequence_id 
+FROM dots.ExternalAaSequence eas, ($$sequence_ids$$) ds
+WHERE lower(eas.source_id) = lower(ds.source_id)
+UNION
+SELECT seqref.aa_sequence_id
+FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr,
+	 ($$sequence_ids$$) ds
+WHERE seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Seqs'
+  AND lower(ref.primary_identifier) = lower(ds.source_id);
+				]]>
             </sql>
         </sqlQuery>  
-
-        <sqlQuery name="ByDbESTLib">
-            <paramRef ref="params.NumEstLibs" default="2"/>
-            <paramRef ref="params.AssemblyConsistency" default="85"/>
-            <column name="na_sequence_id"/>
-            <sql>
-                <!-- use CDATA because query includes angle brackets -->
-                <![CDATA[
-                    select distinct aseq.assembly_na_sequence_id as na_sequence_id
-                    from WDKTestEst est, WDKTestLibrary lib,
-                         WDKTestAssemblySequence aseq, WDKTestAssembly a
-                    where lib.library_id = est.library_id 
-                    and est.na_sequence_id = aseq.na_sequence_id 
-                    and aseq.assembly_na_sequence_id = a.na_sequence_id
-                    and aseq.assembly_na_sequence_id is not NULL 
-                    and a.assembly_consistency > $$AssemblyConsistency$$
-                    group by aseq.assembly_na_sequence_id 
-                    having count (distinct lib.dbest_id) >= $$NumEstLibs$$
-                ]]>
-            </sql>
-        </sqlQuery>
-
-        <sqlQuery name="EstParent">
-            <column name="na_sequence_id"/>
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <sql>
-                   select a.na_sequence_id, a.na_sequence_id AS est_id, '@PROJECT_ID@' || '' AS project_id
-                   from WDKTestAssembly a, WDKTestAssemblySequence aseq
-                        where aseq.assembly_na_sequence_id = a.na_sequence_id
-            </sql>
-        </sqlQuery>
-
- <processQuery name="ByMotifSearch" 
-             processName="org.apidb.apicomplexa.wsfplugin.motifsearch.MotifSearchPlugin">
-       <paramRef ref="params.motif_expression" />
-       <paramRef ref="params.motif_organism" quote="false" />
-       <wsColumn name="na_sequence_id" width="32" wsName="GeneID"/>
-       <wsColumn name="project_id" width="32" wsName="ProjectId"/>
-       <wsColumn name="Locations" width="3999"/>
-       <wsColumn name="MatchCount" width="10"/>
-       <wsColumn name="Sequence" width="3999"/>
-    </processQuery>
 
     </querySet>
 

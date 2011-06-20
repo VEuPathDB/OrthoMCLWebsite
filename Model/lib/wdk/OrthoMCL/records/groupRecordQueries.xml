@@ -22,70 +22,46 @@
 
     <!-- Queries that retrieve attributes of ESTs -->
     
-    <querySet name="EstAttributes" queryType="attribute">
+    <querySet name="GroupAttributes" queryType="attribute">
 
        <defaultTestParamValues>
-            <paramValue name="est_id">9644248</paramValue>
+            <paramValue name="group_name">OG5_228447</paramValue>
        </defaultTestParamValues>
 
         <testRowCountSql>
-            SELECT count(*) FROM WDKTestEst
+            SELECT count(*) FROM apidb.OrthologGroup
         </testRowCountSql>
 
-        <sqlQuery name="EstAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="na_sequence_id"/>
-            <column name="source_id"/>
+        <sqlQuery name="AllGroups">
+            <column name="group_name"/>
             <sql>
-                <!-- union with self for federation simulation -->
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       e.accession as source_id, 
-                       e.na_sequence_id
-                from WDKTestEst e
+			<![CDATA[
+                SELECT g.name AS group_name
+				FROM apidb.OrthologGroups g
+			]]>
             </sql>
         </sqlQuery>
 
-        <sqlQuery name="NullAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="assembly_id"/>
+        <sqlQuery name="GroupAttrs">
+            <column name="group_name"/>
+            <column name="number_of_members"/>
+            <column name="number_of_match_pairs"/>
+            <column name="avg_percent_identity"/>
+            <column name="avg_percent_match"/>
+            <column name="avg_evalue_mant"/>
+            <column name="avg_evalue_exp"/>
+            <column name="avg_connectivity"/>
             <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       a.na_sequence_id as assembly_id
-                from WDKTestEst e, 
-                     WDKTestAssemblySequence aseq, 
-                     WdkTestAssembly a
-                where e.na_sequence_id = aseq.na_sequence_id
-                  and aseq.assembly_na_sequence_id = a.na_sequence_id
+            <![CDATA[
+                SELECT g.name AS group_name, g.number_of_members,
+                       g.number_of_match_pairs, g.avg_percent_identity,
+					   g.avg_percent_match, g.avg_connectivity,
+					   g.avg_evalue_mant, g.avg_evalue_exp
+                FROM apidb.OrthologGroup g
+			]]>
             </sql>
         </sqlQuery>
 
-
-        <sqlQuery name="LibAttrs">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <column name="dbest_name"/>
-            <column name="anatomy_id"/>
-            <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
-                       l.dbest_name, 
-                       l.anatomy_id 
-                from WDKTestEst e, 
-                     WDKTestLibrary l 
-                where e.library_id = l.library_id 
-            </sql>
-        </sqlQuery>
-
-
-        <sqlQuery name="AllEsts">
-            <column name="est_id"/>
-            <column name="project_id"/>
-            <sql>
-                select e.est_id, '@PROJECT_ID@' || '' AS project_id
-                from WDKTestEst e 
-            </sql>
-        </sqlQuery>
-    </querySet>
+	</querySet>
 
 </wdkModel>

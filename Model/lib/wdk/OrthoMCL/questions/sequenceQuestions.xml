@@ -35,11 +35,12 @@
                 Find protein sequences by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="source_id, length"
+                           sorting="source_id asc"/>
         </question>
 
 
+<!--
         <question name="ByKeyword" queryRef="SequenceIds.ByKeyword" 
 				  displayName="Keyword"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
@@ -90,6 +91,7 @@
             <attributesList summary="name, num_of_members"
                            sorting="num_of_members desc"/>
         </question>
+-->
 
     </questionSet>
 

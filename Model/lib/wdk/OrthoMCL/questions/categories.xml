@@ -1,0 +1,34 @@
+<wdkModel>
+
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- Ortholog Group Questions  -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
+  
+    <category name="GroupRecordClasses.GroupRecordClass" displayName="Search for Groups" />
+    
+    	<category name="group" displayName="Search for Groups"
+    	          parentRef="GroupRecordClasses.GroupRecordClass">
+            <questionRef>GroupQuestions.ByName</questionRef>
+            <questionRef>GroupQuestions.ByKeyword</questionRef>
+     	    <questionRef>GroupQuestions.ByPFamDomain</questionRef>
+     	    <questionRef>GroupQuestions.ByPhyleticPattern</questionRef>
+     	    <questionRef>GroupQuestions.ByProperties</questionRef>
+        </category>
+     
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <!-- Sequence Questions  -->
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
+     
+   
+      <category name="SequenceRecordClasses.SequenceRecordClass" displayName="Search for Sequence" />
+     
+     	<category name="sequence" displayName="Search for Sequences"
+    	          parentRef="SequenceRecordClasses.SequenceRecordClass">
+            <questionRef>SequenceQuestions.ById</questionRef>
+            <questionRef>SequenceQuestions.ByKeyword</questionRef>
+            <questionRef>SequenceQuestions.ByTaxonomy</questionRef>
+            <questionRef>SequenceQuestions.ByPFamDomain</questionRef>
+            <questionRef>SequenceQuestions.ByBlast</questionRef>
+        </category>
+     
+</wdkModel>

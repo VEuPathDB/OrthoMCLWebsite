@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdkModel>
+
+    <!-- *************** -->
+    <!-- model querySets -->
+    <!-- *************** -->
+
+    <!--
+    A "query" obtains tabular values from a data source.  It has columns
+    and parameters.  So far, only SQL data sources are supported, but others,
+    such as flat files are coming.  
+
+    Queries are used for different purposes: providing primary keys to a 
+    question; providing attributes and tables to a record; and, providing
+    vocabularies to vocabulary parameters.
+
+    A "query set" is a grouping of queries.  It is useful in organizing the
+    model xml file.  
+
+    The full name of a query is of the form "set_name.name."
+    -->
+
+    <!-- Queries that retrieve attributes of ESTs -->
+    
+    <querySet name="EstAttributes" queryType="attribute">
+
+       <defaultTestParamValues>
+            <paramValue name="est_id">9644248</paramValue>
+       </defaultTestParamValues>
+
+        <testRowCountSql>
+            SELECT count(*) FROM WDKTestEst
+        </testRowCountSql>
+
+        <sqlQuery name="EstAttrs">
+            <column name="est_id"/>
+            <column name="project_id"/>
+            <column name="na_sequence_id"/>
+            <column name="source_id"/>
+            <sql>
+                <!-- union with self for federation simulation -->
+                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
+                       e.accession as source_id, 
+                       e.na_sequence_id
+                from WDKTestEst e
+            </sql>
+        </sqlQuery>
+
+        <sqlQuery name="NullAttrs">
+            <column name="est_id"/>
+            <column name="project_id"/>
+            <column name="assembly_id"/>
+            <sql>
+                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
+                       a.na_sequence_id as assembly_id
+                from WDKTestEst e, 
+                     WDKTestAssemblySequence aseq, 
+                     WdkTestAssembly a
+                where e.na_sequence_id = aseq.na_sequence_id
+                  and aseq.assembly_na_sequence_id = a.na_sequence_id
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="LibAttrs">
+            <column name="est_id"/>
+            <column name="project_id"/>
+            <column name="dbest_name"/>
+            <column name="anatomy_id"/>
+            <sql>
+                select e.est_id, '@PROJECT_ID@' || '' AS project_id,
+                       l.dbest_name, 
+                       l.anatomy_id 
+                from WDKTestEst e, 
+                     WDKTestLibrary l 
+                where e.library_id = l.library_id 
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="AllEsts">
+            <column name="est_id"/>
+            <column name="project_id"/>
+            <sql>
+                select e.est_id, '@PROJECT_ID@' || '' AS project_id
+                from WDKTestEst e 
+            </sql>
+        </sqlQuery>
+    </querySet>
+
+</wdkModel>

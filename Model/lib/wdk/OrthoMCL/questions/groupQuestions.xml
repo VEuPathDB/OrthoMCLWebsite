@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdkModel>
+
+    <!-- ************ -->
+    <!-- questionSets -->
+    <!-- ************ -->
+    
+    <!-- 
+    A question is "a query that returns a list of records."  (Regular queries 
+    return columns and rows.)  They are formed by pairing a query with a
+    record class.  The query must be one that returns one column containing
+    a list of primary keys.  The record class must be one that expects as
+    a primary key the type of key returned by the query.
+    
+    A question set is a grouping of questions.  It may be used in the
+    user interface to present the enclosed questions in one choice box.  
+    -->
+
+
+    <!-- questions that return RNA records -->
+
+
+    <questionSet name="GroupQuestions"
+                 displayName="Searches to find Orthologous Groups">
+        <description>
+		<![CDATA[
+          Search for Orthologous groups.
+        ]]>
+		</description>
+
+        <question name="ById" queryRef="GroupIds.ByName" 
+				  displayName="Group Id"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+                Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
+			]]>
+            </description>
+            <attributesList summary="name, num_of_members"
+                           sorting="num_of_members desc"/>
+        </question>
+
+
+        <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
+				  displayName="Keyword"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+                Find Orthologous groups by the keyword.
+			]]>
+            </description>
+            <attributesList summary="name, num_of_members"
+                           sorting="num_of_members desc"/>
+        </question>
+
+
+        <question name="ByPFamDomain" queryRef="GroupIds.ByPFamDomain" 
+				  displayName="PFam"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+                Find Orthologous groups by the PFam.
+			]]>
+            </description>
+            <attributesList summary="name, num_of_members"
+                           sorting="num_of_members desc"/>
+        </question>
+
+
+        <question name="ByPhyleticPattern" queryRef="GroupIds.ByPhyleticPattern" 
+				  displayName="Phyletic"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+                Find Orthologous groups by the Phyletic pattern.
+			]]>
+            </description>
+            <attributesList summary="name, num_of_members"
+                           sorting="num_of_members desc"/>
+        </question>
+
+
+        <question name="ByProperties" queryRef="GroupIds.ByProperties"
+				  displayName="Group Properties"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+                Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
+			]]>
+            </description>
+            <attributesList summary="name, num_of_members"
+                           sorting="num_of_members desc"/>
+        </question>
+
+
+	</questionSet>
+
+</wdkModel>

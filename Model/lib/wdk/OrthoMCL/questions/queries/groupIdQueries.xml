@@ -50,24 +50,21 @@ WHERE og.ortholog_group_id = ogs.ortholog_group_id
         </sqlQuery>  
 
 
-<!--
         <sqlQuery name="ByKeyword">
             <paramRef ref="sharedParams.keyword"/>
-            <column name="name"/>
+            <column name="group_name"/>
             <sql>
                 <![CDATA[
-SELECT DISTINCT ogs.ortholog_group_id
-FROM apidb.OrthologGroupAaSequence ogs,
+SELECT DISTINCT og.name AS group_name
+FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence ogs,
      dots.AaSequenceImp asi
-WHERE ogs.aa_sequence_id = asi.aa_sequence_id
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+  AND ogs.aa_sequence_id = asi.aa_sequence_id
   AND asi.subclass_view = 'ExternalAASequence'
-  AND ogs.ortholog_group_id != 0
   AND CATSEARCH(asi.description, $$keyword$$, '')>0
-GROUP BY ogs.ortholog_group_id
                 ]]>
             </sql>
         </sqlQuery>
--->
 
     </querySet>
 

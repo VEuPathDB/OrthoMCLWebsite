@@ -5,9 +5,7 @@
 
     <paramSet name="sharedParams">
 
-        <stringParam name="keyword" 
-                     prompt="Keyword" 
-                     number="true">
+        <stringParam name="keyword" prompt="Keyword" number="false">
             <help>You can use boolean terms in search keyword.</help>
             <suggest default="kinase" />
         </stringParam>

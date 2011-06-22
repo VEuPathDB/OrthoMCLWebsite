@@ -40,7 +40,6 @@
                            sorting="number_of_members desc"/>
         </question>
 
-<!--
         <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
 				  displayName="Keyword"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
@@ -49,11 +48,12 @@
                 Find Orthologous groups by the keyword.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
+<!--
         <question name="ByPFamDomain" queryRef="GroupIds.ByPFamDomain" 
 				  displayName="PFam"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">

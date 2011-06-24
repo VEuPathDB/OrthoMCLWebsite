@@ -2601,7 +2601,7 @@ sub proteomeQuery {
 
   my $old_umask = umask 0;
   mkdir $upload_dir;
-  umask $old_umask;
+  # umask $old_umask;
 
   # upload sequence file
   my $seq_file_handle = $q->upload("seq_file");

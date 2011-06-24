@@ -2601,7 +2601,6 @@ sub proteomeQuery {
 
   my $old_umask = umask 0;
   mkdir $upload_dir;
-  umask $old_umask;
 
   # upload sequence file
   my $seq_file_handle = $q->upload("seq_file");
@@ -2637,6 +2636,7 @@ sub proteomeQuery {
 
   return $self->done($tmpl);
 
+  umask $old_umask;
 }
 
 sub edgeList {

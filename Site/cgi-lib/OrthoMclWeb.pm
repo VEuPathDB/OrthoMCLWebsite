@@ -1211,8 +1211,8 @@ sub sequenceList {
       # support a wrong group name
       # change the OG30 to OG3 if needed
       $orthogroup_ac =~ s/OG30_/OG3_/g;
-      my $query_orthogroupid = $dbh->prepare($self->getSql('group_id_per_group_name'));
-      $query_orthogroupid->execute($orthogroup_ac);
+      my $query_orthogroupid = $dbh->prepare($self->getSql('group_per_group_name'));
+      $query_orthogroupid->execute($orthogroup_ac, $orthogroup_ac);
       my @tmp = $query_orthogroupid->fetchrow_array();
       $orthogroup_id = $tmp[0];
     } else {

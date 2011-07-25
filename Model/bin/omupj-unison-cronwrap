@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# cron wrapper to run unison to synch directories used by orthomclProteomeJob.
+# Only reports on error
+
+export UNISON=/var/www/Common/tmp/orthomclProteomeJob/.unison
+
+OUT=/tmp/omupj-unison.$$
+
+date >> $OUT
+echo -e "orthomclProteomeJob cron output\n"  >> $OUT
+
+/usr/bin/unison profile >>$OUT 2>&1
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  cat $OUT
+fi
+
+rm $OUT
+

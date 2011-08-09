@@ -5,11 +5,47 @@
 
     <paramSet name="groupParams">
 
+        <stringParam name="group_name" prompt="Group Name" number="false">
+            <help>Assigned group name from current or previous releases. Wild card is supported</help>
+            <suggest default="OG5_228447" />
+        </stringParam>
+
         <datasetParam name="group_names" prompt="Group Names"
 					  recordClassRef="GroupRecordClasses.GroupRecordClass">
             <help>a list of group names</help>
             <suggest default="OG5_228447" />
         </datasetParam>
+
+        <stringParam name="sequence_count_min" prompt="Min # sequences" number="true">
+            <help>The minimum number of sequences a group has</help>
+            <suggest default="10" />
+        </stringParam>
+
+        <stringParam name="sequence_count_max" prompt="Max # sequences" number="true">
+            <help>The maximum number of sequences a group has</help>
+            <suggest default="20" />
+        </stringParam>
+
+        <stringParam name="genome_count_min" prompt="Min # genomes" number="true">
+            <help>The minimum number of genomes a group has</help>
+            <suggest default="5" />
+        </stringParam>
+
+        <stringParam name="genome_count_max" prompt="Max # genomes" number="true">
+            <help>The maximum number of genomes a group has</help>
+            <suggest default="10" />
+        </stringParam>
+
+        <stringParam name="percent_min" prompt="Min Percentage" number="true">
+            <help>The minimum percentage.</help>
+            <suggest default="50" />
+        </stringParam>
+
+        <stringParam name="percent_max" prompt="Max Percentage" number="true">
+            <help>The maximum percentage</help>
+            <suggest default="800" />
+        </stringParam>
+
 
     </paramSet>
 

@@ -25,6 +25,16 @@
     <import file="OrthoMCL/questions/queries/sequenceIdQueries.xml" />
     <import file="OrthoMCL/questions/params/sequenceParams.xml" />
 
+
+
+
+    <!-- import the helper related pieces -->
+
+    <import file="OrthoMCL/records/helperRecord.xml" />
+    <import file="OrthoMCL/records/helperRecordQueries.xml" />
+    <import file="OrthoMCL/questions/helperQuestions.xml" />
+    <import file="OrthoMCL/questions/queries/helperIdQueries.xml" />
+
     <!-- import common pieces -->
     <import file="OrthoMCL/questions/params/sharedParams.xml" />
     <import file="OrthoMCL/questions/categories.xml"/>

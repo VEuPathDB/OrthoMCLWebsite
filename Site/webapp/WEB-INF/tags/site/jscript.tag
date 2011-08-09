@@ -8,8 +8,7 @@
 %>
 
 
-
-
+<script type="text/javascript" src="<c:url value='/wdkCustomization/js/lib/jquery.tooltip.min.js' />"></script>
 
 <%-- JQuery library is included by WDK --%>
 <c:if test="${refer == 'customSummary'}">

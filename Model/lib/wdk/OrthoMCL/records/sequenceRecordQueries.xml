@@ -48,12 +48,17 @@
             <column name="product"/>
             <column name="molecular_weight"/>
             <column name="full_source_id"/>
+            <column name="abbreviation"/>
+            <column name="taxon_name"/>          
             <sql>
-			<![CDATA[
-                SELECT eas.source_id, eas.length, eas.description AS product,
-					   eas.molecular_weight, eas.secondary_identifier AS full_source_id
-                FROM dots.ExternalAaSequence eas
- 			]]>
+		<![CDATA[
+SELECT eas.source_id, eas.length, eas.description AS product,
+       eas.molecular_weight, eas.secondary_identifier AS full_source_id,
+       ot.three_letter_abbrev AS abbreviation, 
+       ot.name AS taxon_name
+FROM dots.ExternalAaSequence eas, apidb.orthomcltaxon ot
+WHERE eas.taxon_id = ot.taxon_id
+ 		]]>
             </sql>
         </sqlQuery>
 
@@ -64,7 +69,7 @@
 			<![CDATA[
                 SELECT eas.source_id, ot.name AS organism
                 FROM apidb.OrthomclTaxon ot, dots.ExternalAaSequence eas
-				WHERE eas.taxon_id = ot.taxon_id
+		WHERE eas.taxon_id = ot.taxon_id
  			]]>
             </sql>
         </sqlQuery>
@@ -76,15 +81,37 @@
 			<![CDATA[
                 SELECT eas.source_id, og.name AS group_name
                 FROM dots.ExternalAaSequence eas
-				LEFT JOIN apidb.OrthologGroupAaSequence ogs
-					ON eas.aa_sequence_id = ogs.aa_sequence_id
-				LEFT JOIN apidb.OrthologGroup og
-					ON ogs.ortholog_group_id = og.ortholog_group_id
+		LEFT JOIN apidb.OrthologGroupAaSequence ogs
+			ON eas.aa_sequence_id = ogs.aa_sequence_id
+		LEFT JOIN apidb.OrthologGroup og
+			ON ogs.ortholog_group_id = og.ortholog_group_id
  			]]>
             </sql>
         </sqlQuery>
 
+    </querySet>
 
-	</querySet>
+    <querySet name="SequenceTables" queryType="table">
+
+        <sqlQuery name="OldGroups">
+            <column name="source_id"/>
+            <column name="group_name"/>
+            <sql>
+                        <![CDATA[
+SELECT eas.source_id, ref.primary_identifier AS group_name
+FROM dots.ExternalAaSequence eas,
+     Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr
+WHERE eas.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name = 'OrthoMCL Old Groups'
+                        ]]>
+            </sql>
+        </sqlQuery>
+
+
+    </querySet>
 
 </wdkModel>

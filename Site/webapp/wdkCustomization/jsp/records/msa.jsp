@@ -6,12 +6,10 @@
 <!-- get wdkRecord from proper scope -->
 <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
 
-<!-- display page header with recordClass type in banner -->
-<c:set value="${wdkRecord.recordClass.type}" var="recordType"/>
-<site:header banner="${recordType} Record page"/>
+<c:set var="msa" value="${wdkRecord.attributes['msa']}" />
 
-
-<wdk:record record="${wdkRecord}" />
-
-
-<site:footer/>
+<div id="msa">
+  <pre>
+    ${msa.value}
+  </pre>
+</div>

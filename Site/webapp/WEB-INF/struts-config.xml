@@ -470,6 +470,19 @@
       name="questionForm">
       <forward name="show_strategy" path="/showStrategy.do"/>
     </action>
+    <action
+      path="/showResult"
+      type="org.gusdb.wdk.controller.action.ShowResultAction"
+      scope="request"
+      validate="true">
+    </action>
+    <action
+      path="/showRecordFeature"
+      type="org.gusdb.wdk.controller.action.ShowRecordFeatureAction"
+      scope="request"
+      validate="true">
+    </action>
+
 
   </action-mappings>
 

@@ -80,6 +80,8 @@
                 <columnAttribute name="product" displayName="Product" />
                 <columnAttribute name="molecular_weight" displayName="Molecular Weight" />
                 <columnAttribute name="full_source_id" displayName="Full Identifier" />
+                <columnAttribute name="abbreviation" displayName="Taxon Code" />
+                <columnAttribute name="taxon_name" displayName="Taxon Name" />
             </attributeQueryRef>
             
             <attributeQueryRef ref="SequenceAttributes.SequenceOrganism">
@@ -89,6 +91,18 @@
             <attributeQueryRef ref="SequenceAttributes.SequenceGroup">
                 <columnAttribute name="group_name" displayName="Group"/>
             </attributeQueryRef>
+
+
+
+      <!-- =============================================================== -->
+      <!-- Attributes -->
+      <!-- =============================================================== -->
+
+            <table name="OldGroups"
+                   displayName="Groups from Previous Releases"
+                   queryRef="SequenceTables.OldGroups">
+                <columnAttribute name="group_name" displayName="group_name" />
+            </table>
                      
         </recordClass>
 

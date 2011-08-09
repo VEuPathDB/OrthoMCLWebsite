@@ -28,16 +28,24 @@
         ]]>
 		</description>
 
-        <question name="ByName" queryRef="GroupIds.ByName" 
-				  displayName="Group Name"
+        <question name="ByNameList" queryRef="GroupIds.ByNameList" 
+				  displayName="List of Group Names"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
 			<![CDATA[
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="group_name, number_of_members"
-                           sorting="number_of_members desc"/>
+        </question>
+
+        <question name="ByAccession" queryRef="GroupIds.ByAccession" 
+                                  displayName="Group or Sequence id"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
+                        ]]>
+            </description>
         </question>
 
         <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
@@ -48,25 +56,88 @@
                 Find Orthologous groups by the keyword.
 			]]>
             </description>
-            <attributesList summary="group_name, number_of_members"
-                           sorting="number_of_members desc"/>
         </question>
 
 
-<!--
-        <question name="ByPFamDomain" queryRef="GroupIds.ByPFamDomain" 
-				  displayName="PFam"
+        <question name="ByPFamName" queryRef="GroupIds.ByPFamName" 
+				  displayName="PFam Accession"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
 			<![CDATA[
                 Find Orthologous groups by the PFam.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
         </question>
 
 
+        <question name="ByPFamKeyword" queryRef="GroupIds.ByPFamKeyword" 
+                                  displayName="PFam Keyword"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the PFam.
+                        ]]>
+            </description>
+        </question>
+
+
+        <question name="BySequenceCount" queryRef="GroupIds.BySequenceCount" 
+                                  displayName="#Sequences"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the number of sequences a group has
+                        ]]>
+            </description>
+        </question>
+
+
+        <question name="ByGenomeCount" queryRef="GroupIds.ByGenomeCount" 
+                                  displayName="#Genomes"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the number of genomes a group has
+                        ]]>
+            </description>
+        </question>
+
+
+        <question name="ByPercentMatchPairs" queryRef="GroupIds.ByPercentMatchPairs" 
+                                  displayName="%Match Pairs"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the percentage match pairs.
+                        ]]>
+            </description>
+        </question>
+
+
+        <question name="ByPercentIdentity" queryRef="GroupIds.ByPercentIdentity" 
+                                  displayName="AVG %Identity"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the average percentage identities.
+                        ]]>
+            </description>
+        </question>
+
+
+        <question name="ByPercentMatch" queryRef="GroupIds.ByPercentMatch" 
+                                  displayName="AVG %Match"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find Orthologous groups by the average percentage matches.
+                        ]]>
+            </description>
+        </question>
+
+
+
+<!--
         <question name="ByPhyleticPattern" queryRef="GroupIds.ByPhyleticPattern" 
 				  displayName="Phyletic"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">

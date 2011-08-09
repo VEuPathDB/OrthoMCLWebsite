@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wdkModel>
+
+    <!-- *************** -->
+    <!-- model querySets -->
+    <!-- *************** -->
+
+    <!--
+    A "query" obtains tabular values from a data source.  It has columns
+    and parameters.  So far, only SQL data sources are supported, but others,
+    such as flat files are coming.  
+
+    Queries are used for different purposes: providing primary keys to a 
+    question; providing attributes and tables to a record; and, providing
+    vocabularies to vocabulary parameters.
+
+    A "query set" is a grouping of queries.  It is useful in organizing the
+    model xml file.  
+
+    The full name of a query is of the form "set_name.name."
+    -->
+
+    <!-- Queries that retrieve attributes of ESTs -->
+    
+    <querySet name="HelperTables" queryType="table">
+
+       <defaultTestParamValues>
+            <paramValue name="helper_id">helper</paramValue>
+       </defaultTestParamValues>
+
+        <sqlQuery name="Taxons">
+            <column name="helper_id"/>
+            <column name="taxon_id"/>
+            <column name="parent_id"/>
+            <column name="abbreviation"/>
+            <column name="is_species"/>
+            <column name="sort_index"/>
+            <column name="common_name"/>
+            <column name="name"/>
+            <sql>
+            <![CDATA[
+SELECT 'helper' AS helper_id, 
+       orthomcl_taxon_id AS taxon_id,
+       nvl(parent_id, orthomcl_taxon_id) AS parent_id,
+       three_letter_abbrev AS abbreviation,
+       is_species, 
+       species_order AS sort_index,
+       common_name, 
+       name
+FROM apidb.OrthomclTaxon
+ORDER BY parent_id ASC, species_order ASC
+			]]>
+            </sql>
+        </sqlQuery>
+
+	</querySet>
+
+</wdkModel>

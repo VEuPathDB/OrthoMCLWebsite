@@ -24,7 +24,7 @@
     <!-- Queries that return RNA primary keys (for use in questions and nested records.). -->
 
     <querySet name="SequenceIds" queryType="id">
-        <sqlQuery name="ById" isCacheable="true">
+        <sqlQuery name="ByIdList" isCacheable="true">
             <paramRef ref="sequenceParams.source_ids"/>
             <column name="source_id"/>
             <sql>
@@ -46,6 +46,114 @@ WHERE eas.aa_sequence_id = seqref.aa_sequence_id
 				]]>
             </sql>
         </sqlQuery>  
+
+
+        <sqlQuery name="ByAccession" isCacheable="true">
+            <paramRef ref="sequenceParams.accession"/>
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT eas.source_id
+FROM dots.ExternalAaSequence eas
+WHERE eas.source_id LIKE replace($$accession$$, '*', '%')
+   OR eas.secondary_identifier LIKE replace($$accession$$, '*', '%')
+UNION
+SELECT eas.source_id
+FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
+     Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr,
+     dots.ExternalAaSequence eas
+WHERE eas.aa_sequence_id = seqref.aa_sequence_id
+  AND seqref.db_ref_id = ref.db_ref_id
+  AND ref.external_database_release_id = dbr.external_database_release_id
+  AND dbr.external_database_id = db.external_database_id
+  AND db.name IN ('OrthoMCL Old Groups', 'OrthoMCL Old Sequences')
+  AND ref.primary_identifier LIKE replace($$accession$$, '*', '%')
+               ]]>
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="ByKeyword" isCacheable="true">
+            <paramRef ref="sharedParams.keyword"/>
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT asi.source_id 
+FROM dots.AaSequenceImp asi
+WHERE asi.subclass_view = 'ExternalAASequence'
+  AND CATSEARCH(asi.description, $$keyword$$, '') > 0
+               ]]>
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="ByPFamName" isCacheable="true">
+            <paramRef ref="sharedParams.pfam_name"/>
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT DISTINCT eas.source_id
+FROM dots.ExternalAaSequence eas,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf,
+     sres.DbRef db
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+  AND db.primary_identifier LIKE replace($$pfam_name$$, '*', '%')
+                ]]>
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="ByPFamKeyword">
+            <paramRef ref="sharedParams.pfam_keyword"/>
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT DISTINCT eas.source_id
+FROM dots.ExternalAaSequence eas,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf,
+     sres.DbRef db
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+  AND  CATSEARCH(db.secondary_identifier, $$pfam_keyword$$, '') > 0
+UNION
+SELECT DISTINCT eas.source_id
+FROM (  SELECT db_ref_id
+        from sres.DbRef
+        where CATSEARCH(secondary_identifier, 'CANNOT_HAVE_TWO_QUERYCODES', '') > 0
+     union
+       select db_ref_id
+        from sres.DbRef
+        where CATSEARCH(remark, $$pfam_keyword$$, '') > 0
+     ) db,
+     dots.ExternalAaSequence eas,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf
+WHERE eas.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+               ]]>
+            </sql>
+        </sqlQuery>
+
+
+        <sqlQuery name="ByTaxonomy" isCacheable="true">
+            <paramRef ref="sharedParams.taxon"/>
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT eas.source_id 
+FROM dots.ExternalAaSequence eas, apidb.OrthomclTaxon ot
+WHERE eas.taxon_id = ot.taxon_id
+  AND (ot.three_letter_abbrev LIKE replace($$taxon$$, '*', '%')
+       OR ot.name LIKE replace($$taxon$$, '*', '%'))
+               ]]>
+            </sql>
+        </sqlQuery>
 
     </querySet>
 

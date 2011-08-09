@@ -68,9 +68,13 @@
 <%-- css from WDK  --%>
 <wdk:includes /> 
 
+<link type="text/css" href="<c:url value='wdkCustomization/css/sunny/jquery-ui-1.8.14.custom.css' />" rel="stylesheet" /> 
+
 <%-- When definitions are in conflict, the next one overrides the previous one  --%>
 <link rel="StyleSheet" href="<c:url value="/css/style.css" />" 		type="text/css">
 <link rel="stylesheet" href="<c:url value="/css/Color.css" />"        	type="text/css" />
+<link rel="stylesheet" href="<c:url value="/wdkCustomization/css/group.css" />" type="text/css" />
+
 
 <site:jscript refer="${refer}"/>
 

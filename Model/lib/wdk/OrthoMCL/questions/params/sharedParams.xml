@@ -10,6 +10,21 @@
             <suggest default="kinase" />
         </stringParam>
 
+        <stringParam name="pfam_name" prompt="Pfam Domain" number="false">
+            <help>The  accession of the Pfam Domain. Wild card is supported.</help>
+            <suggest default="PF00018" />
+        </stringParam>
+
+        <stringParam name="pfam_keyword" prompt="Pfam Keyword" number="false">
+            <help>The name or description of the Pfam Domain. Wild card is supported.</help>
+            <suggest default="SH3_1" />
+        </stringParam>
+
+        <stringParam name="taxon" prompt="Taxonomy" number="false">
+            <help>The abbreviation or the name of a taxonomy. Wild card is supported.</help>
+            <suggest default="pfal" />
+        </stringParam>
+
     </paramSet>
 
 

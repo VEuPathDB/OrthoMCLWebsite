@@ -6,11 +6,18 @@
     <paramSet name="sequenceParams">
 
         <datasetParam name="source_ids" prompt="Sequence Ids"
-					  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+		      recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <help>A list of source ids of the protein sequences.</help>
             <suggest default="PF11_0344" />
         </datasetParam>
-		
-	</paramSet>
+
+
+        <stringParam name="accession" prompt="Accession" number="false">
+            <help>Sequence source ids from current or previous releases. Wild card is supported</help>
+            <suggest default="PF11_0344" />
+        </stringParam>
+
+
+    </paramSet>
 
 </wdkModel>

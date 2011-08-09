@@ -27,20 +27,33 @@
           Search for Protein Sequences
         </description>
 
-        <question name="ById" queryRef="SequenceIds.ById" 
-				  displayName="Sequence Id"
+
+        <question name="ByIdList" queryRef="SequenceIds.ByIdList" 
+				  displayName="Seq Id List"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
 			<![CDATA[
                 Find protein sequences by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="source_id, length"
-                           sorting="source_id asc"/>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
         </question>
 
 
-<!--
+        <question name="ByAccession" queryRef="SequenceIds.ByAccession" 
+                                  displayName="Seq Accession"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+                        <![CDATA[
+                Find protein sequences by the source id or the group name it belongs to.
+                        ]]>
+            </description>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
+        </question>
+
+
         <question name="ByKeyword" queryRef="SequenceIds.ByKeyword" 
 				  displayName="Keyword"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
@@ -49,22 +62,23 @@
                 Find protein sequences by the keyword.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
         </question>
 
 
-        <question name="ByPFamDomain" queryRef="SequenceIds.ByPFamDomain" 
-				  displayName="PFam"
+        <question name="ByPFamName" queryRef="SequenceIds.ByPFamName" 
+				  displayName="PFam Name"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
 			<![CDATA[
                 Find protein sequences by the PFam.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
         </question>
+
 
 
         <question name="ByTaxonomy" queryRef="SequenceIds.ByTaxonomy" 
@@ -72,14 +86,14 @@
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
 			<![CDATA[
-                Find protein sequences by the Phyletic pattern.
+                Find protein sequences by the Taxonomy abbreviation or taxon name.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
         </question>
 
-
+<!--
         <question name="ByBlast" queryRef="SequenceIds.ByBlast"
 				  displayName="BLAST"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">

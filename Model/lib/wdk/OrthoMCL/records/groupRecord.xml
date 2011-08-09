@@ -65,11 +65,27 @@
       <!-- Views -->
       <!-- =============================================================== -->
 
-            <view name="phyletic" displayName="Phyletic Pattern">
-            </view>
+            <summaryView name="phyletic" display="Phyletic Pattern"
+                         jsp="/wdkCustomization/jsp/results/phyletic.jsp"/>
 
-            <view name="biolayout" displayName="Biolayout Graph">
-            </view>
+
+            <recordView name="proteins" display="List of Proteins"
+                         jsp="/wdkCustomization/jsp/records/proteins.jsp"/>
+
+            <recordView name="phyletic" display="Phyletic Pattern"
+                         jsp="/wdkCustomization/jsp/records/phyletic.jsp"/>
+
+            <recordView name="pfam-domain" display="PFam Domain"
+                         jsp="/wdkCustomization/jsp/records/pfam-domain.jsp"/>
+
+
+<!--
+            <recordView name="biolayout" display="Biolayout"
+                         jsp="/wdkCustomization/jsp/records/biolayout.jsp"/>
+-->
+
+            <recordView name="msa" display="Multiple Sequence Alignment"
+                         jsp="/wdkCustomization/jsp/records/msa.jsp"/>
 
 
       <!-- =============================================================== -->
@@ -102,8 +118,50 @@
 				$$avg_evalue_mant$$E$$avg_evalue_exp$$
 				]]>
 				</text>
-			</textAttribute>
+	    </textAttribute>
+
+            <attributeQueryRef ref="GroupAttributes.MSA">
+                <columnAttribute name="msa" displayName="Multiple Sequence Alignment" internal="true" inReportMaker="false" />
+            </attributeQueryRef>
+
+            <attributeQueryRef ref="GroupAttributes.MaxSequenceLength">
+                <columnAttribute name="max_length" displayName="Longest Sequence" internal="true" inReportMaker="false" />
+            </attributeQueryRef>
+
+
+      <!-- =============================================================== -->
+      <!-- Tables -->
+      <!-- =============================================================== -->
+
+            <table name="TaxonCounts" internal="true" inReportMaker="false"
+                   displayName="TaxonCounts"
+                   queryRef="GroupTables.TaxonCounts">
+                <columnAttribute name="taxon_id" displayName="Taxon Id" />
+                <columnAttribute name="count" displayName="Count" />
+            </table>
+
+            <table name="Proteins"
+                   displayName="List of Proteins"
+                   queryRef="GroupTables.Proteins">
+                <columnAttribute name="source_id" displayName="Source Id" internal="true" />
+                <columnAttribute name="full_source_id" displayName="Accession" />
+                <columnAttribute name="taxon_name" displayName="Taxon" />
+                <columnAttribute name="length" displayName="Length" />
+                <columnAttribute name="previous_groups" displayName="Previous Groups" />
+                <columnAttribute name="description" displayName="Description" />
+            </table>
             
+            <table name="PFamDomains"
+                   displayName="Pfam Domain Architecture"
+                   queryRef="GroupTables.PFamDomains">
+                <columnAttribute name="source_id" displayName="Source Id" />
+                <columnAttribute name="primary_identifier" displayName="Primary Identifier" />
+                <columnAttribute name="secondary_identifier" displayName="Secondary Identifier" />
+                <columnAttribute name="remark" displayName="Remark" />
+                <columnAttribute name="start_min" displayName="End" />
+                <columnAttribute name="end_max" displayName="Start" />
+            </table>
+
         </recordClass>
 
     </recordClassSet>

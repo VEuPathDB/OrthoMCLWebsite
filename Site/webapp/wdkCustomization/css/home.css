@@ -1,0 +1,14 @@
+#main-content { clear: both; }
+#sidebar { float: left; width: 200px; margin: 3px; }
+
+#site-intro { padding: 10px; text-align: center; font-weight: bold; font-size: 16pt; }
+
+#search-bubbles { text-align: center; }
+#search-bubbles > ul, #search-bubbles > ul > li { display: inline-table; }
+#search-bubbles > ul > li { width: 250px; margin: 5px 20px 5px 20px; padding: 2px;}
+#search-bubbles > ul > li > a { font-size: 12pt; padding: 5px; } 
+#search-bubbles > ul > li > div { text-align: left; font-size: 10pt; padding: 3px; }
+#search-bubbles > ul > li > div div { margin: 0px 0px 3px 20px;  }
+#search-bubbles > ul > li li a { padding-left: 20px; background:url(../images/mag_glass.png) 0px -2px no-repeat; }
+#search-bubbles > ul > li li a.parent { background:url(../images/square-plus.gif) 0px 2px no-repeat; }
+#search-bubbles > ul > li li a.parent.opened { background:url(../images/square-minus.gif) 0px 2px no-repeat; }

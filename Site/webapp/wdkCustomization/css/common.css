@@ -1,0 +1,8 @@
+body { font-size: 10pt; }
+
+#header { text-align: right; clear: both; }
+#header #site-logo { float: left ; }
+#header #quick-search { margin-left: auto; }
+#header #quick-search input.search-box { width: 100px; }
+
+#menu { clear: both; position: relative; }

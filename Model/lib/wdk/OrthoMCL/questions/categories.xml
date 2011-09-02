@@ -4,66 +4,68 @@
   <!-- Ortholog Group Questions  -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
   
-    <category name="GroupRecordClasses.GroupRecordClass" displayName="Search for Groups" />
+    <searchCategory name="GroupRecordClasses.GroupRecordClass" displayName="Search for Groups" />
     
-    	<category name="group" displayName="Search for Groups"
-    	          parentRef="GroupRecordClasses.GroupRecordClass">
-		
-		<category name="group-keyword" displayName="Text, ID" parentRef="group">
+	<searchCategory name="group-keyword" displayName="Text, ID"
+                        parentRef="GroupRecordClasses.GroupRecordClass">
             <questionRef>GroupQuestions.ByNameList</questionRef>
             <questionRef>GroupQuestions.ByKeyword</questionRef>
-		</category>
+	</searchCategory>
 				
-		<category name="group-evolution" displayName="Evolution" parentRef="group">
+	<searchCategory name="group-evolution" displayName="Evolution"
+                        parentRef="GroupRecordClasses.GroupRecordClass">
      	    <questionRef>GroupQuestions.ByPhyleticPattern</questionRef>
-        </category>
+        </searchCategory>
 
-		<category name="group-pfam" displayName="Pfam Domains" parentRef="group">
+	<searchCategory name="group-pfam" displayName="Pfam Domains"
+                        parentRef="GroupRecordClasses.GroupRecordClass">
      	    <questionRef>GroupQuestions.ByPFamName</questionRef>
      	    <questionRef>GroupQuestions.ByPFamKeyword</questionRef>
-        </category>
+        </searchCategory>
 		
-		<category name="group-similarity" displayName="Similarity/Pattern" parentRef="group">
+	<searchCategory name="group-similarity" displayName="Similarity/Pattern"
+                        parentRef="GroupRecordClasses.GroupRecordClass">
      	    <questionRef>GroupQuestions.ByBlast</questionRef>
      	    <questionRef>GroupQuestions.ByMotif</questionRef>
-        </category>
+        </searchCategory>
 		
-		<category name="group-properties" displayName="Group Attributes" parentRef="group">
+	<searchCategory name="group-properties" displayName="Group Attributes"
+                        parentRef="GroupRecordClasses.GroupRecordClass">
      	    <questionRef>GroupQuestions.BySequenceCount</questionRef>
      	    <questionRef>GroupQuestions.ByGenomeCount</questionRef>
      	    <questionRef>GroupQuestions.ByPercentMatchPairs</questionRef>
      	    <questionRef>GroupQuestions.ByPercentIdentity</questionRef>
      	    <questionRef>GroupQuestions.ByPercentMatch</questionRef>
-        </category>
+        </searchCategory>
      
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
   <!-- Sequence Questions  -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
      
    
-      <category name="SequenceRecordClasses.SequenceRecordClass" displayName="Search for Sequence" />
+      <searchCategory name="SequenceRecordClasses.SequenceRecordClass" displayName="Search for Sequence" />
      
-     	<category name="sequence" displayName="Search for Sequences"
-    	          parentRef="SequenceRecordClasses.SequenceRecordClass">
-        </category>
-		
-		<category name="sequence-keyword" displayName="Text, Ids" parentRef="sequence">
+	<searchCategory name="sequence-keyword" displayName="Text, Ids"
+                        parentRef="SequenceRecordClasses.SequenceRecordClass">
             <questionRef>SequenceQuestions.ByIdList</questionRef>
             <questionRef>SequenceQuestions.ByKeyword</questionRef>
-       </category>
+       </searchCategory>
 
-		<category name="sequence-pfam" displayName="Pfam Domains" parentRef="sequence">
+	<searchCategory name="sequence-pfam" displayName="Pfam Domains"
+                        parentRef="SequenceRecordClasses.SequenceRecordClass">
      	    <questionRef>SequenceQuestions.ByPFamName</questionRef>
      	    <questionRef>SequenceQuestions.ByPFamKeyword</questionRef>
-        </category>
+        </searchCategory>
 		
-		<category name="sequence-similarity" displayName="Similarity/Pattern" parentRef="sequence">
+	<searchCategory name="sequence-similarity" displayName="Similarity/Pattern"
+                        parentRef="SequenceRecordClasses.SequenceRecordClass">
      	    <questionRef>SequenceQuestions.ByBlast</questionRef>
      	    <questionRef>SequenceQuestions.ByMotif</questionRef>
-        </category>
+        </searchCategory>
 		
-		<category name="sequence-properties" displayName="Sequence Attributes" parentRef="sequence">
+	<searchCategory name="sequence-properties" displayName="Sequence Attributes"
+                        parentRef="SequenceRecordClasses.SequenceRecordClass">
             <questionRef>SequenceQuestions.ByTaxonomy</questionRef>
-        </category>
+        </searchCategory>
      
 </wdkModel>

@@ -8,11 +8,32 @@
     
     	<category name="group" displayName="Search for Groups"
     	          parentRef="GroupRecordClasses.GroupRecordClass">
-            <questionRef>GroupQuestions.ByName</questionRef>
+		
+		<category name="group-keyword" displayName="Text, ID" parentRef="group">
+            <questionRef>GroupQuestions.ByNameList</questionRef>
             <questionRef>GroupQuestions.ByKeyword</questionRef>
-     	    <questionRef>GroupQuestions.ByPFamDomain</questionRef>
+		</category>
+				
+		<category name="group-evolution" displayName="Evolution" parentRef="group">
      	    <questionRef>GroupQuestions.ByPhyleticPattern</questionRef>
-     	    <questionRef>GroupQuestions.ByProperties</questionRef>
+        </category>
+
+		<category name="group-pfam" displayName="Pfam Domains" parentRef="group">
+     	    <questionRef>GroupQuestions.ByPFamName</questionRef>
+     	    <questionRef>GroupQuestions.ByPFamKeyword</questionRef>
+        </category>
+		
+		<category name="group-similarity" displayName="Similarity/Pattern" parentRef="group">
+     	    <questionRef>GroupQuestions.ByBlast</questionRef>
+     	    <questionRef>GroupQuestions.ByMotif</questionRef>
+        </category>
+		
+		<category name="group-properties" displayName="Group Attributes" parentRef="group">
+     	    <questionRef>GroupQuestions.BySequenceCount</questionRef>
+     	    <questionRef>GroupQuestions.ByGenomeCount</questionRef>
+     	    <questionRef>GroupQuestions.ByPercentMatchPairs</questionRef>
+     	    <questionRef>GroupQuestions.ByPercentIdentity</questionRef>
+     	    <questionRef>GroupQuestions.ByPercentMatch</questionRef>
         </category>
      
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -24,11 +45,25 @@
      
      	<category name="sequence" displayName="Search for Sequences"
     	          parentRef="SequenceRecordClasses.SequenceRecordClass">
-            <questionRef>SequenceQuestions.ById</questionRef>
+        </category>
+		
+		<category name="sequence-keyword" displayName="Text, Ids" parentRef="sequence">
+            <questionRef>SequenceQuestions.ByIdList</questionRef>
             <questionRef>SequenceQuestions.ByKeyword</questionRef>
+       </category>
+
+		<category name="sequence-pfam" displayName="Pfam Domains" parentRef="sequence">
+     	    <questionRef>SequenceQuestions.ByPFamName</questionRef>
+     	    <questionRef>SequenceQuestions.ByPFamKeyword</questionRef>
+        </category>
+		
+		<category name="sequence-similarity" displayName="Similarity/Pattern" parentRef="sequence">
+     	    <questionRef>SequenceQuestions.ByBlast</questionRef>
+     	    <questionRef>SequenceQuestions.ByMotif</questionRef>
+        </category>
+		
+		<category name="sequence-properties" displayName="Sequence Attributes" parentRef="sequence">
             <questionRef>SequenceQuestions.ByTaxonomy</questionRef>
-            <questionRef>SequenceQuestions.ByPFamDomain</questionRef>
-            <questionRef>SequenceQuestions.ByBlast</questionRef>
         </category>
      
 </wdkModel>

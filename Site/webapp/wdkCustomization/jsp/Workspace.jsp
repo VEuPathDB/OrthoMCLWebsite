@@ -25,7 +25,7 @@
 
 <c:set var="headElement"></c:set>
 
-<site:header refer="result" title="My Strategies"/>
+<site:header refer="summary" title="My Strategies"/>
 
 <%-- Build URL for sharing strategies --%>
 <c:set var="scheme" value="${pageContext.request.scheme}" />

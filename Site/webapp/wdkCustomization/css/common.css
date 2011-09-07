@@ -6,3 +6,5 @@ body { font-size: 10pt; }
 #header #quick-search input.search-box { width: 100px; }
 
 #menu { clear: both; position: relative; }
+
+#main-content { clear: both; }

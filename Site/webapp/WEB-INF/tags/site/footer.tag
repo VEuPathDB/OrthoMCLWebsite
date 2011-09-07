@@ -16,22 +16,13 @@
 
 <c:set var="releaseDate" value="${applicationScope.wdkModel.releaseDate}" />
 <c:set var="inputDateFormat" value="dd MMMM yyyy HH:mm"/>
-<fmt:setLocale value="en-US"/><%-- req. for date parsing when client browser (e.g. curl) doesn't send locale --%>
+<fmt:setLocale value="en-US"/><%-- req. for date parsing when client browser (e.g. curl) does not send locale --%>
 <fmt:parseDate pattern="${inputDateFormat}" var="rlsDate" value="${releaseDate}"/> 
 <fmt:formatDate var="releaseDate_formatted" value="${rlsDate}" pattern="MMMM d, yyyy"/>
 <%-- http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html --%>
 <fmt:formatDate var="copyrightYear" value="${rlsDate}" pattern="yyyy"/>
 
-
-<%------------ divs defined in header.tag for all pages but home/home2  -----------%>
-<c:if test="${refer != 'home' && refer != 'home2' && refer != 'customSummary'}">
-</div> <%-- class="innertube"   --%>
-</div> <%-- id="contentcolumn2" --%>
-</div> <%-- id="contentwrapper" --%>
-
-</c:if>
-
-<%--------------------------------------------%>
+</div> <!-- END of div#main-content, which is defined in the header -->
 
 <hr />
 

@@ -19,7 +19,7 @@
 <table id="quick-search">
 <tr>
 <td id="group-quicksearch">
-  <form method="get" action="/processQuestionSetsFlat.do">
+  <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">
     <input type="hidden" name="questionFullName" value="${groupQuestion.fullName}"/>
     <input type="hidden" name="questionSubmit" value="Get Answer"/>
     <label>
@@ -40,7 +40,7 @@
 <c:set var="sourceIdParam" value="${groupQuestion.paramsMap['accession']}"/>
 
 <td id="sequence-quicksearch">
-  <form method="get" action="/processQuestionSetsFlat.do">
+  <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">
     <input type="hidden" name="questionFullName" value="${sequenceQuestion.fullName}"/>
     <input type="hidden" name="questionSubmit" value="Get Answer"/>
     <label>

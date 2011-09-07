@@ -53,3 +53,5 @@
 </div>
 
 <site:menubar refer="${refer}" />
+
+<div id="main-content"><!-- the close DIV is defined in footer. -->

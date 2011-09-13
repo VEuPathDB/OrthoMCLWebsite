@@ -36,6 +36,8 @@
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
         <question name="ByAccession" queryRef="GroupIds.ByAccession" 
@@ -46,6 +48,8 @@
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
         <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
@@ -56,6 +60,8 @@
                 Find Orthologous groups by the keyword.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -67,6 +73,8 @@
                 Find Orthologous groups by the PFam.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -78,6 +86,8 @@
                 Find Orthologous groups by the PFam.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -89,6 +99,8 @@
                 Find Orthologous groups by the number of sequences a group has
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -100,6 +112,8 @@
                 Find Orthologous groups by the number of genomes a group has
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -111,6 +125,8 @@
                 Find Orthologous groups by the percentage match pairs.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -122,6 +138,8 @@
                 Find Orthologous groups by the average percentage identities.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -133,11 +151,11 @@
                 Find Orthologous groups by the average percentage matches.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
-
-
-<!--
+		
         <question name="ByPhyleticPattern" queryRef="GroupIds.ByPhyleticPattern" 
 				  displayName="Phyletic"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
@@ -146,10 +164,11 @@
                 Find Orthologous groups by the Phyletic pattern.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
+<!--
 
         <question name="ByProperties" queryRef="GroupIds.ByProperties"
 				  displayName="Group Properties"
@@ -159,8 +178,8 @@
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 -->
 

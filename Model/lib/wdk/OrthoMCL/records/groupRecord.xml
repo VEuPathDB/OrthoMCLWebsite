@@ -103,6 +103,7 @@
             </primaryKeyAttribute>
 
             <attributeQueryRef ref="GroupAttributes.GroupAttrs">  
+                <columnAttribute name="group_name" displayName="Group Name" internal="true" />
                 <columnAttribute name="number_of_members" displayName="#Sequences" />
                 <columnAttribute name="number_of_match_pairs" displayName="#Edges" />
                 <columnAttribute name="avg_percent_identity" displayName="Average % Identity" />

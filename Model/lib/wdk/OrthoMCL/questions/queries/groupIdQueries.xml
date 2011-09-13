@@ -246,6 +246,18 @@ WHERE og.avg_percent_match >= $$percent_min$$
         </sqlQuery>
 
 
+        <sqlQuery name="ByPhyleticPattern">
+            <paramRef ref="groupParams.phyletic_expression"/>
+            <column name="group_name"/>
+            <sql>
+                <![CDATA[
+SELECT og.name AS group_name
+FROM apidb.OrthologGroup og, ($$phyletic_expression$$) ex
+WHERE og.ortholog_group_id = ex.ortholog_group_id
+                ]]>
+            </sql>
+        </sqlQuery>
+
     </querySet>
 
 </wdkModel>

@@ -76,6 +76,7 @@
             </primaryKeyAttribute>
 
             <attributeQueryRef ref="SequenceAttributes.SequenceAttrs">  
+                <columnAttribute name="source_id" displayName="Source ID" internal="true" />
                 <columnAttribute name="length" displayName="Length" />
                 <columnAttribute name="product" displayName="Product" />
                 <columnAttribute name="molecular_weight" displayName="Molecular Weight" />

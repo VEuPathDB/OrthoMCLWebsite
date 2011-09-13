@@ -57,9 +57,7 @@
                                  displayName="ID">
                 <columnRef>helper_id</columnRef>
                 <text>
-                    <![CDATA[
-                    $$helper_id$$
-                    ]]>
+                    <![CDATA[ ]]>
                 </text>                
             </primaryKeyAttribute>
 

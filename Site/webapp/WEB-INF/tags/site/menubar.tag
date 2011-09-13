@@ -3,9 +3,9 @@
 <%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
 
 <%@ attribute name="refer" 
-                          type="java.lang.String"
-                          required="false" 
-                          description="Page calling this tag"
+              type="java.lang.String"
+              required="false" 
+              description="Page calling this tag"
 %>
 
 <div id="menu">
@@ -15,13 +15,13 @@
     <li class="${current}"><a href="<c:url value='/' />" title='Return to OrthoMCL home page'><span>Home</span></a></li>
 
     <%-- search categories --%>
-    <c:set var="current" value="${(refer == 'search') ? 'current' : ''}" />
+    <c:set var="current" value="${(refer == 'question') ? 'current' : ''}" />
     <li class="${current}"><a class="parent" title="Start a new search strategy."><span>New Search</span></a>
       <div><wdk:searchCategories /></div>
     </li>
 
     <%-- strategies --%>
-    <c:set var="current" value="${(refer == 'result') ? 'current' : ''}" />
+    <c:set var="current" value="${(refer == 'summary') ? 'current' : ''}" />
     <li class="${current}"><a class="parent" href="<c:url value='/showApplication.do'/>" title="Access your Search Strategies Workspace"><span>My Strategies</span></a>
       <div><ul>
         <li><a href="<c:url value='/showApplication.do?tag=opened'/>" title="Show your currently open strategies"><span>Opened Strategies</span></a></li>

@@ -3,10 +3,12 @@ package org.orthomcl.model.phyletic;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
@@ -23,6 +25,8 @@ public class ExpressionParamHandler implements ParamHandler {
             + " FROM apidb.GroupTaxonMatrix";
 
     private static final String COLUMN_PREFIX = "column";
+
+    private static final Logger logger = Logger.getLogger(ExpressionParamHandler.class);
 
     private final ExpressionParser parser;
     private Map<String, Integer> terms;
@@ -46,6 +50,8 @@ public class ExpressionParamHandler implements ParamHandler {
 
     public String transform(User user, String internalValue)
             throws WdkUserException {
+        logger.debug("transforming phyletic param: " + internalValue);
+
         // remove the enclosing quotes
         if (internalValue.startsWith("'") && internalValue.endsWith("'"))
             internalValue =
@@ -93,12 +99,17 @@ public class ExpressionParamHandler implements ParamHandler {
             sql.append(composeSql(booleanNode.getRight()));
         } else {
             LeafNode leaf = (LeafNode) node;
-            for (String term : leaf.getTerms()) {
-                if (sql.length() > 1) sql.append(" + ");
+            List<String> terms = leaf.getTerms();
+            if (terms.size() > 0) sql.append("(");
+            StringBuilder sqlTerms = new StringBuilder();
+            for (String term : terms) {
+                if (sqlTerms.length() > 1) sqlTerms.append(" + ");
                 String column = getColumn(term, leaf.isOnSpecies());
-                sql.append(column);
+                sqlTerms.append(column);
             }
-            sql.append(") " + leaf.getCondition() + leaf.getCount());
+            sql.append(sqlTerms);
+            if (terms.size() > 0) sql.append(")");
+            sql.append(" " + leaf.getCondition() + leaf.getCount());
         }
         sql.append(")");
         return sql.toString();

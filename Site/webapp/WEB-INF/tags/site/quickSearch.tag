@@ -36,8 +36,8 @@
 
 <%-- SEQUENCE --%>
 <c:set var="sequenceSet" value="${questionSets['SequenceQuestions']}"/>
-<c:set var="sequenceQuestion" value="${groupSet.questionsMap['ByAccession']}"/>
-<c:set var="sourceIdParam" value="${groupQuestion.paramsMap['accession']}"/>
+<c:set var="sequenceQuestion" value="${sequenceSet.questionsMap['ByAccession']}"/>
+<c:set var="sourceIdParam" value="${sequenceQuestion.paramsMap['accession']}"/>
 
 <td id="sequence-quicksearch">
   <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">

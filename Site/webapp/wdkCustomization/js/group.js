@@ -4,11 +4,6 @@ var COOKIE_SHOW_PATTERN = "show_pattern";
 var COOKIE_SHOW_LABEL = "show_label";
 var COOKIE_TAXON_PREFIX = "taxon_";
 
-$(document).ready(function() {
-    document.groupManager = new GroupManager();
-    document.groupManager.initialize();
-});
-
 function Taxon(id) {
     this.parent = null;
     this.id = id;

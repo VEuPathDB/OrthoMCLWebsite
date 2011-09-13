@@ -10,10 +10,7 @@
 <c:set var="question" value="${wdkStep.question}" />
 <c:set var="wdkAnswer" value="${wdkStep.answerValue}"/>
 <c:set var="answerRecords" value="${wdkAnswer.records}" />
-
-
-<script type="text/javascript" src="<c:url value='/wdkCustomization/js/group.js' />"></script>
-
+<c:set var="rcName" value="${question.recordClass.fullName}" />
 
 <%-- load the taxon info --%>
 <c:set var="helperQuestions" value="${wdkModel.questionSetsMap['HelperQuestions']}" />
@@ -33,6 +30,14 @@
          common-name="${row['common_name']}">${row['name']}</div>
   </c:forEach>
 </div>
+
+<script>
+$(function() {
+    document.groupManager = new GroupManager();
+    document.groupManager.initialize();
+});
+</script>
+
 
 <div id="taxon-display"></div>
 
@@ -104,7 +109,14 @@
   </c:choose>
 
   <c:set value="${record.primaryKey}" var="primaryKey"/>
-  <td width="100">${primaryKey}</td>
+  <c:set var="pkValues" value="${primaryKey.values}" />
+  <c:set var="recordLinkKeys" value="" />
+  <c:forEach items="${pkValues}" var="pkValue">
+      <c:set var="recordLinkKeys" value="${recordLinkKeys}&${pkValue.key}=${pkValue.value}" />
+  </c:forEach>
+  <td width="100">
+    <a href="showRecord.do?name=${rcName}${recordLinkKeys}">${primaryKey}</a>
+  </td>
 
   <%-- load the taxon count --%>
   <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}" />

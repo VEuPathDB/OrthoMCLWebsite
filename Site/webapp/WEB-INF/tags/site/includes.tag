@@ -20,7 +20,24 @@
 <%-- scripts & styles that are used on home page only --%>
 <c:if test="${refer == 'home'}">
 
-<script type="text/javascript" src='<c:url value="/wdkCustomization/js/home.js"/>'></script>
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/home.js"/>'></script>
 
-<link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/home.css' />">
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/home.css' />">
+</c:if>
+
+
+<c:if test="${refer == 'summary'}">
+
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/group.js"/>'></script>
+
+
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
+</c:if>
+
+<c:if test="${refer == 'summary' || refer == 'question'}">
+
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/ppform.js"/>'></script>
+
+
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/ppform.css' />">
 </c:if>

@@ -53,12 +53,16 @@
       <!-- Reporters -->  
       <!-- =============================================================== -->
             
-            <reporter name="tabular" displayName="Summary - Tab delimited"
+            <reporter name="tabular" displayName="Summary - Choose columns only, tab delimited"
                       implementation="org.gusdb.wdk.model.report.TabularReporter">
             </reporter>
-			
-            <reporter name="detail-text" displayName="Detail - Text"
-                      implementation="org.gusdb.wdk.model.report.FullRecordReporter">
+
+            <reporter name="xml" displayName="XML: choose from columns and/or tables"
+                      implementation="org.gusdb.wdk.model.report.XMLReporter">
+            </reporter>
+
+            <reporter name="json" displayName="json: choose from columns and/or tables"
+                      implementation="org.gusdb.wdk.model.report.JSONReporter">
             </reporter>
 
       <!-- =============================================================== -->

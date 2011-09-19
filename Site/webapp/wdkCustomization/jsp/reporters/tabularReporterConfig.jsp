@@ -14,7 +14,7 @@
 
 
 <!-- display page header -->
-<site:header banner="Create and download a Report in Tabular Format" />
+<site:header title="Create and download a Report in Tabular Format" />
 
 <!-- display description for page -->
 <p><b>Generate a tab delimited report of your query result.  Select columns to include in the report.  Optionally include a first line with column names</b></p>

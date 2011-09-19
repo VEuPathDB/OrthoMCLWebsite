@@ -31,7 +31,7 @@ function makeSelection(state)
 
 
 <!-- display page header -->
-<site:header banner="Create and download a Full Records Report" />
+<site:header text="Create and download a Full Records Report" />
 
 <!-- display description for page -->
 <p><b>Generate a report that contents the complete information for each record.  Select columns to include in the report.</b></p>

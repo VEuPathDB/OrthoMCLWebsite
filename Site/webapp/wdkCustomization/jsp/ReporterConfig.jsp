@@ -12,7 +12,7 @@
 
 
 <!-- display page header -->
-<site:header banner="Download Results" />
+<site:header title="Download Results" />
 
 <table border="0" width="100%" cellpadding="1" cellspacing="0" bgcolor="white" class="thinTopBorders">
 <tr><td bgcolor="white" valign="top">

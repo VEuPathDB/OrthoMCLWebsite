@@ -314,7 +314,7 @@ WHERE ogd.ortholog_group_id = ?
 <![CDATA[ 
 SELECT eas.source_id, eas.name, eas.description,
        eas.length, ot.name, orr.linkout_url, ot.three_letter_abbrev, 
-       (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')
+       (SELECT apidb.tab_to_string(CAST(COLLECT(DISTINCT ref.primary_identifier) AS apidb.varchartab), ', ')
         FROM Sres.DbRef ref, 
              Sres.ExternalDatabase db, 
              Sres.ExternalDatabaseRelease dbr,
@@ -528,7 +528,7 @@ AND ogs.aa_sequence_id=$seq_id
 SELECT eas.source_id, eas.secondary_identifier, 
 eas.description, eas.length, ot.name,
 orr.linkout_url, og.name, og.ortholog_group_id, ot.three_letter_abbrev, 
-       (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')
+       (SELECT apidb.tab_to_string(CAST(COLLECT(DISTINCT ref.primary_identifier) AS apidb.varchartab), ', ')
         FROM Sres.DbRef ref, 
              Sres.ExternalDatabase db, 
              Sres.ExternalDatabaseRelease dbr,
@@ -722,7 +722,7 @@ WHERE ogs.aa_sequence_id = seqref.aa_sequence_id
 SELECT eas.source_id, orr.linkout_url, 
        ot.name, og.name,
        eas.description, eas.length, eas.secondary_identifier, eas.sequence,
-       (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')
+       (SELECT apidb.tab_to_string(CAST(COLLECT(DISTINCT ref.primary_identifier) AS apidb.varchartab), ', ')
         FROM Sres.DbRef ref, 
              Sres.ExternalDatabase db, 
              Sres.ExternalDatabaseRelease dbr,

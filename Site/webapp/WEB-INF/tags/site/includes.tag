@@ -9,6 +9,7 @@
 
 <%-- scripts & styles that are applied to all pages --%>
 <script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/apycom-menu.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/wdkCustomization/js/common.js"/>'></script>
 
 
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css' />">

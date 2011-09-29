@@ -4,6 +4,8 @@
 #header #quick-search { margin-left: auto; }
 #header #quick-search input.search-box { width: 100px; }
 
+#user-control #login { display: none; }
+
 #menu { clear: both; position: relative; z-index: 100; }
 
 #main-content { clear: both; }

@@ -62,7 +62,7 @@
 
     <%-- community --%>
     <c:set var="current" value="${(refer == 'community') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Community"><span>Data Summary</span></a>
+    <li class="${current}"><a class="parent" title="Community"><span>Community</span></a>
       <div><ul>
         <li><a href="http://twitter.com" title="Follow us on Twitter"><span>Twitter</span></a></li>
         <li><a href="http://www.facebook.com" title="Follow us on Facebook"><span>Facebook</span></a></li>

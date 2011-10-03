@@ -31,7 +31,7 @@
 
     <%-- strategies --%>
     <c:set var="current" value="${(refer == 'basket') ? 'current' : ''}" />
-    <li class="${current}"><a href="<c:url value='/showApplication.doi?tab=basket'/>" title="Access your baskets"><span>My Baskets</span></a></li>
+    <li class="${current}"><a href="<c:url value='/showApplication.do?tag=basket'/>" title="Access your baskets"><span>My Baskets</span></a></li>
 
     <%-- tools --%>
     <c:set var="current" value="${(refer == 'tool') ? 'current' : ''}" />

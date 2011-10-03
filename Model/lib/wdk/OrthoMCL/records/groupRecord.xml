@@ -42,8 +42,7 @@
     <recordClassSet name="GroupRecordClasses">
     
         <recordClass name="GroupRecordClass"
-                     type="Group"
-                     allRecordsQueryRef="GroupAttributes.AllGroups">
+                     type="Group">
             
             <testParamValues>
                <paramValue name="group_name">9644248</paramValue>

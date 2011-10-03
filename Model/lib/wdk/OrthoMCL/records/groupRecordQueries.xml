@@ -34,15 +34,6 @@
             SELECT count(*) FROM apidb.OrthologGroup
         </testRowCountSql>
 
-        <sqlQuery name="AllGroups">
-            <column name="group_name"/>
-            <sql>
-			<![CDATA[
-                SELECT g.name AS group_name
-				FROM apidb.OrthologGroup g
-			]]>
-            </sql>
-        </sqlQuery>
 
         <sqlQuery name="GroupAttrs">
             <column name="group_name"/>

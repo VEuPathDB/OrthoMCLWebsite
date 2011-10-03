@@ -11,17 +11,21 @@
 <span id="user-control">
   <c:choose>
     <c:when test="${wdkUser != null && wdkUser.guest != true}">
-      <c:set var="userName" value="${wdkUser.firstName} ${wdkUser.lastName}}" />
-      <a href="<c:url value='/profile.jsp'/>">${userName}'s Profile</a> |
+      <c:set var="userName" value="${wdkUser.firstName} ${wdkUser.lastName}" />
+      <a href="<c:url value='/profile.jsp'/>"><span id="user-name">${userName}</span>'s Profile</a> |
       <a href="javascript:void(0)" onclick="logout()">Logout</a>
+      <div id="logout">
+        <form name="logoutForm" method="POST" action="<c:url value='/processLogout.do'/>">
+        </form>
+      </div>
     </c:when>
 
     <c:otherwise>
-      <a href="javascript:void(0)" onclick="logout()">Login</a> |
+      <a href="javascript:void(0)" onclick="login(this)">Login</a> |
       <a href="<c:url value='/register.do'/>">Register</a>
       <div id="login">
         <div class="title">OrthoMCL Account Login</div>
-        <form action="<c:url value='/processLogin.do'/>" method="POST" name="loginForm">
+        <form name="loginForm" method="POST" action="<c:url value='/processLogin.do'/>">
           <table>
             <tr>
               <th>Email:</th>
@@ -39,8 +43,8 @@
             <tr>
               <td align="center" colspan="2">
                 <span class="small">
-                  <input type="submit" style="width:76px;" id="login" value="Login">  
-                  <input type="submit" onclick="jQuery('#loginForm input:hidden[name=refererUrl]').val(window.location);jQuery.unblockUI();return false;" style="width:76px;" value="Cancel">             
+                  <input type="submit" class="button" value="Login">  
+                  <input type="submit" class="button" value="Cancel">             
                 </span>
               </td>
             </tr>

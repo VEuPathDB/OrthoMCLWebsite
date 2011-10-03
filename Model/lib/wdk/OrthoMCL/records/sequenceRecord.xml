@@ -42,8 +42,7 @@
     <recordClassSet name="SequenceRecordClasses">
     
         <recordClass name="SequenceRecordClass"
-                     type="Sequence"
-                     allRecordsQueryRef="SequenceAttributes.AllSequences">
+                     type="Sequence">
             
             <testParamValues>
                <paramValue name="est_id">9644248</paramValue>

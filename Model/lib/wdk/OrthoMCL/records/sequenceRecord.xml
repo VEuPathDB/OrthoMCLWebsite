@@ -95,6 +95,10 @@
             <attributeQueryRef ref="SequenceAttributes.SequenceGroup">
                 <columnAttribute name="group_name" displayName="Group"/>
             </attributeQueryRef>
+            
+            <attributeQueryRef ref="SequenceAttributes.SequenceSequence">
+                <columnAttribute name="sequence" displayName="Sequence" internal="false"/>
+            </attributeQueryRef>
 
 
 

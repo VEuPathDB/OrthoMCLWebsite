@@ -80,6 +80,16 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
+        <sqlQuery name="SequenceSequence">
+            <column name="source_id"/>
+            <column name="sequence"/>
+            <sql>
+			<![CDATA[
+            SELECT eas.source_id, eas.sequence FROM dots.ExternalAaSequence eas
+ 			]]>
+            </sql>
+        </sqlQuery>
+
     </querySet>
 
     <querySet name="SequenceTables" queryType="table">

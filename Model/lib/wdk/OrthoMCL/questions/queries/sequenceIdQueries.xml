@@ -155,6 +155,40 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
+    <processQuery name="BySimilarity" local="true"
+             processName="org.orthomcl.model.wsfplugin.BlastPlugin">
+
+        <testParamValues>
+            <paramValue name="BlastAlgorithm">blastp</paramValue>
+            <paramValue name="BlastQuerySequence">ESEGARVGTPEGTDNNVRRPEEEKGREGERNGFLKSCALCLRGLGCAWCCQDFDAYELS</paramValue>
+        </testParamValues>
+
+       <paramRef ref="sequenceParams.BlastAlgorithm" />
+       <paramRef ref="sequenceParams.BlastQuerySequence"/>
+       <paramRef ref="sequenceParams.-e"/>
+       <paramRef ref="sequenceParams.-v"/>
+       <paramRef ref="sequenceParams.-b"/>
+       <paramRef ref="sequenceParams.-filter" quote="false" />
+       <wsColumn name="source_id" width="100"/>
+       <wsColumn name="e_value" columnType="number" width="30"/>
+       <wsColumn name="score" columnType="number" width="30"/>
+    </processQuery>
+
+    <processQuery name="ByMotifSearch" local="true"
+                  processName="org.orthomcl.model.wsfplugin.MotifPlugin">
+      <testParamValues>
+        <paramValue name="motif_expression">CC6+RK</paramValue>
+        <paramValue name="organism">Plasmodium falciparum 3D7</paramValue>
+      </testParamValues>
+
+       <paramRef ref="sequenceParams.motif_expression" />
+       <paramRef ref="sharedParams.organism" />
+       <wsColumn name="source_id" width="100" />
+       <wsColumn name="Locations" width="3999"/>
+       <wsColumn name="MatchCount" width="10"/>
+       <wsColumn name="Sequence" width="3999"/>
+    </processQuery>
+
     </querySet>
 
 </wdkModel>

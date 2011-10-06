@@ -33,7 +33,7 @@
             <help>
              Choose one or more organisms to search with the given motif
             </help>
-            <suggest default="Plasmodium falciparum 3D7"/>
+            <suggest default="pfal"/>
         </flatVocabParam>
 
     </paramSet>
@@ -47,7 +47,7 @@
             <column name="internal" />
             <sql>
                 <![CDATA[ 
-SELECT t.name AS display, t.three_letter_abbrev AS term, t.taxon_id AS internal,
+SELECT t.name AS display, t.three_letter_abbrev AS term, t.three_letter_abbrev AS internal,
        (SELECT three_letter_abbrev FROM apidb.OrthomclTaxon p 
         WHERE p.orthomcl_taxon_id = t.parent_id) AS parentTerm
 FROM apidb.OrthomclTaxon t

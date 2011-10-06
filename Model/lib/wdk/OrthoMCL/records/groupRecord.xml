@@ -148,7 +148,7 @@
                    displayName="List of Proteins"
                    queryRef="GroupTables.Proteins">
                 <columnAttribute name="source_id" displayName="Source Id" internal="true" />
-                <columnAttribute name="full_source_id" displayName="Accession" />
+                <columnAttribute name="accession_id" displayName="Accession" />
                 <columnAttribute name="taxon_name" displayName="Taxon" />
                 <columnAttribute name="length" displayName="Length" />
                 <columnAttribute name="previous_groups" displayName="Previous Groups" />

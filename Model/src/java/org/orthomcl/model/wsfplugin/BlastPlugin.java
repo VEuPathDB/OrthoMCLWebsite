@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +38,8 @@ public class BlastPlugin extends AbstractPlugin {
     private static final String PARAM_QUERY_SEQUENCE = "BlastQuerySequence";
 
     private static final String COLUMN_ID = "source_id";
-    private static final String COLUMN_E_VALUE = "e_value";
+    private static final String COLUMN_EVALUE_MANT = "evalue_mant";
+    private static final String COLUMN_EVALUE_EXP = "evalue_exp";
     private static final String COLUMN_SCORE = "score";
 
     private static final String FIELD_APP_PATH = "AppPath";
@@ -49,6 +51,8 @@ public class BlastPlugin extends AbstractPlugin {
     private static final String URL_GROUP = "showRecord.do?name=GroupRecordClasses.GroupRecordClass&group_name=";
     private static final String FLAG_NO_GROUP = "no_group";
 
+    private static final DecimalFormat formatter = new DecimalFormat("0.###E0");
+ 
     private String appPath;
     private String databasePath;
     private File tempDir;
@@ -76,7 +80,7 @@ public class BlastPlugin extends AbstractPlugin {
      * @see org.gusdb.wsf.plugin.Plugin#getColumns()
      */
     public String[] getColumns() {
-        return new String[] { COLUMN_ID, COLUMN_E_VALUE, COLUMN_SCORE };
+        return new String[] { COLUMN_ID, COLUMN_EVALUE_MANT, COLUMN_EVALUE_EXP, COLUMN_SCORE };
     }
 
     /*
@@ -239,8 +243,9 @@ public class BlastPlugin extends AbstractPlugin {
                 columns[columnIndexes.get(COLUMN_ID)] = sourceId;
                 String score = parts[parts.length - 2];
                 columns[columnIndexes.get(COLUMN_SCORE)] = score;
-                String evalue = parts[parts.length - 1];
-                columns[columnIndexes.get(COLUMN_E_VALUE)] = evalue;
+                String[] evalue = parseEValue(parts[parts.length - 1]);
+                columns[columnIndexes.get(COLUMN_EVALUE_MANT)] = evalue[0];
+                columns[columnIndexes.get(COLUMN_EVALUE_EXP)] = evalue[1];
                 sequences.put(sourceId, columns);
             } else {
                 message.append(line).append(newline);
@@ -254,6 +259,16 @@ public class BlastPlugin extends AbstractPlugin {
             i++;
         }
         return results;
+    }
+
+    private String[] parseEValue(String evalue) {
+        evalue = evalue.toUpperCase();
+        if (evalue.indexOf("E") < 0) {
+            evalue = formatter.format(Double.valueOf(evalue));
+        }
+        String[] parts = evalue.split("E");
+        if (parts[0].length() == 0) parts[0] = "1";
+        return parts;
     }
 
     /**

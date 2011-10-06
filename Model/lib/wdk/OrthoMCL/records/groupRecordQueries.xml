@@ -122,7 +122,7 @@ GROUP BY og.name, ot.orthomcl_taxon_id
         <sqlQuery name="Proteins">
             <column name="group_name"/>
             <column name="source_id"/>
-            <column name="full_source_id"/>
+            <column name="accession_id"/>
             <column name="taxon_name"/>
             <column name="length"/>
             <column name="previous_groups"/>
@@ -130,8 +130,8 @@ GROUP BY og.name, ot.orthomcl_taxon_id
             <sql>
                         <![CDATA[
 SELECT og.name AS group_name,
-       eas.source_id,
-       ot.three_letter_abbrev || '|' || eas.source_id AS full_source_id,
+       eas.secondary_identifier AS source_id,
+       eas.source_id AS accession_id,
        ot.name AS taxon_name,
        eas.length,
        eas.description,

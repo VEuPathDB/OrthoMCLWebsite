@@ -23,11 +23,6 @@
      	    <questionRef>GroupQuestions.ByPFamKeyword</questionRef>
         </searchCategory>
 		
-	<searchCategory name="group-similarity" displayName="Similarity/Pattern"
-                        parentRef="GroupRecordClasses.GroupRecordClass">
-     	    <questionRef>GroupQuestions.ByBlast</questionRef>
-     	    <questionRef>GroupQuestions.ByMotif</questionRef>
-        </searchCategory>
 		
 	<searchCategory name="group-properties" displayName="Group Attributes"
                         parentRef="GroupRecordClasses.GroupRecordClass">

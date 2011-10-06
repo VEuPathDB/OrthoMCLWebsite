@@ -93,16 +93,16 @@
                            sorting="primary_key asc"/>
         </question>
 
-    <question name="BySimilarity"
+    <question name="ByBlast"
          displayName="BLAST"
          shortDisplayName="BLAST"
          searchCategory="Similarity/Pattern"
-         queryRef="SequenceIds.BySimilarity"
+         queryRef="SequenceIds.ByBlast"
          recordClassRef="SequenceRecordClasses.SequenceRecordClass"
          fullAnswer="true">
         <attributesList
-         summary="organism,product,score,e_value"
-         sorting="e_value asc"
+         summary="organism,product,score,evalue"
+         sorting="evalue asc"
          /> 
          <summary>
            Find genes that have BLAST similarity to your input sequence.
@@ -115,17 +115,31 @@
           ]]>
          </description>
 
+         <summaryView name="blast" display="BLAST" default="true"
+                      jsp="/wdkCustomization/jsp/results/blast.jsp" />
+
          <dynamicAttributes>
-             <columnAttribute name="e_value" displayName="E-Value"/>
+             <columnAttribute name="evalue_mant" displayName="E-Value-Mant"
+                              internal="true" inReportMaker="false"/>
+             <columnAttribute name="evalue_exp" displayName="E-Value-Exp"
+                              internal="true" inReportMaker="false"/>
              <columnAttribute name="score" displayName="Score"/>
+             <textAttribute name="evalue" displayName="E-Value">
+                 <display>
+                     <![CDATA[
+                     <span style="display:none">$$evalue_exp$$ $$evalue_mant$$</span>$$evalue_mant$$E$$evalue_exp$$
+                     ]]>
+                 </display>
+                 <text>$$evalue_mant$$E$$evalue_exp$$</text>
+             </textAttribute>
          </dynamicAttributes>
     </question>
 
-    <question name="ByMotifSearch"
+    <question name="ByMotif"
          displayName="Protein Motif Pattern"
          shortDisplayName="Prot Motif"
          searchCategory="Similarity/Pattern"
-         queryRef="SequenceIds.ByMotifSearch"
+         queryRef="SequenceIds.ByMotif"
          recordClassRef="SequenceRecordClasses.SequenceRecordClass">
         <attributesList
          summary="organism,product,MatchCount,Sequence"

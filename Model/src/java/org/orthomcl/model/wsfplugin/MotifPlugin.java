@@ -57,7 +57,7 @@ public class MotifPlugin extends AbstractPlugin {
     private static final String PARAM_EXPRESSION = "motif_expression";
 
     // column definitions for returnd results
-    private static final String COLUMN_SOURCE_ID = "SourceID";
+    private static final String COLUMN_SOURCE_ID = "source_id";
     private static final String COLUMN_LOCATIONS = "Locations";
     private static final String COLUMN_MATCH_COUNT = "MatchCount";
     private static final String COLUMN_SEQUENCE = "Sequence";
@@ -154,9 +154,10 @@ public class MotifPlugin extends AbstractPlugin {
 
         // open the database and get a resultSet
         Set<Match> matches = new HashSet<Match>();
-        String sql = "SELECT secondary_identifier AS source_id, sequence "
-                + " FROM dots.ExternalAaSequence eas        "
-                + " WHERE taxon_id IN (" + organisms + ")";
+        String sql = "SELECT eas.secondary_identifier AS source_id, eas.sequence "
+                + " FROM dots.ExternalAaSequence eas, apidb.OrthomclTaxon ot "
+                + " WHERE ot.three_letter_abbrev IN (" + organisms + ")"
+                + "   AND ot.taxon_id = eas.taxon_id";
         DataSource dataSource = wdkModel.getQueryPlatform().getDataSource();
         ResultSet resultSet = null;
         try {
@@ -167,18 +168,19 @@ public class MotifPlugin extends AbstractPlugin {
                 String sequence = resultSet.getString("sequence");
 
                 findMatches(matches, searchPattern, sourceId, sequence);
-
+                if (matches.size() >= MAX_MATCH)
+                    throw new WsfServiceException("The number of matches "
+                           + "exceeds the system limit, please refine your "
+                           + "search pattern to make it more specific."); 
             }
             String[] orderedColumns = request.getOrderedColumns();
             String[][] result = prepareResult(matches, orderedColumns);
             WsfResponse wsfResponse = new WsfResponse();
             wsfResponse.setResult(result);
             return wsfResponse;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new WsfServiceException(ex);
-        }
-        finally {
+        } finally {
             SqlUtils.closeResultSet(resultSet);
         }
     }

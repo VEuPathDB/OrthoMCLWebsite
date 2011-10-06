@@ -32,7 +32,9 @@
   <script type="text/javascript" src='<c:url value="/wdkCustomization/js/group.js"/>'></script>
 
 
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/results.css' />">
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
+
 </c:if>
 
 <c:if test="${refer == 'summary' || refer == 'question'}">

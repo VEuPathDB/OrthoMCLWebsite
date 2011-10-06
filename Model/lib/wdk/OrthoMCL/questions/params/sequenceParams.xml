@@ -62,7 +62,7 @@
             <suggest sample=""/>
         </stringParam>
 
-        <enumParam name="-filter" quote="false" multiPick="false"
+        <enumParam name="-F" quote="false" multiPick="false"
                    prompt="Low complexity filter">
             <help>
               If this filter is set to yes, you will omit results which contain repetitive and low complexity sequence. 

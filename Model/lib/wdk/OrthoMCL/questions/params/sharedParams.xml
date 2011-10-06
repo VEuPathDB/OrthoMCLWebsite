@@ -24,6 +24,14 @@
             <help>The abbreviation or the name of a taxonomy. Wild card is supported.</help>
             <suggest default="pfal" />
         </stringParam>
+
+        <answerParam name="group_answer" readonly="true">
+            <recordClass ref="GroupRecordClasses.GroupRecordClass" />
+        </answerParam>
+
+        <answerParam name="sequence_answer" readonly="true">
+            <recordClass ref="SequenceRecordClasses.SequenceRecordClass" />
+        </answerParam>
  
         <flatVocabParam name="organism"
                       queryRef="SharedVQ.AllOrganisms"

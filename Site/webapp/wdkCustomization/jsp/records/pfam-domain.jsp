@@ -37,11 +37,11 @@
 
 <c:set var="odd" value="${true}" />
 <c:forEach items="${proteins}" var="row">
-  <c:set var="full_source_id" value="${row['full_source_id']}" />
+  <c:set var="source_id" value="${row['source_id']}" />
   <c:set var="length" value="${row['length']}" />
   <c:set var="rowClass"><c:choose><c:when test="${odd}">rowLight</c:when><c:otherwise>rowMedium</c:otherwise></c:choose></c:set>
   <tr>
-    <td>${full_source_id}</td>
+    <td>${source_id}</td>
     <td>${length}</td>
     <td>
       <%-- the hard-coded url need to removed after the drawing code is refactored into an independent package. --%>

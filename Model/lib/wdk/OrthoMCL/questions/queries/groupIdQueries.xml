@@ -258,6 +258,24 @@ WHERE og.ortholog_group_id = ex.ortholog_group_id
             </sql>
         </sqlQuery>
 
+
+        <sqlQuery name="FromSequences">
+            <paramRef ref="sharedParams.sequence_answer"/>
+            <column name="group_name"/>
+            <column name="wdk_weight"/>
+            <sql>
+                <![CDATA[
+SELECT og.name AS group_name, sum(sa.wdk_weight) AS wdk_weight
+FROM apidb.OrthologGroup og, apidb.OrthologGroupAaSequence ogs,
+     dots.ExternalAaSequence eas, ($$sequence_answer$$) sa
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+  AND ogs.aa_sequence_id = eas.aa_sequence_id
+  AND eas.secondary_identifier = sa.source_id
+GROUP BY og.name
+                ]]>
+            </sql>
+        </sqlQuery>
+
     </querySet>
 
 </wdkModel>

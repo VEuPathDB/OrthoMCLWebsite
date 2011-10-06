@@ -306,7 +306,19 @@
            <columnAttribute name="MatchCount" displayName="Match Count" align="center"/>
            <columnAttribute name="Sequence" displayName="Motif" inReportMaker="false" truncateTo="4000"/>
          </dynamicAttributes>
-    </question>
+       </question>
+
+
+        <question name="FromGroups" queryRef="SequenceIds.FromGroups" 
+                  displayName="Transform to Sequences" shortDisplayName="To Sequences"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+                        <![CDATA[ Transform group results into sequences. ]]>
+            </description>
+            <attributesList summary="organism, group_name, length"
+                           sorting="group_name ASC"/>
+        </question>
+
 
     </questionSet>
 

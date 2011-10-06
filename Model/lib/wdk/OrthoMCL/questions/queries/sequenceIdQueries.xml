@@ -156,6 +156,7 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
+
     <processQuery name="ByBlast" local="true"
              processName="org.orthomcl.model.wsfplugin.BlastPlugin">
 
@@ -176,6 +177,7 @@ WHERE eas.taxon_id = ot.taxon_id
        <wsColumn name="score" columnType="number" width="30"/>
     </processQuery>
 
+
     <processQuery name="ByMotif" local="true"
                   processName="org.orthomcl.model.wsfplugin.MotifPlugin">
       <testParamValues>
@@ -191,6 +193,24 @@ WHERE eas.taxon_id = ot.taxon_id
        <wsColumn name="Sequence" width="3999"/>
     </processQuery>
 
-    </querySet>
+
+        <sqlQuery name="FromGroups" isCacheable="true">
+            <paramRef ref="sharedParams.group_answer"/>
+            <column name="source_id"/>
+            <column name="wdk_weight"/>
+            <sql>
+                <![CDATA[
+SELECT eas.secondary_identifier AS source_id, max(ga.wdk_weight) AS wdk_weight
+FROM dots.ExternalAaSequence eas, apidb.OrthologGroup og,
+     apidb.OrthologGroupAaSequence ogs, ($$group_answer$$) ga
+WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+  AND ogs.ortholog_group_id = og.ortholog_group_id
+  AND og.name = ga.group_name
+GROUP BY eas.secondary_identifier
+               ]]>
+            </sql>
+        </sqlQuery>
+
+  </querySet>
 
 </wdkModel>

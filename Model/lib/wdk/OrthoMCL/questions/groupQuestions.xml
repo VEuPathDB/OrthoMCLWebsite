@@ -192,21 +192,17 @@
                            sorting="number_of_members desc"/>
         </question>
 
-<!--
 
-        <question name="ByProperties" queryRef="GroupIds.ByProperties"
-				  displayName="Group Properties"
+        <question name="FromSequences" queryRef="GroupIds.FromSequences" 
+                  displayName="Transform to Groups" shortDisplayName="To Groups"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
-			<![CDATA[
-                Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
-			]]>
+                        <![CDATA[ Transform sequence results into groups. ]]>
             </description>
             <attributesList summary="group_name, number_of_members"
                            sorting="number_of_members desc"/>
         </question>
--->
 
-	</questionSet>
+    </questionSet>
 
 </wdkModel>

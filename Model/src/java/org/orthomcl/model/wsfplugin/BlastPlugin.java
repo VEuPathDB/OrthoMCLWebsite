@@ -231,6 +231,7 @@ public class BlastPlugin extends AbstractPlugin {
                 // find the defline of detail section
                 inSummary = false;
                 StringBuilder buffer = new StringBuilder();
+                processDefline(line, buffer);
                 message.append(buffer).append(newline);
             } else if (inSummary) { // find a line in the table summary
                 StringBuilder buffer = new StringBuilder();

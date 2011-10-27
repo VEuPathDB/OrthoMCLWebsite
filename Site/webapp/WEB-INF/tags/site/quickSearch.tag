@@ -46,7 +46,7 @@
     <label>
       <b><a href="<c:url value='/showQuestion.do?questionFullName=${SequenceQuestions.ByIdList}'/>"
             title="Enter a Gene source id. Use * as a wildcard (to obtain more than one). Click to enter multiple source ids."
-            >Sequence source id:</a></b>
+            >Sequence id:</a></b>
     </label>
     <input type="text" class="search-box" name="value(${sourceIdParam.name})" value="${sourceIdParam.default}" />
     <input name="go" value="go" type="image" src="<c:url value='/wdkCustomization/images/mag_glass.png' />"

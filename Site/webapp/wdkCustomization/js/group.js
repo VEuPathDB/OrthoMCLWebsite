@@ -1,8 +1,11 @@
 // cookie names
-var COOKIE_SHOW_DETAIL = "show_detail";
-var COOKIE_SHOW_PATTERN = "show_pattern";
 var COOKIE_SHOW_LABEL = "show_label";
 var COOKIE_TAXON_PREFIX = "taxon_";
+
+$(function() {
+    document.groupManager = new GroupManager();
+    document.groupManager.loadTaxons();
+});
 
 function Taxon(id) {
     this.parent = null;
@@ -45,74 +48,8 @@ function GroupManager() {
     this.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, AMOE: {}, 
                     VIRI: {}, ALVE: {}, FUNG: {}, META: {}, OEUK: {}}; 
 
-    this.initialize = function() {
-        this.applyCookie();
-        this.buildTree();
-        this.createTaxonDisplay();
-        this.createGroupDisplay();
-        
-        // register other events
-        $("#control #showDetail").click(function() {
-            var checked = $(this).attr("checked");
-            if (checked) $("#groups .group .group-detail").show();
-            else $("#groups .group .group-detail").hide();
-            $.cookie(COOKIE_SHOW_DETAIL, (checked ? 1 : 0), 30);
-        });
-        $("#control #showPhyletic").click(function() {
-            var checked = $(this).attr("checked");
-            $("#control #showCount").attr("disabled", !checked);
-            if (checked) {
-                $("#groups .group .phyletic-pattern").show();
-                $("#taxon-display").show();
-            } else {
-                $("#groups .group .phyletic-pattern").hide();
-                $("#taxon-display").hide();
-            }
-            $.cookie(COOKIE_SHOW_PATTERN, (checked ? 1 : 0), 30);
-        });
-        $("#control #showCount").click(function() {
-            var checked = $(this).attr("checked");
-            $("#groups .group .phyletic-pattern .taxon").each(function() {
-                var taxon = $(this);
-                var name = taxon.children(".name");
-                var count = taxon.children(".count");
-                if (checked) {
-                    taxon.css("width", "26px");
-                    name.css("height", "12px");
-                    name.children("span").show();
-                    count.css("height", "10px");
-                    count.children("span").show();
-                } else {
-                    taxon.css("width", "10px");
-                    name.css("height", "5px");
-                    name.children("span").hide();
-                    count.css("height", "5px");
-                    count.children("span").hide();
-                }
-            });
-            $.cookie(COOKIE_SHOW_LABEL, (checked ? 1 : 0), 30);
-        });
-    }
-
-    this.applyCookie = function() {
-        // show/hide details
-        var cookieDetail = $.cookie(COOKIE_SHOW_DETAIL);
-        if (cookieDetail == "0") {
-            $("#control #showDetail").attr("checked", false);
-            $("#groups .group .group-detail").hide();
-        }
-        // show/hide pattern
-        var cookiePattern = $.cookie(COOKIE_SHOW_PATTERN);
-        if (cookiePattern == "0") {
-            $("#control #showPattern").attr("checked", false);
-            $("#control #showCount").attr("disabled", true);
-            $("#groups .group .phyletic-pattern").hide();
-            $("#taxon-display").hide();
-        }
-    }
-
-    this.buildTree = function() {
-        var manager = this;
+    this.loadTaxons = function() {
+        var manager = document.groupManager;
         var parentMap = { };
         // fetch data
         $("#taxons .taxon").each(function() {
@@ -150,12 +87,42 @@ function GroupManager() {
                 }
             }
         }
-
     }
 
-    this.createTaxonDisplay = function() {
+    this.initialize = function() {
+        // get the current view
+        var view = findActiveSummaryView();
+        var manager = document.groupManager;
+        manager.createTaxonDisplay(view);
+        manager.createGroupDisplay(view);
+
+        // register other events
+        view.find("#control #showCount").click(function() {
+            view.find("#groups .group .phyletic-pattern .taxon").each(function() {
+                var taxon = $(this);
+                var name = taxon.children(".name");
+                var count = taxon.children(".count");
+                if (this.checked) {
+                    taxon.css("width", "26px");
+                    name.css("height", "12px");
+                    name.children("span").show();
+                    count.css("height", "10px");
+                    count.children("span").show();
+                } else {
+                    taxon.css("width", "10px");
+                    name.css("height", "5px");
+                    name.children("span").hide();
+                    count.css("height", "5px");
+                    count.children("span").hide();
+                }
+            });
+            $.cookie(COOKIE_SHOW_LABEL, (this.checked ? 1 : 0), 30);
+        });
+    }
+
+    this.createTaxonDisplay = function(view) {
         var manager = this;
-        var stub = $("#taxon-display");
+        var stub = view.find("#taxon-display");
         var div = "<table><tr>";
         var even = false;
         for(var abbrev in manager.rootMap) {
@@ -191,7 +158,7 @@ function GroupManager() {
             handle.siblings(".hide-handle").attr("src", "/images/hide.gif");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
-            var branch = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
+            var branch = view.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
             branch.show();
             branch.children(".taxon[leaf=\"true\"]").show();
             branch.children(".taxon[leaf=\"false\"]").hide();
@@ -204,7 +171,7 @@ function GroupManager() {
             handle.siblings(".hide-handle").attr("src", "/images/hide.gif");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
-            var branch = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
+            var branch = view.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
             branch.show();
             branch.children(".taxon[leaf=\"true\"]").hide();
             branch.children(".taxon[leaf=\"false\"]").show();
@@ -217,7 +184,7 @@ function GroupManager() {
             handle.siblings(".collapse-handle").attr("src", "/images/collapse.gif");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
-            var branch = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
+            var branch = view.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
             branch.hide();
             $.cookie(COOKIE_TAXON_PREFIX + abbrev, "h", cookie_options);
         });
@@ -265,7 +232,7 @@ function GroupManager() {
                 border = "rgb(" + bcolor + ", " + bcolor + ", " + bcolor + ")";
                 $(this).children(".name").css("background-color", color)
                                          .css("border-color", border);
-                var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
+                var taxon = view.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
                 taxon.css("background-color", color)
                      .css("border-color", "silver");
                 if (inc >= 60) step = -5;
@@ -280,18 +247,18 @@ function GroupManager() {
             var color = $(this).attr("color-backup");
             $(this).children(".name").css("background-color", color)
                                      .css("border-color", "black");
-            var taxon = $("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
+            var taxon = view.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"] .taxon");
             taxon.css("background-color", color)
                  .css("border-color", "black");
             $(this).removeAttr("color-backup");
         });
     }
 
-    this.createGroupDisplay = function() {
-        var manager = this;
-        $("#groups .group").each(function() {
+    this.createGroupDisplay = function(view) {
+        var manager = document.groupManager;
+        view.find("#groups .group").each(function() {
             var groupId = $(this).attr("id");
-            var counts = manager.getCounts(groupId);
+            var counts = manager.getCounts(view, groupId);
             for(var abbrev in manager.rootMap) {
                 var root = manager.rootMap[abbrev];
                 var cookie = $.cookie(COOKIE_TAXON_PREFIX + abbrev);
@@ -311,7 +278,7 @@ function GroupManager() {
         });
 
         // register mouse over events
-        $("#groups .group .phyletic-pattern .taxon").tooltip({ 
+        view.find("#groups .group .phyletic-pattern .taxon").tooltip({ 
             showURL: false, 
             bodyHandler: function() { 
                 return $(this).children(".description").html(); 
@@ -341,9 +308,9 @@ function GroupManager() {
         return div;
     }
 
-    this.getCounts = function(groupId) {
+    this.getCounts = function(view, groupId) {
         var counts = { };
-        $("#groups #" + groupId).find(".count-data .count").each(function () {
+        view.find("#groups #" + groupId).find(".count-data .count").each(function () {
             var group = $(this);
             var taxonId = group.attr("taxon-id");
             var count = group.html();

@@ -31,11 +31,8 @@
 
 </head>
 <body>
-<div id="header">
-  <div id="site-logo">
-    <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
-  </div>
-   
+
+<div id="header" class="ui-widget ui-widget-content ui-corner-all">
   <div id="sub-logo">
     <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
   </div>
@@ -50,6 +47,10 @@
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
   </div>
+</div>
+
+<div id="site-logo">
+  <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
 </div>
 
 <site:menubar refer="${refer}" />

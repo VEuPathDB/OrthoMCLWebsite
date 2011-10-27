@@ -1,73 +1,112 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
 <%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 
 <%@ attribute name="refer" 
-              type="java.lang.String"
-              required="false" 
-              description="Page calling this tag"
+ 			  type="java.lang.String"
+			  required="false" 
+			  description="Page calling this tag"
 %>
 
+<c:set var="project" value="${applicationScope.wdkModel.name}" />
+<c:set var="modelName" value="${applicationScope.wdkModel.name}" />
+<c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
+<c:set var="wdkUser" value="${sessionScope.wdkUser}"/>
+
+
+<!-- for external links -->
+<c:set var="xqSetMap" value="${wdkModel.xmlQuestionSetsMap}"/>
+<c:set var="xqSet" value="${xqSetMap['XmlQuestions']}"/>
+<c:set var="xqMap" value="${xqSet.questionsMap}"/>
+<c:set var="extlQuestion" value="${xqMap['ExternalLinks']}"/>
+<c:catch var="extlAnswer_exception">
+    <c:set var="extlAnswer" value="${extlQuestion.fullAnswer}"/>
+</c:catch>
+
+<c:choose>
+<c:when test="${wdkUser.stepCount == null}">
+<c:set var="count" value="0"/>
+</c:when>
+<c:otherwise>
+<c:set var="count" value="${wdkUser.strategyCount}"/>
+</c:otherwise>
+</c:choose>
+<c:set var="basketCount" value="${wdkUser.basketCount}"/>
+
+
 <div id="menu">
+
+<!-- default style for this ul establishes 9em -->
   <ul class="menu">
-    <%-- home page --%>
-    <c:set var="current" value="${(refer == 'home') ? 'current' : ''}" />
-    <li class="${current}"><a href="<c:url value='/' />" title='Return to OrthoMCL home page'><span>Home</span></a></li>
+    <li><a href="<c:url value="/"/>"><span>Home</span></a></li>
 
-    <%-- search categories --%>
-    <c:set var="current" value="${(refer == 'question') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Start a new search strategy."><span>New Search</span></a>
-      <div><wdk:searchCategories /></div>
+    <wdk:wdkMenu />
+
+    <li><a><span>Tools</span></a>
+	<ul>
+	    <li><a href="<c:url value="/showQuestion.do?questionFullName=UniversalQuestions.UnifiedBlast"/>"><span>BLAST</span></a></li>
+  	    <li><a href="<c:url value="/srt.jsp"/>"><span>Sequence Retrieval</span></a></li>
+            <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li>
+	    <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li>
+
+    	</ul>
+
     </li>
 
-    <%-- strategies --%>
-    <c:set var="current" value="${(refer == 'summary') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" href="<c:url value='/showApplication.do'/>" title="Access your Search Strategies Workspace"><span>My Strategies</span></a>
-      <div><ul>
-        <li><a href="<c:url value='/showApplication.do?tag=opened'/>" title="Show your currently open strategies"><span>Opened Strategies</span></a></li>
-        <li><a href="<c:url value='/showApplication.do?tag=all'/>" title="Show all you strategies"><span>All Strategies</span></a></li>
-      </ul></div>
+    <li><a><span>Data Summary</span></a>
+  	<ul>
+
+   	    <li><a href="<c:url value='/getDataSource.do?display=detail'/>"><span>Data Sources</span></a></li>
+ 	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.Methods'/>"><span>Analysis Methods</span></a></li>
+
+	</ul>
     </li>
 
-    <%-- strategies --%>
-    <c:set var="current" value="${(refer == 'basket') ? 'current' : ''}" />
-    <li class="${current}"><a href="<c:url value='/showApplication.do?tag=basket'/>" title="Access your baskets"><span>My Baskets</span></a></li>
+    <li><a><span>Downloads</span></a>
+ 	<ul>
+    	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.About#downloads'/>"><span>Understanding Downloads</span></a></li>
+    	    <li><a href="/common/downloads">Data Files</a></li>
+    	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.EuPathDBPubs'/>"><span>EuPathDB Publications</span></a></li> 
+  	</ul>
+    </li>
+    
+    <li><a><span>Community</span></a>
+	<ul>
+		<li>
+		<a href="http://twitter.com/eupathdb">
+                  <span>
+		    <img style="margin:0px;vertical-align:top" title="Follow us on twitter!" 
+                         src="<c:url value='/wdkCustomization/images/twitter.gif'/>" width="20">
+			&nbsp;Follow us on twitter!
+                  </span>
+		</a>
+		<a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
+                  <span>
+	            <img style="margin:0px;margin-left:1px;vertical-align:top" title="Follow us on facebook!" 
+                         src="<c:url value='/wdkCustomization/images/facebook.png'/>" width="18">
+                    &nbsp;Follow us on facebook!
+                  </span>
+		</a>
+		</li>
 
-    <%-- tools --%>
-    <c:set var="current" value="${(refer == 'tool') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Access online tools provided by OrthoMCL"><span>Tools</span></a>
-      <div><ul>
-        <li><a href="<c:url value='/blast'/>" title="Run BLAST against the proteins in OrthoMCL"><span>BLAST</span></a></li>
-        <li><a href="<c:url value='/proteomeUpload'/>" title="Show all you strategies"><span>Analyze your Proteome data</span></a></li>
-      </ul></div>
+    	    <li><a href="https://community.eupathdb.org"><span>Discussion Forums</span></a></li>
+	    <li><a href="<c:url value="/communityEvents.jsp"/>"><span>Upcoming Events</span></a></li>
+
+  	    <c:choose>
+    	    <c:when test="${extlAnswer_exception != null}">
+	    	<li><a href="#"><span><font color="#CC0033"><i>Error. related sites temporarily unavailable</i></font></span></a></li>
+    	    </c:when>
+    	    <c:otherwise>
+    		<li><a href="<c:url value="/showXmlDataContent.do?name=XmlQuestions.ExternalLinks"/>"><span>Related Sites</span></a></li>
+    	    </c:otherwise>
+    	    </c:choose>
+  	</ul>
     </li>
 
-    <%-- data source --%>
-    <c:set var="current" value="${(refer == 'data-source') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Data summary"><span>Data Summary</span></a>
-      <div><ul>
-        <li><a href="<c:url value='/showSummary.do'/>" title="Organism summary"><span>Organism Summary</span></a></li>
-        <li><a href="<c:url value='/showSummary.do'/>" title="Protein summary"><span>Protein Summary</span></a></li>
-      </ul></div>
-    </li>
-
-    <%-- download --%>
-    <c:set var="current" value="${(refer == 'data-source') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Downloads"><span>Downloads</span></a>
-      <div><ul>
-        <li><a href="<c:url value='/downloadData.do'/>" title="Download data for current build"><span>Download Data</span></a></li>
-        <li><a href="<c:url value='/downloadTool.do'/>" title="Download the OrthoMCL software to run it by your own"><span>Download Software</span></a></li>
-      </ul></div>
-    </li>
-
-    <%-- community --%>
-    <c:set var="current" value="${(refer == 'community') ? 'current' : ''}" />
-    <li class="${current}"><a class="parent" title="Community"><span>Community</span></a>
-      <div><ul>
-        <li><a href="http://twitter.com" title="Follow us on Twitter"><span>Twitter</span></a></li>
-        <li><a href="http://www.facebook.com" title="Follow us on Facebook"><span>Facebook</span></a></li>
-      </ul></div>
-    </li>
   </ul>
-  <a href="http://apycom.com/" style="display:none">jQuery Menu by Apycom</a>
-</div> <%-- end of menu DIV --%>
+
+</div>
+

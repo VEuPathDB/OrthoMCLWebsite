@@ -1,11 +1,17 @@
+a { color: #000099; }
+a:hover { color: #3333FF; }
+a:visited { color: #330099; }
 
-#header { text-align: right; clear: both; }
-#header #site-logo { float: left ; }
-#header #quick-search { margin-left: auto; }
+#header { float:right; text-align: right; margin: 7px; }
+#header #quick-search, #header #tool-sets { margin: 5px; }
 #header #quick-search input.search-box { width: 100px; }
 
 #user-control #login, #user-control #logout { display: none; }
 
-#menu { clear: both; position: relative; z-index: 100; }
+#menubar { clear: both; }
 
-#main-content { clear: both; }
+#main-content, #footer { clear: both; background: url(../images/gradient.gif) repeat-x; }
+
+#footer { padding: 5px; text-align: center; }
+#footer #copyright { float: left; padding: 10px; }
+#footer #contact { float: right; text-align: right; }

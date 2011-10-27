@@ -21,6 +21,26 @@
     -->
 
     <!-- Queries that retrieve attributes of ESTs -->
+
+    <querySet name="HelperAttributes" queryType="attribute">
+
+        <sqlQuery name="Counts" isCacheable="true">
+            <column name="helper_id"/>
+            <column name="organism_count"/>
+            <column name="protein_count"/>
+            <column name="group_count"/>
+            <sql>
+            <![CDATA[
+SELECT 'helper' AS helper_id, 
+       count(DISTINCT taxon_id) AS organism_count, 
+       count(*) AS protein_count, 
+       max((SELECT count(*) FROM apidb.OrthologGroup)) AS group_count
+FROM dots.ExternalAaSequence                        
+            ]]>
+            </sql>
+        </sqlQuery>
+
+    </querySet>
     
     <querySet name="HelperTables" queryType="table">
 
@@ -28,7 +48,7 @@
             <paramValue name="helper_id">helper</paramValue>
        </defaultTestParamValues>
 
-        <sqlQuery name="Taxons">
+        <sqlQuery name="Taxons" isCacheable="true">
             <column name="helper_id"/>
             <column name="taxon_id"/>
             <column name="parent_id"/>
@@ -53,6 +73,6 @@ ORDER BY parent_id ASC, species_order ASC
             </sql>
         </sqlQuery>
 
-	</querySet>
+    </querySet>
 
 </wdkModel>

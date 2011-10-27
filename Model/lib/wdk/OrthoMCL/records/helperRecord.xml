@@ -61,6 +61,13 @@
                 </text>                
             </primaryKeyAttribute>
 
+            <attributeQueryRef ref="HelperAttributes.Counts">
+                <columnAttribute name="helper_id" internal="true" inReportMaker="false"/>
+                <columnAttribute name="organism_count"/>
+                <columnAttribute name="protein_count"/>
+                <columnAttribute name="group_count"/>
+            </attributeQueryRef>
+
             <table name="Taxons"
                    displayName="Taxons"
                    queryRef="HelperTables.Taxons">

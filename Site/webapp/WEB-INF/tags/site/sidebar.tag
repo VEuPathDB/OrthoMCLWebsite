@@ -7,8 +7,7 @@
 <script>
 $(function() {
   $( "#sidebar" ).accordion({
-    autoHeight: false,
-    navigation: true
+    navigation: true,
   });
 });
 </script>

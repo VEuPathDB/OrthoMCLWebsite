@@ -12,7 +12,12 @@
 <c:set var="answerRecords" value="${wdkAnswer.records}" />
 <c:set var="rcName" value="${question.recordClass.fullName}" />
 
-<%-- load the taxon info --%>
+<script>
+$(document.groupManager.initialize);
+</script>
+
+
+<%-- load the taxon info. The taxon info is used by group phyletic pattern query --%>
 <c:set var="helperQuestions" value="${wdkModel.questionSetsMap['HelperQuestions']}" />
 <c:set var="helperQuestion" value="${helperQuestions.questionsMap['ByDefault']}" />
 <jsp:setProperty name="helperQuestion" property="user" value="${wdkUser}" />
@@ -31,13 +36,6 @@
   </c:forEach>
 </div>
 
-<script>
-$(function() {
-    document.groupManager = new GroupManager();
-    document.groupManager.initialize();
-});
-</script>
-
 
 <div id="taxon-display"></div>
 
@@ -49,8 +47,6 @@ $(function() {
 </div>
 
 <div id="control">
-  <input id="showDetail" type="checkbox" checked="true" />group details <br />
-  <input id="showPhyletic" type="checkbox" checked="true" />phyletic pattern <br />
   <input id="showCount" type="checkbox" checked="true" />phyletic pattern labels <br />
 </div>
 

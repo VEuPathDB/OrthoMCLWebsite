@@ -5,12 +5,9 @@ $(function() {
 function login() {
     // somehow the dialog cannot center itself
     var dialog = $("#user-control div#login").clone();
-    var left = ($(window).width() - dialog.width()) / 2;
-    var top = ($(window).height() - dialog.height()) / 2;
     dialog.find("form[name=loginForm]").submit(processLogin);
     dialog.dialog({
         modal: true,
-        position: [left, top],
     });
 }
 

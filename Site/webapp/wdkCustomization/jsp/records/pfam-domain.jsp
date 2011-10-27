@@ -6,47 +6,52 @@
 <!-- get wdkRecord from proper scope -->
 <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
 
-<c:set var="max_length" value="${wdkRecord.attributes['max_length'].value}" />
 <c:set var="proteins" value="${wdkRecord.tables['Proteins']}" />
-<c:set var="PFamDomains" value="${wdkRecord.tables['PFamDomains']}" />
+<c:set var="domains" value="${wdkRecord.tables['PFamDomains']}" />
 
-<c:set var="dom_height" value="${14}" />
-<c:set var="spacer_height" value="${15}" />
-<c:set var="margin_x" value="${10}" />
-<c:set var="margin_y" value="${40}" />
-<c:set var="scale_factor" value="${0.7}" />
-<c:set var="tick_step" value="${50}" />
 
-<c:if test="${max_length >= 2000}">
-  <c:set var="tick_step" value="${max_length / 20}" />
-</c:if>
-<c:if test="${max_length > 1000}">
-  <c:set var="scale_factor" value="${scale_factor * (1000 / max_length)}" />
-</c:if>
+<h3>List of Domains (present in this group)</h3>
+<table id="domains">
+  <tr>
+    <th>Accession</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Legend</th>
+  </tr>
+  <c:set var="odd" value="${true}" />
+  <c:forEach items="${domains}" var="domain">
+    <c:set var="rowClass">
+      <c:choose><c:when test="${odd}">rowLight</c:when><c:otherwise>rowMedium</c:otherwise></c:choose>
+    </c:set>
+    <tr class="domain,${rowClass}" >
+      <td class="source-id">${domain["source_id"]}</td>
+      <td>${domain["primary_identifier"]}</td>
+      <td>${domain["secondary_identifier"]}</td>
+      <td class="legend"></td>
+    </tr>
+  </c:forEach>
+</table>
 
-<c:set var="size_x" value="${max_length * scale_factor + 2 * margin_x}" />
-<c:set var="size_y" value="${margin_y + dom_height + spacer_height}" />
-<c:set var="pos_y" value="${margin_y + dom_height / 2 + spacer_height}" />
 
-<table>
+<h3>List of Protein Domain Architectures</h3>
+<table id="proteins">
   <tr>
     <th>Accession</th>
     <th>Length</th>
-    <th>Pfam Domain Architecture</th>
+    <th id="ruler"></th>
   </tr>
 
-<c:set var="odd" value="${true}" />
-<c:forEach items="${proteins}" var="row">
-  <c:set var="source_id" value="${row['source_id']}" />
-  <c:set var="length" value="${row['length']}" />
-  <c:set var="rowClass"><c:choose><c:when test="${odd}">rowLight</c:when><c:otherwise>rowMedium</c:otherwise></c:choose></c:set>
-  <tr>
-    <td>${source_id}</td>
-    <td>${length}</td>
-    <td>
-      <%-- the hard-coded url need to removed after the drawing code is refactored into an independent package. --%>
-      <img src="http://orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=drawProtein&margin_x=${margin_x}&scale_factor=${scale_factor}&pos_y=${pos_y}&size_x=${size_x}&size_y=${size_y}&dom_height=${dom_height}&length=${length}&length_max=${max_length}&tick_step=${tick_step}&margin_y=${margin_y}&spacer_height=${spacer_height}" />
+  <c:set var="odd" value="${true}" />
+  <c:forEach items="${proteins}" var="protein">
+    <c:set var="source_id" value="${protein['source_id']}" />
+    <c:set var="rowClass"><c:choose><c:when test="${odd}">rowLight</c:when><c:otherwise>rowMedium</c:otherwise></c:choose></c:set>
+    <tr class="protein,${rowClass}">
+    <td class="source-id">
+      
+      <a href="<c:url value='/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&source_id=${source_id}' />">${source_id}</a>
     </td>
+    <td class="length">${row['length']}</td>
+    <td class="display"></td>
   </tr>
 </c:forEach>
 </table>

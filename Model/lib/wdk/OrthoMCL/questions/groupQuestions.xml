@@ -203,6 +203,19 @@
                            sorting="number_of_members desc"/>
         </question>
 
+
+        <question name="AllGroups" queryRef="GroupIds.AllGroups" 
+                                  displayName="All Groups"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find all Orthologous groups in the current release of OrthoMCL.
+                        ]]>
+            </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
+        </question>
+
     </questionSet>
 
 </wdkModel>

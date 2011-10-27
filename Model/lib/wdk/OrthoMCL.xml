@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wdkModel>
-    <modelName displayName="OrthoMCL" version="1.0"/>
+    <modelName displayName="OrthoMCL" version="5.0"/>
 
     <!-- ******************* -->
     <!-- model introduction  -->
     <!-- ******************* -->
     <introduction>
 	<![CDATA[
-        Welcome to OrthoMCL Website. It is powered by Strategic WDK.
+        Welcome to OrthoMCL DB
 	]]>
     </introduction>
     

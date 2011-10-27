@@ -211,6 +211,16 @@ GROUP BY eas.secondary_identifier
             </sql>
         </sqlQuery>
 
+
+        <sqlQuery name="AllSequences" isCacheable="false">
+            <column name="source_id"/>
+            <sql>
+                <![CDATA[
+SELECT eas.secondary_identifier AS source_id FROM dots.ExternalAaSequence eas
+               ]]>
+            </sql>
+        </sqlQuery>
+
   </querySet>
 
 </wdkModel>

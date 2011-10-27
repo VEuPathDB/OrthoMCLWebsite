@@ -319,6 +319,17 @@
                            sorting="group_name ASC"/>
         </question>
 
+        <question name="AllSequences" queryRef="SequenceIds.AllSequences" 
+                                  displayName="All Sequences"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+                        <![CDATA[
+                Find all protein sequences in the current release of OrthoMCL.
+                        ]]>
+            </description>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
+        </question>
 
     </questionSet>
 

@@ -40,7 +40,6 @@
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLShared"/>
       <property name="project" value="OrthoMCLShared"/>
-      <property name="version" value=""/>
       <property name="excludeChildren" value="true"/>
     </ant>
   </target>

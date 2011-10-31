@@ -42,8 +42,9 @@
 
 
         <question name="ByAccession" queryRef="SequenceIds.ByAccession" 
-                                  displayName="Seq Accession"
-                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+                  displayName="Seq Accession"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass"
+                  noSummaryOnSingleRecord="true">
             <description>
                         <![CDATA[
                 Find protein sequences by the source id or the group name it belongs to.

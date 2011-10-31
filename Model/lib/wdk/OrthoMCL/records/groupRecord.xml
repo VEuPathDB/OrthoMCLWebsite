@@ -94,7 +94,8 @@
       <!-- =============================================================== -->
       <!-- Attributes -->  
       <!-- =============================================================== -->
-            
+            <favorite noteField="group_name" />
+             
             <primaryKeyAttribute name="primary_key"
                                  displayName="Group">
                 <columnRef>group_name</columnRef>

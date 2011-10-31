@@ -47,3 +47,9 @@
 
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
 </c:if>
+
+<c:if test="${refer == 'record'}">
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic.js"/>'></script>
+
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/record.css' />">
+</c:if>

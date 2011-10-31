@@ -9,12 +9,14 @@
 
 <%-- scripts & styles that are applied to all pages --%>
 
-<script type="text/javascript" src='<c:url value="/wdkCustomization/js/common.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/apycom-menu.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/jquery.timers-1.2.js"/>'></script>
 
+<script type="text/javascript" src='<c:url value="/wdkCustomization/js/common.js"/>'></script>
 
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css' />">
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/apycom-menu/menu.css' />">
+
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/common.css' />">
 
 
@@ -29,13 +31,7 @@
 
 
 <c:if test="${refer == 'summary'}">
-
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/group.js"/>'></script>
-
-
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/results.css' />">
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
-
 </c:if>
 
 <c:if test="${refer == 'summary' || refer == 'question'}">
@@ -44,4 +40,10 @@
 
 
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/ppform.css' />">
+</c:if>
+
+<c:if test="${refer == 'summary' || refer == 'record'}">
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic.js"/>'></script>
+
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
 </c:if>

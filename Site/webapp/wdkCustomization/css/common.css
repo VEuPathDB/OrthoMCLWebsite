@@ -2,14 +2,16 @@ a { color: #000099; }
 a:hover { color: #3333FF; }
 a:visited { color: #330099; }
 
-#header { float:right; text-align: right; margin: 7px; }
+#header {min-width:975px;}
+#header-control {float:right; text-align: right; margin: 7px; }
 #header #quick-search, #header #tool-sets { margin: 5px; }
 #header #quick-search input.search-box { width: 100px; }
+#header #site-logo a {font:bold 70pt Georgia,serif; color:#3333FF; text-decoration:none;}
 
 #user-control #login, #user-control #logout { display: none; }
 
 #menubar { clear: both; }
-
+#menubar #favorite-menu {float:right;}
 #main-content, #footer { clear: both; background: url(../images/gradient.gif) repeat-x; }
 
 #footer { padding: 5px; text-align: center; }

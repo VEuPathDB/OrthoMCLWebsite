@@ -32,25 +32,30 @@
 </head>
 <body>
 
-<div id="header" class="ui-widget ui-widget-content ui-corner-all">
-  <div id="sub-logo">
-    <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
-  </div>
+<div id="header">
+  <div id="header-control" class="ui-widget ui-widget-content ui-corner-all">
+    <div id="sub-logo">
+      <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
+    </div>
 
   <site:quickSearch />
 
-  <div id="tool-sets">
+    <div id="tool-sets">
     <a href="#">About OrthoMCL</a> |
     <a href="#">Help</a> |
     <site:login /> |
     <a href="#">Contact Us</a> |
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
+    </div>
   </div>
-</div>
 
-<div id="site-logo">
-  <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
+   <div id="site-logo">
+<%--
+    <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
+--%>
+    <a href="<c:url value='/home.jsp'/>">OrthoMCL</a>
+  </div>
 </div>
 
 <site:menubar refer="${refer}" />

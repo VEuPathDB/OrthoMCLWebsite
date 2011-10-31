@@ -13,7 +13,7 @@
 <c:set var="rcName" value="${question.recordClass.fullName}" />
 
 <script>
-$(document.groupManager.initialize);
+$(initializePhyleticView);
 </script>
 
 

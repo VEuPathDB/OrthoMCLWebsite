@@ -124,7 +124,12 @@
                               internal="true" inReportMaker="false"/>
              <columnAttribute name="evalue_exp" displayName="E-Value-Exp"
                               internal="true" inReportMaker="false"/>
-             <columnAttribute name="score" displayName="Score"/>
+             <columnAttribute name="score" displayName="Score">
+                    <plugin name="histogram" display="Histogram"
+                            description="Display the histogram of the values of this attribute"
+                            implementation="org.gusdb.wdk.model.attribute.plugin.HistogramAttributePlugin"
+                            view="/wdk/jsp/results/histogram.jsp" />
+             </columnAttribute>
              <textAttribute name="evalue" displayName="E-Value">
                  <display>
                      <![CDATA[
@@ -304,7 +309,12 @@
          </description>
          <dynamicAttributes>
            <columnAttribute name="Locations" displayName="Match Locations" align="center"/>
-           <columnAttribute name="MatchCount" displayName="Match Count" align="center"/>
+           <columnAttribute name="MatchCount" displayName="Match Count" align="center">
+                    <plugin name="histogram" display="Histogram"
+                            description="Display the histogram of the values of this attribute"
+                            implementation="org.gusdb.wdk.model.attribute.plugin.HistogramAttributePlugin"
+                            view="/wdk/jsp/results/histogram.jsp" />
+           </columnAttribute>
            <columnAttribute name="Sequence" displayName="Motif" inReportMaker="false" truncateTo="4000"/>
          </dynamicAttributes>
        </question>

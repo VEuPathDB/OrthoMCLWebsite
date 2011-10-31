@@ -38,13 +38,12 @@
             <column name="length"/>
             <column name="product"/>
             <column name="molecular_weight"/>
-            <column name="full_source_id"/>
             <column name="abbreviation"/>
             <column name="taxon_name"/>          
             <sql>
 		<![CDATA[
 SELECT eas.secondary_identifier AS source_id, eas.length, eas.description AS product,
-       eas.molecular_weight, eas.secondary_identifier AS full_source_id,
+       eas.molecular_weight,
        ot.three_letter_abbrev AS abbreviation, 
        ot.name AS taxon_name
 FROM dots.ExternalAaSequence eas, apidb.orthomcltaxon ot

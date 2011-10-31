@@ -57,6 +57,7 @@
               </td>
             </tr>
         </table>
+      </form>
       </div>
     </c:otherwise>
   </c:choose>

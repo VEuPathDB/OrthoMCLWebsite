@@ -4,8 +4,7 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean" %>
 
 <site:header title="Login"
-             banner="Account Login"
-             division="login"/>
+             refer="login"/>
 
 
 <c:choose>

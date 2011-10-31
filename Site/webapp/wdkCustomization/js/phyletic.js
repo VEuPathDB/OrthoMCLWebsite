@@ -50,7 +50,7 @@ function PhyleticViewManager() {
 
     this.initialize = function() {
         var manager = document.phyleticViewManager;
-        var workspace = findActiveSummaryView();
+        var workspace = window.wdk.findActiveView();
         manager.loadTaxons(manager, workspace);
         manager.configureControls(manager, workspace);
         manager.createTaxonDisplay(manager, workspace);

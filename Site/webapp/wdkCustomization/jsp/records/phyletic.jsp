@@ -10,9 +10,6 @@
 <c:set var="recordClass" value="${record.recordClass}" />
 
 
-<script type="text/javascript" src="<c:url value='/wdkCustomization/js/group.js' />"></script>
-
-
 <%-- load the taxon info --%>
 <c:set var="helperQuestions" value="${wdkModel.questionSetsMap['HelperQuestions']}" />
 <c:set var="helperQuestion" value="${helperQuestions.questionsMap['ByDefault']}" />
@@ -31,6 +28,10 @@
          common-name="${row['common_name']}">${row['name']}</div>
   </c:forEach>
 </div>
+
+<script>
+$(initializePhyleticView);
+</script>
 
 <div id="taxon-display"></div>
 

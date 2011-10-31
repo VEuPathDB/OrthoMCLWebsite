@@ -10,7 +10,7 @@ a:visited { color: #330099; }
 
 #user-control #login, #user-control #logout { display: none; }
 
-#menu {clear:both;}
+#menu {clear:both; position:relative;}
 #menu > ul.menu {float:none;}
 #menu #favorite-menu {float:right;}
 #main-content, #footer { clear: both; background: url(../images/gradient.gif) repeat-x; }

@@ -129,6 +129,9 @@
       <property name="component" value="Site"/>
     </ant>
 
+    <available file="${webappTargetDir}/WEB-INF/classes/log4j.xml" property="weblog4j.present"/>
+    <antcall target="setLog4j"/>
+
     <replace dir="${cgibinTargetDir}" 
              propertyFile="${targetDir}/config/gus.config" >
       <include name="**/*" />
@@ -148,6 +151,12 @@
       <replacefilter token="@oracleHome@" value="${env.ORACLE_HOME}"/>
     </replace>
 
+  </target>
+
+  <target name="setLog4j" if="weblog4j.present">
+    <dirname  property="webappDir" file="${webappTargetDir}"/>
+    <basename property="webapp" file="${webappDir}"/>
+    <replace file="${webappTargetDir}/WEB-INF/classes/log4j.xml" token="@WEBAPP@" value="${webapp}"/>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->

@@ -489,6 +489,12 @@
       validate="false">
       <forward name="display" redirect="false" path="/wdk/jsp/results/attributePlugin.jsp"/>
     </action>
+    <action
+      path="/proteomeUpload"
+      type="org.orthomcl.controller.action.ProteomeUploadAction"
+      scope="request">
+      <forward name="upload-form" path="/wdkCustomization/jsp/proteomeUpload.jsp"/>
+    </action>
 
   </action-mappings>
 

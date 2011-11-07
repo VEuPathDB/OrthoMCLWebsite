@@ -49,7 +49,7 @@
       <li><a title="Tools">Tools</a>
         <ul>
           <li><a href="<c:url value='/showQuestion.do?questionFullName=SequenceQuestions.ByBlast'/>">BLAST</a></li>
-          <li><a href="/cgi-bin/OrthoMclWeb.cgi?rm=proteomeUploadForm">Assign proteins to groups</a></li>
+          <li><a href="<c:url value='/proteomeUpload.do'/>">Assign proteins to groups</a></li>
         </ul>
       </li>
     </ul>

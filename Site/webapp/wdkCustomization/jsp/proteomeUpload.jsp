@@ -1,14 +1,17 @@
+<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="w" uri="http://www.servletsuite.com/servlets/wraptag" %>
+
+
+<site:header refer="proteome" title="Upload your own Proteome" />
+
+<script type="text/javascript" src="<c:url value='wdk/js/lib/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/wdkCustomization/js/proteome.js'/>"></script>
 
 <!-- BEGIN CONTENT -->
 
-<TMPL_IF UPLOAD>
-
-<TMPL_INCLUDE header.tmpl>
-
-<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="/js/proteome.js"></script>
-
-
+<div id="proteome-result" style="display:none;"></div>
 
 <h3 align="center">Assign your proteins to OrthoMCL Groups</h3>
 
@@ -16,7 +19,7 @@ Use this tool to provisionally assign the proteins in a genome to OrthoMCL Group
 
 <br><br>The process takes between 6 to 24 hours depending upon server load.  
 <br><br>
-<form id="upload_form" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
+<form id="proteome" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
       enctype="multipart/form-data">
   <input type="hidden" name="rm" value="proteomeQuery">
   <table align="center">
@@ -67,21 +70,6 @@ Please refer to the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">Or
 <li>For remaining proteins: use the InParalog algorithm described in the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a> to find potential paralog pairs.  
 <li>Submit those pairs to the <a href="http://www.micans.org/mcl/">MCL</a> program (see the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a>).
 
-
-<TMPL_INCLUDE footer.tmpl>
-
-</TMPL_IF> <!-- end of UPLOAD -->
-
-<TMPL_IF RESULT>
-
-  <h3 align="center">Proteins Submitted</h3>
-  <TMPL_IF JOB_NAME><p>Job name: <b><TMPL_VAR JOB_NAME></b></p></TMPL_IF>
-  <p>Your proteins sequence file <TMPL_VAR FILE_NAME> has been uploaded. You will receive an email soon at <TMPL_VAR EMAIL> indicating that the job has been submitted to the queue.  You will receive another email in many hours when the job is complete.  
-<p>
-Thanks for submitting your proteins.
- 
-</TMPL_IF> <!-- end of RESULT -->
-
-
 <!-- END CONTENT -->
 
+<site:footer />

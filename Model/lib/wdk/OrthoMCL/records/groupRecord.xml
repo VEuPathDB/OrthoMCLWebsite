@@ -81,11 +81,8 @@
             <recordView name="pfam-domain" display="PFam Domain"
                          jsp="/wdkCustomization/jsp/records/pfam-domain.jsp"/>
 
-
-<!--
             <recordView name="biolayout" display="Biolayout"
                          jsp="/wdkCustomization/jsp/records/biolayout.jsp"/>
--->
 
             <recordView name="msa" display="Multiple Sequence Alignment"
                          jsp="/wdkCustomization/jsp/records/msa.jsp"/>

@@ -3,9 +3,6 @@
  */
 package org.orthomcl.controller.action;
 
-import java.io.File;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

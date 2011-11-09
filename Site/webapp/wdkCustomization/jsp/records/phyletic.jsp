@@ -43,38 +43,26 @@ $(initializePhyleticView);
 </div>
 
 <div id="control">
-  <input id="showDetail" type="checkbox" checked="true" />group details <br />
-  <input id="showPhyletic" type="checkbox" checked="true" />phyletic pattern <br />
   <input id="showCount" type="checkbox" checked="true" />phyletic pattern labels <br />
 </div>
 
 
 
-<table id="groups" class="Results_Table" width="100%" border="0" cellpadding="3" cellspacing="0">
-<tbody class="rootBody">
-
-  <c:choose>
-    <c:when test="${i % 2 == 0}"><tr class="lines"></c:when>
-    <c:otherwise><tr class="linesalt"></c:otherwise>
-  </c:choose>
+<div id="groups" class="Results_Table">
 
   <c:set value="${record.primaryKey}" var="primaryKey"/>
-  <td width="100">${primaryKey}</td>
 
   <%-- load the taxon count --%>
   <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}" />
 
-  <td id="${primaryKey}" class="group">
+  <div id="${primaryKey}" class="group">
     <div class="count-data">
       <c:forEach items="${taxonCounts}" var="row">
         <div class="count" taxon-id="${row['taxon_id']}">${row['count']}</div>
       </c:forEach>
     </div>
     <div class="phyletic-pattern"></div>
-  </td>
+  </div>
 
-</tr>
-
-</tbody>
-</table>
+</div>
 

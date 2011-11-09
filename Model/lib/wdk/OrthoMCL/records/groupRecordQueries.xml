@@ -85,6 +85,18 @@ GROUP BY og.name
             </sql>
         </sqlQuery>
 
+
+        <sqlQuery name="SVG">
+            <column name="group_name"/>
+            <column name="svg_content"/>
+            <sql>
+            <![CDATA[
+                SELECT g.name AS group_name, g.svg_content
+                FROM apidb.OrthologGroup g
+                        ]]>
+            </sql>
+        </sqlQuery>
+
     </querySet>
 
 

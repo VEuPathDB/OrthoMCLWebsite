@@ -500,6 +500,12 @@
       type="org.orthomcl.controller.action.GetBiolayoutImageAction"
       scope="request">
     </action>
+    <action
+      path="/getSvgContent"
+      type="org.orthomcl.controller.action.GetSvgContentAction"
+      scope="request">
+      <forward name="display" redirect="false" path="/wdkCustomization/jsp/records/svgContent.jsp"/>
+    </action>
 
   </action-mappings>
 

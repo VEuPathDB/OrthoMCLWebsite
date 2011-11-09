@@ -81,11 +81,14 @@
             <recordView name="pfam-domain" display="PFam Domain"
                          jsp="/wdkCustomization/jsp/records/pfam-domain.jsp"/>
 
+            <recordView name="msa" display="Multiple Sequence Alignment"
+                         jsp="/wdkCustomization/jsp/records/msa.jsp"/>
+
             <recordView name="biolayout" display="Biolayout"
                          jsp="/wdkCustomization/jsp/records/biolayout.jsp"/>
 
-            <recordView name="msa" display="Multiple Sequence Alignment"
-                         jsp="/wdkCustomization/jsp/records/msa.jsp"/>
+            <recordView name="svg" display="Interactive Biolayout"
+                         jsp="/wdkCustomization/jsp/records/svg.jsp"/>
 
 
       <!-- =============================================================== -->
@@ -155,6 +158,9 @@
                 <columnAttribute name="max_length" displayName="Longest Sequence" internal="true" inReportMaker="false" />
             </attributeQueryRef>
 
+            <attributeQueryRef ref="GroupAttributes.SVG">
+                <columnAttribute name="svg_content" displayName="SVG" internal="true" inReportMaker="false" />
+            </attributeQueryRef>
 
       <!-- =============================================================== -->
       <!-- Tables -->

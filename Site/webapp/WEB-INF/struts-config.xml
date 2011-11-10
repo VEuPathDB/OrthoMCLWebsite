@@ -471,14 +471,14 @@
       <forward name="show_strategy" path="/showStrategy.do"/>
     </action>
     <action
-      path="/showResult"
-      type="org.gusdb.wdk.controller.action.ShowResultAction"
+      path="/showSummaryView"
+      type="org.gusdb.wdk.controller.action.ShowSummaryViewAction"
       scope="request"
       validate="true">
     </action>
     <action
-      path="/showRecordFeature"
-      type="org.gusdb.wdk.controller.action.ShowRecordFeatureAction"
+      path="/showRecordView"
+      type="org.gusdb.wdk.controller.action.ShowRecordViewAction"
       scope="request"
       validate="true">
     </action>

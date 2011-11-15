@@ -12,6 +12,9 @@
 
 Use this tool to provisionally assign the proteins in a genome to OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.  
 
+<TMPL_IF UPLOAD_IS_OFFLINE>
+<h2 class='notice'>This tool is temporarily unavailable.</h2>
+<TMPL_ELSE>
 <br><br>The process takes between 6 to 24 hours depending upon server load.  
 <br><br>
 <form id="upload_form" action="/cgi-bin/OrthoMclWeb.cgi" method="post"  
@@ -36,6 +39,7 @@ Use this tool to provisionally assign the proteins in a genome to OrthoMCL Group
     </tr>
   </table>
 </form> 
+</TMPL_IF>
 <br><br>
 <h3>Details</h3>
 <b>Input:</b> Your proteins in FASTA format.

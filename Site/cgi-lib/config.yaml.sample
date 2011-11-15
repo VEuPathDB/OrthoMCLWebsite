@@ -4,6 +4,7 @@ password: orthomcl
 
 basehref: http://orthomcl.cbil.upenn.edu
 proteome_job_dir: <the_job_dir_for_proteome_uploads>
+proteome_upload_is_offline: < 1 (offline) or 0 >
 
 
 NEWS_file: /home/fengchen/www/orthomcl-web/cgi-lib/news

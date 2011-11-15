@@ -11,6 +11,10 @@ h1 {
    margin-right : 1cm;
 }
 
+.notice {
+  text-decoration : none; color: red;
+}
+
 a.nocolor_b:link {
    text-decoration : none; color: black;
 }

@@ -1,6 +1,6 @@
 #domains .domain .legend {width:200px;}
 
-#domains .domain .legend, #proteins .protein .domains .domain > div {height:5px; border-style:solid; border-width:4px; border-radius:8px;}
+#domains .domain .legend, #proteins .protein .domains .domain > div {height:5px; border-style:solid; border-width:4px; border-radius:6px;}
 #proteins .protein .domains {position:relative;}
 #proteins .protein .domains .protein-graph {margin:7px 0px; background-color:#333333; height:5px;}
 #proteins .protein .domains .domain {top:-4px; position:absolute; display:block;}

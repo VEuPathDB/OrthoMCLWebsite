@@ -3,9 +3,43 @@ function initializePfams() {
     manager.initialize();
 }
 
+
+// use a seeded random function to make sure the color is always in the same random order
+var seedobja = 1103515245; 
+var seedobjc = 12345; 
+var seedobjm = 4294967295; //0x100000000 
+
+ 
+// Creates a new seed for seeded functions such as srandom(). 
+function newseed(seednum) { 
+    return [seednum];
+}
+ 
+// Works like Math.random(), except you provide your own seed as the first argument. 
+function srandom(seedobj) 
+{ 
+    seedobj[0] = (seedobj[0] * seedobja + seedobjc) % seedobjm 
+    return seedobj[0] / (seedobjm - 1) 
+}
+
+String.prototype.hash = function() {
+    var value = 0;
+    var i = 0;
+    var shift = 0;
+    for (i = 0; i < this.length; i++) {
+        value ^= (this.charCodeAt(i) << shift);
+        shift = (shift < 24) ? shift + 8 : 0;
+    }
+    return value;
+}
+
 Array.prototype.shuffle = function() {
+    // get seed from group name
+    var strSeed = $("#Record_View #domains").attr("seed");
+    var seed = strSeed.hash();
     var s = [];
-    while (this.length) s.push(this.splice(Math.random() * this.length, 1)[0]);
+    var my_seed_value = newseed(seed);
+    while (this.length) s.push(this.splice(srandom(my_seed_value) * this.length, 1)[0]);
     while (s.length) this.push(s.pop());
     return this;
 } 

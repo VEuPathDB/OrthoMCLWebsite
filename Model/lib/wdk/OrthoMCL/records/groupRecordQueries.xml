@@ -185,11 +185,13 @@ FROM apidb.OrthologGroup og,
      apidb.OrthologGroupAaSequence ogs,
      dots.DomainFeature df,
      dots.DbRefAaFeature dbaf,
-     sres.DbRef db
+     sres.DbRef db,
+     dots.AaLocation al
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = df.aa_sequence_id
   AND df.aa_feature_id = dbaf.aa_feature_id
   AND dbaf.db_ref_id = db.db_ref_id
+  AND df.aa_feature_id = al.aa_feature_id
 ORDER BY db.primary_identifier
                         ]]>
             </sql>
@@ -206,22 +208,25 @@ ORDER BY db.primary_identifier
             <column name="end_max"/>
             <sql>
                         <![CDATA[
-SELECT DISTINCT og.name AS group_name, db.primary_identifier,
-eas.source_id, al.start_min, al.end_max, eas.length
+SELECT DISTINCT og.name AS group_name, eas.secondary_identifier AS source_id, eas.length,
+       da.primary_identifier, da.start_min, da.end_max
 FROM apidb.OrthologGroup og,
      apidb.OrthologGroupAaSequence ogs,
-     dots.DomainFeature df,
-     dots.DbRefAaFeature dbaf,
-     sres.DbRef db,
-     dots.ExternalAaSequence eas,
-     dots.AaLocation al
+     dots.ExternalAaSequence eas
+     LEFT JOIN
+     (SELECT df.aa_sequence_id, db.primary_identifier, al.start_min, al.end_max
+      FROM dots.DomainFeature df,
+           dots.DbRefAaFeature dbaf,
+           sres.DbRef db,
+           dots.AaLocation al
+      WHERE df.aa_feature_id = al.aa_feature_id
+        AND df.aa_feature_id = dbaf.aa_feature_id
+        AND dbaf.db_ref_id = db.db_ref_id
+     ) da
+     ON eas.aa_sequence_id = da.aa_sequence_id
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = eas.aa_sequence_id
-  AND ogs.aa_sequence_id = df.aa_sequence_id
-  AND df.aa_feature_id = al.aa_feature_id
-  AND df.aa_feature_id = dbaf.aa_feature_id
-  AND dbaf.db_ref_id = db.db_ref_id
-ORDER BY eas.source_id
+ORDER BY eas.secondary_identifier ASC, da.start_min ASC
                         ]]>
             </sql>
         </sqlQuery>

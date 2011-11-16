@@ -172,32 +172,56 @@ WHERE og.ortholog_group_id = ogs.ortholog_group_id
 
 
 
-        <sqlQuery name="PFamDomains">
+        <sqlQuery name="PFams">
             <column name="group_name"/>
-            <column name="source_id"/>
             <column name="primary_identifier"/>
             <column name="secondary_identifier"/>
             <column name="remark"/>
+            <sql>
+                        <![CDATA[
+SELECT DISTINCT og.name AS group_name, db.primary_identifier,
+db.secondary_identifier, db.remark
+FROM apidb.OrthologGroup og,
+     apidb.OrthologGroupAaSequence ogs,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf,
+     sres.DbRef db
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+  AND ogs.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+ORDER BY db.primary_identifier
+                        ]]>
+            </sql>
+        </sqlQuery>
+
+
+
+        <sqlQuery name="ProteinPFams">
+            <column name="group_name"/>
+            <column name="primary_identifier"/>
+            <column name="source_id"/>
+            <column name="length"/>
             <column name="start_min"/>
             <column name="end_max"/>
             <sql>
                         <![CDATA[
-SELECT og.name AS group_name, eas.source_id, db.primary_identifier,
-db.secondary_identifier, db.remark,
- al.start_min, al.end_max
+SELECT DISTINCT og.name AS group_name, db.primary_identifier,
+eas.source_id, al.start_min, al.end_max, eas.length
 FROM apidb.OrthologGroup og,
      apidb.OrthologGroupAaSequence ogs,
-     dots.ExternalAaSequence eas,
      dots.DomainFeature df,
      dots.DbRefAaFeature dbaf,
-     dots.AaLocation al,
-     sres.DbRef db
+     sres.DbRef db,
+     dots.ExternalAaSequence eas,
+     dots.AaLocation al
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = eas.aa_sequence_id
-  AND eas.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = al.aa_feature_id
-AND df.aa_feature_id = dbaf.aa_feature_id
-AND dbaf.db_ref_id = db.db_ref_id
+  AND ogs.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = al.aa_feature_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+ORDER BY eas.source_id
                         ]]>
             </sql>
         </sqlQuery>

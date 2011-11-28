@@ -211,11 +211,12 @@
       input="/showSummary.do">
     </action>
     <action
-      path="/updateResult"
-      type="org.gusdb.wdk.controller.action.UpdateResultAction"
+      path="/processSummaryView"
+      type="org.gusdb.wdk.controller.action.ProcessSummaryViewAction"
       scope="request"
-      input="/showResult.do">
-      <forward name="show-result" path="/showResult.do"/>
+      input="/showSummaryView.do">
+      <forward name="show-summary-view" path="/showSummaryView.do"/>
+      <forward name="pq-show-basket" path="/showBasket.do"/>
     </action>  
     <action
       path="/showRecord"

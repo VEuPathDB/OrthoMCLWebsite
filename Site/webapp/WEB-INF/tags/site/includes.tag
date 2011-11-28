@@ -50,9 +50,9 @@
 
 <c:if test="${refer == 'record'}">
   <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic.js"/>'></script>
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/groupPfam.js"/>'></script>
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/pfamDomain.js"/>'></script>
 
 
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/groupPfam.css' />">
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/pfamDomain.css' />">
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/record.css' />">
 </c:if>

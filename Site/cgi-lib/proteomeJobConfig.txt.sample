@@ -1,77 +1,28 @@
-
-# Full URL for orthmclresult CGI script. Trailing slash required.
-resultBaseUrl=http://orthomcl.org/cgi-bin/orthomclresult/   
-
-
-##############################################################################
+#
 # these change with each OrthoMCL Release
-##############################################################################
+#
+resultBaseUrl=http://orthomcl.org/cgi-bin/orthomclresult/   
+blastDbFilePath=/genomics/binf/scratch/orthoMCL/4/proteinsBlastDb/proteinSeqs
+groupsFile=/files/cbil/data/cbil/apiSiteFiles/downloadSite/OrthoMCL/release-4/groups_OrthoMCL-4.txt.gz
 
-# path to the blast database on the cluster
-blastDbFilePath=/scratch/jcklab/eupathdb/OrthoMCL/5/proteinsBlastDb/proteinSeqs
-
-# OrthoMCL groups file on webserver. This is the same file that is made available for download
-# so can just use that. The OrthoMCLShared/MapProteomeService/bin/orthomclMapProteomeToGroups 
-# script uses this.
-groupsFile=/var/www/Common/apiSiteFilesMirror/downloadSite/OrthoMCL/release-5/groups_OrthoMCL-5.txt.gz
-
-
-##############################################################################
-# Webserver directories. These are static across releases.
-##############################################################################
-
-# working directories on webserver
-controlDir=/home/mheiges/OrthoMCL-dev/tmp/orthomclProteomeJob         
-resultDir=/home/mheiges/OrthoMCL-dev/tmp/orthomclProteomeJob/results
-
-# location of NCBI's formatdb command on webserver
-formatdbBinDir=/opt/ncbi-blast2/bin
-
-##############################################################################
-# cluster specific
-##############################################################################
-
-# Parent director for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
-clusterServerDir=/scratch/jcklab/eupathdb/OrthoMCL/orthomclProteomeJob
-
-# clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
-#          Host orthomclProteomeJob-cluster
-#              Hostname rcluster.rcc.uga.edu
-#              IdentityFile ~/.ssh/orthomclProteomeJob
-#              IdentitiesOnly yes
-#              User mheiges
-#              ForwardX11 no
-#              ForwardAgent no
+#
+# these are static across releases
+#
+controlDir=/var/www/Common/tmp/orthomclProteomeJob         
+resultDir=/var/www/Common/tmp/orthomclProteomeJob/results
+clusterServerDir=/genomics/binf/scratch/orthoMCL/orthomclProteomeJob
+clusterUserName=sfischer    
+#clusterServer=beta.genomics.upenn.edu
+# clusterServer corresponds to a Host in executor's ~/.ssh/config
 clusterServer=orthomclProteomeJob-cluster
-
-# Cluster login username. This cluster user should have the public key installed for the
-# IdentityFile specified in ~/.ssh/config
-clusterUserName=mheiges    
-
-# Cluster queue name where BLAST tasks will be run.
-clusterQueue=mri-q64-30d
-
-# temporary scratch space for DJob
-nodePath=/scratch/jcklab/eupathdb/OrthoMCL/
-
-# parent directory on cluster for the NCBI blastall executable
-blastBinDir=/usr/local/ncbiblast/bin
-
-# A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
-# instead of the user's .bashrc to ensure a stable running environment.
-# Use full path or path relative to $HOME
-rcfile=/scratch/jcklab/eupathdb/OrthoMCL/GUS/setenv
-
-##############################################################################
-# DJob blast task settings.
-# These are static across releases and SGE-based clusters.
-##############################################################################
-
-numNodes=5
-slotsPerNode=1
-ppn=1
+clusterQueue=apidb
+numNodes=10
+slotsPerNode=2
+ppn=2
+nodePath=/scratch/user/sfischer
 nodeClass=DJob::DistribJob::SgeNode
 taskSize=100
 taskClass=DJob::DistribJobTasks::BlastSimilarityTask
-blastArgs=-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5
+blastArgs=-F 'm S' -v 1000 -b 1000  -e 1e-5 -a 2
+blastBinDir=/genomics/share/pkg/bio/ncbi/current
 mclBin=$GUS_HOME/bin/mcl

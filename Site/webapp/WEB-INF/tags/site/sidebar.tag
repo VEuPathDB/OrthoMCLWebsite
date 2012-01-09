@@ -17,40 +17,40 @@ $(function() {
   <h3><a href="#data-summary">Data Summary</a></h3>
   <div>
     <ul>
-      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a><li>
-      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a><li>
+      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
+      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a></li>
     </ul>
   </div>
 
   <h3><a href="#news">News</a></h3>
   <div>
     <ul>
-      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a><li>
-      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a><li>
+      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
+      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a></li>
     </ul>
   </div>
 
   <h3><a href="#community">Community Resources</a></h3>
   <div>
     <ul>
-      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a><li>
-      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a><li>
+      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
+      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a></li>
     </ul>
   </div>
 
   <h3><a href="#tutorials">Web Tutorials</a></h3>
   <div> 
     <ul>
-      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a><li>
-      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a><li>
+      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
+      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a></li>
     </ul>
   </div>
 
   <h3><a href="#help">Information and Help</a></h3>
   <div> 
     <ul>
-      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a><li>
-      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a><li>
+      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
+      <li><a href="/showDataSummary.do?data=protein">Show Protein Summary</a></li>
     </ul>
   </div>
 </div>

@@ -2552,6 +2552,7 @@ sub proteomeUploadForm {
 
   $tmpl->param(PAGETITLE => "Upload your own Proteome");
   $tmpl->param(UPLOAD => 1);
+  $tmpl->param(UPLOAD_IS_OFFLINE => $config->{proteome_upload_is_offline});
 
   # Timing info
   $currentTime = clock_gettime(CLOCK_REALTIME);

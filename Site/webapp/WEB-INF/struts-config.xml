@@ -507,6 +507,13 @@
       scope="request">
       <forward name="display" redirect="false" path="/wdkCustomization/jsp/records/svgContent.jsp"/>
     </action>
+    <action
+      path="/getDataSummary"
+      type="org.orthomcl.controller.action.GetDataSummaryAction"
+      scope="request">
+      <forward name="data" redirect="false" path="/wdkCustomization/jsp/DataSummary.jsp"/>
+      <forward name="release" redirect="false" path="/wdkCustomization/jsp/ReleaseSummary.jsp"/>
+    </action>
 
   </action-mappings>
 

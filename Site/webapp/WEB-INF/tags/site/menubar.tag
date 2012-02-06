@@ -59,8 +59,8 @@
     <li><a><span>Data Summary</span></a>
   	<ul>
 
-   	    <li><a href="<c:url value='/getDataSource.do?display=detail'/>"><span>Data Sources</span></a></li>
- 	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.Methods'/>"><span>Analysis Methods</span></a></li>
+   	    <li><a href="<c:url value='/getDataSummary.do?summary=data'/>"><span>Data Sources</span></a></li>
+ 	    <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Summary Statistics</span></a></li>
 
 	</ul>
     </li>

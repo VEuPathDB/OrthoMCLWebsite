@@ -18,7 +18,8 @@ $(function() {
   <div>
     <ul>
    	    <li><a href="<c:url value='/getDataSummary.do?summary=data'/>"><span>Data Sources</span></a></li>
- 	    <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Summary     </ul>
+ 	    <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Release Summary</span></a></li>
+     </ul>
   </div>
 
   <h3><a href="#news">News</a></h3>

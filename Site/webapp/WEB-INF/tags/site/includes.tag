@@ -1,11 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
 
 <%@ attribute name="refer" 
 	      required="true" 
 	      description="Page calling this tag"
 %>
 
+<%-- includes the original wdk includes --%>
+<wdk:includes refer="${refer}" /> 
 
 <%-- scripts & styles that are applied to all pages --%>
 

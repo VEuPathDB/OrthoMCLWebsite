@@ -25,8 +25,6 @@
 <link rel="shortcut icon" href="<c:url value="/images/favicon.ico" /> ">
 
 <%-- css from WDK  --%>
-<imp:includes refer="${refer}" /> 
-
 <imp:includes refer="${refer}"/>
 
 </head>

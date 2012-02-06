@@ -1,9 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic" %>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean" %>
 
-<site:header title="Login"
+<imp:header title="Login"
              refer="login"/>
 
 
@@ -44,9 +44,9 @@
 
 <p>
 
-<site:login showError="true" />
+<imp:login showError="true" />
 </div>
 
 
-<site:footer />
+<imp:footer />
 

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 
 <c:set var="project" value="${applicationScope.wdkModel.displayName}" />
 
@@ -25,9 +25,9 @@
 <link rel="shortcut icon" href="<c:url value="/images/favicon.ico" /> ">
 
 <%-- css from WDK  --%>
-<wdk:includes refer="${refer}" /> 
+<imp:includes refer="${refer}" /> 
 
-<site:includes refer="${refer}"/>
+<imp:includes refer="${refer}"/>
 
 </head>
 <body>
@@ -38,12 +38,12 @@
       <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
     </div>
 
-  <site:quickSearch />
+  <imp:quickSearch />
 
     <div id="tool-sets">
     <a href="#">About OrthoMCL</a> |
     <a href="#">Help</a> |
-    <site:login /> |
+    <imp:login /> |
     <a href="#">Contact Us</a> |
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
@@ -58,6 +58,6 @@
   </div>
 </div>
 
-<site:menubar refer="${refer}" />
+<imp:menubar refer="${refer}" />
 
 <div id="main-content"><!-- the close DIV is defined in footer. -->

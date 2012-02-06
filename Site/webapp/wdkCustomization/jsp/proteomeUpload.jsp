@@ -1,10 +1,10 @@
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="w" uri="http://www.servletsuite.com/servlets/wraptag" %>
 
 
-<site:header refer="proteome" title="Upload your own Proteome" />
+<imp:header refer="proteome" title="Upload your own Proteome" />
 
 <script type="text/javascript" src="<c:url value='wdk/js/lib/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/wdkCustomization/js/proteome.js'/>"></script>
@@ -72,4 +72,4 @@ Please refer to the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">Or
 
 <!-- END CONTENT -->
 
-<site:footer />
+<imp:footer />

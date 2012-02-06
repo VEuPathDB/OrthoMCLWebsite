@@ -1,5 +1,5 @@
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 
@@ -25,8 +25,8 @@
 <c:set var="group_count" value="${attributes['group_count']}" />
 
 
-<site:header title="OrthoMCL" refer="home" />
-<site:sidebar />
+<imp:header title="OrthoMCL" refer="home" />
+<imp:sidebar />
 
   <!-- display wdkModel introduction text -->
   <div id="site-title">${wdkModel.introduction}</div>
@@ -44,7 +44,7 @@
 
   <div id="search-bubbles">
     <ul>
-      <wdk:searchCategories />
+      <imp:searchCategories />
       
       <li><a title="Tools">Tools</a>
         <ul>
@@ -55,4 +55,4 @@
     </ul>
   </div>
 
-<site:footer/>
+<imp:footer/>

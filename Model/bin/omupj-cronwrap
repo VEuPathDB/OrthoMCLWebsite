@@ -11,7 +11,7 @@
 # Example cron entry
 #   */5 * * * * /var/www/w1.orthomcl.org/gus_home/bin/omupj-cronwrap
 
-umask 007
+umask 0113
 
 Bin="$(dirname $(readlink -f "$0"))"
 

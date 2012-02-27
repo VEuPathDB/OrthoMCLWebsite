@@ -105,9 +105,9 @@ is_local_dir $proteome_job_dir || \
     abort "invalid directory for proteome_job_dir:\n'$resultDir'" 
 ok
 
-echo -n "checking proteome_job_dir is subdirectory of controlDir ... "
+echo -n "checking proteome_job_dir (config.yaml) is subdirectory of controlDir ... "
 if [[ "$controlDir" != "$(dirname "$proteome_job_dir")" ]]; then
-    abort "resultDir:\n'$resultDir' is not sub to '$controlDir'" 
+    abort "proteome_job_dir:\n'$proteome_job_dir' is not sub to '$controlDir'" 
 fi
 ok
 
@@ -149,8 +149,13 @@ is_remote_file $rcfile || \
     abort "invalid file for rcfile:\n'$rcfile'"
 ok
 
+echo -n "checking if qsub runs ... "
+ssh_with_env "qsub -help" || \
+    abort "Could not run qsub.\nCheck that SGE environment is set in rcfile '$rcfile'."
+ok
+
 echo -n "checking clusterQueue ... "
-ssh_without_env "qconf -sql | grep $clusterQueue" || \
+ssh_with_env "qconf -sql | grep $clusterQueue" || \
     abort "invalid clusterQueue:\n'$clusterQueue'"
 ok
 

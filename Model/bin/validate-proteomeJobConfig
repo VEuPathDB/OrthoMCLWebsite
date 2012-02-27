@@ -149,7 +149,7 @@ is_remote_file $rcfile || \
     abort "invalid file for rcfile:\n'$rcfile'"
 ok
 
-echo -n "checking qsub runs ... "
+echo -n "checking if qsub runs ... "
 ssh_with_env "qsub -help" || \
     abort "Could not run qsub.\nCheck that SGE environment is set in rcfile '$rcfile'."
 ok

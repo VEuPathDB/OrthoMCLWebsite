@@ -1,6 +1,19 @@
 #!/bin/bash
 
-Bin="$( readlink -f -- "${0%/*}" )"
+# wrapper script to run orthomclManageUserProteomeJob via cron (ok to run manually from CLI).
+# 
+# 1. Establishes environment paths relative to the location of this script at execution time.
+# 2. Writes stdout and stderr to log file.
+# 3. Log file path is based on the value of controlDir assigned in $CGILIB/proteomeJobConfig.txt
+# 4. Rotates and gzips log file when it exceeds a set size. Keeps back log for 1 rotation cycle.
+# 5. Executes orthomclManageUserProteomeJob
+#
+# Example cron entry
+#   */5 * * * * /var/www/w1.orthomcl.org/gus_home/bin/omupj-cronwrap
+
+umask 0002
+
+Bin="$(dirname $(readlink -f "$0"))"
 
 export BASE_GUS="${Bin%%gus_home/bin}"
 export GUS_HOME=$BASE_GUS/gus_home
@@ -8,5 +21,17 @@ export PATH=$GUS_HOME/bin:$PROJECT_HOME/install/bin:$PATH
 export PERL5LIB=$GUS_HOME/lib/perl
 export CGILIB=$BASE_GUS/cgi-lib
 
+TMPDIR="$(grep controlDir $CGILIB/proteomeJobConfig.txt | cut -d'=' -f2 | sed "s/ //g" )"
+LOG=$TMPDIR/runlog
 
-$Bin/orthomclManageUserProteomeJob $CGILIB/proteomeJobConfig.txt
+# rotate log at 100MB
+#  100MB * 1024KB/MB * 1024B/KB = 104857600
+if [[ -f $LOG ]]; then
+    LOGSIZE=$(stat -c %s $LOG)
+    if [[ "$LOGSIZE" -gt "104857600" ]]; then
+      mv $LOG ${LOG}.1
+      gzip -f ${LOG}.1
+    fi
+fi
+
+$Bin/orthomclManageUserProteomeJob $CGILIB/proteomeJobConfig.txt >> $LOG 2>&1

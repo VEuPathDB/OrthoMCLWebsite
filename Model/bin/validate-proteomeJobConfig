@@ -30,12 +30,12 @@ function abort() {
     exit 1
 }
 
-function ssh_without_env() {
+function remote_cmd_without_env() {
   sshcmd="ssh $clusterUserName@$clusterServer"
   $sshcmd $1 >/dev/null 2>&1
 }
 
-function ssh_with_env() {
+function remote_cmd_with_env() {
   sshcmd="ssh $clusterUserName@$clusterServer"
   $sshcmd "/bin/bash --rcfile $rcfile -i -c \"$1\"" >/dev/null 2>&1
 }
@@ -57,11 +57,11 @@ function is_local_file() {
 }
 
 function is_remote_dir() {
-  ssh_without_env "test -d $1"
+  remote_cmd_without_env "test -d $1"
 }
 
 function is_remote_file() {
-  ssh_without_env "test -f $1"
+  remote_cmd_without_env "test -f $1"
 }
 
 echo "#### WEBSERVER CHECKS #####################################################"
@@ -124,7 +124,7 @@ ok
 echo "#### CLUSTER CHECKS #######################################################"
 
 echo -n "checking clusterUserName and clusterServer ... "
-ssh_without_env date || \
+remote_cmd_without_env date || \
     abort "failed $clusterUserName@$clusterServer\nCheck clusterUserName and clusterServer"
 ok
 
@@ -150,27 +150,27 @@ is_remote_file $rcfile || \
 ok
 
 echo -n "checking if qsub runs ... "
-ssh_with_env "qsub -help" || \
+remote_cmd_with_env "qsub -help" || \
     abort "Could not run qsub.\nCheck that SGE environment is set in rcfile '$rcfile'."
 ok
 
 echo -n "checking clusterQueue ... "
-ssh_with_env "qconf -sql | grep $clusterQueue" || \
+remote_cmd_with_env "qconf -sql | grep $clusterQueue" || \
     abort "invalid clusterQueue:\n'$clusterQueue'"
 ok
 
 echo -n "checking nodeClass (and \$PERL5LIB in rcfile) ... "
-ssh_with_env "perl -e 'use $nodeClass'" || \
+remote_cmd_with_env "perl -e 'use $nodeClass'" || \
     abort "failed value for nodeClass:\n'$nodeClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
 ok
 
 echo -n "checking taskClass (and \$PERL5LIB in rcfile)... "
-ssh_with_env "perl -e 'use $taskClass'" || \
+remote_cmd_with_env "perl -e 'use $taskClass'" || \
     abort "failed value for taskClass:\n'$taskClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
 ok
 
 echo -n "checking \$GUS_HOME ... "
-ssh_with_env "test -d \\\$GUS_HOME" || \
+remote_cmd_with_env "test -d \\\$GUS_HOME" || \
     abort "\$GUS_HOME environment variable looks bad on cluster\n(hint: check $rcfile)"
 ok
 

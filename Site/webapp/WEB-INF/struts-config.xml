@@ -514,6 +514,16 @@
       <forward name="data" redirect="false" path="/wdkCustomization/jsp/DataSummary.jsp"/>
       <forward name="release" redirect="false" path="/wdkCustomization/jsp/ReleaseSummary.jsp"/>
     </action>
+    <action
+      path="/getGroup"
+      type="org.orthomcl.controller.action.GetGroupAction"
+      scope="request">
+    </action>
+    <action
+      path="/getOrganisms"
+      type="org.orthomcl.controller.action.GetOrganismAction"
+      scope="request">
+    </action>
 
   </action-mappings>
 

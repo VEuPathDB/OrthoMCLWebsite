@@ -1,0 +1,176 @@
+#!/bin/bash
+
+
+Bin="$(dirname $(readlink -f "$0"))"
+export BASE_GUS="${Bin%%gus_home/bin}"
+export CGILIB=$BASE_GUS/cgi-lib
+export GUS_HOME=$BASE_GUS/gus_home
+
+PJCONF="$CGILIB/proteomeJobConfig.txt"
+YAMLCONF="$CGILIB/config.yaml"
+
+if [[ ! -e "$PJCONF" ]]; then
+    echo "File '$PJCONF' not found"
+    if [[ "$CGILIB" =~ "project_home" ]]; then
+        echo "Be sure to run this script from \$GUS_HOME, not \$PROJECT_HOME"
+    fi
+    exit 1
+fi
+
+# crudely strip any spaces around '=' and source it.
+# Some lines are not valid for eval, so we squash the warnings
+eval "$(cat $PJCONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
+
+eval "$(cat $YAMLCONF | egrep 'proteome_job_dir' | sed 's/: /=/')" 2> /dev/null
+
+function abort() {
+    msg=$1
+    echo
+    echo -e '\E[;31m'"\033[1m$1\033[0m"
+    exit 1
+}
+
+function remote_cmd_without_env() {
+  sshcmd="ssh $clusterUserName@$clusterServer"
+  $sshcmd $1 >/dev/null 2>&1
+}
+
+function remote_cmd_with_env() {
+  sshcmd="ssh $clusterUserName@$clusterServer"
+  $sshcmd "/bin/bash --rcfile $rcfile -i -c \"$1\"" >/dev/null 2>&1
+}
+
+function lscmd() {
+  ls $1 >/dev/null 2>&1
+}
+
+function ok() {
+  echo -e '\E[;32m'"\033[1mOK\033[0m"
+}
+
+function is_local_dir() {
+ test -d $1
+}
+
+function is_local_file() {
+ test -f $1
+}
+
+function is_remote_dir() {
+  remote_cmd_without_env "test -d $1"
+}
+
+function is_remote_file() {
+  remote_cmd_without_env "test -f $1"
+}
+
+echo "#### WEBSERVER CHECKS #####################################################"
+
+echo -n "checking adminEmail ... "
+if [[ ! $adminEmail =~ "@" ]]; then
+    abort "adminEmail '$adminEmail' looks invalid"
+fi
+ok
+
+
+echo -n "checking resultBaseUrl ... "
+if [[ ! $resultBaseUrl =~ "/$" ]]; then
+    abort "resultBaseUrl needs trailing slash '/'"
+fi
+ok
+
+echo -n "checking groupsFile ... "
+is_local_file $groupsFile || \
+    abort "invalid file for groupsFile:\n'$groupsFile'" 
+ok
+
+echo -n "checking controlDir ... "
+is_local_dir $controlDir || \
+    abort "invalid directory for controlDir:\n'$controlDir'" 
+ok
+
+echo -n "checking resultDir ... "
+is_local_dir $resultDir || \
+    abort "invalid directory for resultDir:\n'$resultDir'" 
+ok
+
+echo -n "checking resultDir is subdirectory of controlDir ... "
+if [[ "$controlDir" != "$(dirname "$resultDir")" ]]; then
+    abort "resultDir:\n'$resultDir' is not sub to '$controlDir'" 
+fi
+ok
+
+echo -n "checking proteome_job_dir (config.yaml) ... "
+is_local_dir $proteome_job_dir || \
+    abort "invalid directory for proteome_job_dir:\n'$resultDir'" 
+ok
+
+echo -n "checking proteome_job_dir (config.yaml) is subdirectory of controlDir ... "
+if [[ "$controlDir" != "$(dirname "$proteome_job_dir")" ]]; then
+    abort "proteome_job_dir:\n'$proteome_job_dir' is not sub to '$controlDir'" 
+fi
+ok
+
+echo -n "checking formatdbBinDir ... "
+is_local_dir $formatdbBinDir || \
+    abort "invalid directory for formatdbBinDir:\n'$formatdbBinDir'" 
+ok
+
+echo -n "checking mclBin ... "
+is_local_file  $mclBin || \
+    abort "invalid file for mclBin:\n'$mclBin'"
+ok
+
+echo "#### CLUSTER CHECKS #######################################################"
+
+echo -n "checking clusterUserName and clusterServer ... "
+remote_cmd_without_env date || \
+    abort "failed $clusterUserName@$clusterServer\nCheck clusterUserName and clusterServer"
+ok
+
+echo -n "checking nodePath ... "
+is_remote_dir $nodePath || \
+    abort "invalid directory for nodePath:\n'$nodePath'"
+ok
+
+
+echo -n "checking blastDbFilePath ... "
+is_remote_file $blastDbFilePath || \
+    abort "invalid file for blastDbFilePath:\n'$blastDbFilePath'"
+ok
+
+echo -n "checking blastBinDir ... "
+is_remote_dir $blastBinDir || \
+    abort "invalid directory for blastBinDir:\n'$blastBinDir'"
+ok
+
+echo -n "checking rcfile ... "
+is_remote_file $rcfile || \
+    abort "invalid file for rcfile:\n'$rcfile'"
+ok
+
+echo -n "checking if qsub runs ... "
+remote_cmd_with_env "qsub -help" || \
+    abort "Could not run qsub.\nCheck that SGE environment is set in rcfile '$rcfile'."
+ok
+
+echo -n "checking clusterQueue ... "
+remote_cmd_with_env "qconf -sql | grep $clusterQueue" || \
+    abort "invalid clusterQueue:\n'$clusterQueue'"
+ok
+
+echo -n "checking nodeClass (and \$PERL5LIB in rcfile) ... "
+remote_cmd_with_env "perl -e 'use $nodeClass'" || \
+    abort "failed value for nodeClass:\n'$nodeClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
+ok
+
+echo -n "checking taskClass (and \$PERL5LIB in rcfile)... "
+remote_cmd_with_env "perl -e 'use $taskClass'" || \
+    abort "failed value for taskClass:\n'$taskClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
+ok
+
+echo -n "checking \$GUS_HOME ... "
+remote_cmd_with_env "test -d \\\$GUS_HOME" || \
+    abort "\$GUS_HOME environment variable looks bad on cluster\n(hint: check $rcfile)"
+ok
+

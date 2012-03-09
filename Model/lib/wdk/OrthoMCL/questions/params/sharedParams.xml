@@ -25,8 +25,44 @@
             <suggest default="pfal" />
         </stringParam>
 
+        <answerParam name="group_answer" readonly="true">
+            <recordClass ref="GroupRecordClasses.GroupRecordClass" />
+        </answerParam>
+
+        <answerParam name="sequence_answer" readonly="true">
+            <recordClass ref="SequenceRecordClasses.SequenceRecordClass" />
+        </answerParam>
+ 
+        <flatVocabParam name="organism"
+                      queryRef="SharedVQ.AllOrganisms"
+                      displayType="treeBox"  
+                      prompt="Organism"
+                      multiPick="true">
+            <help>
+             Choose one or more organisms to search with the given motif
+            </help>
+            <suggest default="pfal"/>
+        </flatVocabParam>
+
     </paramSet>
 
+  <querySet name="SharedVQ" queryType="vocab">
 
+        <sqlQuery name="AllOrganisms">
+            <column name="term" />
+            <column name="display" />
+            <column name="parentTerm" />
+            <column name="internal" />
+            <sql>
+                <![CDATA[ 
+SELECT t.name AS display, t.three_letter_abbrev AS term, t.three_letter_abbrev AS internal,
+       (SELECT three_letter_abbrev FROM apidb.OrthomclTaxon p 
+        WHERE p.orthomcl_taxon_id = t.parent_id) AS parentTerm
+FROM apidb.OrthomclTaxon t
+                ]]>
+            </sql>
+        </sqlQuery>
 
+    </querySet>
+    
 </wdkModel>

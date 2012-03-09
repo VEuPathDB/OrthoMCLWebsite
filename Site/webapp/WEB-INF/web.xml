@@ -28,7 +28,7 @@
   </listener>
 
   <servlet>
-    <servlet-name>wdkTemplateSite</servlet-name>
+    <servlet-name>OrthoMCLWebsite</servlet-name>
     <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
     <init-param>
       <param-name>config</param-name>
@@ -37,7 +37,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>wdkTemplateSite</servlet-name>
+    <servlet-name>OrthoMCLWebsite</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 

@@ -23,7 +23,7 @@
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/gus/WDK"/>
       <property name="project" value="WDK"/>
-      <property name="version" value="WDK_version_2-0"/>
+      <property name="version" value="alter-views"/>
       <property name="excludeChildren" value="false"/>
     </ant>
   </target>
@@ -40,7 +40,6 @@
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLShared"/>
       <property name="project" value="OrthoMCLShared"/>
-      <property name="version" value="api-mar-2008"/>
       <property name="excludeChildren" value="true"/>
     </ant>
   </target>
@@ -130,6 +129,9 @@
       <property name="component" value="Site"/>
     </ant>
 
+    <available file="${webappTargetDir}/WEB-INF/classes/log4j.xml" property="weblog4j.present"/>
+    <antcall target="setLog4j"/>
+
     <replace dir="${cgibinTargetDir}" 
              propertyFile="${targetDir}/config/gus.config" >
       <include name="**/*" />
@@ -149,6 +151,12 @@
       <replacefilter token="@oracleHome@" value="${env.ORACLE_HOME}"/>
     </replace>
 
+  </target>
+
+  <target name="setLog4j" if="weblog4j.present">
+    <dirname  property="webappDir" file="${webappTargetDir}"/>
+    <basename property="webapp" file="${webappDir}"/>
+    <replace file="${webappTargetDir}/WEB-INF/classes/log4j.xml" token="@WEBAPP@" value="${webapp}"/>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->

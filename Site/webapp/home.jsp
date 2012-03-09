@@ -1,45 +1,58 @@
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 
 <!-- get wdkModel saved in application scope -->
 <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
+<c:set var="wdkUser" value="${sessionScope.wdkUser}" />
+<c:if test="${wdkUser == null}">
+  <c:set var="wdkUser" value="${wdkModel.userFactory.guestUser}" />
+</c:if>
 
-<!-- get wdkModel name to display as page header -->
-<c:set value="${wdkModel.displayName}" var="wdkModelDispName"/>
-<site:header banner="WDK ${wdkModelDispName} Home page" />
-
-<!-- display wdkModel introduction text -->
-<p style="padding-left:1em;">
-<b><i>${wdkModel.introduction}</i></b>
-</pn>
-<hr>
-
-<!-- show all questionSets in model -->
-<table width="100%" style="margin-left:10px;">
-<c:set value="${wdkModel.questionSets}" var="questionSets"/>
-<c:forEach items="${questionSets}" var="qSet">
-  <c:if test="${qSet.internal == false}">
-  <tr><td bgcolor="lightblue">${qSet.description}</td></tr>
-  <tr><td><!-- list of questions in a questionSet -->
-          <html:form method="get" action="/showQuestion.do">
-          <html:select property="questionFullName">
-            <c:set value="${qSet.name}" var="qSetName"/>
-            <c:set value="${qSet.questions}" var="questions"/>
-            <c:forEach items="${questions}" var="q">
-              <c:if test="${q.isCombined == false}">
-                <c:set value="${q.name}" var="qName"/>
-                <c:set value="${q.displayName}" var="qDispName"/>
-                <html:option value="${qSetName}.${qName}">${qDispName}</html:option>
-              </c:if>
-            </c:forEach>
-          </html:select>
-          <html:submit value="Select Search"/>
-          </html:form>
-	<br>
-       </td>
-   </c:if>
+<%-- load help record, and obtain statistics --%>
+<%-- load the taxon info --%>
+<c:set var="helperQuestions" value="${wdkModel.questionSetsMap['HelperQuestions']}" />
+<c:set var="helperQuestion" value="${helperQuestions.questionsMap['ByDefault']}" />
+<jsp:setProperty name="helperQuestion" property="user" value="${wdkUser}" />
+<c:set var="helperRecords" value="${helperQuestion.answerValue.records}" />
+<c:forEach items="${helperRecords}" var="item">
+  <c:set var="helperRecord" value="${item}" />
 </c:forEach>
-</table>
+<c:set var="attributes" value="${helperRecord.attributes}" />
+<c:set var="organism_count" value="${attributes['organism_count']}" />
+<c:set var="protein_count" value="${attributes['protein_count']}" />
+<c:set var="group_count" value="${attributes['group_count']}" />
 
-<site:footer/>
+
+<imp:header title="OrthoMCL" refer="home" />
+<imp:sidebar />
+
+  <!-- display wdkModel introduction text -->
+  <div id="site-title">${wdkModel.introduction}</div>
+  <div id="site-intro" class="ui-widget ui-widget-content ui-corner-all">
+    <p>Ortholog Groups of Protein Sequences from Multiple Genomes!</p>
+    <p>Current Release: Version: ${wdkModel.version}</p>
+    <c:url var="organismUrl" value="/showSummary.do?view=organism"/>
+    <c:url var="proteinUrl" value="/processQuestion.do?questionFullName=SequenceQuestions.AllSequences&questionSubmit=Get%20Answer"/>
+    <c:url var="groupUrl" value="/processQuestion.do?questionFullName=GroupQuestions.AllGroups&questionSubmit=Get%20Answer"/>
+    <p>Number of Genomes: <a href="${organismUrl}"><b>${organism_count}</b></a>, 
+       Number of Protein Sequences: <a href="${proteinUrl}"><b>${protein_count}</b></a>, 
+       <br>Number of Ortholog Groups: <a href="${groupUrl}"><b>${group_count}</b></a>
+    </p>
+  </div>
+
+  <div id="search-bubbles">
+    <ul>
+      <imp:searchCategories />
+      
+      <li><a title="Tools">Tools</a>
+        <ul>
+          <li><a href="<c:url value='/showQuestion.do?questionFullName=SequenceQuestions.ByBlast'/>">BLAST</a></li>
+          <li><a href="<c:url value='/proteomeUpload.do'/>">Assign proteins to groups</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+<imp:footer/>

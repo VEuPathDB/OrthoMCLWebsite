@@ -8,68 +8,57 @@
 %>
 
 <c:set var="wdkUser" value="${sessionScope.wdkUser}"/>
+<span id="user-control">
+  <c:choose>
+    <c:when test="${wdkUser != null && wdkUser.guest != true}">
+      <c:set var="userName" value="${wdkUser.firstName} ${wdkUser.lastName}" />
+      <a href="<c:url value='/profile.jsp'/>"><span id="user-name">${userName}</span>'s Profile</a> |
+      <a href="javascript:void(0)" onclick="logout()">Logout</a>
+      <div id="logout">
+        <form name="logoutForm" method="POST" action="<c:url value='/processLogout.do'/>">
+        </form>
+      </div>
+    </c:when>
 
-<table>
-<c:choose>
-  <c:when test="${wdkUser != null && wdkUser.guest != true}">
-      <tr>
-        <td valign="top" colspan="2" style="font-size:130%">
-           <c:set var="firstName" value="${wdkUser.firstName}"/>
-	   Welcome: ${firstName}! 
-        </td>
-     </tr>
-     <tr>
-        <td valign="top">
-           <a href="<c:url value='/profile.jsp'/>">Your Profile</a>
-        </td>
-        <td>
-	   <html:form method="POST" action='/processLogout.do' >
-              <input type="submit" value="Logout">
-           </html:form>
-        </td>
-      </tr>
-
-  </c:when>
-
-  <c:otherwise>
-     <c:if test="${showError && sessionScope.loginError != null && sessionScope.loginError != ''}">
-       <c:set var="errorMessage" value="${sessionScope.loginError}"/>
-       <c:remove var="loginError" scope="session"/>
-       <tr>
-          <td align="center" colspan="2">
-             <div class="small"><font color="red">${errorMessage}<br>
-             Note email and password are case-sensitive.</font></div>
-          </td>
-       </tr>
-     </c:if>
-     <tr>
-       <td align="left">
-          <html:form method="POST" action='/processLogin.do' >
-<table><tr><td>
-	            <b>Email: </b> <input type="text" name="email" size="10%">
-	    </td>
-  	    <td>
-        	    <b>Password: </b> <input type="password" name="password" size="10%">
-            		<a href="<c:url value='/showResetPassword.do'/>">forgot?</a>
-	    </td>
-	</tr>
-
-            <c:if test="${requestScope.refererUrl != null}">
-               <input type="hidden" name="refererUrl" value="${requestScope.refererUrl}">
-            </c:if>
-	<tr><td colspan="2" >
-             <input type="submit" value="Log In">&nbsp;&nbsp;     
-		     <a href="<c:url value='/showRegister.do'/>">.....or Register</a>
-	</td></tr>
-</table>
-
-          </html:form>
-       </td>
-    </tr>
-
-
-  </c:otherwise>
-
-</c:choose>
-
-</table>
+    <c:otherwise>
+      <a href="javascript:void(0)" onclick="login(this)">Login</a> |
+      <a href="<c:url value='/register.do'/>">Register</a>
+      <div id="login">
+        <div class="title">OrthoMCL Account Login</div>
+        <form name="loginForm" method="POST" action="<c:url value='/processLogin.do'/>">
+          <table>
+            <tr>
+              <th>Email:</th>
+              <td><input id="email" type="text" size="20" name="email" /></td>
+            </tr>
+            <tr>
+              <th>Password:</th>
+              <td><input id="password" type="password" size="20" name="password"></td>
+            </tr>
+            <tr>
+              <td align="center" colspan="2">
+                <input type="checkbox" size="11" name="remember" id="remember">Remember me on this computer.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" colspan="2">
+                <span class="small">
+                  <input type="submit" class="button" value="Login">  
+                  <input type="submit" class="button" value="Cancel">             
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" align="center" colspan="2">
+                <span class="small">
+                  <a href="<c:url value='/showResetPassword.do'/>">Forgot Password?</a>&nbsp;&nbsp;
+                  <a href="<c:url value='/showRegister.do'/>">Register/Subscribe</a>
+                </span>
+              </td>
+            </tr>
+        </table>
+      </form>
+      </div>
+    </c:otherwise>
+  </c:choose>
+</span>

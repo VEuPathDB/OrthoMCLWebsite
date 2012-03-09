@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 
 <c:set var="project" value="${applicationScope.wdkModel.displayName}" />
 
@@ -8,50 +8,9 @@
               description="Value to appear in page's title"
 %>
 <%@ attribute name="refer" 
-                          type="java.lang.String"
-                          required="false" 
-                          description="Page calling this tag"
+              required="false" 
+              description="Page calling this tag"
 %>
-
-<%-------- CHECK list below: some are not in use:
-	- division being used by login and help, 
-	- banner by many pages   
-----------------------------------------------------------%>
-<%@ attribute name="banner"
-              required="false"
-              description="Value to appear at top of page"
-%>
-<%@ attribute name="parentDivision"
-              required="false"
-%>
-
-<%@ attribute name="parentUrl"
-              required="false"
-%>
-<%@ attribute name="divisionName"
-              required="false"
-%>
-
-<%@ attribute name="division"
-              required="false"
-%>
-<%@ attribute name="summary"
-              required="false"
-              description="short text description of the page"
-%>
-
-<%@ attribute name="headElement"
-              required="false"
-              description="additional head elements"
-%>
-
-<%@ attribute name="bodyElement"
-              required="false"
-              description="additional body elements"
-%>
-
-
-
 <html>
 
 <%--------------------------- HEAD of HTML doc ---------------------%>
@@ -66,87 +25,37 @@
 <link rel="shortcut icon" href="<c:url value="/images/favicon.ico" /> ">
 
 <%-- css from WDK  --%>
-<wdk:includes /> 
-
-<link type="text/css" href="<c:url value='wdkCustomization/css/sunny/jquery-ui-1.8.14.custom.css' />" rel="stylesheet" /> 
-
-<%-- When definitions are in conflict, the next one overrides the previous one  --%>
-<link rel="StyleSheet" href="<c:url value="/css/style.css" />" 		type="text/css">
-<link rel="stylesheet" href="<c:url value="/css/Color.css" />"        	type="text/css" />
-<link rel="stylesheet" href="<c:url value="/wdkCustomization/css/group.css" />" type="text/css" />
-
-
-<site:jscript refer="${refer}"/>
-
-<!--[if lt IE 8]>
-<link rel="stylesheet" href="<c:url value="/css/ie7.css"/>" type="text/css" />
-<![endif]-->
-
-<!--[if lt IE 7]>
-<link rel="stylesheet" href="<c:url value="/css/ie6.css"/>" type="text/css" />
-<![endif]-->
-
-
-
-<%-- LETS CHECK WHO IS USING THIS, OR REMOVE ---%>
-<SCRIPT TYPE="text/javascript" lang="JavaScript">
-<!--
-
-function uncheck(notFirst) {
-    var form = document.downloadConfigForm;
-    var cb = form.selectedFields;
-    if (notFirst) {
-        for (var i=1; i<cb.length; i++) {
-            cb[i].checked = null;
-        }
-    } else {
-        cb[0].checked = null;
-    }
-}
-
-function check(all) {
-    var form = document.downloadConfigForm;
-    var cb = form.selectedFields;
-    cb[0].checked = (all > 0 ? null : 'checked');
-    for (var i=1; i<cb.length; i++) {
-        cb[i].checked = (all > 0 ? 'checked' : null);
-    }
-}
-
--->
-</SCRIPT>
-
+<imp:includes refer="${refer}"/>
 
 </head>
-
-<%--------------------------- BODY of HTML doc ---------------------%>
 <body>
-  <div id="siteLogoBanner">
-    <a href="<c:url value="/" />"><img src="<c:url value="/wdk/images/strategiesWDK.png" />"
-       border="0" alt="Site logo"></a>
-  <c:choose>
-  <c:when test="${not empty banner}">
-    <span class="bannerh1">${banner}</span>
-  </c:when>
-  <c:otherwise>
-    <span class="bannerh1">WDK ${project}</span>
-  </c:otherwise>
-  </c:choose>
-  <br><br>
+
+<div id="header">
+  <div id="header-control" class="ui-widget ui-widget-content ui-corner-all">
+    <div id="sub-logo">
+      <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
+    </div>
+
+  <imp:quickSearch />
+
+    <div id="tool-sets">
+    <a href="#">About OrthoMCL</a> |
+    <a href="#">Help</a> |
+    <imp:login /> |
+    <a href="#">Contact Us</a> |
+    <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
+    <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
+    </div>
   </div>
 
-<div id="tabsLogin" style="position:relative">
-  <div id="leftLinks" style="position:absolute;top:-4pt;left:8pt;font-size:130%">
-    <table><tr><td>
-    <a href='<c:url value="/" />'>New Search</a></td><td>
-    <a href='<c:url value="/showApplication.do" />'>My Strategies</a></td><td>
-    <a href='<c:url value="/showXmlDataContent.do?name=XmlQuestions.StrategiesHelp" />'>Strategy Tips</a></td>
-<%--	<td><a href='<c:url value="/showXmlDataList.do" />'>News</a></td>  --%>
-   </tr></table>  
-  </div>
-  <div id="login" style="position:absolute;right:10pt;top:-5pt;">
-    <site:login/>
+   <div id="site-logo">
+<%--
+    <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
+--%>
+    <a href="<c:url value='/home.jsp'/>">OrthoMCL</a>
   </div>
 </div>
-<br><br><br>
-  <hr />
+
+<imp:menubar refer="${refer}" />
+
+<div id="main-content"><!-- the close DIV is defined in footer. -->

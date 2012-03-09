@@ -42,8 +42,9 @@
 
 
         <question name="ByAccession" queryRef="SequenceIds.ByAccession" 
-                                  displayName="Seq Accession"
-                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+                  displayName="Seq Accession"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass"
+                  noSummaryOnSingleRecord="true">
             <description>
                         <![CDATA[
                 Find protein sequences by the source id or the group name it belongs to.
@@ -93,19 +94,253 @@
                            sorting="primary_key asc"/>
         </question>
 
-<!--
-        <question name="ByBlast" queryRef="SequenceIds.ByBlast"
-				  displayName="BLAST"
+    <question name="ByBlast"
+         displayName="BLAST"
+         shortDisplayName="BLAST"
+         searchCategory="Similarity/Pattern"
+         queryRef="SequenceIds.ByBlast"
+         recordClassRef="SequenceRecordClasses.SequenceRecordClass"
+         fullAnswer="true">
+        <attributesList
+         summary="organism,product,score,evalue"
+         sorting="evalue asc"
+         /> 
+         <summary>
+           Find genes that have BLAST similarity to your input sequence.
+         </summary>
+
+         <description>
+           <![CDATA[
+             Find genes that have BLAST similarity to your input query sequence.
+             <p>The search uses <a href="http://blast.wustl.edu/" target="_blank">WU BLAST</a>.
+          ]]>
+         </description>
+
+         <summaryView name="blast" display="BLAST" default="true"
+                      jsp="/wdkCustomization/jsp/results/blast.jsp" />
+
+         <dynamicAttributes>
+             <columnAttribute name="evalue_mant" displayName="E-Value-Mant"
+                              internal="true" inReportMaker="false"/>
+             <columnAttribute name="evalue_exp" displayName="E-Value-Exp"
+                              internal="true" inReportMaker="false"/>
+             <columnAttribute name="score" displayName="Score">
+                    <plugin name="histogram" display="Histogram"
+                            description="Display the histogram of the values of this attribute"
+                            implementation="org.gusdb.wdk.model.attribute.plugin.HistogramAttributePlugin"
+                            view="/wdk/jsp/results/histogram.jsp" />
+             </columnAttribute>
+             <textAttribute name="evalue" displayName="E-Value">
+                 <display>
+                     <![CDATA[
+                     <span style="display:none">$$evalue_exp$$ $$evalue_mant$$</span>$$evalue_mant$$E$$evalue_exp$$
+                     ]]>
+                 </display>
+                 <text>$$evalue_mant$$E$$evalue_exp$$</text>
+             </textAttribute>
+         </dynamicAttributes>
+    </question>
+
+    <question name="ByMotif"
+         displayName="Protein Motif Pattern"
+         shortDisplayName="Prot Motif"
+         searchCategory="Similarity/Pattern"
+         queryRef="SequenceIds.ByMotif"
+         recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+        <attributesList
+         summary="organism,product,MatchCount,Sequence"
+         sorting="organism asc,MatchCount desc,location_text asc"
+        /> 
+
+        <summary>
+             <![CDATA[
+              Find genes whose protein product contains a motif pattern that you specify, e.g.: two cysteines followed by one or more hydrophobic amino acids, followed by arginine, then lysine.
+              ]]>
+         </summary>
+         <description>
+           <![CDATA[
+             Find genes whose protein product contains a motif pattern that
+             you specify., e.g. "CC6+RK", which means "two cysteines followed
+             by one or more hydrophobic amino acids, followed by arginine,
+             then lysine". The pattern need not be well conserved. If 
+             you can describe it in
+             words, you can probably use this tool to create an "expression"
+             that can search other proteins for similar patterns.  
+             <br><br>
+
+             Another example is the pattern of the
+             <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15591202&query_hl=2">
+             Pexel motif</a>, which can be represented as "R.L.[EQD]", meaning
+             "an arginine, then any amino acid, then a leucine, then any amino
+             acid, then either an aspartic acid, a glutamic acid, or a
+             glutamine".
+             <br><br>
+
+             The pattern need not be well conserved. If you can describe it in
+             words, you can probably use this tool to create an "expression"
+             that can search other proteins for similar patterns.
+             <br><br>
+
+             Specify the pattern with a (Perl style) "regular expression".
+             (Regular expressions are more powerful than PROSITE patterns.)
+             For a description of how to create regular expressions,
+             please see the <a href="regexp.jsp">Regular Expression Tutorial</a>.
+             <br><br>
+
+             The following codes can be used to represent classes of amino acids.
+		<table border columns=3>
+                   <TR>
+                      <TD><B>AA property</B>
+                      </TD>
+                      <TD><B>Amino acids</B>
+                      </TD>
+                      <TD><B>Code</B>
+                      </TD>
+                   </TR>
+
+                   <TR>
+                      <TD>
+                      <B>Acidic</B>
+                      </TD>
+                      <TD><B>DE</B>
+                      </TD>
+                      <TD><B>0</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Alcohol</B>
+                      </TD>
+                      <TD><B>ST</B>
+                      </TD>
+                      <TD><B>1</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aliphatic</B>
+                      </TD>
+                      <TD><B>ILV</B>
+                      </TD>
+                      <TD><B>2</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aromatic</B>
+                      </TD>
+                      <TD><B>FHWY</B>
+                      </TD>
+                      <TD><B>3</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Basic</B>
+                      </TD>
+                      <TD><B>KRH</B>
+                      </TD>
+                      <TD><B>4</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Charged</B>
+                      </TD>
+                      <TD><B>DEHKR</B>
+                      </TD>
+                      <TD><B>5</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophobic</B>
+                      </TD>
+                      <TD><B>AVILMFYW</B>
+                      </TD>
+                      <TD><B>6</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophilic</B>
+                      </TD>
+                      <TD><B>KRHDENQ</B>
+                      </TD>
+                      <TD><B>7</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Polar</B>
+                      </TD>
+                      <TD><B>CDEHKNQRST</B>
+                      </TD>
+                      <TD><B>8</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Small</B>
+                      </TD>
+                      <TD><B>ACDGNPSTV</B>
+                      </TD>
+                      <TD><B>9</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Tiny</B>
+                      </TD>
+                      <TD><B>AGS</B>
+                      </TD>
+                      <TD><B>B</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Turnlike</B>
+                      </TD>
+                      <TD><B>ACDEGHKNQRST</B>
+                      </TD>
+                      <TD><B>Z</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Any</B>
+                      </TD>
+                      <TD><b>ACDEFGHIKLM<br>
+                             NPQRSTVWY</b>
+                      </TD>
+                      <TD><B>.</B>
+                      </TD>
+                   </TR>
+                   </table>
+          ]]>
+         </description>
+         <dynamicAttributes>
+           <columnAttribute name="Locations" displayName="Match Locations" align="center"/>
+           <columnAttribute name="MatchCount" displayName="Match Count" align="center">
+                    <plugin name="histogram" display="Histogram"
+                            description="Display the histogram of the values of this attribute"
+                            implementation="org.gusdb.wdk.model.attribute.plugin.HistogramAttributePlugin"
+                            view="/wdk/jsp/results/histogram.jsp" />
+           </columnAttribute>
+           <columnAttribute name="Sequence" displayName="Motif" inReportMaker="false" truncateTo="4000"/>
+         </dynamicAttributes>
+       </question>
+
+
+        <question name="FromGroups" queryRef="SequenceIds.FromGroups" 
+                  displayName="Transform to Sequences" shortDisplayName="To Sequences"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
-			<![CDATA[
-                Find protein sequences by the id assigned by current or previous releases of OrthoMCL.
-			]]>
+                        <![CDATA[ Transform group results into sequences. ]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="organism, group_name, length"
+                           sorting="group_name ASC"/>
         </question>
--->
+
+        <question name="AllSequences" queryRef="SequenceIds.AllSequences" 
+                                  displayName="All Sequences"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+                        <![CDATA[
+                Find all protein sequences in the current release of OrthoMCL.
+                        ]]>
+            </description>
+            <attributesList summary="abbreviation, length, product"
+                           sorting="primary_key asc"/>
+        </question>
 
     </questionSet>
 

@@ -36,16 +36,21 @@
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
         <question name="ByAccession" queryRef="GroupIds.ByAccession" 
-                                  displayName="Group or Sequence id"
-                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+                  displayName="Group or Sequence id"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass"
+                  noSummaryOnSingleRecord="true">
             <description>
                         <![CDATA[
                 Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
         <question name="ByKeyword" queryRef="GroupIds.ByKeyword" 
@@ -56,6 +61,8 @@
                 Find Orthologous groups by the keyword.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -67,6 +74,8 @@
                 Find Orthologous groups by the PFam.
 			]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -78,6 +87,8 @@
                 Find Orthologous groups by the PFam.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -89,6 +100,8 @@
                 Find Orthologous groups by the number of sequences a group has
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -100,6 +113,8 @@
                 Find Orthologous groups by the number of genomes a group has
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -111,6 +126,8 @@
                 Find Orthologous groups by the percentage match pairs.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -122,6 +139,8 @@
                 Find Orthologous groups by the average percentage identities.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
@@ -133,37 +152,71 @@
                 Find Orthologous groups by the average percentage matches.
                         ]]>
             </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
-
-
-<!--
+		
         <question name="ByPhyleticPattern" queryRef="GroupIds.ByPhyleticPattern" 
-				  displayName="Phyletic"
+		  displayName="Phyletic Patterns" shortDisplayName="Phyletic"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
 			<![CDATA[
-                Find Orthologous groups by the Phyletic pattern.
+<p>Find Orthologous groups by the Phyletic pattern.</p>
+
+<p>Phyletic Pattern Expression is a flexible way to do queries of ortholog groups. By using this tool, you can specify the presence or absence of genome (i.e. whether this genome has certain gene or not), and the number of copies (i.e. how many duplicates certain gene has in a specific genome).</p>
+
+<p>*PPE Grammar: Individual grammatical units of PPE expressions are composed of two parts:</p>
+<ol>
+	<li> A species specification, composed of a three-letter species abbreviation (e.g. "tgon"), or a list of species abbreviations linked by plus sign "+" (e.g. "tgon+pfal+hsap"). Several abbreviations are also permitted, such as "BACT" for all Eubacteria genomes, "EUKA" for all eukaryotic genomes, "APIC" for all apicomplexan genomes, "ALL" to represent all the genomes in the current OrthoMCL (clade abbreviations are indicated on the form).</li>
+	<li> A logical comparison operator, such as >, <, =, >=, or <=, and a number representing the number of sequences from these species that must be present in the ortholog group (e.g. "tgon>5" specifies ortholog groups containing at least 5 in-paralogs from Toxoplasma gondii. Alternatively, when appended with the character "T" (for Taxa), this number represents the number of species that must be represented in the ortholog group.</li>
+</ol>
+<p>Multiple expression units may be combined using "AND" or "OR", and may use parentheses to provide explicit execution ordering.</p>
+
+<p>Examples & Explanations:</p>
+<ul>
+    <li>"hsap+ecol=2T" would generate ortholog groups in which both human and E. coli are present.</li>
+    <li>"hsap+ecol=1T" would generate ortholog groups in which only one species of human and E. coli is present.</li>
+    <li>"ALL=150T" would generate ortholog groups representing all 150 species.</li>
+    <li>"EUKA=35T" would generate Eukaryota-universal ortholog groups (representing all 35 eukaryotic species).</li>
+    <li>"EUKA>=5T AND hsap>=10" would generate all ortholog groups representing at least five eukaryotic species and containing at least 10 human proteins.</li>
+</ul>
+
+<p>Tips:</p>
+<ul>
+    <li> Please prevent redundancy in your PPE query, e.g. "hsap>=1" is equal to "hsap=1T", so no need to mention them twice.</li>
+    <li> Please merge different PPE units to save time in query, e.g. "hsap=1T AND mmus=1T" can be merged as "hsap+mmus=2T".</li>
+</ul>
 			]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
 
 
-        <question name="ByProperties" queryRef="GroupIds.ByProperties"
-				  displayName="Group Properties"
+        <question name="FromSequences" queryRef="GroupIds.FromSequences" 
+                  displayName="Transform to Groups" shortDisplayName="To Groups"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
-			<![CDATA[
-                Find Orthologous groups by the id assigned by current or previous releases of OrthoMCL.
-			]]>
+                        <![CDATA[ Transform sequence results into groups. ]]>
             </description>
-            <attributesList summary="name, num_of_members"
-                           sorting="num_of_members desc"/>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
         </question>
--->
 
-	</questionSet>
+
+        <question name="AllGroups" queryRef="GroupIds.AllGroups" 
+                                  displayName="All Groups"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+                        <![CDATA[
+                Find all Orthologous groups in the current release of OrthoMCL.
+                        ]]>
+            </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
+        </question>
+
+    </questionSet>
 
 </wdkModel>

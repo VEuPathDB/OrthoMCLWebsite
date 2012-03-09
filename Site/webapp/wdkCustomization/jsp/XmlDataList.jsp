@@ -1,12 +1,12 @@
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 
 <!-- get wdkXmlQuestionSets saved in request scope -->
 <c:set var="xmlQSets" value="${requestScope.wdkXmlQuestionSets}"/>
 
-<site:header banner="News" />
+<imp:header banner="News" />
 
 <!-- show all xml question sets -->
 	<div id="cirbulletlist">
@@ -28,4 +28,4 @@
 </UL>
 </div>
 
-<site:footer/>
+<imp:footer/>

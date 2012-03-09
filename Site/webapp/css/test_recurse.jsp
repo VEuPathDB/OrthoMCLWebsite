@@ -1,4 +1,4 @@
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  
 <c:set var="depth" value="${param.depth}"/>
@@ -11,6 +11,6 @@
 
 Expect to see [${depth}..1], one per line, with increasing indentation: <br>
 
-<site:toyrecurse current_depth="${depth}" current_indent="0"/>
+<imp:toyrecurse current_depth="${depth}" current_indent="0"/>
 
 <br> ~~ end of test ~~ <br>

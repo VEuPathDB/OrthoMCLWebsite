@@ -34,15 +34,6 @@
             SELECT count(*) FROM apidb.OrthologGroup
         </testRowCountSql>
 
-        <sqlQuery name="AllGroups">
-            <column name="group_name"/>
-            <sql>
-			<![CDATA[
-                SELECT g.name AS group_name
-				FROM apidb.OrthologGroup g
-			]]>
-            </sql>
-        </sqlQuery>
 
         <sqlQuery name="GroupAttrs">
             <column name="group_name"/>
@@ -94,6 +85,18 @@ GROUP BY og.name
             </sql>
         </sqlQuery>
 
+
+        <sqlQuery name="SVG">
+            <column name="group_name"/>
+            <column name="svg_content"/>
+            <sql>
+            <![CDATA[
+                SELECT g.name AS group_name, g.svg_content
+                FROM apidb.OrthologGroup g
+                        ]]>
+            </sql>
+        </sqlQuery>
+
     </querySet>
 
 
@@ -131,7 +134,7 @@ GROUP BY og.name, ot.orthomcl_taxon_id
         <sqlQuery name="Proteins">
             <column name="group_name"/>
             <column name="source_id"/>
-            <column name="full_source_id"/>
+            <column name="accession_id"/>
             <column name="taxon_name"/>
             <column name="length"/>
             <column name="previous_groups"/>
@@ -139,8 +142,8 @@ GROUP BY og.name, ot.orthomcl_taxon_id
             <sql>
                         <![CDATA[
 SELECT og.name AS group_name,
-       eas.source_id,
-       ot.three_letter_abbrev || '|' || eas.source_id AS full_source_id,
+       eas.secondary_identifier AS source_id,
+       eas.source_id AS accession_id,
        ot.name AS taxon_name,
        eas.length,
        eas.description,
@@ -169,32 +172,61 @@ WHERE og.ortholog_group_id = ogs.ortholog_group_id
 
 
 
-        <sqlQuery name="PFamDomains">
+        <sqlQuery name="PFams">
             <column name="group_name"/>
-            <column name="source_id"/>
             <column name="primary_identifier"/>
             <column name="secondary_identifier"/>
             <column name="remark"/>
+            <sql>
+                        <![CDATA[
+SELECT DISTINCT og.name AS group_name, db.primary_identifier,
+db.secondary_identifier, db.remark
+FROM apidb.OrthologGroup og,
+     apidb.OrthologGroupAaSequence ogs,
+     dots.DomainFeature df,
+     dots.DbRefAaFeature dbaf,
+     sres.DbRef db,
+     dots.AaLocation al
+WHERE og.ortholog_group_id = ogs.ortholog_group_id
+  AND ogs.aa_sequence_id = df.aa_sequence_id
+  AND df.aa_feature_id = dbaf.aa_feature_id
+  AND dbaf.db_ref_id = db.db_ref_id
+  AND df.aa_feature_id = al.aa_feature_id
+ORDER BY db.primary_identifier
+                        ]]>
+            </sql>
+        </sqlQuery>
+
+
+
+        <sqlQuery name="ProteinPFams">
+            <column name="group_name"/>
+            <column name="primary_identifier"/>
+            <column name="source_id"/>
+            <column name="length"/>
             <column name="start_min"/>
             <column name="end_max"/>
             <sql>
                         <![CDATA[
-SELECT og.name AS group_name, eas.source_id, db.primary_identifier,
-db.secondary_identifier, db.remark,
- al.start_min, al.end_max
+SELECT DISTINCT og.name AS group_name, eas.secondary_identifier AS source_id, eas.length,
+       da.primary_identifier, da.start_min, da.end_max
 FROM apidb.OrthologGroup og,
      apidb.OrthologGroupAaSequence ogs,
-     dots.ExternalAaSequence eas,
-     dots.DomainFeature df,
-     dots.DbRefAaFeature dbaf,
-     dots.AaLocation al,
-     sres.DbRef db
+     dots.ExternalAaSequence eas
+     LEFT JOIN
+     (SELECT df.aa_sequence_id, db.primary_identifier, al.start_min, al.end_max
+      FROM dots.DomainFeature df,
+           dots.DbRefAaFeature dbaf,
+           sres.DbRef db,
+           dots.AaLocation al
+      WHERE df.aa_feature_id = al.aa_feature_id
+        AND df.aa_feature_id = dbaf.aa_feature_id
+        AND dbaf.db_ref_id = db.db_ref_id
+     ) da
+     ON eas.aa_sequence_id = da.aa_sequence_id
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = eas.aa_sequence_id
-  AND eas.aa_sequence_id = df.aa_sequence_id
-AND df.aa_feature_id = al.aa_feature_id
-AND df.aa_feature_id = dbaf.aa_feature_id
-AND dbaf.db_ref_id = db.db_ref_id
+ORDER BY eas.secondary_identifier ASC, da.start_min ASC
                         ]]>
             </sql>
         </sqlQuery>

@@ -211,11 +211,12 @@
       input="/showSummary.do">
     </action>
     <action
-      path="/processSummary"
-      type="org.gusdb.wdk.controller.action.ProcessSummaryAction"
+      path="/processSummaryView"
+      type="org.gusdb.wdk.controller.action.ProcessSummaryViewAction"
       scope="request"
-      input="/showSummary.do">
-      <forward name="pq_show_summary" path="/showSummary.do"/>
+      input="/showSummaryView.do">
+      <forward name="show-summary-view" path="/showSummaryView.do"/>
+      <forward name="pq-show-basket" path="/showBasket.do"/>
     </action>  
     <action
       path="/showRecord"
@@ -471,18 +472,58 @@
       <forward name="show_strategy" path="/showStrategy.do"/>
     </action>
     <action
-      path="/showResult"
-      type="org.gusdb.wdk.controller.action.ShowResultAction"
+      path="/showSummaryView"
+      type="org.gusdb.wdk.controller.action.ShowSummaryViewAction"
       scope="request"
       validate="true">
     </action>
     <action
-      path="/showRecordFeature"
-      type="org.gusdb.wdk.controller.action.ShowRecordFeatureAction"
+      path="/showRecordView"
+      type="org.gusdb.wdk.controller.action.ShowRecordViewAction"
       scope="request"
       validate="true">
     </action>
-
+    <action
+      path="/invokeAttributePlugin"
+      type="org.gusdb.wdk.controller.action.InvokeAttributePluginAction"
+      scope="request"
+      validate="false">
+      <forward name="display" redirect="false" path="/wdk/jsp/results/attributePlugin.jsp"/>
+    </action>
+    <action
+      path="/proteomeUpload"
+      type="org.orthomcl.controller.action.ProteomeUploadAction"
+      scope="request">
+      <forward name="upload-form" path="/wdkCustomization/jsp/proteomeUpload.jsp"/>
+    </action>
+    <action
+      path="/getBiolayout"
+      type="org.orthomcl.controller.action.GetBiolayoutImageAction"
+      scope="request">
+    </action>
+    <action
+      path="/getSvgContent"
+      type="org.orthomcl.controller.action.GetSvgContentAction"
+      scope="request">
+      <forward name="display" redirect="false" path="/wdkCustomization/jsp/records/svgContent.jsp"/>
+    </action>
+    <action
+      path="/getDataSummary"
+      type="org.orthomcl.controller.action.GetDataSummaryAction"
+      scope="request">
+      <forward name="data" redirect="false" path="/wdkCustomization/jsp/DataSummary.jsp"/>
+      <forward name="release" redirect="false" path="/wdkCustomization/jsp/ReleaseSummary.jsp"/>
+    </action>
+    <action
+      path="/getGroup"
+      type="org.orthomcl.controller.action.GetGroupAction"
+      scope="request">
+    </action>
+    <action
+      path="/getOrganisms"
+      type="org.orthomcl.controller.action.GetOrganismAction"
+      scope="request">
+    </action>
 
   </action-mappings>
 

@@ -32,28 +32,18 @@
             SELECT count(*) FROM dots.ExternalAaSequence
         </testRowCountSql>
 
-        <sqlQuery name="AllSequences">
-            <column name="source_id"/>
-            <sql>
-            <![CDATA[
-                SELECT eas.source_id
-                FROM dots.ExternalAaSequence eas
-			]]>
-            </sql>
-        </sqlQuery>
 
         <sqlQuery name="SequenceAttrs">
             <column name="source_id"/>
             <column name="length"/>
             <column name="product"/>
             <column name="molecular_weight"/>
-            <column name="full_source_id"/>
             <column name="abbreviation"/>
             <column name="taxon_name"/>          
             <sql>
 		<![CDATA[
-SELECT eas.source_id, eas.length, eas.description AS product,
-       eas.molecular_weight, eas.secondary_identifier AS full_source_id,
+SELECT eas.secondary_identifier AS source_id, eas.length, eas.description AS product,
+       eas.molecular_weight,
        ot.three_letter_abbrev AS abbreviation, 
        ot.name AS taxon_name
 FROM dots.ExternalAaSequence eas, apidb.orthomcltaxon ot
@@ -67,7 +57,7 @@ WHERE eas.taxon_id = ot.taxon_id
             <column name="organism"/>
             <sql>
 			<![CDATA[
-                SELECT eas.source_id, ot.name AS organism
+                SELECT eas.secondary_identifier AS source_id, ot.name AS organism
                 FROM apidb.OrthomclTaxon ot, dots.ExternalAaSequence eas
 		WHERE eas.taxon_id = ot.taxon_id
  			]]>
@@ -79,12 +69,23 @@ WHERE eas.taxon_id = ot.taxon_id
             <column name="group_name"/>
             <sql>
 			<![CDATA[
-                SELECT eas.source_id, og.name AS group_name
+                SELECT eas.secondary_identifier AS source_id, og.name AS group_name
                 FROM dots.ExternalAaSequence eas
 		LEFT JOIN apidb.OrthologGroupAaSequence ogs
 			ON eas.aa_sequence_id = ogs.aa_sequence_id
 		LEFT JOIN apidb.OrthologGroup og
 			ON ogs.ortholog_group_id = og.ortholog_group_id
+ 			]]>
+            </sql>
+        </sqlQuery>
+
+        <sqlQuery name="SequenceSequence">
+            <column name="source_id"/>
+            <column name="sequence"/>
+            <sql>
+			<![CDATA[
+            SELECT eas.secondary_identifier AS source_id, eas.sequence 
+            FROM dots.ExternalAaSequence eas
  			]]>
             </sql>
         </sqlQuery>
@@ -98,7 +99,7 @@ WHERE eas.taxon_id = ot.taxon_id
             <column name="group_name"/>
             <sql>
                         <![CDATA[
-SELECT eas.source_id, ref.primary_identifier AS group_name
+SELECT eas.secondary_identifier AS source_id, ref.primary_identifier AS group_name
 FROM dots.ExternalAaSequence eas,
      Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
      Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr

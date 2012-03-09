@@ -1,4 +1,4 @@
-<%@ taglib prefix="site" tagdir="/WEB-INF/tags/site" %>
+<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- get wdkRecord from proper scope -->
@@ -6,7 +6,7 @@
 
 <!-- display page header with recordClass type in banner -->
 <c:set value="${wdkRecord.recordClass.type}" var="recordType"/>
-<site:header banner="${recordType} Record page"/>
+<imp:header banner="${recordType} Record page"/>
 
 <EM style="color:#7cba7c">This is a customized view for records of type EstRecordClasses.EstRecordClass</EM><br>
 
@@ -31,9 +31,9 @@
 
 <!-- show all tables for record -->
 <c:forEach items="${wdkRecord.tables}"  var="tblEntry">
-  <wdk:wdkTable tblName="${tblEntry.key}" isOpen="true"/>
+  <imp:wdkTable tblName="${tblEntry.key}" isOpen="true"/>
 </c:forEach>
 
 </table>
 
-<site:footer/>
+<imp:footer/>

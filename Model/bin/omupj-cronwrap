@@ -9,7 +9,7 @@
 # 5. Executes orthomclManageUserProteomeJob
 #
 # Example cron entry
-#   */5 * * * * /var/www/w1.orthomcl.org/gus_home/bin/omupj-cronwrap
+#   */5 * * * * /var/www/w1.orthomcl.org/gus_home/bin/omupj-cronwrap /var/www/w1.orthomcl.org/cgi-lib/proteomeMapping-zcluster.rcc.uga.edu.conf
 
 umask 0002
 
@@ -21,17 +21,19 @@ export PATH=$GUS_HOME/bin:$PROJECT_HOME/install/bin:$PATH
 export PERL5LIB=$GUS_HOME/lib/perl
 export CGILIB=$BASE_GUS/cgi-lib
 
-TMPDIR="$(grep controlDir $CGILIB/proteomeJobConfig.txt | cut -d'=' -f2 | sed "s/ //g" )"
+CONF=${1-$CGILIB/proteomeJobConfig.txt}
+
+TMPDIR="$(grep controlDir "$CONF" | cut -d'=' -f2 | sed "s/ //g" )"
 LOG=$TMPDIR/runlog
 
 # rotate log at 100MB
 #  100MB * 1024KB/MB * 1024B/KB = 104857600
 if [[ -f $LOG ]]; then
-    LOGSIZE=$(stat -c %s $LOG)
+    LOGSIZE=$(stat -c %s "$LOG")
     if [[ "$LOGSIZE" -gt "104857600" ]]; then
       mv $LOG ${LOG}.1
       gzip -f ${LOG}.1
     fi
 fi
 
-$Bin/orthomclManageUserProteomeJob $CGILIB/proteomeJobConfig.txt >> $LOG 2>&1
+$Bin/orthomclManageUserProteomeJob "$CONF" >> $LOG 2>&1

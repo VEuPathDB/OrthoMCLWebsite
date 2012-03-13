@@ -96,7 +96,7 @@ ok
 
 echo -n "checking proteome_job_dir (config.yaml) ... "
 is_local_dir $proteome_job_dir || \
-    abort "invalid directory for proteome_job_dir:\n'$resultDir'" 
+    abort "invalid directory for proteome_job_dir:\n'$proteome_job_dir'" 
 ok
 
 echo -n "checking proteome_job_dir (config.yaml) is subdirectory of controlDir ... "

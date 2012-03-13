@@ -6,7 +6,7 @@ export BASE_GUS="${Bin%%gus_home/bin}"
 export CGILIB=$BASE_GUS/cgi-lib
 export GUS_HOME=$BASE_GUS/gus_home
 
-PJCONF="$CGILIB/proteomeJobConfig.txt"
+PJCONF=${1-$CGILIB/proteomeJobConfig.txt}
 YAMLCONF="$CGILIB/config.yaml"
 
 if [[ ! -e "$PJCONF" ]]; then
@@ -94,12 +94,6 @@ is_local_dir $resultDir || \
     abort "invalid directory for resultDir:\n'$resultDir'" 
 ok
 
-echo -n "checking resultDir is subdirectory of controlDir ... "
-if [[ "$controlDir" != "$(dirname "$resultDir")" ]]; then
-    abort "resultDir:\n'$resultDir' is not sub to '$controlDir'" 
-fi
-ok
-
 echo -n "checking proteome_job_dir (config.yaml) ... "
 is_local_dir $proteome_job_dir || \
     abort "invalid directory for proteome_job_dir:\n'$resultDir'" 
@@ -135,7 +129,7 @@ ok
 
 
 echo -n "checking blastDbFilePath ... "
-is_remote_file $blastDbFilePath || \
+is_remote_file $blastDbFilePath.psq || \
     abort "invalid file for blastDbFilePath:\n'$blastDbFilePath'"
 ok
 

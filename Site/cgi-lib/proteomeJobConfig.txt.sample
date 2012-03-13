@@ -9,7 +9,7 @@ adminEmail=mheiges@gmail.com
 # these change with each OrthoMCL Release
 ##############################################################################
 
-# path to the blast database on the cluster
+# path on cluster to the FASTA file of OrthoMCL protein sequences
 blastDbFilePath=/scratch/jcklab/eupath/OrthoMCL/5/proteinsBlastDb/proteinSeqs
 
 # OrthoMCL groups file on webserver. This is the same file that is made available for download

@@ -129,7 +129,7 @@ ok
 
 
 echo -n "checking blastDbFilePath ... "
-is_remote_file $blastDbFilePath.psq || \
+is_remote_file $blastDbFilePath || \
     abort "invalid file for blastDbFilePath:\n'$blastDbFilePath'"
 ok
 

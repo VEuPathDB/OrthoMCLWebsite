@@ -27,20 +27,6 @@
 
 <imp:header refer="summary" title="My Strategies"/>
 
-<%-- Build URL for sharing strategies --%>
-<c:set var="scheme" value="${pageContext.request.scheme}" />
-<c:set var="serverName" value="${pageContext.request.serverName}" />
-<c:set var="request_uri" value="${requestScope['javax.servlet.forward.request_uri']}" />
-<c:set var="request_uri" value="${fn:substringAfter(request_uri, '/')}" />
-<c:set var="request_uri" value="${fn:substringBefore(request_uri, '/')}" />
-<c:set var="exportBaseUrl" value = "${scheme}://${serverName}/${request_uri}/im.do?s=" />
-
-<%-- set guestUser flag and sharing URL for javascript --%>
-<script type="text/javascript" language="javascript">
-        var guestUser = '${wdkUser.guest}'; 
-	exportBaseURL = '${exportBaseUrl}'
-</script>
-
 <imp:strategyWorkspace includeDYK="true" />
 
 <imp:footer />

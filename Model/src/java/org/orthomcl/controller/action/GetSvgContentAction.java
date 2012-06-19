@@ -1,7 +1,5 @@
 package org.orthomcl.controller.action;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 

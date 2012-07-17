@@ -31,7 +31,7 @@
   </div>
 
   <div id="contact">
-    Please <a href="<c:url value="/help.jsp"/>" target="_blank" onClick="poptastic(this.href); return false;">Contact Us</a> 
+    Please <a href="#" class="open-dialog-contact-us">Contact Us</a> 
     with any questions or comments.
     <br>
     <a href="http://code.google.com/p/strategies-wdk/" target="_blank"
@@ -49,6 +49,10 @@
        	<a href="http://trichdb.org"><img border=0 src="<c:url value='wdkCustomization/images/trichdb_w65.png'/>"       height=30></a>&nbsp;&nbsp;
        	<a href="http://tritrypdb.org"><img border=0 src="<c:url value='wdkCustomization/images/tritrypdb_w40.png'/>"	width=25></a>
   </div>
+</div>
+
+<div id="wdk-dialog-contact-us" style="display:none;" title="We Appreciate Your Questions and Feedback">
+  <imp:contactUs/>
 </div>
 
 </body>

@@ -46,7 +46,7 @@
     <a href="#">About OrthoMCL</a> |
     <a href="#">Help</a> |
     <imp:login /> |
-    <a href="#">Contact Us</a> |
+    <a href="#" class="open-dialog-contact-us">Contact Us</a> |
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
     <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
     </div>

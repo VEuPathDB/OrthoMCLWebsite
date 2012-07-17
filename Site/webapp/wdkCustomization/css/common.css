@@ -18,3 +18,7 @@ a:visited { color: #330099; }
 #footer { padding: 5px; text-align: center; }
 #footer #copyright { float: left; padding: 10px; }
 #footer #contact { float: right; text-align: right; }
+
+.contact-us ul { list-style: disc outside none; margin: 1em 0em; padding-left: 1em; }
+
+.contact-us td { vertical-align: top; }

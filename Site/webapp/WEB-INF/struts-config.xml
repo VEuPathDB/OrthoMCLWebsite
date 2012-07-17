@@ -49,6 +49,12 @@
 
   <action-mappings>
     <action
+      path="/contactUs"
+      type="org.gusdb.wdk.controller.action.ContactUsAction"
+      scope="request"
+      validate="false">
+    </action>
+    <action
       path="/showFavorite"
       type="org.gusdb.wdk.controller.action.ShowFavoriteAction"
       scope="request"

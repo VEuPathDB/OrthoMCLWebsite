@@ -23,8 +23,15 @@ export CGILIB=$BASE_GUS/cgi-lib
 
 CONF=${1-$CGILIB/proteomeJobConfig.txt}
 
+if [[ ! -f $CONF ]]; then
+    echo    
+    echo "$CONF not found. Quitting."
+    exit 1;
+fi
+
 TMPDIR="$(grep controlDir "$CONF" | cut -d'=' -f2 | sed "s/ //g" )"
 LOG=$TMPDIR/runlog
+LASTLOG=$TMPDIR/runlog.$$
 
 # rotate log at 100MB
 #  100MB * 1024KB/MB * 1024B/KB = 104857600
@@ -36,4 +43,17 @@ if [[ -f $LOG ]]; then
     fi
 fi
 
-$Bin/orthomclManageUserProteomeJob "$CONF" >> $LOG 2>&1
+$Bin/orthomclManageUserProteomeJob "$CONF" > $LASTLOG 2>&1
+EXIT=$?
+
+if [[ -f $LASTLOG ]]; then 
+    echo '---------' >> $LOG
+    date >> $LOG
+    cat $LASTLOG >> $LOG
+    if [[ "$EXIT" -ne "0" ]]; then
+        cat $LASTLOG; # stdout for email
+    fi
+    rm $LASTLOG
+fi
+
+exit $EXIT

@@ -275,11 +275,12 @@ PhyleticViewManager.createGroupDisplay = function(manager, workspace) {
         });
 
         // register mouse over events
-        workspace.find("#groups .group .phyletic-pattern .taxon").tooltip({ 
-            showURL: false, 
-            bodyHandler: function() { 
-                return $(this).children(".description").html(); 
-            } 
+        workspace.find("#groups .group .phyletic-pattern .taxon").qtip({ 
+            content: {
+		text: function(api) {
+			return $(this).find('.tooltip').clone();
+		}
+	    }
         });
     }
 

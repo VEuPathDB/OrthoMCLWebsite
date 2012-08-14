@@ -169,15 +169,16 @@
             <table name="TaxonCounts" internal="true" inReportMaker="false"
                    displayName="TaxonCounts"
                    queryRef="GroupTables.TaxonCounts">
-                <columnAttribute name="taxon_id" displayName="Taxon Id" />
+                <columnAttribute name="taxon_id" displayName="Taxon ID" />
+                <columnAttribute name="abbrev" displayName="Taxon Abbreviation" />
                 <columnAttribute name="count" displayName="Count" />
             </table>
 
-            <table name="Proteins"
-                   displayName="List of Proteins"
+            <table name="Sequences"
+                   displayName="List of Sequences"
                    queryRef="GroupTables.Proteins">
-                <columnAttribute name="source_id" displayName="Source Id" internal="true" />
-                <columnAttribute name="accession_id" displayName="Accession" />
+                <columnAttribute name="full_id" displayName="Accession" />
+                <columnAttribute name="source_id" displayName="Source ID" />
                 <columnAttribute name="taxon_name" displayName="Taxon" />
                 <columnAttribute name="length" displayName="Length" />
                 <columnAttribute name="previous_groups" displayName="Previous Groups" />

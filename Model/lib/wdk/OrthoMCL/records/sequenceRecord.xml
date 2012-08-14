@@ -43,7 +43,7 @@
                      type="Sequence">
             
             <testParamValues>
-               <paramValue name="est_id">9644248</paramValue>
+               <paramValue name="full_id">aaeg|AAEL000450-PA</paramValue>
             </testParamValues>
         
       <!-- =============================================================== -->
@@ -77,17 +77,17 @@
             <favorite noteField="product" />
             
             <primaryKeyAttribute name="primary_key"
-                                 displayName="Source Id">
-                <columnRef>source_id</columnRef>
+                                 displayName="Accession">
+                <columnRef>full_id</columnRef>
                 <text>
                     <![CDATA[
-                    $$source_id$$
+                    $$full_id$$
                     ]]>
                 </text>                
             </primaryKeyAttribute>
 
             <attributeQueryRef ref="SequenceAttributes.SequenceAttrs">  
-                <columnAttribute name="source_id" displayName="Source ID" internal="true" />
+                <columnAttribute name="source_id" displayName="Source ID" />
                 <columnAttribute name="length" displayName="Length">
                     <plugin name="histogram" display="Histogram"
                             description="Display the histogram of the values of this attribute"
@@ -115,9 +115,6 @@
                 <columnAttribute name="taxon_name" displayName="Taxon Name" />
             </attributeQueryRef>
             
-            <attributeQueryRef ref="SequenceAttributes.SequenceOrganism">
-                <columnAttribute name="organism" displayName="Organism" />
-            </attributeQueryRef>
             
             <attributeQueryRef ref="SequenceAttributes.SequenceGroup">
                 <columnAttribute name="group_name" displayName="Group">
@@ -127,6 +124,7 @@
                             view="/wdk/jsp/results/wordCloud.jsp" />
                 </columnAttribute>
             </attributeQueryRef>
+
             
             <attributeQueryRef ref="SequenceAttributes.SequenceSequence">
                 <columnAttribute name="sequence" displayName="Sequence" internal="false"/>

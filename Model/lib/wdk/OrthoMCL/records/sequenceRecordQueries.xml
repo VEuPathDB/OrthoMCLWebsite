@@ -25,7 +25,7 @@
     <querySet name="SequenceAttributes" queryType="attribute">
 
        <defaultTestParamValues>
-            <paramValue name="source_id">PF11_0344</paramValue>
+            <paramValue name="full_id">pfal|PF11_0344</paramValue>
        </defaultTestParamValues>
 
         <testRowCountSql>
@@ -34,6 +34,7 @@
 
 
         <sqlQuery name="SequenceAttrs">
+            <column name="full_id"/>
             <column name="source_id"/>
             <column name="length"/>
             <column name="product"/>
@@ -42,7 +43,8 @@
             <column name="taxon_name"/>          
             <sql>
 		<![CDATA[
-SELECT eas.secondary_identifier AS source_id, eas.length, eas.description AS product,
+SELECT eas.secondary_identifier AS full_id, eas.source_id,
+       eas.length, eas.description AS product,
        eas.molecular_weight,
        ot.three_letter_abbrev AS abbreviation, 
        ot.name AS taxon_name
@@ -52,24 +54,13 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
-        <sqlQuery name="SequenceOrganism">
-            <column name="source_id"/>
-            <column name="organism"/>
-            <sql>
-			<![CDATA[
-                SELECT eas.secondary_identifier AS source_id, ot.name AS organism
-                FROM apidb.OrthomclTaxon ot, dots.ExternalAaSequence eas
-		WHERE eas.taxon_id = ot.taxon_id
- 			]]>
-            </sql>
-        </sqlQuery>
 
         <sqlQuery name="SequenceGroup">
-            <column name="source_id"/>
+            <column name="full_id"/>
             <column name="group_name"/>
             <sql>
 			<![CDATA[
-                SELECT eas.secondary_identifier AS source_id, og.name AS group_name
+                SELECT eas.secondary_identifier AS full_id, og.name AS group_name
                 FROM dots.ExternalAaSequence eas
 		LEFT JOIN apidb.OrthologGroupAaSequence ogs
 			ON eas.aa_sequence_id = ogs.aa_sequence_id
@@ -80,11 +71,11 @@ WHERE eas.taxon_id = ot.taxon_id
         </sqlQuery>
 
         <sqlQuery name="SequenceSequence">
-            <column name="source_id"/>
+            <column name="full_id"/>
             <column name="sequence"/>
             <sql>
 			<![CDATA[
-            SELECT eas.secondary_identifier AS source_id, eas.sequence 
+            SELECT eas.secondary_identifier AS full_id, eas.sequence 
             FROM dots.ExternalAaSequence eas
  			]]>
             </sql>
@@ -95,11 +86,11 @@ WHERE eas.taxon_id = ot.taxon_id
     <querySet name="SequenceTables" queryType="table">
 
         <sqlQuery name="OldGroups">
-            <column name="source_id"/>
+            <column name="full_id"/>
             <column name="group_name"/>
             <sql>
                         <![CDATA[
-SELECT eas.secondary_identifier AS source_id, ref.primary_identifier AS group_name
+SELECT eas.secondary_identifier AS full_id, ref.primary_identifier AS group_name
 FROM dots.ExternalAaSequence eas,
      Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
      Sres.ExternalDatabase db, Sres.ExternalDatabaseRelease dbr

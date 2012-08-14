@@ -37,7 +37,7 @@ public class BlastPlugin extends AbstractPlugin {
     private static final String PARAM_ALGORITHM = "BlastAlgorithm";
     private static final String PARAM_QUERY_SEQUENCE = "BlastQuerySequence";
 
-    private static final String COLUMN_ID = "source_id";
+    private static final String COLUMN_ID = "full_id";
     private static final String COLUMN_EVALUE_MANT = "evalue_mant";
     private static final String COLUMN_EVALUE_EXP = "evalue_exp";
     private static final String COLUMN_SCORE = "score";

@@ -115,10 +115,12 @@ GROUP BY og.name
         <sqlQuery name="TaxonCounts">
             <column name="group_name"/>
             <column name="taxon_id"/>
+            <column name="abbrev"/>
             <column name="count"/>
             <sql>
                         <![CDATA[
-SELECT og.name as group_name, ot.orthomcl_taxon_id AS taxon_id, count(*) as count
+SELECT og.name as group_name, ot.orthomcl_taxon_id AS taxon_id, 
+       ot.three_letter_abbrev AS abbrev, count(*) as count
 FROM apidb.OrthologGroup og, 
      APIDB.ORTHOLOGGROUPAASEQUENCE ogs, 
      DOTS.externalaasequence eas,
@@ -126,15 +128,15 @@ FROM apidb.OrthologGroup og,
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = eas.aa_sequence_id
   AND eas.taxon_id = ot.taxon_id
-GROUP BY og.name, ot.orthomcl_taxon_id
+GROUP BY og.name, ot.orthomcl_taxon_id, ot.three_letter_abbrev
                         ]]>
             </sql>
         </sqlQuery>
 
         <sqlQuery name="Proteins">
             <column name="group_name"/>
+            <column name="full_id"/>
             <column name="source_id"/>
-            <column name="accession_id"/>
             <column name="taxon_name"/>
             <column name="length"/>
             <column name="previous_groups"/>
@@ -142,8 +144,8 @@ GROUP BY og.name, ot.orthomcl_taxon_id
             <sql>
                         <![CDATA[
 SELECT og.name AS group_name,
-       eas.secondary_identifier AS source_id,
-       eas.source_id AS accession_id,
+       eas.secondary_identifier AS full_id,
+       eas.source_id,
        ot.name AS taxon_name,
        eas.length,
        eas.description,

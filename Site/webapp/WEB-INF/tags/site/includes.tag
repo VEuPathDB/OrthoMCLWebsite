@@ -47,8 +47,10 @@
 
 <c:if test="${refer == 'summary' || refer == 'record'}">
   <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic.js"/>'></script>
-
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
+
+  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic-pattern.js"/>'></script>
+  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/phyletic-pattern.css' />">
 </c:if>
 
 <c:if test="${refer == 'record'}">

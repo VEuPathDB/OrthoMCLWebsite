@@ -3,8 +3,7 @@ var COOKIE_SHOW_LABEL = "show_label";
 var COOKIE_TAXON_PREFIX = "taxon_";
 
 function initializePhyleticView() {
-    document.phyleticViewManager = new PhyleticViewManager();
-    document.phyleticViewManager.initialize();
+    PhyleticViewManager.initialize();
 };
 
 function Taxon(id) {
@@ -43,13 +42,14 @@ function Taxon(id) {
     }
 }
 
-function PhyleticViewManager() {
-    this.taxonMap = { };
-    this.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, AMOE: {}, 
+var PhyleticViewManager = { };
+
+PhyleticViewManager.taxonMap = { };
+PhyleticViewManager.rootMap = {FIRM: {}, PROT: {}, OBAC: {}, ARCH: {}, EUGL: {}, AMOE: {}, 
                     VIRI: {}, ALVE: {}, FUNG: {}, META: {}, OEUK: {}};
 
-    this.initialize = function() {
-        var manager = document.phyleticViewManager;
+PhyleticViewManager.initialize = function() {
+        var manager = PhyleticViewManager;
         var workspace = window.wdk.findActiveView();
         manager.loadTaxons(manager, workspace);
         manager.configureControls(manager, workspace);
@@ -57,7 +57,7 @@ function PhyleticViewManager() {
         manager.createGroupDisplay(manager, workspace);
     }
 
-    this.loadTaxons = function(manager, workspace) {
+PhyleticViewManager.loadTaxons = function(manager, workspace) {
         var parentMap = { };
         // fetch data
         workspace.find("#taxons .taxon").each(function() {
@@ -97,7 +97,7 @@ function PhyleticViewManager() {
         }
     }
 
-    this.configureControls = function(manager, workspace) {
+PhyleticViewManager.configureControls = function(manager, workspace) {
         // register show/hide count events
         workspace.find("#control #showCount").click(function() {
             var checked = this.checked
@@ -123,7 +123,7 @@ function PhyleticViewManager() {
         });
     }
 
-    this.createTaxonDisplay = function(manager, workspace) {
+PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         var stub = workspace.find("#taxon-display");
         var div = "<table><tr>";
         var even = false;
@@ -192,12 +192,8 @@ function PhyleticViewManager() {
         });
 
         // register mouse over events
-        stub.find(".taxon .name").tooltip({
-            showURL: false,
-            bodyHandler: function() {
-                return $(this).siblings(".description").html();
-            }
-        });
+        assignStickyTooltipByElement(stub.find(".taxon"));
+
         stub.find(".taxon").hover(function() {
             if ($(this).attr("color-backup")) return;
             
@@ -256,7 +252,7 @@ function PhyleticViewManager() {
         });
     }
 
-    this.createGroupDisplay = function(manager, workspace) {
+PhyleticViewManager.createGroupDisplay = function(manager, workspace) {
         workspace.find("#groups .group").each(function() {
             var groupId = $(this).attr("id");
             var counts = manager.getCounts(manager, workspace, groupId);
@@ -287,7 +283,7 @@ function PhyleticViewManager() {
         });
     }
 
-    this.createFlatNode = function(taxon, count, show) {
+PhyleticViewManager.createFlatNode = function(taxon, count, show) {
         var div = "";
         var display = show ? "" : "display: none; ";
         var cookie = $.cookie(COOKIE_SHOW_LABEL);
@@ -302,14 +298,14 @@ function PhyleticViewManager() {
         div += "     style=\"" + display + width + "\" count=\"" + count + "\">";
         div += "  <div class=\"name\" " + childStyle+ "><span " + grandChildStyle+ ">" + taxon.abbrev + "</span></div>";
         div += "  <div class=\"count\" " + childStyle+ "><span " + grandChildStyle+ ">" + count + "</span></div>";
-        div += "  <div class=\"description\">" + taxon.getPath() + "<br /><i>" + taxon.name;
+        div += "  <div class=\"description tooltip\">" + taxon.getPath() + "<br /><i>" + taxon.name;
         if (taxon.common_name) div += " (" + taxon.common_name + ")";
         div += "</i></div>";
         div += "</div>";
         return div;
     }
 
-    this.getCounts = function(manager, workspace, groupId) {
+PhyleticViewManager.getCounts = function(manager, workspace, groupId) {
         var counts = { };
         workspace.find("#groups #" + groupId).find(".count-data .count").each(function () {
             var group = $(this);
@@ -319,4 +315,4 @@ function PhyleticViewManager() {
         });
         return counts; 
     }
-}
+

@@ -37,8 +37,6 @@
     The full name of a record is is of the form "set_name.name."
     --> 
 
-
-    <!-- EST recordClasses -->
     <recordClassSet name="SequenceRecordClasses">
     
         <recordClass name="SequenceRecordClass"
@@ -64,6 +62,15 @@
                       implementation="org.gusdb.wdk.model.report.JSONReporter">          
             </reporter>
 
+      <!-- =============================================================== -->
+      <!--  Default summary attributes and sorting attributes -->  
+      <!-- =============================================================== -->
+            
+         <attributesList
+           summary="group_name, taxon_name, abbreviation, length, product"
+           sorting="primary_key asc"/>
+
+ 
       <!-- =============================================================== -->
       <!-- Attributes -->  
       <!-- =============================================================== -->

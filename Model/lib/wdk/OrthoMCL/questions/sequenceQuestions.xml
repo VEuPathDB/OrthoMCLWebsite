@@ -36,8 +36,6 @@
                 Find protein sequences by the id assigned by current or previous releases of OrthoMCL.
 			]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
 
@@ -50,8 +48,6 @@
                 Find protein sequences by the source id or the group name it belongs to.
                         ]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
 
@@ -63,8 +59,6 @@
                 Find protein sequences by the keyword.
 			]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
 
@@ -76,8 +70,6 @@
                 Find protein sequences by the PFam.
 			]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
 
@@ -90,8 +82,6 @@
                 Find protein sequences by the Taxonomy abbreviation or taxon name.
 			]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
     <question name="ByBlast"
@@ -102,7 +92,7 @@
          recordClassRef="SequenceRecordClasses.SequenceRecordClass"
          fullAnswer="true">
         <attributesList
-         summary="organism,product,score,evalue"
+         summary="score, evalue, group_name, taxon_name, abbreviation, length, product"
          sorting="evalue asc"
          /> 
          <summary>
@@ -148,8 +138,8 @@
          queryRef="SequenceIds.ByMotif"
          recordClassRef="SequenceRecordClasses.SequenceRecordClass">
         <attributesList
-         summary="organism,product,MatchCount,Sequence"
-         sorting="organism asc,MatchCount desc,location_text asc"
+         summary="MatchCount, Location, group_name, taxon_name, abbreviation, length, product, Sequence"
+         sorting="MatchCount desc"
         /> 
 
         <summary>
@@ -326,7 +316,7 @@
             <description>
                         <![CDATA[ Transform group results into sequences. ]]>
             </description>
-            <attributesList summary="organism, group_name, length"
+            <attributesList summary="group_name, taxon_name, abbreviation, length, product"
                            sorting="group_name ASC"/>
         </question>
 
@@ -338,8 +328,6 @@
                 Find all protein sequences in the current release of OrthoMCL.
                         ]]>
             </description>
-            <attributesList summary="abbreviation, length, product"
-                           sorting="primary_key asc"/>
         </question>
 
     </questionSet>

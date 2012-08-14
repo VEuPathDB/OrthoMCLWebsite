@@ -138,7 +138,7 @@
          queryRef="SequenceIds.ByMotif"
          recordClassRef="SequenceRecordClasses.SequenceRecordClass">
         <attributesList
-         summary="MatchCount, Location, group_name, taxon_name, abbreviation, length, product, Sequence"
+         summary="MatchCount, Locations, group_name, taxon_name, abbreviation, length, product, Sequence"
          sorting="MatchCount desc"
         /> 
 

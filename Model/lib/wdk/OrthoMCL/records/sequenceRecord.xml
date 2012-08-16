@@ -130,10 +130,20 @@
                 <columnAttribute name="sequence" displayName="Sequence" internal="false"/>
             </attributeQueryRef>
 
+        <linkAttribute displayName="Group ID" name="group_link" inReportMaker="false" internal="false" >
+           <displayText>
+            <![CDATA[ $$group_name$$  ]]>
+           </displayText>
+           <url>
+            <![CDATA[
+              showRecord.do?name=GroupRecordClasses.GroupRecordClass&group_name=$$group_name$$
+              ]]>
+            </url>
+        </linkAttribute>
 
 
       <!-- =============================================================== -->
-      <!-- Attributes -->
+      <!-- Tables -->
       <!-- =============================================================== -->
 
             <table name="OldGroups"

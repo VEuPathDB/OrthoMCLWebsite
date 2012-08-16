@@ -177,12 +177,21 @@
             <table name="Sequences"
                    displayName="List of Sequences"
                    queryRef="GroupTables.Proteins">
-                <columnAttribute name="full_id" displayName="Accession" />
-                <columnAttribute name="source_id" displayName="Source ID" />
-                <columnAttribute name="taxon_name" displayName="Taxon" />
-                <columnAttribute name="length" displayName="Length" />
-                <columnAttribute name="previous_groups" displayName="Previous Groups" />
-                <columnAttribute name="description" displayName="Description" />
+	      <linkAttribute displayName="Accession" name="sequence_link" inReportMaker="false" internal="false" >
+		<displayText>
+		  <![CDATA[ $$full_id$$  ]]>
+		</displayText>
+		<url>
+		  <![CDATA[
+			   showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&full_id=$$full_id$$
+		  ]]>
+		</url>
+	      </linkAttribute>
+	      <columnAttribute name="full_id" internal="true" />
+	      <columnAttribute name="taxon_name" displayName="Taxon" />
+	      <columnAttribute name="length" displayName="Length" />
+	      <columnAttribute name="previous_groups" displayName="Previous Groups" />
+	      <columnAttribute name="description" displayName="Description" />
             </table>
             
             <table name="PFams"

@@ -136,7 +136,6 @@ GROUP BY og.name, ot.orthomcl_taxon_id, ot.three_letter_abbrev
         <sqlQuery name="Proteins">
             <column name="group_name"/>
             <column name="full_id"/>
-            <column name="source_id"/>
             <column name="taxon_name"/>
             <column name="length"/>
             <column name="previous_groups"/>
@@ -145,7 +144,6 @@ GROUP BY og.name, ot.orthomcl_taxon_id, ot.three_letter_abbrev
                         <![CDATA[
 SELECT og.name AS group_name,
        eas.secondary_identifier AS full_id,
-       eas.source_id,
        ot.name AS taxon_name,
        eas.length,
        eas.description,

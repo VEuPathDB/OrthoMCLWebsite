@@ -35,7 +35,7 @@ String.prototype.hash = function() {
 
 Array.prototype.shuffle = function() {
     // get seed from group name
-    var strSeed = $("#Record_View #domains").attr("seed");
+    var strSeed = $("#Record_Views #domains").attr("seed");
     var seed = strSeed.hash();
     var s = [];
     var my_seed_value = newseed(seed);
@@ -50,7 +50,7 @@ function PfamManager() {
         var manager = this;
         // the function generates 168 colors, and max domain # per group should be smaller than this.
         // if the domain # is bigger than that, should change the DIFF to 2
-        var domainCount = parseInt($("#Record_View #domains").attr("count"));
+        var domainCount = parseInt($("#Record_Views #domains").attr("count"));
         var colors = manager.generateColors(manager, 3);
         if (domainCount > colors.length)
             colors = manager.generateColors(manager, 2);
@@ -108,7 +108,7 @@ function PfamManager() {
     this.loadDomains = function(colors) {
         var domains = new Array();
         var index = 0;
-        $("#Record_View #domains .domain").each(function() {
+        $("#Record_Views #domains .domain").each(function() {
             var name = $(this).attr("id");
             var color = colors[index];
             $(this).find(".legend").css(color);
@@ -119,8 +119,8 @@ function PfamManager() {
     };
 
     this.loadProteins = function(domains) {
-        var maxLength = parseInt($("#Record_View #proteins").attr("maxlength"));
-        $("#Record_View #proteins .protein").each(function() {
+        var maxLength = parseInt($("#Record_Views #proteins").attr("maxlength"));
+        $("#Record_Views #proteins .protein").each(function() {
             var length = parseInt($(this).find(".length").text());
             var width = (100.0 * length / maxLength).toString() + "%";
             $(this).find(".protein-graph").width(width);

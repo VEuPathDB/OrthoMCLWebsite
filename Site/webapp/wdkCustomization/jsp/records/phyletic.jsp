@@ -20,6 +20,8 @@
 </c:forEach>
 <c:set var="taxons" value="${helperRecord.tables['Taxons']}" />
 
+<div class="phyletic-pattern record-panel">
+
 <div id="taxons" style="display:none">
   <c:forEach items="${taxons}" var="row">
     <div class="taxon" taxon-id="${row['taxon_id']}"
@@ -66,3 +68,4 @@ $(initializePhyleticView);
 
 </div>
 
+</div><!-- END OF .phyletic-patter -->

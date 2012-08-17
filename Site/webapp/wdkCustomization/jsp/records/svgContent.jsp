@@ -27,7 +27,7 @@ text {font-size: 11px;}
     ]]></style>
   </defs>
 
-    <script xlink:href="<c:url value='/wdk/js/lib/jquery-1.6.4.min.js'/>" type="application/ecmascript"></script>
+    <script xlink:href="<c:url value='/wdk/js/lib/jquery-1.7.min.js'/>" type="application/ecmascript"></script>
     <script xlink:href="<c:url value='/wdkCustomization/js/svg.js'/>" type="application/ecmascript"></script>
 
 

@@ -6,6 +6,6 @@
 <!-- get wdkRecord from proper scope -->
 <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
 
-<c:set var="proteins" value="${wdkRecord.tables['Proteins']}" />
+<c:set var="proteins" value="${wdkRecord.tables['Sequences']}" />
 
 <imp:wdkTable tblName="${proteins.name}" isOpen="true"/>

@@ -61,6 +61,10 @@
             <reporter name="json" displayName="json: choose from columns and/or tables"
                       implementation="org.gusdb.wdk.model.report.JSONReporter">          
             </reporter>
+         
+            <reporter name="fasta" displayName="Download protein sequences in FASTA format"
+                      implementation="org.orthomcl.model.report.FastaReporter">          
+            </reporter>
 
       <!-- =============================================================== -->
       <!--  Default summary attributes and sorting attributes -->  

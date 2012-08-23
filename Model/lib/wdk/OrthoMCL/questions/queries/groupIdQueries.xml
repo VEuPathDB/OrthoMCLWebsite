@@ -185,7 +185,7 @@ WHERE og.number_of_members >= $$sequence_count_min$$
                 <![CDATA[
 SELECT group_id AS group_name
 FROM apidb.GroupsChangedInPlanA
-where min_score != null
+where min_score is not null
                 ]]>
             </sql>
         </sqlQuery>

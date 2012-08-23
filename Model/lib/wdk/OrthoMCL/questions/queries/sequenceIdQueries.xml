@@ -177,6 +177,20 @@ WHERE plan_a_group_id = $$planAGroupId$$
             </sql>
         </sqlQuery>
 
+        <sqlQuery name="ByPlanAAvgScoreChange" isCacheable="true">
+            <paramRef ref="sharedParams.minAvgScore"/>
+            <paramRef ref="sharedParams.maxAvgScore"/>
+            <column name="full_id"/>
+            <sql>
+                <![CDATA[
+SELECT protein_id AS full_id 
+FROM apidb.ProteinToPlanAGroupId
+WHERE avg_score >= $$minAvgScore$$
+and avg_score <= $$maxAvgScore$$
+               ]]>
+            </sql>
+        </sqlQuery>
+
         <sqlQuery name="ByPlanAScoreChange" isCacheable="true">
             <paramRef ref="sharedParams.minScore"/>
             <paramRef ref="sharedParams.maxScore"/>

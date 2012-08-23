@@ -162,6 +162,13 @@
                 <columnAttribute name="svg_content" displayName="SVG" internal="true" inReportMaker="false" />
             </attributeQueryRef>
 
+            <attributeQueryRef ref="GroupAttributes.GroupPlanAInfo">
+                <columnAttribute name="min_score" displayName="Worst average-score" internal="false"/>
+                <columnAttribute name="max_score" displayName="Best average-score" internal="false"/>
+                <columnAttribute name="sum_score" displayName="Sum average-score" internal="false"/>
+                <columnAttribute name="avg_score" displayName="Avg average-score" internal="false"/>
+
+            </attributeQueryRef>
       <!-- =============================================================== -->
       <!-- Tables -->
       <!-- =============================================================== -->

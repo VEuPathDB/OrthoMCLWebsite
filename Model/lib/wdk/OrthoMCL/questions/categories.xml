@@ -64,6 +64,7 @@
             <questionRef>SequenceQuestions.ByTaxonomy</questionRef>
             <questionRef>SequenceQuestions.ByPlanAGroupId</questionRef>
             <questionRef>SequenceQuestions.ByPlanAScoreChange</questionRef>
+            <questionRef>SequenceQuestions.ByPlanAAvgScoreChange</questionRef>
         </searchCategory>
      
 </wdkModel>

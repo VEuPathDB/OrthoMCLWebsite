@@ -97,6 +97,22 @@ GROUP BY og.name
             </sql>
         </sqlQuery>
 
+
+        <sqlQuery name="GroupPlanAInfo">
+            <column name="group_name"/>
+            <column name="min_score"/>
+            <column name="max_score"/>
+            <column name="sum_score"/>
+            <column name="avg_score"/>
+            <sql>
+			<![CDATA[
+            SELECT group_id AS group_name, min_score, max_score, sum_score, avg_score
+            FROM apidb.GroupsChangedInPlanA
+ 			]]>
+            </sql>
+        </sqlQuery>
+
+
     </querySet>
 
 

@@ -30,14 +30,24 @@
             <suggest default="OG6_who_knows" />
         </stringParam>
 
-        <stringParam name="minScore" prompt="Min changed average score" number="false">
+        <stringParam name="minAvgScore" prompt="Min changed average score" number="false">
             <help>Range: -4.1 to 3.4</help>
             <suggest default="-4.1" />
         </stringParam>
 
-        <stringParam name="maxScore" prompt="Max changed average score" number="false">
+        <stringParam name="maxAvgScore" prompt="Max changed average score" number="false">
             <help>Range: -4.1 to 3.4</help>
             <suggest default="-3" />
+        </stringParam>
+
+        <stringParam name="minScore" prompt="Min changed score" number="false">
+            <help>Range: -1440 to 1860</help>
+            <suggest default="-1440" />
+        </stringParam>
+
+        <stringParam name="maxScore" prompt="Max changed score" number="false">
+            <help>Range: -1440 to 1860</help>
+            <suggest default="-1000" />
         </stringParam>
 
         <answerParam name="group_answer" readonly="true">

@@ -26,6 +26,7 @@
 		
 	<searchCategory name="group-properties" displayName="Group Attributes"
                         parentRef="GroupRecordClasses.GroupRecordClass">
+     	    <questionRef>GroupQuestions.ByIsChangedInPlanA</questionRef>
      	    <questionRef>GroupQuestions.BySequenceCount</questionRef>
      	    <questionRef>GroupQuestions.ByGenomeCount</questionRef>
      	    <questionRef>GroupQuestions.ByPercentMatchPairs</questionRef>
@@ -61,6 +62,8 @@
 	<searchCategory name="sequence-properties" displayName="Sequence Attributes"
                         parentRef="SequenceRecordClasses.SequenceRecordClass">
             <questionRef>SequenceQuestions.ByTaxonomy</questionRef>
+            <questionRef>SequenceQuestions.ByPlanAGroupId</questionRef>
+            <questionRef>SequenceQuestions.ByPlanAScoreChange</questionRef>
         </searchCategory>
      
 </wdkModel>

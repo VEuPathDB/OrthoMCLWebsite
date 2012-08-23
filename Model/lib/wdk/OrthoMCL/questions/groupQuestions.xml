@@ -40,6 +40,17 @@
                            sorting="number_of_members desc"/>
         </question>
 
+        <question name="ByIsChangedInPlanA" queryRef="GroupIds.ByIsChangedInPlanA" 
+				  displayName="Changed in Plan A"
+                  recordClassRef="GroupRecordClasses.GroupRecordClass">
+            <description>
+			<![CDATA[
+			]]>
+            </description>
+            <attributesList summary="group_name, number_of_members"
+                           sorting="number_of_members desc"/>
+        </question>
+
         <question name="ByAccession" queryRef="GroupIds.ByAccession" 
                   displayName="Group or Sequence id"
                   recordClassRef="GroupRecordClasses.GroupRecordClass"

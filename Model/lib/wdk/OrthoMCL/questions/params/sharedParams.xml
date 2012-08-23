@@ -25,6 +25,21 @@
             <suggest default="pfal" />
         </stringParam>
 
+        <stringParam name="planAGroupId" prompt="Plan A Group ID" number="false">
+            <help></help>
+            <suggest default="OG6_who_knows" />
+        </stringParam>
+
+        <stringParam name="minScore" prompt="Min changed score" number="false">
+            <help></help>
+            <suggest default="OG6_who_knows" />
+        </stringParam>
+
+        <stringParam name="maxScore" prompt="Max changed score" number="false">
+            <help></help>
+            <suggest default="OG6_who_knows" />
+        </stringParam>
+
         <answerParam name="group_answer" readonly="true">
             <recordClass ref="GroupRecordClasses.GroupRecordClass" />
         </answerParam>

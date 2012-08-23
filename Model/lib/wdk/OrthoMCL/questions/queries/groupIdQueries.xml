@@ -179,6 +179,17 @@ WHERE og.number_of_members >= $$sequence_count_min$$
         </sqlQuery>
 
 
+        <sqlQuery name="ByIsChangedInPlanA">
+            <column name="group_name"/>
+            <sql>
+                <![CDATA[
+SELECT group_id AS group_name
+FROM apidb.GroupsChangedInPlanA
+where min_score != null
+                ]]>
+            </sql>
+        </sqlQuery>
+
         <sqlQuery name="ByGenomeCount">
             <paramRef ref="groupParams.genome_count_min"/>
             <paramRef ref="groupParams.genome_count_max"/>

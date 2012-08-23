@@ -81,6 +81,18 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
+        <sqlQuery name="SequencePlanAInfo">
+            <column name="full_id"/>
+            <column name="plan_a_group_id"/>
+            <column name="plan_a_score"/>
+            <column name="plan_a_avg_score"/>
+            <sql>
+			<![CDATA[
+            SELECT protein_id AS full_id, plan_a_group_id, score as plan_a_score, avg_score as plan_a_avg_score
+            FROM apidb.ProteinToPlanAGroupId
+ 			]]>
+            </sql>
+        </sqlQuery>
     </querySet>
 
     <querySet name="SequenceTables" queryType="table">

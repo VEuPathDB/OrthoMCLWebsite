@@ -129,6 +129,17 @@
                 </columnAttribute>
             </attributeQueryRef>
 
+            <attributeQueryRef ref="SequenceAttributes.SequencePlanAInfo">
+                <columnAttribute name="plan_a_group_id" displayName="Plan A Group">
+                    <plugin name="wordCloud" display="Word Cloud"
+                            description="Display the terms in the attribute as word clouds"
+                            implementation="org.gusdb.wdk.model.attribute.plugin.WordCloudAttributePlugin"
+                            view="/wdk/jsp/results/wordCloud.jsp" />
+                </columnAttribute>
+                <columnAttribute name="plan_a_score" displayName="Change Score" internal="false"/>
+                <columnAttribute name="plan_a_avg_score" displayName="Change Score (avg)" internal="false"/>
+
+            </attributeQueryRef>
             
             <attributeQueryRef ref="SequenceAttributes.SequenceSequence">
                 <columnAttribute name="sequence" displayName="Sequence" internal="false"/>

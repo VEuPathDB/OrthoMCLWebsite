@@ -38,6 +38,24 @@
             </description>
         </question>
 
+        <question name="ByPlanAGroupId" queryRef="SequenceIds.ByPlanAGroupId" 
+				  displayName="Plan A Group"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+			<![CDATA[
+			]]>
+            </description>
+        </question>
+
+        <question name="ByPlanAScoreChange" queryRef="SequenceIds.ByPlanAScoreChange" 
+				  displayName="Plan A Score Change"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+			<![CDATA[
+			]]>
+            </description>
+        </question>
+
 
         <question name="ByAccession" queryRef="SequenceIds.ByAccession" 
                   displayName="Seq Accession"

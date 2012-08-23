@@ -191,7 +191,6 @@ and score <= $$maxScore$$
             </sql>
         </sqlQuery>
 
-
     <processQuery name="ByBlast" local="true"
              processName="org.orthomcl.model.wsfplugin.BlastPlugin">
 

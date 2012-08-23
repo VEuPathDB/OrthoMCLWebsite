@@ -71,7 +71,7 @@
       <!-- =============================================================== -->
             
          <attributesList
-           summary="group_name, taxon_name, abbreviation, length, product"
+           summary="group_name, taxon_name, abbreviation, length, product, plan_a_group_id, plan_a_score, plan_a_avg_score"
            sorting="primary_key asc"/>
 
  
@@ -136,8 +136,8 @@
                             implementation="org.gusdb.wdk.model.attribute.plugin.WordCloudAttributePlugin"
                             view="/wdk/jsp/results/wordCloud.jsp" />
                 </columnAttribute>
-                <columnAttribute name="plan_a_score" displayName="Change Score" internal="false"/>
-                <columnAttribute name="plan_a_avg_score" displayName="Change Score (avg)" internal="false"/>
+                <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
+                <columnAttribute name="plan_a_avg_score" displayName="Change in Averaged Score" internal="false"/>
 
             </attributeQueryRef>
             

@@ -93,6 +93,7 @@ WHERE eas.taxon_id = ot.taxon_id
  			]]>
             </sql>
         </sqlQuery>
+
     </querySet>
 
     <querySet name="SequenceTables" queryType="table">

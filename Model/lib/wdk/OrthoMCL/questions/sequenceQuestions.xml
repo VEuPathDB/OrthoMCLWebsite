@@ -42,7 +42,7 @@
 				  displayName="Plan A Group"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
-			<![CDATA[
+			<![CDATA[Find sequences by their Plan A Group ID.
 			]]>
             </description>
         </question>
@@ -51,7 +51,7 @@
 				  displayName="Plan A Score Change"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
-			<![CDATA[
+			<![CDATA[Find sequences by the amount their averaged connectivity score changed from Rel 5 to Plan A.  A protein's averaged connectivity score in a group is computed by summing it edge weights (average evalue exponent per pair) and dividing by the number of possible edges (group size minus 1).  A protein's change score is its averaged connectivity score in Plan A minus its averaged connectivity score in Rel 5.  Negative scores show a decrease in connectivity in Plan A.
 			]]>
             </description>
         </question>

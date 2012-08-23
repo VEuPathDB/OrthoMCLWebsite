@@ -42,7 +42,6 @@ ${Question_Header}
 
 </html:form>
 
-
 <c:set var="Question_Footer" scope="request">
   <%-- displays question description, can be overridden by the custom question form --%>
 <c:if test="${hideAttrDescr == false}">

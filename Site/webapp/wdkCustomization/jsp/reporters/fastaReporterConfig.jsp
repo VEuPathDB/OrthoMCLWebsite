@@ -31,6 +31,8 @@
 
 <!-- content of current page -->
 <form name="downloadConfigForm" method="get" action="<c:url value='/getDownloadResult.do' />">
+  <input type="hidden" name="step" value="${step_id}">
+  <input type="hidden" name="wdkReportFormat" value="${format}">
   <table>
    <tr>
     <td colspan="2" valign="top">

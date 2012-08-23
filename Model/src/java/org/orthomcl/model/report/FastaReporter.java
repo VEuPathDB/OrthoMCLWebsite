@@ -69,11 +69,7 @@ public class FastaReporter extends Reporter {
    */
   @Override
   public String getHttpContentType() {
-    if (format.equalsIgnoreCase("text")) {
       return "text/plain";
-    } else { // use the default content type defined in the parent class
-      return super.getHttpContentType();
-    }
   }
 
   /*

@@ -92,6 +92,15 @@
 
 
       <!-- =============================================================== -->
+      <!--  Default summary attributes and sorting attributes -->  
+      <!-- =============================================================== -->
+            
+         <!-- the last four of these are temporary PlanA attributes -->
+         <attributesList
+           summary="number_of_members, min_score, max_score, sum_score, avg_score"
+           sorting="number_of_members desc"/>
+
+      <!-- =============================================================== -->
       <!-- Attributes -->  
       <!-- =============================================================== -->
             <favorite noteField="group_name" />
@@ -197,6 +206,7 @@
 	      <columnAttribute name="full_id" internal="true" />
 	      <columnAttribute name="taxon_name" displayName="Taxon" />
 	      <columnAttribute name="length" displayName="Length" />
+	      <columnAttribute name="plan_a_group_id" displayName="Plan A Group" />
 	      <columnAttribute name="previous_groups" displayName="Previous Groups" />
 	      <columnAttribute name="description" displayName="Description" />
             </table>

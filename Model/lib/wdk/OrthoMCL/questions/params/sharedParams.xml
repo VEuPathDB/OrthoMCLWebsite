@@ -27,7 +27,7 @@
 
         <stringParam name="planAGroupId" prompt="Plan A Group ID" number="false">
             <help></help>
-            <suggest default="OG6_who_knows" />
+            <suggest default="OG6_400507" />
         </stringParam>
 
         <stringParam name="minAvgScore" prompt="Min changed average score" number="false">

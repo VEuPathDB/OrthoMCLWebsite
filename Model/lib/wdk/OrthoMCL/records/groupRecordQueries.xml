@@ -163,6 +163,7 @@ SELECT og.name AS group_name,
        ot.name AS taxon_name,
        eas.length,
        eas.description,
+       planagrp.plan_a_group_id,
        (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')
         FROM Sres.DbRef ref, 
              Sres.ExternalDatabase db, 
@@ -177,11 +178,13 @@ FROM apidb.OrthologGroup og,
      apidb.OrthologGroupAaSequence ogs,
      dots.ExternalAaSequence eas,
      apidb.OrthomclResource orr,
-     apidb.OrthomclTaxon ot
+     apidb.OrthomclTaxon ot,
+     apidb.ProteinToPlanAGroupId planagrp
 WHERE og.ortholog_group_id = ogs.ortholog_group_id
   AND ogs.aa_sequence_id = eas.aa_sequence_id
   AND ot.orthomcl_taxon_id = orr.orthomcl_taxon_id
   AND eas.taxon_id = ot.taxon_id
+  and planagrp.protein_id = eas.secondary_identifier
                         ]]>
             </sql>
         </sqlQuery>

@@ -147,7 +147,7 @@ public class FastaReporter extends Reporter {
   }
 
   @Override
-  protected void initialize() {
+  protected void initialize() throws SQLException {
     // do nothing
   }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.gusdb.wdk.model.WdkModelException;
+import org.gusdb.wdk.model.WdkUserException;
 
 public class ExpressionParser {
 
@@ -35,7 +35,7 @@ public class ExpressionParser {
         conditionPattern = Pattern.compile(CONDITION_PATTERN);
     }
 
-    public ExpressionNode parse(String expression) throws WdkModelException {
+    public ExpressionNode parse(String expression) throws WdkUserException {
         expression = expression.toLowerCase();
 
         Map<String, String> blocks = new HashMap<String, String>();
@@ -43,7 +43,7 @@ public class ExpressionParser {
     }
 
     private ExpressionNode parseNode(String expression,
-            Map<String, String> blocks) throws WdkModelException {
+            Map<String, String> blocks) throws WdkUserException {
         expression = expression.trim();
 
         // check if the node is a block identifier
@@ -70,7 +70,7 @@ public class ExpressionParser {
     }
 
     private ExpressionNode parseLeaf(String expression,
-            Map<String, String> blocks) throws WdkModelException {
+            Map<String, String> blocks) throws WdkUserException {
         expression = expression.trim();
 
         // check if the node is a block identifier
@@ -90,7 +90,7 @@ public class ExpressionParser {
             parseCounts(leaf, counts);
             return leaf;
         } else {
-            throw new WdkModelException("The expression is invalid: "
+            throw new WdkUserException("The expression is invalid: "
                     + expression);
         }
     }
@@ -108,7 +108,7 @@ public class ExpressionParser {
     }
 
     private void parseCounts(LeafNode leaf, String counts)
-            throws WdkModelException {
+            throws WdkUserException {
         counts = counts.trim();
         boolean onSpecies = counts.endsWith("t");
         if (onSpecies) counts = counts.substring(0, counts.length() - 1);
@@ -118,13 +118,13 @@ public class ExpressionParser {
             leaf.setCount(count);
         }
         catch (NumberFormatException ex) {
-            throw new WdkModelException("The expression is invalid "
+            throw new WdkUserException("The expression is invalid "
                     + "(expected: \\d+(T)? ): " + counts);
         }
     }
 
     private String replaceBlocks(String expression, Map<String, String> blocks)
-            throws WdkModelException {
+            throws WdkUserException {
         int count = 0, start = 0, previous = 0;
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < expression.length(); i++) {
@@ -134,7 +134,7 @@ public class ExpressionParser {
                 if (count == 1) start = i;
             } else if (ch == ')') {
                 if (count <= 0)
-                    throw new WdkModelException("Invalid expression. "
+                    throw new WdkUserException("Invalid expression. "
                             + "Unbalanced ')': " + expression);
                 count--;
                 if (count == 0) {
@@ -148,7 +148,7 @@ public class ExpressionParser {
             }
         }
         if (count != 0)
-            throw new WdkModelException("Invalid expression. Unbalanced '(': "
+            throw new WdkUserException("Invalid expression. Unbalanced '(': "
                     + expression);
         if (previous != expression.length()) {
             builder.append(expression.substring(previous));

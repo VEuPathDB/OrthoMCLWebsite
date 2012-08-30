@@ -14,10 +14,7 @@
       <c:set var="userName" value="${wdkUser.firstName} ${wdkUser.lastName}" />
       <a href="<c:url value='/profile.jsp'/>"><span id="user-name">${userName}</span>'s Profile</a> |
       <a href="javascript:void(0)" onclick="logout()">Logout</a>
-      <div id="logout">
-        <form name="logoutForm" method="POST" action="<c:url value='/processLogout.do'/>">
-        </form>
-      </div>
+      <div id="logout" data-location="<c:url value='/processLogout.do'/>"></div>
     </c:when>
 
     <c:otherwise>
@@ -44,7 +41,7 @@
               <td align="center" colspan="2">
                 <span class="small">
                   <input type="submit" class="button" value="Login">  
-                  <input type="submit" class="button" value="Cancel">             
+                  <input id="login-cancel-button" type="button" class="button" value="Cancel">             
                 </span>
               </td>
             </tr>

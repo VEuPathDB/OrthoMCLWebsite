@@ -1,6 +1,8 @@
 $(function() {
     $(".button").button();
 
+    initLoginDialog();
+    
     // submit Contact us via AJAX
     $("body").on("submit", "#contact-us", function(e) {
       e.preventDefault();
@@ -91,47 +93,26 @@ $(function() {
 
 });
 
-function login() {
-    // somehow the dialog cannot center itself
-    var dialog = $("#user-control div#login").clone();
-    dialog.find("form[name=loginForm]").submit(processLogin);
-    dialog.dialog({
-        modal: true,
-    });
+var loginDialog;
+
+function initLoginDialog() {
+	loginDialog = $('#user-control div#login').dialog({
+		modal: true,
+		autoOpen: false
+	});
+	$('#login-cancel-button').click(function() {
+		$(loginDialog).dialog('close');
+		//$(loginDialog).child('form').clear();
+	});
 }
 
-function processLogin() {
-    var form = $("#user-control form[name=loginForm]");
-    var url = form.attr("action");
-    var data = form.serialize();
-    $.ajax({
-        url: url,
-        data: data,
-        type: 'POST',
-        success: function(data, textStatus, jqXHR) {
-            window.location.reload( true );
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(textStatus + "\n" + errorThrown);
-        },
-    });
-    return false;
+function login() {
+	$(loginDialog).dialog('open');
 }
 
 function logout() {
     var userName = $("#user-control #user-name").text();
     if(confirm("Do you want to logout as " + userName + "?")) {
-        var form =  $("#user-control form[name=logoutForm]");
-        var url = form.attr("action");
-        $.ajax({
-            url: url,
-            type: 'POST',
-            success: function(data, textStatus, jqXHR) {
-                window.location.reload( true );
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert(textStatus + "\n" + errorThrown);
-            },
-        });
+    	window.location = $('#logout').data('location');
     }
 }

@@ -46,6 +46,3 @@ $webapp_data = $webapp->attributes();
 </div>
 
 </p>
-<p>
-<b><a href="?p=Logger">Manage Log Levels</a></b> for this running instance of the webapp
-</p>

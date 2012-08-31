@@ -27,6 +27,10 @@
     <listener-class>org.gusdb.wdk.controller.ApplicationInitListener</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>org.gusdb.wdk.jmx.JmxInitListener</listener-class>
+  </listener>
+
   <servlet>
     <servlet-name>OrthoMCLWebsite</servlet-name>
     <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>

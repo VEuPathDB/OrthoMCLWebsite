@@ -120,7 +120,8 @@
 
   <target name="OrthoMCLWebsite-WebInstallation" depends="WDK-WebInstallation,
                                                           OrthoMCLWebsite-Installation,
-                                                          OrthoMCLWebsite/Site-WebInstallation">
+                                                          OrthoMCLWebsite/Site-WebInstallation,
+                                                          OrthoMCLWebsite/Site-DashboardInstallation">
   </target>
 
   <target name="OrthoMCLWebsite/Site-WebInstallation">
@@ -157,6 +158,32 @@
     <dirname  property="webappDir" file="${webappTargetDir}"/>
     <basename property="webapp" file="${webappDir}"/>
     <replace file="${webappTargetDir}/WEB-INF/classes/log4j.xml" token="@WEBAPP@" value="${webapp}"/>
+  </target>
+
+  <target name="OrthoMCLWebsite/Site-DashboardInstallation">
+    <ant target="webComponentPartCopy">
+      <property name="componentDir" value="${projectsDir}/OrthoMCLWebsite/Site"/>
+      <property name="part" value="dashboard"/>
+      <property name="to" value="${htdocsTargetDir}/../dashboard"/>
+    </ant>
+    <available file="${htdocsTargetDir}/../dashboard" type="dir" property="dashboard.present"/>
+    <antcall target="dashboardDoc"/>
+  </target>
+
+  <target name="dashboardDoc" if="dashboard.present">
+    <echo message="Compiling phpdoc" />
+    <exec executable="phpdoc" 
+      failonerror="false"
+      failifexecutionfails="false"
+    >
+      <arg line="--ignore phpdoc/,css/,js/,config/,test/,images/,doc/" />
+      <arg line="--defaultpackagename dashboard" />
+      <arg line="--title /dashboard" />
+      <arg line="-t ${htdocsTargetDir}/../dashboard/phpdoc" />
+      <arg line="-d ${htdocsTargetDir}/../dashboard" />
+      <arg line="-o HTML:Smarty:PHP" />
+      <arg value="-q"/>      
+    </exec>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->

@@ -142,7 +142,6 @@
                 <columnAttribute name="plan_a_group_sz" displayName="Plan A Grp Sz" internal="false"/>
                 <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
                 <columnAttribute name="plan_a_avg_score" displayName="Change in Averaged Score" internal="false"/>
-                <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
                 <columnAttribute name="is_rep" displayName="Is Rep" internal="false"/>
             </attributeQueryRef>
 	    <!-- END_TEMPORARY -->

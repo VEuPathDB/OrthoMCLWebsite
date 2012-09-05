@@ -70,8 +70,9 @@
       <!--  Default summary attributes and sorting attributes -->  
       <!-- =============================================================== -->
             
+	<!-- PLANA_TEMPORARY -->
          <attributesList
-           summary="group_link, taxon_name, abbreviation, length, product, plan_a_group_id, plan_a_score, plan_a_avg_score"
+           summary="group_link, group_size, taxon_name, abbreviation, length, product, plan_a_group_id, plan_a_group_sz, plan_a_score, plan_a_avg_score"
            sorting="primary_key asc"/>
 
  
@@ -127,8 +128,10 @@
                             implementation="org.gusdb.wdk.model.attribute.plugin.WordCloudAttributePlugin"
                             view="/wdk/jsp/results/wordCloud.jsp" />
                 </columnAttribute>
+                <columnAttribute name="group_size" displayName="Group Size" internal="false"/>
             </attributeQueryRef>
 
+	    <!-- PLANA_TEMPORARY -->
             <attributeQueryRef ref="SequenceAttributes.SequencePlanAInfo">
                 <columnAttribute name="plan_a_group_id" displayName="Plan A Group">
                     <plugin name="wordCloud" display="Word Cloud"
@@ -136,10 +139,13 @@
                             implementation="org.gusdb.wdk.model.attribute.plugin.WordCloudAttributePlugin"
                             view="/wdk/jsp/results/wordCloud.jsp" />
                 </columnAttribute>
+                <columnAttribute name="plan_a_group_sz" displayName="Plan A Grp Sz" internal="false"/>
                 <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
                 <columnAttribute name="plan_a_avg_score" displayName="Change in Averaged Score" internal="false"/>
-
+                <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
+                <columnAttribute name="is_rep" displayName="Is Rep" internal="false"/>
             </attributeQueryRef>
+	    <!-- END_TEMPORARY -->
             
             <attributeQueryRef ref="SequenceAttributes.SequenceSequence">
                 <columnAttribute name="sequence" displayName="Sequence" internal="false"/>

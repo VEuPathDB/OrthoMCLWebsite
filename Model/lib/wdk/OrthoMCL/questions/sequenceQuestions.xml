@@ -38,6 +38,7 @@
             </description>
         </question>
 
+	<!-- PLANA_TEMPORARY -->
         <question name="ByPlanAGroupId" queryRef="SequenceIds.ByPlanAGroupId" 
 				  displayName="Plan A Group"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
@@ -64,6 +65,7 @@
 			]]>
             </description>
         </question>
+	<!-- END_TEMPORARY -->
 
 
         <question name="ByAccession" queryRef="SequenceIds.ByAccession" 

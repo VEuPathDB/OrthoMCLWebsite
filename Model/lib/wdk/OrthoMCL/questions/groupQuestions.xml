@@ -38,6 +38,7 @@
             </description>
         </question>
 
+	<!-- PLANA_TEMPORARY -->
         <question name="ByIsChangedInPlanA" queryRef="GroupIds.ByIsChangedInPlanA" 
 				  displayName="Changed in Plan A"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
@@ -46,6 +47,7 @@
 			]]>
             </description>
         </question>
+	<!-- END_TEMPORARY -->
 
         <question name="ByAccession" queryRef="GroupIds.ByAccession" 
                   displayName="Group or Sequence id"

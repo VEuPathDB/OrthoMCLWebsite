@@ -58,9 +58,10 @@ WHERE eas.taxon_id = ot.taxon_id
         <sqlQuery name="SequenceGroup">
             <column name="full_id"/>
             <column name="group_name"/>
+            <column name="group_size"/>
             <sql>
 			<![CDATA[
-                SELECT eas.secondary_identifier AS full_id, og.name AS group_name
+                SELECT eas.secondary_identifier AS full_id, og.name AS group_name, og.number_of_members as group_size
                 FROM dots.ExternalAaSequence eas
 		LEFT JOIN apidb.OrthologGroupAaSequence ogs
 			ON eas.aa_sequence_id = ogs.aa_sequence_id
@@ -81,18 +82,22 @@ WHERE eas.taxon_id = ot.taxon_id
             </sql>
         </sqlQuery>
 
+	<!-- PLANA_TEMPORARY -->
         <sqlQuery name="SequencePlanAInfo">
             <column name="full_id"/>
             <column name="plan_a_group_id"/>
             <column name="plan_a_score"/>
             <column name="plan_a_avg_score"/>
+            <column name="plan_a_group_sz"/>
+            <column name="is_rep"/>
             <sql>
 			<![CDATA[
-            SELECT protein_id AS full_id, plan_a_group_id, score as plan_a_score, avg_score as plan_a_avg_score
+            SELECT protein_id AS full_id, plan_a_group_id, score as plan_a_score, avg_score as plan_a_avg_score, grp_size as plan_a_group_sz, is_rep
             FROM apidb.ProteinToPlanAGroupId
  			]]>
             </sql>
         </sqlQuery>
+	<!-- END_TEMPORARY -->
 
     </querySet>
 

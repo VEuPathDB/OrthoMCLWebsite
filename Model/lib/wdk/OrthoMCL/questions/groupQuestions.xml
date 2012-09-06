@@ -29,7 +29,7 @@
 		</description>
 
         <question name="ByNameList" queryRef="GroupIds.ByNameList" 
-				  displayName="List of Group Names"
+				  displayName="Group ID(s)"
                   recordClassRef="GroupRecordClasses.GroupRecordClass">
             <description>
 			<![CDATA[

@@ -4,9 +4,9 @@
   <!-- Ortholog Group Questions  -->
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
   
-    <searchCategory name="GroupRecordClasses.GroupRecordClass" displayName="Search for Groups" />
+    <searchCategory name="GroupRecordClasses.GroupRecordClass" displayName="Search for Groups by:" />
     
-	<searchCategory name="group-keyword" displayName="Text, ID"
+	<searchCategory name="group-keyword" displayName="Text, IDs"
                         parentRef="GroupRecordClasses.GroupRecordClass">
             <questionRef>GroupQuestions.ByNameList</questionRef>
             <questionRef>GroupQuestions.ByKeyword</questionRef>
@@ -41,9 +41,9 @@
   <!--++++++++++++++++++++++++++++++++++++++++++++++++-->
      
    
-      <searchCategory name="SequenceRecordClasses.SequenceRecordClass" displayName="Search for Sequence" />
+      <searchCategory name="SequenceRecordClasses.SequenceRecordClass" displayName="Search for Sequences by:" />
      
-	<searchCategory name="sequence-keyword" displayName="Text, Ids"
+	<searchCategory name="sequence-keyword" displayName="Text, IDs"
                         parentRef="SequenceRecordClasses.SequenceRecordClass">
             <questionRef>SequenceQuestions.ByIdList</questionRef>
             <questionRef>SequenceQuestions.ByKeyword</questionRef>

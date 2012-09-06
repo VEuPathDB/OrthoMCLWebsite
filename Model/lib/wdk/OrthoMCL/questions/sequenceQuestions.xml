@@ -29,7 +29,7 @@
 
 
         <question name="ByIdList" queryRef="SequenceIds.ByIdList" 
-				  displayName="Seq Id List"
+				  displayName="Sequence ID(s)"
                   recordClassRef="SequenceRecordClasses.SequenceRecordClass">
             <description>
 			<![CDATA[

@@ -169,7 +169,7 @@ SELECT og.name AS group_name,
        planagrp.avg_score as plan_a_avg_score,
        planagrp.is_rep,
        -- END_TEMPORARY
-       eas.description
+       eas.description,
        (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')
         FROM Sres.DbRef ref, 
              Sres.ExternalDatabase db, 

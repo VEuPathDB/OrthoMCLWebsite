@@ -25,6 +25,7 @@
             <suggest default="pfal" />
         </stringParam>
 
+        <!-- PLANA_TEMPORARY -->
         <stringParam name="planAGroupId" prompt="Plan A Group ID" number="false">
             <help></help>
             <suggest default="OG6_400507" />
@@ -49,6 +50,8 @@
             <help>Range: -1440 to 1860</help>
             <suggest default="-1000" />
         </stringParam>
+
+        <!-- END_TEMPORARY -->
 
         <answerParam name="group_answer" readonly="true">
             <recordClass ref="GroupRecordClasses.GroupRecordClass" />

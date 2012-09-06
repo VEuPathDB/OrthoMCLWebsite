@@ -167,6 +167,7 @@ SELECT og.name AS group_name,
        planagrp.grp_sz as plan_a_group_sz,
        planagrp.score as plan_a_score,
        planagrp.avg_score as plan_a_avg_score,
+       planagrp.syn_score as plan_a_syn_score,
        planagrp.is_rep,
        -- END_TEMPORARY
        eas.description,

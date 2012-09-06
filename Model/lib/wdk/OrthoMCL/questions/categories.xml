@@ -68,6 +68,7 @@
             <questionRef>SequenceQuestions.ByPlanAGroupId</questionRef>
             <questionRef>SequenceQuestions.ByPlanAScoreChange</questionRef>
             <questionRef>SequenceQuestions.ByPlanAAvgScoreChange</questionRef>
+            <questionRef>SequenceQuestions.ByPlanASynScoreChange</questionRef>
 	    <!-- END_TEMPORARY -->
         </searchCategory>
      

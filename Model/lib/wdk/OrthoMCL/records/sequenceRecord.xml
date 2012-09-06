@@ -72,7 +72,7 @@
             
 	<!-- PLANA_TEMPORARY -->
          <attributesList
-           summary="group_link, group_size, taxon_name, abbreviation, length, product, plan_a_group_link, plan_a_group_sz, plan_a_score, plan_a_avg_score"
+           summary="group_link, group_size, taxon_name, abbreviation, length, product, plan_a_group_link, plan_a_group_sz, plan_a_score, plan_a_avg_score, plan_a_syn_score"
            sorting="primary_key asc"/>
 
  
@@ -142,6 +142,7 @@
                 <columnAttribute name="plan_a_group_sz" displayName="Plan A Grp Sz" internal="false"/>
                 <columnAttribute name="plan_a_score" displayName="Change in Score" internal="false"/>
                 <columnAttribute name="plan_a_avg_score" displayName="Change in Averaged Score" internal="false"/>
+                <columnAttribute name="plan_a_syn_score" displayName="Change in Synteny Score" internal="false"/>
                 <columnAttribute name="is_rep" displayName="Is Rep" internal="false"/>
             </attributeQueryRef>
  

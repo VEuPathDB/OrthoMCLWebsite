@@ -215,6 +215,7 @@
 	      <columnAttribute name="plan_a_group_sz" displayName="Plan A Grp Sz" />
 	      <columnAttribute name="plan_a_score" displayName="Plan A Score" />
 	      <columnAttribute name="plan_a_avg_score" displayName="Plan A Avg Score" />
+	      <columnAttribute name="plan_a_syn_score" displayName="Plan A Syn Score" />
 	      <columnAttribute name="is_rep" displayName="Is Rep" />
 	      <!-- END_TEMPORARY -->
 

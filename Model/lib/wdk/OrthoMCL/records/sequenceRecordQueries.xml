@@ -88,11 +88,12 @@ WHERE eas.taxon_id = ot.taxon_id
             <column name="plan_a_group_id"/>
             <column name="plan_a_score"/>
             <column name="plan_a_avg_score"/>
+            <column name="plan_a_syn_score"/>
             <column name="plan_a_group_sz"/>
             <column name="is_rep"/>
             <sql>
 			<![CDATA[
-            SELECT protein_id AS full_id, plan_a_group_id, score as plan_a_score, avg_score as plan_a_avg_score, grp_sz as plan_a_group_sz, is_rep
+            SELECT protein_id AS full_id, plan_a_group_id, score as plan_a_score, avg_score as plan_a_avg_score, syn_score as plan_a_syn_score, grp_sz as plan_a_group_sz, is_rep
             FROM apidb.ProteinToPlanAGroupId
  			]]>
             </sql>

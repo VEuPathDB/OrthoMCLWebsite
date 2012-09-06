@@ -65,6 +65,16 @@
 			]]>
             </description>
         </question>
+
+        <question name="ByPlanASynScoreChange" queryRef="SequenceIds.ByPlanASynScoreChange" 
+				  displayName="Plan A Synteny Score Change"
+                  recordClassRef="SequenceRecordClasses.SequenceRecordClass">
+            <description>
+			<![CDATA[Find sequences by the amount their synteny score changed from Rel 5 to Plan A. Negative number indicates a worsening.
+			]]>
+            </description>
+        </question>
+
 	<!-- END_TEMPORARY -->
 
 

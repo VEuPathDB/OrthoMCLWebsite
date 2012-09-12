@@ -68,27 +68,23 @@
       <!-- Views -->
       <!-- =============================================================== -->
 
-            <summaryView name="phyletic" display="Phyletic Pattern"
+            <summaryView name="phyletic" display="Phyletic pattern"
                          jsp="/wdkCustomization/jsp/results/phyletic.jsp"/>
 
+            <recordView name="_default" display="Statistics &amp; Proteins"
+                         jsp="/wdkCustomization/jsp/records/group-default.jsp"/>
 
-            <recordView name="proteins" display="List of Proteins"
-                         jsp="/wdkCustomization/jsp/records/proteins.jsp"/>
+            <recordView name="pfam-domain-graph" display="PFam domain (graphic)"
+                         jsp="/wdkCustomization/jsp/records/group-pfam-graph.jsp"/>
 
-            <recordView name="phyletic" display="Phyletic Pattern"
-                         jsp="/wdkCustomization/jsp/records/phyletic.jsp"/>
+            <recordView name="pfam-domain-list" display="PFam domain (list)"
+                         jsp="/wdkCustomization/jsp/records/group-pfam-list.jsp"/>
 
-            <recordView name="pfam-domain" display="PFam Domain"
-                         jsp="/wdkCustomization/jsp/records/groupPfam.jsp"/>
+            <recordView name="msa" display="MSA"
+                         jsp="/wdkCustomization/jsp/records/group-msa.jsp"/>
 
-            <recordView name="msa" display="Multiple Sequence Alignment"
-                         jsp="/wdkCustomization/jsp/records/msa.jsp"/>
-
-            <recordView name="biolayout" display="Biolayout"
-                         jsp="/wdkCustomization/jsp/records/biolayout.jsp"/>
-
-            <recordView name="svg" display="Interactive Biolayout"
-                         jsp="/wdkCustomization/jsp/records/svg.jsp"/>
+            <recordView name="cluster" display="Cluster graph"
+                         jsp="/wdkCustomization/jsp/records/group-cluster.jsp"/>
 
 
       <!-- =============================================================== -->

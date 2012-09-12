@@ -41,7 +41,6 @@ $(initializePhyleticView);
     <div class="count"><span count="0">&nbsp;0&nbsp;</span> no ortholog; </div>
     <div class="count"><span count="1">&nbsp;1&nbsp;</span> one ortholog; </div>
     <div class="count"><span count="2">&nbsp;n&nbsp;</span> more than one ortholog; </div>
-
 </div>
 
 <div id="control">
@@ -50,7 +49,7 @@ $(initializePhyleticView);
 
 
 
-<div id="groups" class="Results_Table">
+ <div id="groups" class="Results_Table">
 
   <c:set value="${record.primaryKey}" var="primaryKey"/>
 
@@ -66,6 +65,39 @@ $(initializePhyleticView);
     <div class="phyletic-pattern"></div>
   </div>
 
+ </div>
+
+</div><!-- END OF .phyletic-pattern -->
+
+<c:set var="attributes" value="${record.summaryAttributes}" />
+<div class="group-info">
+  <h3>Group statistics</h3>
+  <table>
+    <tr>
+      <c:forEach items="${attributes}" var="entry">
+        <th>${entry.value.attributeField.displayName}</th>
+      </c:forEach>
+    </tr>
+    <tr>
+      <c:forEach items="${attributes}" var="entry">
+        <c:set var="attribute" value="${entry.value}" />
+        <td>
+          <c:choose>
+            <c:when test="${attribute.class.name eq 'org.gusdb.wdk.model.LinkAttributeValue'}">
+              <a href="${attribute.url}">${attribute.displayText}</a>
+            </c:when>
+            <c:otherwise>
+              <font class="fixed">${attribute.value}</font>
+            </c:otherwise>
+          </c:choose>
+        </td>
+      </c:forEach>
+    </tr>
+  </table>  
 </div>
 
-</div><!-- END OF .phyletic-patter -->
+<div class="sequences">
+  <c:set var="proteins" value="${wdkRecord.tables['Sequences']}" />
+
+  <imp:wdkTable tblName="${proteins.name}" isOpen="true"/>
+</div>

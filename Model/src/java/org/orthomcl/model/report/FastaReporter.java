@@ -79,9 +79,13 @@ public class FastaReporter extends Reporter {
    */
   @Override
   public String getDownloadFileName() {
-    logger.info("Internal format: " + format);
-    String name = getQuestion().getName();
-    return name + ".fasta";
+    if (format.equalsIgnoreCase("text")) {
+      logger.info("Internal format: " + format);
+      String name = getQuestion().getName();
+      return name + ".fasta";
+    } else { // use the default content type defined in the parent class
+      return super.getHttpContentType();
+    }
   }
 
   /*

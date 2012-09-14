@@ -33,7 +33,6 @@ SELECT eas.secondary_identifier AS full_id
 FROM dots.ExternalAaSequence eas, ($$source_ids$$) ds
 WHERE lower(eas.source_id) = lower(ds.full_id)
    OR lower(eas.secondary_identifier) = lower(ds.full_id)
-/*
 UNION
 SELECT eas.secondary_identifier AS full_id
 FROM dots.ExternalAaSequence eas, Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
@@ -47,7 +46,6 @@ WHERE eas.aa_sequence_id = seqref.aa_sequence_id
   AND (lower(ref.primary_identifier) = lower(ds.full_id)
        OR
        lower(ref.secondary_identifier) = lower(ds.full_id))
-*/
 				]]>
             </sql>
         </sqlQuery>  
@@ -62,7 +60,6 @@ SELECT eas.secondary_identifier AS full_id
 FROM dots.ExternalAaSequence eas
 WHERE eas.source_id LIKE replace($$accession$$, '*', '%')
    OR eas.secondary_identifier LIKE replace($$accession$$, '*', '%')
-/*
 UNION
 SELECT eas.secondary_identifier AS full_id
 FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
@@ -76,7 +73,13 @@ WHERE eas.aa_sequence_id = seqref.aa_sequence_id
   AND (ref.primary_identifier LIKE replace($$accession$$, '*', '%')
        OR
        ref.secondary_identifier LIKE replace($$accession$$, '*', '%'))
-*/
+UNION
+SELECT eas.secondary_identifier AS full_id
+FROM dots.ExternalAaSequence eas, apidb.OrthologGroup og,
+     apidb.OrthologGroupAaSequence ogs
+WHERE eas.aa_sequence_id = ogs.aa_sequence_id
+  AND ogs.ortholog_group_id = og.ortholog_group_id
+  AND og.name = $$accession$$
                ]]>
             </sql>
         </sqlQuery>

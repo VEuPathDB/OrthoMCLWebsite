@@ -97,6 +97,8 @@ $(initializePhyleticView);
 </div>
 
 <div class="sequences">
+  <c:url var="fastaLink" value="/processQuestion.do?questionFullName=SequenceQuestions.ByAccession&skip_to_download=1&wdkReportFormat=fasta&value(accession)=${primaryKey}" />
+  <a class="button" href="${fastaLink}">Download protein sequences</a>
   <c:set var="proteins" value="${wdkRecord.tables['Sequences']}" />
 
   <imp:wdkTable tblName="${proteins.name}" isOpen="true"/>

@@ -75,6 +75,14 @@
            summary="group_link, group_size, taxon_name, abbreviation, length, product, plan_a_group_link, plan_a_group_sz, plan_a_score, plan_a_avg_score, plan_a_syn_score"
            sorting="primary_key asc"/>
 
+
+      <!-- =============================================================== -->
+      <!--  View definitions -->
+      <!-- =============================================================== -->
+
+            <recordView name="pfam-domain" display="PFam domain"
+                         jsp="/wdkCustomization/jsp/records/sequence-pfam.jsp"/>
+
  
       <!-- =============================================================== -->
       <!-- Attributes -->  
@@ -193,7 +201,33 @@
                    queryRef="SequenceTables.OldGroups">
                 <columnAttribute name="group_name" displayName="group_name" />
             </table>
+
+            <table name="PFamDomains"
+                   displayName="Pfam Domain Architecture"
+                   queryRef="SequenceTables.PFamDomains">
+                <columnAttribute name="primary_identifier" displayName="Primary Identifier" />
+                <columnAttribute name="secondary_identifier" displayName="Secondary Identifier" />
+                <columnAttribute name="remark" displayName="Remark" />
+                <columnAttribute name="start_min" displayName="End" />
+                <columnAttribute name="end_max" displayName="Start" />
+            </table>
                      
+            <table name="PFams" internal="true" inReportMaker="false"
+                   displayName="Pfam Domain Architecture"
+                   queryRef="SequenceTables.PFams">
+                <columnAttribute name="primary_identifier" displayName="Primary Identifier" />
+                <columnAttribute name="secondary_identifier" displayName="Secondary Identifier" />
+                <columnAttribute name="remark" displayName="Remark" />
+            </table>
+
+            <table name="ProteinPFams" internal="true" inReportMaker="false"
+                   displayName="Pfam Domain Architecture"
+                   queryRef="SequenceTables.ProteinPFams">
+                <columnAttribute name="primary_identifier" displayName="Primary Identifier" />
+                <columnAttribute name="length" displayName="Length" />
+                <columnAttribute name="start_min" displayName="End" />
+                <columnAttribute name="end_max" displayName="Start" />
+            </table>
         </recordClass>
 
     </recordClassSet>

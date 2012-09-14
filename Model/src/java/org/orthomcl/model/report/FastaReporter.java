@@ -84,7 +84,7 @@ public class FastaReporter extends Reporter {
       String name = getQuestion().getName();
       return name + ".fasta";
     } else { // use the default content type defined in the parent class
-      return super.getHttpContentType();
+      return super.getDownloadFileName();
     }
   }
 
@@ -115,7 +115,8 @@ public class FastaReporter extends Reporter {
 
         // output description if selected
         if (hasDescription) {
-          String description = record.getAttributeValue(ATTR_DESCRIPTION).getValue().toString().trim();
+          Object value = record.getAttributeValue(ATTR_DESCRIPTION).getValue();
+          String description = (value == null) ? "" : value.toString().trim();
           writer.print(" | " + description);
         }
 

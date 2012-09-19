@@ -1,0 +1,11 @@
+# This file contains macros used in model.xml
+# example: 
+PROJECT_ID = OrthoMCL
+
+#
+# The file needs to exist in gus_home/config/PROJECT_ID/
+# even if it is empty.
+#
+# Current OrthoMCL model.xml is not making use of any macros.
+#
+

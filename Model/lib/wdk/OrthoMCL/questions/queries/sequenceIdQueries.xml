@@ -192,20 +192,21 @@ SELECT protein_id AS full_id
 FROM apidb.ProteinToPlanAGroupId
 WHERE avg_score >= $$minAvgScore$$
 and avg_score <= $$maxAvgScore$$
+and avg_score is not null
                ]]>
             </sql>
         </sqlQuery>
 
         <sqlQuery name="ByPlanASynScoreChange" isCacheable="true">
-            <paramRef ref="sharedParams.minScore"/>
-            <paramRef ref="sharedParams.maxScore"/>
+            <paramRef ref="sharedParams.minSynScore"/>
+            <paramRef ref="sharedParams.maxSynScore"/>
             <column name="full_id"/>
             <sql>
                 <![CDATA[
 SELECT protein_id AS full_id 
 FROM apidb.ProteinToPlanAGroupId
-WHERE syn_score >= $$minScore$$
-and syn_score <= $$maxScore$$
+WHERE syn_score >= $$minSynScore$$
+and syn_score <= $$maxSynScore$$
                ]]>
             </sql>
         </sqlQuery>
@@ -220,6 +221,7 @@ SELECT protein_id AS full_id
 FROM apidb.ProteinToPlanAGroupId
 WHERE score >= $$minScore$$
 and score <= $$maxScore$$
+and score is not null
                ]]>
             </sql>
         </sqlQuery>

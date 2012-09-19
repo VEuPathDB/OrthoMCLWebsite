@@ -242,7 +242,7 @@ and score is not null
        <paramRef ref="sequenceParams.-v"/>
        <paramRef ref="sequenceParams.-b"/>
        <paramRef ref="sequenceParams.-F" quote="false" />
-       <wsColumn name="source_id" width="100"/>
+       <wsColumn name="full_id" width="100"/>
        <wsColumn name="evalue_mant" columnType="float" width="10"/>
        <wsColumn name="evalue_exp" columnType="number" width="5"/>  
        <wsColumn name="score" columnType="number" width="30"/>

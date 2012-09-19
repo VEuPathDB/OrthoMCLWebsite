@@ -106,7 +106,7 @@ GROUP BY og.name
             <column name="avg_score"/>
             <sql>
 			<![CDATA[
-            SELECT group_id AS group_name, min_score, max_score, sum_score, avg_score
+            SELECT group_id AS group_name, round(min_score, 2) as min_score, round(max_score, 2) as max_score, round(sum_score, 2) as sum_score, avg_score
             FROM apidb.GroupsChangedInPlanA
  			]]>
             </sql>

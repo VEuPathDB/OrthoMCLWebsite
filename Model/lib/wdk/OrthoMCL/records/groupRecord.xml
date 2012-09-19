@@ -207,7 +207,17 @@
 	      <columnAttribute name="length" displayName="Length" />
 
 	      <!-- PLANA_TEMPORARY -->
-	      <columnAttribute name="plan_a_group_id" displayName="Plan A Group" />
+	      <columnAttribute name="plan_a_group_id" displayName="Plan A Group" internal="true"/>
+	      <linkAttribute displayName="Plan A Group" name="plan_a_group_link" inReportMaker="false" internal="false" >
+		<displayText>
+                  <![CDATA[ $$plan_a_group_id$$  ]]>
+                </displayText>
+                <url>
+                <![CDATA[
+                  showQuestion.do?questionFullName=SequenceQuestions.ByPlanAGroupId&value%28planAGroupId%29=$$plan_a_group_id$$
+                   ]]>
+                </url>
+	      </linkAttribute>
 	      <columnAttribute name="plan_a_group_sz" displayName="Plan A Grp Sz" />
 	      <columnAttribute name="plan_a_score" displayName="Plan A Score" />
 	      <columnAttribute name="plan_a_avg_score" displayName="Plan A Avg Score" />

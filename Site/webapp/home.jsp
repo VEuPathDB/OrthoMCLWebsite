@@ -31,14 +31,14 @@
   <!-- display wdkModel introduction text -->
   <div id="site-title">${wdkModel.introduction}</div>
   <div id="site-intro" class="ui-widget ui-widget-content ui-corner-all">
-    <p>Ortholog Groups of Protein Sequences from Multiple Genomes!</p>
+    <p>Ortholog Groups of Protein Sequences from Multiple Genomes</p>
     <p>Current Release: Version: ${wdkModel.version}</p>
-    <c:url var="organismUrl" value="/showSummary.do?view=organism"/>
+    <c:url var="organismUrl" value="/getDataSummary.do?summary=data"/>
     <c:url var="proteinUrl" value="/processQuestion.do?questionFullName=SequenceQuestions.AllSequences&questionSubmit=Get%20Answer"/>
     <c:url var="groupUrl" value="/processQuestion.do?questionFullName=GroupQuestions.AllGroups&questionSubmit=Get%20Answer"/>
     <p>Number of Genomes: <a href="${organismUrl}"><b>${organism_count}</b></a>, 
-       Number of Protein Sequences: <a href="${proteinUrl}"><b>${protein_count}</b></a>, 
-       <br>Number of Ortholog Groups: <a href="${groupUrl}"><b>${group_count}</b></a>
+       Number of Protein Sequences: <b>${protein_count}</b>, 
+       <br>Number of Ortholog Groups: <b>${group_count}</b>
     </p>
   </div>
 

@@ -22,3 +22,6 @@ a:visited { color: #330099; }
 .contact-us ul { list-style: disc outside none; margin: 1em 0em; padding-left: 1em; }
 
 .contact-us td { vertical-align: top; }
+
+
+#query-description-section { font-size: 12pt; margin: 10px; }

@@ -165,10 +165,11 @@ SELECT og.name AS group_name,
        -- PLANA_TEMPORARY
        planagrp.plan_a_group_id,
        planagrp.grp_sz as plan_a_group_sz,
-       planagrp.score as plan_a_score,
-       planagrp.avg_score as plan_a_avg_score,
+       round(planagrp.score,2) as plan_a_score,
+       round(planagrp.avg_score,2) as plan_a_avg_score,
        planagrp.syn_score as plan_a_syn_score,
        planagrp.is_rep,
+       planagrp.tieroneclade as tier_one_clade_id,
        -- END_TEMPORARY
        eas.description,
        (SELECT apidb.tab_to_string(CAST(COLLECT(ref.primary_identifier) AS apidb.varchartab), ', ')

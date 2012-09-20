@@ -28,6 +28,7 @@
                         parentRef="GroupRecordClasses.GroupRecordClass">
 	    <!-- PLANA_TEMPORARY -->
      	    <questionRef>GroupQuestions.ByIsChangedInPlanA</questionRef>
+     	    <questionRef>GroupQuestions.ByIsChangedInPlanASingleClade</questionRef>
 	    <!-- END_TEMPORARY -->
      	    <questionRef>GroupQuestions.BySequenceCount</questionRef>
      	    <questionRef>GroupQuestions.ByGenomeCount</questionRef>

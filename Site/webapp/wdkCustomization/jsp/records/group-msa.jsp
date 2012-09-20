@@ -9,7 +9,15 @@
 <c:set var="msa" value="${wdkRecord.attributes['msa']}" />
 
 <div id="msa">
-  <pre>
-    ${msa.value}
-  </pre>
+  <c:choose>
+    <c:when test="${msa.value == null || mas.value eq ''}">
+      Multiple Sequence Alignment not available for this ortholog group, <br />
+      since it contains more than 100 genes.
+    </c:when>
+    <c:otherwise>
+      <pre>
+        ${msa.value}
+      </pre>
+    </c:otherwise>
+  </c:choose>
 </div>

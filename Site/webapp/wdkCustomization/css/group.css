@@ -22,9 +22,7 @@
     display: none;
 }
 
-#taxon-display {
-    float: right;
-}
+#taxon-display { float: right; margin: 5px; }
 
 #taxon-display .taxon {
     font-size: 8pt;

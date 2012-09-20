@@ -55,6 +55,9 @@ PhyleticViewManager.initialize = function() {
         manager.configureControls(manager, workspace);
         manager.createTaxonDisplay(manager, workspace);
         manager.createGroupDisplay(manager, workspace);
+
+        // remove select columns from pager
+        $(".pager .addAttributesButton").hide();
     }
 
 PhyleticViewManager.loadTaxons = function(manager, workspace) {

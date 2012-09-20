@@ -50,7 +50,6 @@ $(initializePhyleticView);
   <input id="showCount" type="checkbox" checked="true" />phyletic pattern labels <br />
 </div>
 
-
 <!-- pager -->
 <pg:pager isOffset="true"
           scope="request"
@@ -70,7 +69,7 @@ $(initializePhyleticView);
   </c:if>
 
 <%--------- PAGING TOP BAR ----------%>
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<table class="pager" width="100%" border="0" cellpadding="3" cellspacing="0">
 	<tr class="subheaderrow">
 	<th style="text-align: left;white-space:nowrap;"> 
 	       <imp:pager wdkAnswer="${wdkAnswer}" pager_id="top"/> 

@@ -26,6 +26,7 @@ function initial() {
     }
     // load the saved status
     loadState();
+    displayNodes();
 }
 
 function compareTaxons(a, b) {
@@ -39,7 +40,7 @@ function displayNodes() {
     for(var i = 0; i < roots.length; i++) {
         displayClade(roots[i], content);
     }
-    document.write(content.join(""));
+    $("#phyletic-tree").html(content.join(""));
 }
 
 function displayClade(node, content) {

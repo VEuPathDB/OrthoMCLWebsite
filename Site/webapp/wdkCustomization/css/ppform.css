@@ -10,10 +10,7 @@
     font-family: Courier New, monospace;
 }
 
-#phyletic-tree {
-    text-align: left;
-    padding: 5px 20px;
-}
+#phyletic-tree { text-align: left; margin: 10px; padding: 5px 20px; overflow:auto; }
 
 #phyletic-tree * table {
     margin: 0;
@@ -48,14 +45,12 @@
     vertical-align: middle;
 }
 
-#phyletic-search #legend, #phyletic-search .expression { text-align: center; }
+#phyletic-search #phyletic-legend, #phyletic-search .expression { text-align: center; }
 
-#phyletic-search #legend {
-    font-size:x-small;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
+#phyletic-search #phyletic-legend {
+    border: solid 1px black;
     white-space: nowrap;
+    padding:5px; margin: 10px;
 }
 
 .phyletic-category {

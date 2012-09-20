@@ -27,6 +27,42 @@
   </c:forEach>
 </div>
 
+<p>Use this query to find groups that have a particular phyletic pattern, i.e., that include or exclude taxa or species that you specify.</p>
+<p>Click on +/- to show or hide subtaxa and species.</p>
+<p>Click on the <img border=0 src="wdkCustomization/images/dc.gif"> icon to specify which taxa or species to include or exclude in the profile.  This fills in the text
+ box with an equivalent <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpression">PPE grammar</a> expression.  To refine the query, edit t
+he expression in the text box as needed, following the PPE grammar as described on the <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpre
+ssion">Advanced Phyletic Pattern Query</a> page. Hit <b>Execute Phyletic Query</b> to run the query.</p>
+
+<!-- show error messages, if any -->
+<div class='usererror'><api:errors/></div>
+
+<div id="phyletic-search" class="params">
+<div class="expression">
+  <input type="hidden" value="${wdkQuestion.fullName}" name="questionFullName" />
+  Expression:
+  <html:text property="value(phyletic_expression)" styleId="query_top" size="100" 
+       onchange="changePPE(true)" />
+  <input type="submit" value="Get Answer" name="questionSubmit" />
+</div>
+<div id="phyletic-legend">
+    <b>Key:</b> <img border=0 src="wdkCustomization/images/dc.gif"> =no constraints
+    | <img border=0 src="wdkCustomization/images/yes.gif"> =must be in group
+    | <img border=0 src="wdkCustomization/images/no.gif"> =must not be in group
+    | <img border=0 src="wdkCustomization/images/maybe.gif"> =at least one subtaxon must be in group
+    | <img border=0 src="wdkCustomization/images/unk.gif"> =mixture of constraints
+</div>
+<div id="phyletic-tree">
+ 
+</div>
+<div class="expression">
+  Expression:
+  <html:text property="value(phyletic_expression)" styleId="query_bottom" size="100" 
+       onchange="changePPE(false)" />
+</div>
+</div><%-- END OF PARAMS DIV --%>
+
+
 <script type="text/javascript">
 
 var taxons = { };
@@ -57,43 +93,4 @@ initial();
 <noscript>
 Ack, this form won't work at all without JavaScript support!
 </noscript>
-
-<p>Use this query to find groups that have a particular phyletic pattern, i.e., that include or exclude taxa or species that you specify.</p>
-<p>Click on +/- to show or hide subtaxa and species.</p>
-<p>Click on the <img border=0 src="wdkCustomization/images/dc.gif"> icon to specify which taxa or species to include or exclude in the profile.  This fills in the text
- box with an equivalent <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpression">PPE grammar</a> expression.  To refine the query, edit t
-he expression in the text box as needed, following the PPE grammar as described on the <a href="cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&type=ppexpre
-ssion">Advanced Phyletic Pattern Query</a> page. Hit <b>Execute Phyletic Query</b> to run the query.</p>
-
-<!-- show error messages, if any -->
-<div class='usererror'><api:errors/></div>
-
-<div id="phyletic-search" class="params">
-<div class="expression">
-  <input type="hidden" value="${wdkQuestion.fullName}" name="questionFullName" />
-  Expression:
-  <html:text property="value(phyletic_expression)" styleId="query_top" size="100" 
-       onchange="changePPE(true)" />
-  <input type="submit" value="Get Answer" name="questionSubmit" />
-</div>
-<div id="legend">
-    <b>Key:</b> <img border=0 src="wdkCustomization/images/dc.gif"> =no constraints
-    | <img border=0 src="wdkCustomization/images/yes.gif"> =must be in group
-    | <img border=0 src="wdkCustomization/images/no.gif"> =must not be in group
-    | <img border=0 src="wdkCustomization/images/maybe.gif"> =at least one subtaxon must be in group
-    | <img border=0 src="wdkCustomization/images/unk.gif"> =mixture of constraints
-</div>
-<div id="phyletic-tree">
-    <script type="text/javascript">
-        displayNodes();
-    </script>
-</div>
-<div class="expression">
-  Expression:
-  <html:text property="value(phyletic_expression)" styleId="query_bottom" size="100" 
-       onchange="changePPE(false)" />
-</div>
-</div><%-- END OF PARAMS DIV --%>
-
-
 

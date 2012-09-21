@@ -19,20 +19,17 @@
 	<c:out value="${title}" default="WDK ${project}" />
 </title>
 
-<!-- for IE and other beowsers -->
+<!-- for IE and other browsers -->
 <link rel="icon" type="image/png" href="<c:url value="/images/favicon.ico" /> "> 
 <link rel="shortcut icon" href="<c:url value="/images/favicon.ico" /> ">
 
-
+<!-- links and scripts (scripts should go in footer) -->
 <imp:includes refer="${refer}"/>
-
 </head>
 
 <body>
-
 <!-- helper divs with generic information used by javascript -->
 <imp:siteInfo />
-
 
 <div id="header">
   <div id="header-control" class="ui-widget ui-widget-content ui-corner-all">
@@ -40,19 +37,19 @@
       <a href="http://eupathdb.org"><image src="<c:url value='/wdkCustomization/images/partofeupath.png'/>"/></a>
     </div>
 
-  <imp:quickSearch />
+    <imp:quickSearch />
 
     <div id="tool-sets">
-    <a href="#">About OrthoMCL</a> |
-    <a href="#">Help</a> |
-    <imp:login /> |
-    <a href="#" class="open-dialog-contact-us">Contact Us</a> |
-    <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
-    <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
+      <a href="#">About OrthoMCL</a> |
+      <a href="#">Help</a> |
+      <imp:login /> |
+      <a href="#" class="open-dialog-contact-us">Contact Us</a> |
+      <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/twitter.gif' />"/></a>
+      <a href="#"><image width="16" src="<c:url value='/wdkCustomization/images/facebook.png' />"/></a>
     </div>
   </div>
 
-   <div id="site-logo">
+  <div id="site-logo">
 <%--
     <a href="<c:url value='/home.jsp'/>"><image src="<c:url value='/wdkCustomization/images/site-logo.jpg'/>"/></a>
 --%>

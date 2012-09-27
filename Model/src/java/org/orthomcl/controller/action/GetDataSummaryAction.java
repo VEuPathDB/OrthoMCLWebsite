@@ -53,7 +53,7 @@ public class GetDataSummaryAction extends Action {
         QuestionBean question = wdkModel.getQuestion(HELPER_QUESTION);
         UserBean userBean = ActionUtility.getUser(servlet, request);
         Map<String, String> params = new LinkedHashMap<String, String>();
-        AnswerValueBean answerValue = question.makeAnswerValue(userBean, params, 0);
+        AnswerValueBean answerValue = question.makeAnswerValue(userBean, params, true, 0);
         RecordBean record = answerValue.getRecords().next();
         request.setAttribute(ATTR_HELPER_RECORD, record);
         

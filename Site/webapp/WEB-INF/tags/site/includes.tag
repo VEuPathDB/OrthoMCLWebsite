@@ -14,7 +14,7 @@
 <script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/jquery.timers-1.2.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/wdkCustomization/js/common.js"/>'></script>
 
-<link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css' />">
+<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css' />">  -->
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/apycom-menu/menu.css' />">
 <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/common.css' />">
 
@@ -44,3 +44,5 @@
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/pfamDomain.css' />">
   <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/record.css' />">
 </c:if>
+
+<link rel="stylesheet" href="/assets/css/OrthoMCL.css" type="text/css" />

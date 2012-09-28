@@ -1,5 +1,9 @@
 #sidebar { float: left; width: 230px; margin: 40px 5px 5px 5px; }
-#sidebar .ui-accordion-header a {font-size:14px;}
+#sidebar .ui-accordion-header a {font-size:14px; color:white;
+	background-image: url("/assets/images/OrthoMCL/menu_lft2.png"); 
+
+}
+
 
 #site-title, #site-intro { text-align: center; }
 #site-title { padding: 10px; font-weight: bold; font-size: 16pt; }
@@ -14,5 +18,6 @@
 #search-bubbles > ul > li > ul ul { margin: 0px 0px 3px 20px;  }
 #search-bubbles > ul > li > ul li { padding: 2px; }
 #search-bubbles > ul > li > ul a { padding-left: 15px; }
+
 #search-bubbles > ul > li > ul a.category { font-weight: bold; cursor: pointer; background:url(../images/square-plus.gif) 0px 2px no-repeat; }
 #search-bubbles > ul > li > ul a.category.opened { background:url(../images/square-minus.gif) 0px 2px no-repeat; }

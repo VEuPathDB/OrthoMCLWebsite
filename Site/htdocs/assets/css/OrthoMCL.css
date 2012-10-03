@@ -164,6 +164,9 @@ a:hover, a:active {
 	background-image: url(/assets/images/OrthoMCL/menu_lft2.png);
 }
 
+#sidebar a.heading {
+	background-image: url(/assets/images/OrthoMCL/menu_lft2.png);
+}
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	 =Search Boxes

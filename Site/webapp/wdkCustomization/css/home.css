@@ -1,14 +1,8 @@
-#sidebar { float: left; width: 230px; margin: 40px 5px 5px 5px; }
-#sidebar .ui-accordion-header a {font-size:14px; color:white;
+#sidebar { float: left; width: 230px; margin: 5px 5px 5px 5px; }
+#sidebar .ui-accordion-header a {
+  font-size:14px; color:white;
 	background-image: url("/assets/images/OrthoMCL/menu_lft2.png"); 
-
 }
-
-
-#site-title, #site-intro { text-align: center; }
-#site-title { padding: 10px; font-weight: bold; font-size: 16pt; }
-#site-intro { font-size: 12pt; width: 690px; padding: 5px; overflow: auto; margin: 0px auto;}
-#site-intro p { margin: 5px; }
 
 #search-bubbles { text-align: center; }
 #search-bubbles > ul, #search-bubbles > ul > li { display: inline-table; }
@@ -21,3 +15,12 @@
 
 #search-bubbles > ul > li > ul a.category { font-weight: bold; cursor: pointer; background:url(../images/square-plus.gif) 0px 2px no-repeat; }
 #search-bubbles > ul > li > ul a.category.opened { background:url(../images/square-minus.gif) 0px 2px no-repeat; }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =additions 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#sidebar {font-size:12px;}
+
+
+

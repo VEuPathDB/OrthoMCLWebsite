@@ -1,71 +1,77 @@
 package org.orthomcl.controller.action;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.gusdb.wdk.controller.action.ActionUtility;
-import org.gusdb.wdk.model.WdkModel;
-import org.gusdb.wdk.model.WdkUserException;
+import org.gusdb.wdk.controller.actionutil.ActionResult;
+import org.gusdb.wdk.controller.actionutil.ParamDef;
+import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
+import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
+import org.gusdb.wdk.controller.actionutil.ParamGroup;
+import org.gusdb.wdk.controller.actionutil.ResponseType;
+import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.dbms.SqlUtils;
-import org.gusdb.wdk.model.jspwrap.WdkModelBean;
 
-public class GetSvgContentAction extends Action {
+public class GetSvgContentAction extends WdkAction {
 
+    private static final Logger logger = Logger.getLogger(GetSvgContentAction.class.getName());
+  
     private static final String PARAM_GROUP_NAME = "group";
-    private static final String FORWARD_DISPLAY = "display";
+    
     private static final String ATTR_SVG_CONTENT = "svgContent";
 
-    private static final Logger logger = Logger.getLogger(GetSvgContentAction.class);
+    private static final String IMAGE_FIELD_NAME = "svg_content";
+    private static final String IMAGE_QUERY_SQL =
+        "SELECT " + IMAGE_FIELD_NAME + " FROM apidb.OrthologGroup WHERE name = ?";
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        logger.debug("Entering GetSvgContentAction...");
-        WdkModelBean wdkModelBean = ActionUtility.getWdkModel(servlet);
-
-        // get the input group name
-        String groupName = request.getParameter(PARAM_GROUP_NAME);
-        if (groupName == null || groupName.length() == 0)
-            throw new WdkUserException("group parameter is required");
-
-        // set the responce content type
-        response.reset();
-        response.setContentType("image/svg+xml");
-
-        // read svg_content from database
-        String sql = "SELECT svg_content FROM apidb.OrthologGroup "
-                + " WHERE name = ? ";
-        WdkModel wdkModel = wdkModelBean.getModel();
-        DataSource dataSource = wdkModel.getQueryPlatform().getDataSource();
-        PreparedStatement statement = null;
-        try {
-            statement = SqlUtils.getPreparedStatement(dataSource, sql);
-            statement.setString(1, groupName);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                String svgContent = resultSet.getString("svg_content");
-                request.setAttribute(ATTR_SVG_CONTENT, svgContent);
-            }
-        }
-        catch (Exception ex) {
-            logger.error(ex);
-            ex.printStackTrace();
-            throw ex;
-        }
-        finally {
-            SqlUtils.closeStatement(statement);
-        }
-        logger.debug("Leaving GetSvgContentAction...");
-        return mapping.findForward(FORWARD_DISPLAY);
+    @Override
+    protected ResponseType getResponseType() {
+      return ResponseType.svg;
     }
 
+    @Override
+    protected boolean shouldValidateParams() {
+      return true;
+    }
+
+    @Override
+    protected Map<String, ParamDef> getParamDefs() {
+      return new ParamDefMapBuilder().addParam(PARAM_GROUP_NAME,
+          new ParamDef(Required.REQUIRED)).toMap();
+    }
+
+    @Override
+    protected ActionResult handleRequest(ParamGroup params) throws Exception {
+      logger.debug("Entering GetSvgContentAction...");
+
+      // get the input group name
+      String groupName = params.getValue(PARAM_GROUP_NAME);
+
+      // read svg_content from database
+      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      Connection conn = null;
+      PreparedStatement statement = null;
+      ResultSet resultSet = null;
+      try {
+          conn = dataSource.getConnection();
+          statement = conn.prepareStatement(IMAGE_QUERY_SQL);
+          statement.setString(1, groupName);
+          resultSet = statement.executeQuery();
+          if (resultSet.next()) {
+              String svgContent = resultSet.getString("svg_content");
+              return new ActionResult()
+                  .setRequestAttribute(ATTR_SVG_CONTENT, svgContent)
+                  .setViewName(SUCCESS);
+          }
+          return ActionResult.EMPTY_RESULT;
+      }
+      finally {
+          SqlUtils.closeQuietly(resultSet, statement, conn);
+      }
+    }
 }

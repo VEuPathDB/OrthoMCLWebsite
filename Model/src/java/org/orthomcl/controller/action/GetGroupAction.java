@@ -1,51 +1,47 @@
 package org.orthomcl.controller.action;
 
-import java.io.OutputStream;
 import java.sql.Connection;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.gusdb.wdk.controller.action.ActionUtility;
-import org.gusdb.wdk.model.WdkModel;
+import org.gusdb.wdk.controller.actionutil.ActionResult;
+import org.gusdb.wdk.controller.actionutil.ParamDef;
+import org.gusdb.wdk.controller.actionutil.ParamGroup;
+import org.gusdb.wdk.controller.actionutil.ResponseType;
+import org.gusdb.wdk.controller.actionutil.WdkAction;
+import org.gusdb.wdk.model.dbms.SqlUtils;
 import org.orthomcl.data.GroupLoader;
 
-/**
- * Hello world!
- * 
- */
-public class GetGroupAction extends Action {
+public class GetGroupAction extends WdkAction {
 
     private static final String PROP_GROUP = "group";
 
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        String groupName = request.getParameter(PROP_GROUP);
+    protected ResponseType getResponseType() {
+      return ResponseType.binary_data;
+    }
 
-        // get connection
-        WdkModel wdkModel = ActionUtility.getWdkModel(servlet).getModel();
-        DataSource dataSource = wdkModel.getQueryPlatform().getDataSource();
-        Connection connection = dataSource.getConnection();
+    @Override protected boolean shouldValidateParams() { return false; }
+    @Override protected Map<String, ParamDef> getParamDefs() { return null; }
 
-        try {
-            GroupLoader loader = new GroupLoader(connection);
-            byte[] data = loader.getGroupData(groupName);
+    @Override
+    protected ActionResult handleRequest(ParamGroup params) throws Exception {
 
-            OutputStream output = response.getOutputStream();
-            output.write(data);
-            output.flush();
-            output.close();
-        } finally {
-            connection.close();
-        }
+      String groupName = params.getValue(PROP_GROUP);
 
-        return null;
+      // get connection
+      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      Connection connection = null;
+
+      try {
+          connection = dataSource.getConnection();
+          GroupLoader loader = new GroupLoader(connection);
+          byte[] data = loader.getGroupData(groupName);
+          return new ActionResult().setStream(getStreamFromBytes(data));
+      }
+      finally {
+          SqlUtils.closeQuietly(connection);
+      }
     }
 }

@@ -3,25 +3,14 @@
  */
 package org.orthomcl.controller.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.gusdb.wdk.controller.action.standard.GenericPageAction;
 
 /**
  * @author xingao
  * 
  */
-public class ProteomeUploadAction extends Action {
+public class ProteomeUploadAction extends GenericPageAction {
 
-    private static final String FORWARD_UPLOAD_FORM = "upload-form";
-
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        return mapping.findForward(FORWARD_UPLOAD_FORM);
-    }
+  // TO BE FILLED IN...
+  
 }

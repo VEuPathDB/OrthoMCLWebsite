@@ -49,7 +49,7 @@ public class ExpressionParamHandler implements ParamHandler {
     }
 
     public String transform(User user, String internalValue)
-            throws WdkUserException {
+            throws WdkModelException {
         logger.debug("transforming phyletic param: " + internalValue);
 
         // remove the enclosing quotes
@@ -90,7 +90,7 @@ public class ExpressionParamHandler implements ParamHandler {
         return terms;
     }
 
-    private String composeSql(ExpressionNode node) throws WdkUserException {
+    private String composeSql(ExpressionNode node) throws WdkModelException {
         StringBuilder sql = new StringBuilder("(");
         if (node instanceof BooleanNode) {
             BooleanNode booleanNode = (BooleanNode) node;
@@ -116,9 +116,9 @@ public class ExpressionParamHandler implements ParamHandler {
     }
 
     private String getColumn(String term, boolean onSpecies)
-            throws WdkUserException {
+            throws WdkModelException {
         if (!terms.containsKey(term))
-            throw new WdkUserException("Invalid expression. Unknown term: "
+            throw new WdkModelException("Invalid expression. Unknown term: "
                     + term);
         int columnIndex = terms.get(term) * 2 + 1;
         if (onSpecies) columnIndex++;

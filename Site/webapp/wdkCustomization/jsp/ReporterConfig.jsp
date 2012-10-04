@@ -1,37 +1,33 @@
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="pg" uri="http://jsptags.com/tags/navigation/pager" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
-<%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
+  <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
-<!-- get wdkAnswer from requestScope -->
-<jsp:useBean id="wdkUser" scope="session" type="org.gusdb.wdk.model.jspwrap.UserBean"/>
-<c:set value="${requestScope.wdkAnswer}" var="wdkAnswer"/>
-<c:set var="format" value="${requestScope.wdkReportFormat}"/>
+  <!-- get wdkAnswer from requestScope -->
+  <c:set value="${wdkAnswer}" var="wdkAnswer"/>
+  <c:set var="format" value="${wdkReportFormat}"/>
 
+  <!-- display page header -->
+  <imp:pageFrame title="Download Results" refer="reporter">
 
-<!-- display page header -->
-<imp:header title="Download Results" />
+    <!-- table sets the red line on top -->
+    <table border="0" width="100%" cellpadding="1" cellspacing="0" bgcolor="white" class="thinTopBorders">
+      <tr>
+        <td bgcolor="white" valign="top">
+          <!-- display description for page -->
+          <p><b>Please select a format from the dropdown list to create the download report.</b></p>
 
-<table border="0" width="100%" cellpadding="1" cellspacing="0" bgcolor="white" class="thinTopBorders">
-<tr><td bgcolor="white" valign="top">
+          <!-- display the parameters of the question, and the format selection form -->
+          <imp:reporter/>
 
-
-<!-- display description for page -->
-<p><b>Please select a format from the dropdown list to create the download report.</b></p>
-
-<!-- display the parameters of the question, and the format selection form -->
-<imp:reporter/>
-
-<!-- handle empty result set situation -->
-<c:if test='${wdkAnswer.resultSize == 0}'>
-    No results for your query
-</c:if>
-
-
-<%-- CLOSE TABLE that sets the red line on top --%>
-</td></tr></table>
-
-
-<imp:footer/>
+          <!-- handle empty result set situation -->
+          <c:if test="${wdkAnswer.resultSize eq 0}">
+            No results for your query
+          </c:if>
+        </td>
+      </tr>
+    </table>
+  </imp:pageFrame>
+</jsp:root>

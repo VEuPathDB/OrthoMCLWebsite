@@ -1,48 +1,50 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="wdk" tagdir="/WEB-INF/tags/wdk" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:wdk="urn:jsptagdir:/WEB-INF/tags/wdk"
+    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
 
-<%@ attribute name="refer" 
-	      required="true" 
-	      description="Page calling this tag"
-%>
+  <jsp:directive.attribute name="refer" required="false" 
+              description="Page calling this tag"/>
 
-<%-- includes the original wdk includes --%>
-<wdk:includes refer="${refer}" /> 
+  <c:set var="base" value="${pageContext.request.contextPath}"/>
 
-<script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/apycom-menu.js"/>'></script>
-<script type="text/javascript" src='<c:url value="/wdkCustomization/js/lib/jquery.timers-1.2.js"/>'></script>
-<script type="text/javascript" src='<c:url value="/wdkCustomization/js/common.js"/>'></script>
+  <!-- includes the original wdk includes -->
+  <wdk:includes refer="${refer}"/>
+  
+  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/apycom-menu.js"><jsp:text/></script>
+  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
+  <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
+  
+  <!--<link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
+  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/apycom-menu/menu.css"/>
+  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/common.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
+  
+  <c:if test="${refer eq 'home'}">
+    <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/home.css"/>
+  </c:if>
+  
+  <c:if test="${refer eq 'summary'}">
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/results.css"/>
+  </c:if>
+  
+  <c:if test="${refer eq 'summary' or refer eq 'record'}">
+    <script type="text/javascript" src="${base}/wdkCustomization/js/phyletic.js"><jsp:text/></script>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/group.css"/>
+  </c:if>
+  
+  <c:if test="${refer eq 'summary' or refer eq 'question'}">
+    <script type="text/javascript" src="${base}/wdkCustomization/js/ppform.js"><jsp:text/></script>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/ppform.css"/>
+  </c:if>
+  
+  <c:if test="${refer eq 'record'}">
+    <script type="text/javascript" src="${base}/wdkCustomization/js/pfamDomain.js"><jsp:text/></script>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/pfamDomain.css"/>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/record.css"/>
+  </c:if>
 
-<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css' />">  -->
-<link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/apycom-menu/menu.css' />">
-<link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/common.css' />">
-
-<c:if test="${refer == 'home'}">
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/home.js"/>'></script>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/home.css' />">
-</c:if>
-
-<c:if test="${refer == 'summary'}">
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/results.css' />">
-</c:if>
-
-<c:if test="${refer == 'summary' || refer == 'record'}">
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic.js"/>'></script>
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/phyletic-pattern.js"/>'></script>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/group.css' />">
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/phyletic-pattern.css' />">
-</c:if>
-
-<c:if test="${refer == 'summary' || refer == 'question'}">
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/ppform.js"/>'></script>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/ppform.css' />">
-</c:if>
-
-<c:if test="${refer == 'record'}">
-  <script type="text/javascript" src='<c:url value="/wdkCustomization/js/pfamDomain.js"/>'></script>
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/pfamDomain.css' />">
-  <link rel="stylesheet" type="text/css" href="<c:url value='/wdkCustomization/css/record.css' />">
-</c:if>
-
-<link rel="stylesheet" href="/assets/css/OrthoMCL.css" type="text/css" />
+</jsp:root>

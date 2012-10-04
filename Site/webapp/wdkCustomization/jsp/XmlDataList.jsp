@@ -1,31 +1,36 @@
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
+  <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
-<!-- get wdkXmlQuestionSets saved in request scope -->
-<c:set var="xmlQSets" value="${requestScope.wdkXmlQuestionSets}"/>
+  <!-- get wdkXmlQuestionSets saved in request scope -->
+  <c:set var="xmlQSets" value="${requestScope.wdkXmlQuestionSets}"/>
 
-<imp:header banner="News" />
+  <imp:pageFrame title="News">
 
-<!-- show all xml question sets -->
-	<div id="cirbulletlist">
+    <!-- show all xml question sets -->
+	  <div id="cirbulletlist">
+      <ul>
+        <c:forEach items="${xmlQSets}" var="qSet">
+          <c:set var="qSetName" value="${qSet.name}"/>
+          ${qSet.displayName}:<br/>
 
-<UL>
-<c:forEach items="${xmlQSets}" var="qSet">
-    <c:set var="qSetName" value="${qSet.name}"/>
-    ${qSet.displayName}:<br>
+          <!-- show all xml questions in this set -->
+          <c:set var="xqs" value="${qSet.questions}"/>
+          <c:forEach items="${xqs}" var="q">
+            <c:set var="qName" value="${q.name}"/>
+	          <c:if test="${qName ne 'StrategiesHelp'}">
+	            <!-- This content is available in top menu -->
+        	    <li>
+        	      <a href="${pageContext.request.contextPath}/showXmlDataContent.do?name=${qSetName}.${qName}">${q.displayName}</a>
+        	    </li>
+	          </c:if>
+          </c:forEach>
+        </c:forEach>
+      </ul>
+    </div>
 
-    <!-- show all xml questions in this set -->
-    <c:set var="xqs" value="${qSet.questions}"/>
-    <c:forEach items="${xqs}" var="q">
-        <c:set var="qName" value="${q.name}"/>
-	<c:if test="${qName ne 'StrategiesHelp'}">  <%-- This content is available in top menu --%>
-        	<LI><a href="showXmlDataContent.do?name=${qSetName}.${qName}">${q.displayName}</a></LI>
-	</c:if>
-    </c:forEach>
-</c:forEach>
-</UL>
-</div>
-
-<imp:footer/>
+  </imp:pageFrame>
+</jsp:root>

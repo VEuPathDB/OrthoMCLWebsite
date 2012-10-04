@@ -23,11 +23,11 @@ public class ExpressionParamHandlerTest {
     private final ExpressionParamHandler handler;
 
     public ExpressionParamHandlerTest() throws WdkModelException,
-            NoSuchAlgorithmException, WdkUserException, InstantiationException,
+            NoSuchAlgorithmException, WdkModelException, InstantiationException,
             IllegalAccessException, ClassNotFoundException,
             ParserConfigurationException, TransformerFactoryConfigurationError,
             TransformerException, IOException, SAXException, SQLException,
-            JSONException {
+            JSONException, WdkUserException {
         String projectId = System.getProperty(Utilities.ARGUMENT_PROJECT_ID);
         String gusHome = System.getProperty(Utilities.SYSTEM_PROPERTY_GUS_HOME);
         WdkModel wdkModel = WdkModel.construct(projectId, gusHome);
@@ -37,7 +37,7 @@ public class ExpressionParamHandlerTest {
     }
 
     @Test
-    public void testTransform() throws WdkUserException {
+    public void testTransform() throws WdkModelException {
         testExpression("pviv = 2");
         testExpression("pfal >3T");
         testExpression("pber<= 5");
@@ -52,7 +52,7 @@ public class ExpressionParamHandlerTest {
 
     }
 
-    private void testExpression(String exp) throws WdkUserException {
+    private void testExpression(String exp) throws WdkModelException {
         System.out.println("Expression: " + exp);
         String sql = handler.transform(user, exp);
         System.out.println("SQL: " + sql);

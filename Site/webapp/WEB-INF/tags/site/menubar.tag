@@ -41,7 +41,7 @@
 
 <!-- default style for this ul establishes 9em -->
   <ul class="menu">
-    <li><a href="<c:url value="/"/>"><span>Home</span></a></li>
+    <li><a href="/"><span>Home</span></a></li>
 
     <imp:wdkMenu />
 
@@ -77,14 +77,14 @@
 		<a href="http://twitter.com/eupathdb">
                   <span>
 		    <img style="margin:0px;vertical-align:top" title="Follow us on twitter!" 
-                         src="<c:url value='/wdkCustomization/images/twitter.gif'/>" width="20">
+                         src="${pageContext.request.contextPath}/wdkCustomization/images/twitter.gif" width="20">
 			&nbsp;Follow us on twitter!
                   </span>
 		</a>
 		<a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
                   <span>
 	            <img style="margin:0px;margin-left:1px;vertical-align:top" title="Follow us on facebook!" 
-                         src="<c:url value='/wdkCustomization/images/facebook.png'/>" width="18">
+                         src="${pageContext.request.contextPath}//wdkCustomization/images/facebook.png" width="18">
                     &nbsp;Follow us on facebook!
                   </span>
 		</a>

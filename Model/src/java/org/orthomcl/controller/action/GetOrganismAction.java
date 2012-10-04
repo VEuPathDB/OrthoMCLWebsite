@@ -1,44 +1,43 @@
 package org.orthomcl.controller.action;
 
-import java.io.OutputStream;
 import java.sql.Connection;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.gusdb.wdk.controller.action.ActionUtility;
-import org.gusdb.wdk.model.WdkModel;
+import org.gusdb.wdk.controller.actionutil.ActionResult;
+import org.gusdb.wdk.controller.actionutil.ParamDef;
+import org.gusdb.wdk.controller.actionutil.ParamGroup;
+import org.gusdb.wdk.controller.actionutil.ResponseType;
+import org.gusdb.wdk.controller.actionutil.WdkAction;
+import org.gusdb.wdk.model.dbms.SqlUtils;
 import org.orthomcl.data.GroupLoader;
 
-/**
- * Hello world!
- * 
- */
-public class GetOrganismAction extends Action {
+public class GetOrganismAction extends WdkAction {
 
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    protected ResponseType getResponseType() {
+      return ResponseType.binary_data;
+    }
 
-        // get connection
-        WdkModel wdkModel = ActionUtility.getWdkModel(servlet).getModel();
-        DataSource dataSource = wdkModel.getQueryPlatform().getDataSource();
-        Connection connection = dataSource.getConnection();
+    @Override protected boolean shouldValidateParams() { return false; }
+    @Override protected Map<String, ParamDef> getParamDefs() { return null; }
+
+    @Override
+    protected ActionResult handleRequest(ParamGroup params) throws Exception {
+      // get connection
+      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      Connection connection = null;
+      
+      try {
+        connection = dataSource.getConnection();
 
         GroupLoader loader = new GroupLoader(connection);
         byte[] data = loader.getOrganismsData();
-
-        OutputStream output = response.getOutputStream();
-        output.write(data);
-        output.flush();
-        output.close();
-
-        return null;
+        return new ActionResult().setStream(getStreamFromBytes(data));
+      }
+      finally {
+        SqlUtils.closeQuietly(connection);
+      }
     }
 }

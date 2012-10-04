@@ -436,6 +436,7 @@
     <action path="/wizard"
       type="org.gusdb.wdk.controller.action.WizardAction"
       name="wizardForm"
+      scope="request"
       validate="false">
       <forward name="show_wizards" path="/wdk/jsp/wizard/wizards.jsp"/>
     </action>

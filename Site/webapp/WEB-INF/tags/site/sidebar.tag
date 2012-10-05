@@ -25,7 +25,7 @@
 
 	<div id="sidebar">
 	  <h3>
-		  <img src="/assets/images/${project}/menu_lft1.png" alt="" width="208" height="12"/>
+		  <img src="/assets/images/${project}/menu_lft1.png" alt="" width="230" height="12"/>
 	    <a class="heading" id="stats" href="#">Data Summary</a>
 	  </h3>
 	  <div>
@@ -37,7 +37,7 @@
 	  </div>
 	
 	  <h3>
-	    <img src="/assets/images/${project}/menu_lft1.png" alt="" width="208" height="12"/>
+	    <img src="/assets/images/${project}/menu_lft1.png" alt=""  width="230" height="12"/>
 	    <a class="heading" href="#">News</a>
 	  </h3>
 	  <div>
@@ -47,7 +47,10 @@
 	    </ul>
 	  </div>
 	
-	  <h3><a href="#community">Community Resources</a></h3>
+	  <h3>
+<img src="/assets/images/${project}/menu_lft1.png" alt="" width="230" height="12" />
+<a  class="heading" id='community' href="#">Community Resources</a>
+ </h3>
 	  <div>
 	    <ul>
 	      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
@@ -55,7 +58,10 @@
 	    </ul>
 	  </div>
 	
-	  <h3><a href="#tutorials">Web Tutorials</a></h3>
+	  <h3>
+<img src="/assets/images/${project}/menu_lft1.png" alt="" width="230" height="12" />
+<a class="heading" id='tutorials' href="#">Education and Tutorials</a>
+ </h3>
 	  <div> 
 	    <ul>
 	      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>
@@ -63,7 +69,10 @@
 	    </ul>
 	  </div>
 	
-	  <h3><a href="#help">Information and Help</a></h3>
+	  <h3>
+<img src="/assets/images/${project}/menu_lft1.png" alt="" width="230" height="12" />
+<a class="heading" id='informationAndHelp' href="#">Other Information</a>
+ </h3>
 	  <div> 
 	    <ul>
 	      <li><a href="/showDataSummary.do?data=orgamism">Show Organism Summary</a></li>

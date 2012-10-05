@@ -20,7 +20,7 @@
   <!--<link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
   <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/apycom-menu/menu.css"/>
   <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/common.css"/>
-  <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
+
   
   <c:if test="${refer eq 'home'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>
@@ -47,4 +47,5 @@
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/record.css"/>
   </c:if>
 
+  <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
 </jsp:root>

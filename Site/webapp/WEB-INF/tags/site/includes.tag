@@ -13,6 +13,10 @@
   <!-- includes the original wdk includes -->
   <wdk:includes refer="${refer}"/>
   
+<!-- adding some css for backgorund in contentcolumn2, used in strategy workspace -->
+  <link rel="stylesheet" type="text/css" href="/assets/css/AllSites.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
+
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/apycom-menu.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
@@ -47,5 +51,5 @@
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/record.css"/>
   </c:if>
 
-  <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
+ 
 </jsp:root>

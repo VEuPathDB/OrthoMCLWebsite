@@ -2,11 +2,6 @@ a { color: #330099; }
 a:hover { color: #3333FF; }
 a:visited { color: #330099; }
 
-#header {min-width:975px; clear:both;}
-#header-control {float:right; text-align: right; margin: 7px; }
-#header #quick-search, #header #tool-sets { margin: 5px; }
-#header #quick-search input.search-box { width: 100px; }
-#header #site-logo a {font:bold 50pt Georgia,serif; color:#3333FF; text-decoration:none;}
 
 #menu {clear:both; position:relative; z-index:11;}
 #menu > ul.menu {float:none;}
@@ -107,7 +102,7 @@ div#about li {
 	width: 230px;
 	margin: 15px;
   -moz-border-radius: 50px;
-  -webkit-border-radius: 50px;
+  -webkit-border-radius: 50px;	
   -khtml-border-radius: 50px;
   border-radius: 50px;
 }
@@ -131,20 +126,42 @@ div#about li {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      =HEADER from AllSites.css
+      =HEADER 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-#header2 {
-	color: #666666;
-	font-size: 10px;  /*version,date*/
-	min-width: 980px;
-	height: 104px;
-	background-repeat: no-repeat;
-}
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      =HEADER: div#header-control contains link to EuPathDB, quickSearch and smallMenu
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#header2 {min-width:975px; clear:both;}
+
 div#header2 .ui-widget-content {
 	background:0;
   border:0;
 }
+
+#header-control {float:right; text-align: right; margin: 7px; }
+#header2 #quick-search, #header2 #tool-sets { margin: 5px; }
+#header2 #quick-search input.search-box { width: 100px; }
+#header2 #site-logo a {font:bold 50pt Georgia,serif; color:#3333FF; text-decoration:none;}
+
+/* Ortho colors, move to OrthoMCL.css */
+#nav-top a:link, #nav-top a:visited {
+  color: white; 
+}
+#nav-top a:hover, #nav-top a:active {
+  color: white; 
+}
+table#quick-search a {
+  color:white;
+  font-size:120%;
+}
+
+/* from AllSites now included in includes.tag */
+/*
+#header2 {
+	color: #666666;
+	font-size: 10px; 
+	min-width: 980px;
+	height: 104px;
+	background-repeat: no-repeat;
+}
+*/
+
+

@@ -103,7 +103,7 @@ a:hover, a:active {
 }
 
 #contentcolumn2 {
-	/* background-image: url(/assets/images/OrthoMCL/footer.png); */
+	background-image: url(/assets/images/OrthoMCL/footer.png);
 	border: 1px solid #345ca1;
 }
 

@@ -141,3 +141,10 @@ div#about li {
 	background-repeat: no-repeat;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =HEADER: div#header-control contains link to EuPathDB, quickSearch and smallMenu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+div#header2 .ui-widget-content {
+	background:0;
+  border:0;
+}

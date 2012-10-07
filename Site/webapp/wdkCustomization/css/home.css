@@ -74,7 +74,7 @@ div#sidebar h3.ui-state-default {
    font-weight: normal;
    padding: 6px;
    line-height: 15px;
-   border: 1px solid grey;
+ /*  border: 1px solid grey; */
    background-color: #FFFFFF;
    margin: -5px 0px 5px;
 }

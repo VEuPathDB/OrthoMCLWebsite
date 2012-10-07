@@ -6,7 +6,6 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <imp:pageFrame title="OrthoMCL" refer="home">
-	  <imp:sidebar/>
 	  <div id="search-bubbles">
 	    <ul>
 	      <imp:searchCategories /> <!-- wdk: generates two <li>, one bubble per category -->

@@ -33,6 +33,7 @@
 
       <imp:header refer="${refer}"/>
       <imp:menubar refer="${refer}"/>
+			<imp:sidebar/>
 
       <div id="main-content">
         <jsp:doBody/>

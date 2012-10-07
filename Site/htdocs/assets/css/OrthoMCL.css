@@ -61,26 +61,28 @@ a:hover, a:active {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
 
-#nav_top {
-	color: #067387;
+#nav-top a:link, #nav-top a:visited {
+	color:  white;
 }
 
-#nav_top a:link, #nav_top a:visited {
-	color:  #067387;
-}
-
-#nav_top li ul {  /* second-level lists */
+#nav-top > li > ul { 
 	background-image: url(/assets/images/OrthoMCL/footer.png);
 	border-color:#345ca1;
 	list-style-image: url(/assets/images/OrthoMCL/bullet_arrow.gif);
 }
 
-#nav_top li ul a:link, #nav_top li ul a:visited {
+#nav-top > li > ul a:link, #nav-top > li > ul a:visited {
 	color: #2a3469;
 }
 
-#nav_top li ul a:hover, #nav_top li ul a:active {
+#nav-top > li > ul a:hover, #nav-top > li > ul a:active {
 	color: #7a3838;
+}
+
+
+
+table#quick-search a {
+  color:white;
 }
 
 

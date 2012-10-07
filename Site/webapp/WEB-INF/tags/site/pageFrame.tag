@@ -33,8 +33,11 @@
 
       <imp:header refer="${refer}"/>
       <imp:menubar refer="${refer}"/>
-			<imp:sidebar/>
 
+			<c:if test="${refer == 'home' or refer == 'home2' }">
+				<imp:sidebar/>
+			</c:if>
+		
       <div id="main-content">
         <jsp:doBody/>
       </div>

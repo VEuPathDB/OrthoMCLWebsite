@@ -1,7 +1,8 @@
+/* let OrthoMCL.css decide the color
 a { color: #330099; }
 a:hover { color: #3333FF; }
 a:visited { color: #330099; }
-
+*/
 
 #menu {clear:both; position:relative; z-index:11;}
 #menu > ul.menu {float:none;}
@@ -141,15 +142,8 @@ div#header2 .ui-widget-content {
 #header2 #quick-search input.search-box { width: 100px; }
 #header2 #site-logo a {font:bold 50pt Georgia,serif; color:#3333FF; text-decoration:none;}
 
-/* Ortho colors, move to OrthoMCL.css */
-#nav-top a:link, #nav-top a:visited {
-  color: white; 
-}
-#nav-top a:hover, #nav-top a:active {
-  color: white; 
-}
+
 table#quick-search a {
-  color:white;
   font-size:120%;
 }
 

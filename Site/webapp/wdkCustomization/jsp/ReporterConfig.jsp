@@ -16,8 +16,7 @@
     <table border="0" width="100%" cellpadding="1" cellspacing="0" bgcolor="white" class="thinTopBorders">
       <tr>
         <td bgcolor="white" valign="top">
-          <!-- display description for page -->
-          <p><b>Please select a format from the dropdown list to create the download report.</b></p>
+         
 
           <!-- display the parameters of the question, and the format selection form -->
           <imp:reporter/>

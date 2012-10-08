@@ -45,12 +45,14 @@ div#about h2 { font-size: 16px; }
 div#about p { margin: 15px; }
 div#about .question { font-weight:bold; }
 
+/*
 div#about .about-title {
 	width: 70%;
 	padding: 16px;
 	margin-top: 10px;
 	text-align: left;
 }
+*/
 
 div#about .section-title {
 	width: 70%;

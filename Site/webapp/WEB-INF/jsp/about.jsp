@@ -5,10 +5,7 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
   <imp:pageFrame title="${wdkModel.displayName} :: About" refer="about">
 	  <div id="about">
-	    <div class="about-title">
-	      <h1>About OrthoMCL</h1>
-	      <hr/>
-	    </div>
+	    <h1>About OrthoMCL</h1>
 	    <div class="about-body">
 	      <div class="section-title">
 		      <h2>Current Release</h2>
@@ -193,6 +190,6 @@
 	      </div>
 	    </div>
 	  </div>
-	  <hr/>
+
   </imp:pageFrame>
 </jsp:root>

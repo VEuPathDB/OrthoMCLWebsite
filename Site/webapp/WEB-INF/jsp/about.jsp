@@ -13,13 +13,13 @@
 		    <div class="section-content">
 		      <p>
 		        The genome data for this release was acquired from these
-		        <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&amp;type=data">data sources</a>.
+		        <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">data sources</a>.
 		        The number of sequences and groups in each genome is shown in the
-		        <a href="cgi-bin/OrthoMclWeb.cgi?rm=genome&amp;type=summary">release summary</a>.
+		        <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">release summary</a>.
 		      </p>
 		      <p>
 		        <strong>Downloads:</strong>
-		        Go to the <a href="common/downloads">download site</a> to get the protein sequences
+		        Go to the <a href="/common/downloads">download site</a> to get the protein sequences
 		        used in this release, and the ortholog groups.  To get the (huge) file of all-vs-all
 		        blast contact us at help@orthomcl.org.
 		      </p>
@@ -109,10 +109,10 @@
 	            <p>
 	              OrthoMCL-DB is designed to provide complicated query features. In this case, several steps are required to find the answer:
 	              <ol>
-	                <li>Identify the groups that satisfy this phyletic pattern criteria, using "eco+hsa=2T" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">Phyletic Pattern Expression (PPE) Group Query page</a> (eco and hsa are the abbreviation names for E. coli and H. sapiens).</li>
-	                <li>Identify all genes belonging to the groups identified in Step (a), by selecting the group query result from Step a and clicking on "GROUP QUERY INTO SEQUENCE QUERY" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryHistory">Group Query History page</a>. This will automatically redirect you to the Sequence Query History page, where all genes belonging to the groups identified in Step (a) are deposited as a new sequence query.</li>
-	                <li>Identify all E. coli genes, by searching for "eco" in "Taxon_Abbreviation" at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryForm&amp;type=ackeyword">Accession/Keyword Sequence Query page</a>.</li>
-	                <li>Find the answer to the original question by merging the sequence query results from Steps (c) and (d) using INTERSECTION at <a href="http://www.orthomcl.org/cgi-bin/OrthoMclWeb.cgi?rm=sequenceQueryHistory">Sequence Query History page</a>. You can further download the list of gene IDs or sequences from this page.</li>
+	                <li>Identify the groups that satisfy this phyletic pattern criteria, using "eco+hsa=2T" at <a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByPhyleticPattern">Phyletic Pattern Expression (PPE) Group Query page</a> (eco and hsa are the abbreviation names for E. coli and H. sapiens).</li>
+	                <li>Identify all genes belonging to the groups identified in Step (a), by selecting the group query result from Step a and clicking on "GROUP QUERY INTO SEQUENCE QUERY" at <a href="${pageContext.request.contextPath}/showApplication.do">Group Query History page</a>. This will automatically redirect you to the Sequence Query History page, where all genes belonging to the groups identified in Step (a) are deposited as a new sequence query.</li>
+	                <li>Identify all E. coli genes, by searching for "ecol" in "Taxon_Abbreviation" at <a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByTaxonomy">Accession/Keyword Sequence Query page</a>.</li>
+	                <li>You can do an initial search for groups and sequences, and then refine the results by adding steps onto the search in <a href="${pageContext.request.contextPath}/showApplication.do">Strategy workspace</a>. You can further download the list of gene IDs or sequences in different format from the download link in the same Strategy workspace.</li>
 	              </ol>
 	            </p>
 	          </li>
@@ -126,10 +126,10 @@
 	          OrthoMCL was originally implemented by Li Li.  The software was not available for download.
 	        </p>
 	        <p>
-	          <a href="common/downloads/software">Version 1.4</a> was developed as publicly available software by Feng Chen (This version is now not supported).
+	          <a href="/common/downloads/software">Version 1.4</a> was developed as publicly available software by Feng Chen (This version is now not supported).
 	        </p>
 	        <p>
-	          <a href="common/downloads/software">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau
+	          <a href="/common/downloads/software">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau
 	        </p>
 	      </div>
 	      <div class="section-title">

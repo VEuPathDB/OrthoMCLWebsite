@@ -7,7 +7,7 @@
   <!-- display page header with wdkAnswer's recordClass's type as banner -->
   <c:if test="${resultOnly}">
     <imp:pageFrame title="Error Displaying Results" refer="summaryError">
-      <summaryError/>
+      <imp:summaryError/>
     </imp:pageFrame>
   </c:if>
   <c:if test="${not resultOnly}">

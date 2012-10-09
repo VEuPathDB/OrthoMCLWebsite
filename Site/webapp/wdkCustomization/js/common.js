@@ -67,5 +67,13 @@ var Setup = {
 			navigation: true,
 		    icons:false
 		});
-	}
+	},
+
+  configureMenuBar: function() {
+    jQuery("#menu .sf-menu").supersubs({
+      minWidth: 15,
+      maxWidth: 25,
+      extraWidth: 1
+    }).superfish();
+  }
 };

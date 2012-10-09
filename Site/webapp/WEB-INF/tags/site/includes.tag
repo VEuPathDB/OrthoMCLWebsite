@@ -13,18 +13,23 @@
   <!-- includes the original wdk includes -->
   <wdk:includes refer="${refer}"/>
   
+  <!-- inlude third party CSS first, so that we can easily override rules -->
+  <!--<link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
+  <!-- <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/apycom-menu/menu.css"/> -->
+  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/superfish/css/superfish.css"/>
+  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/common.css"/>
+
 <!-- adding some css for backgorund in contentcolumn2, used in strategy workspace -->
   <link rel="stylesheet" type="text/css" href="/assets/css/AllSites.css"/>
   <link rel="stylesheet" type="text/css" href="/assets/css/OrthoMCL.css"/>
 
-  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/apycom-menu.js"><jsp:text/></script>
+  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
+  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>
+  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/supersubs.js"><jsp:text/></script>
+  <!-- <script type="text/javascript" src="${base}/wdkCustomization/js/lib/apycom-menu.js"><jsp:text/></script> -->
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
   
-  <!--<link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
-  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/apycom-menu/menu.css"/>
-  <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/common.css"/>
-
   
   <c:if test="${refer eq 'home'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>

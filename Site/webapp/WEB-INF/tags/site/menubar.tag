@@ -37,10 +37,12 @@
 <c:set var="basketCount" value="${wdkUser.basketCount}"/>
 
 
+<span class="onload-function" data-function="Setup.configureMenuBar"></span>
+
 <div id="menu">
 
 <!-- default style for this ul establishes 9em -->
-  <ul class="menu">
+  <ul class="sf-menu">
     <li><a href="/"><span>Home</span></a></li>
 
     <imp:wdkMenu />
@@ -81,6 +83,8 @@
 			&nbsp;Follow us on twitter!
                   </span>
 		</a>
+    </li>
+    <li>
 		<a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
                   <span>
 	            <img style="margin:0px;margin-left:1px;vertical-align:top" title="Follow us on facebook!" 

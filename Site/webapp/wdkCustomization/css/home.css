@@ -17,6 +17,7 @@
    =from AllSites.css (menu_leftop), modified
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #sidebar { 
+  clear: both;
 	float: left; 
 	width: 230px; /* same width in <img> tag */
 	margin: 5px 5px 5px 5px; 

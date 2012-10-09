@@ -36,12 +36,12 @@
 				  <table>
 				    <tr>
 				      <td colspan="2" valign="top">
-				        <input type="checkbox" name="hasOrganism" value="true" checked="checked">Include taxon name
+				        <input type="checkbox" name="hasOrganism" value="true" checked="checked" />Include taxon name
 				      </td>
 				    </tr>
 				    <tr>
 				      <td colspan="2" valign="top">
-				        <input type="checkbox" name="hasDescription" value="true" checked="checked">Include protein product.
+				        <input type="checkbox" name="hasDescription" value="true" checked="checked" />Include protein product.
 				      </td>
 				    </tr>
 				    <tr>

@@ -48,7 +48,7 @@
 				              Default (same as in <a href="${pageContext.request.contextPath}/showSummary.do?step=${step_id}">result</a>), or...
 				            </td>
 				          </tr>
-				          <imp:attributeColumns title="" numCols="2" attributes="${wdkAnswer.allReportMakerTables}"/>
+				          <imp:fieldColumns title="" numCols="2" attributes="${wdkAnswer.allReportMakerAttributes}"/>
 				        </table>
 				      </td>
 				    </tr>

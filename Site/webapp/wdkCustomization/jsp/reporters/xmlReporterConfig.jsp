@@ -41,8 +41,8 @@
                 <input type="hidden" name="wdkReportFormat" value="${format}"/>
                 <table>
                   <c:set var="numCols" value="2"/>
-                  <imp:attributeColumn title="Attributes" numCols="${numCols}" attributes="${wdkAnswer.allReportMakerAttributes}"/>
-                  <imp:attributeColumn title="Tables" numCols="${numCols}" attributes="${wdkAnswer.allReportMakerTables}"/>
+                  <imp:fieldColumns title="Attributes" numCols="${numCols}" attributes="${wdkAnswer.allReportMakerAttributes}"/>
+                  <imp:fieldColumns title="Tables" numCols="${numCols}" attributes="${wdkAnswer.allReportMakerTables}"/>
                 </table>
               </td>
             </tr>
@@ -58,12 +58,12 @@
               <td valign="top"><b>Download Type: </b></td>
               <td>
                 <input type="radio" name="downloadType" value="text"/>Text File
-                <input type="radio" name="downloadType" value="plain" checked="checked">Show in Browser
+                <input type="radio" name="downloadType" value="plain" checked="checked" />Show in Browser
               </td>
             </tr>
             <tr>
               <td colspan="2" valign="top">
-                <input type="checkbox" name="hasEmptyTable" value="true" checked="checked">Include Empty Table
+                <input type="checkbox" name="hasEmptyTable" value="true" checked="checked" />Include Empty Table
               </td>
             </tr>
             <tr>

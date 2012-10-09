@@ -20,7 +20,7 @@
 #contentcolumn2 {
 	background-color: #FFFFFF;
 	background-position: 0 -25px;
-	background-repeat: repeat-x;
+  background-repeat: repeat-x;
 	margin: 0 5px 0 6px;
 }
 
@@ -284,42 +284,22 @@ ul.cirbulletlist {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	 =HEADER 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
-#nav-top li ul {  /* second-level lists */
-  background-repeat: repeat-x;      /*was in AllSites, did not make it into WDK*/
-  width:13em;
-  padding: 6px 6px 6px 18px;
-}
-
 
 div#quick-search td {
   white-space: nowrap;
 }
 
-
-#header {
-	color: #666666;
-	font-size: 10px;
-	width: 100%;
-	height: 159px;
-	text-align: left;
-	min-width: 1000px;
-	background-repeat: no-repeat;
-}
-
 #header2 {
 	color: #666666;
-	font-size: 10px;  /*version,date*/
-/*	width: 100%; */
+	font-size: 10px; 
 	min-width: 980px;
 	height: 104px;
-/*	text-align: left; */
 	background-repeat: no-repeat;
 }
 
 
 #header_rt {
    font-size: 12px;
- /*  width: 446px;*/   /* it was making safari wrap with long usernames */
    float: right;
    text-align: right;
    margin-right: 25px;
@@ -346,22 +326,20 @@ div#quick-search td {
 
 #toplink a:link, #toplink a:visited{
 	display: block;
-/* 	width: 381px; */
 	text-align: right;
 }
 
 #toplink a:hover {
 	display: block;
-/* 	width: 381px; */
 	text-align: right;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	 =MENUBAR (horizontal bar, under header)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
-
+/*
 #menubar {
-	min-width: 935px; /* to make space for My Favorites */
+	min-width: 935px;
 	height: 19px;
 	text-align: left;
 	background-image: url(../images/menu_bar.png);
@@ -374,33 +352,161 @@ div#quick-search td {
 	z-index: 1;
 }
 
-/* #menubar #mysearch {
+#menu {
+	z-index: 500;
+	margin-left: -45px;
+	padding-top: 0px;
+	height: 20px;
+}
+
+#menu ul {
+	display:block;
+	text-align: center;
+	float:left;
+	line-height: 16px;
+	margin:0pt;
+	padding:0pt;
+	padding-top: 6px;
+	width: 9.0em;         
+	border-top-width: 0px;
+	border-right-width: 2px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-style: solid;
+	border-color: #888888;
+
+}
+
+#menu a.dropdown {
+	background: url('/assets/images/menu_arrow.png') no-repeat 100% 0;
+}
+
+#menu a, #menu h2 {
+	display:block;
+	line-height: 14px;
+	line-height: 1;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	margin:0pt;
+	padding:0pt;
+}
+
+#menu a:link, #menu a:visited {
+	color:#FFFFFF;
+	line-height: 13px; 
 	width: auto;
-	background-repeat: repeat-x;
-	margin-top: -4px;
-	padding: 4px 3px 3px 3px;
-	z-index: 1;
-} */
+	text-decoration:none;
+}
 
-/* were used in quickSearch
+#menu a:hover, #menu a:active {
+	display: block;
+	line-height: 13px;
+	width: auto;
+	text-decoration: none;
+}
 
-#half_left {
-	width: 45%;
-	text-align: right;
-	padding: 4px;
-	margin: 6 0 12 0;
+#menu li {
+	position:relative;
+	line-height: 14px;
+	font-weight:normal;
+  	z-index: 500;   
+}
+
+#menu ul ul {
 	float: left;
-}
-
-#half_right {
-	width: 45%;
+	position: absolute;
+	display: block;
 	text-align: left;
-	padding: 4px;
-	margin: 6 0 12 0;
-	float: right;
+	width: 16em;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	background-color: #FFFFFF;
+	background-image: url(../images/dropdownmenu.jpg);
+	background-repeat: repeat-x;
+	background-position: top;
+	border-width: 1px;
+	border-style: solid;
+	border-color:#888888;
+	padding: 10px 6px 6px 18px;
+	line-height: 14px;
+	z-index: 500;
 }
-*/
 
+#menu ul ul a:link, #menu ul ul a:visited{
+	border-bottom: 0.1px solid black; 
+	left:100%;
+	width: 16em;
+	font-weight: normal;
+	padding: 5px 0px;
+	line-height: 14px;
+	z-index: 500;
+  	color: #414141;
+}
+
+#menu ul ul a:hover, #menu ul ul a:active{
+	border-bottom: 0.1px solid black;  
+	left:100%;
+	width: 16em;
+	font-weight: normal;
+	background-color: #FFFFFF;
+	text-decoration: none;
+	padding: 5px 0px;
+	line-height: 14px;
+	display: block;
+	z-index: 500;
+}
+
+#menu ul ul ul {
+	left:100%;
+	width: 16em;
+	position:absolute;
+	top:0pt;
+	z-index: 500;
+}
+
+div#menu ul ul, div#menu ul li:hover ul ul, div#menu ul ul li:hover ul ul {
+	display:none;
+	width: 14em;
+	z-index: 500;
+}
+
+div#menu ul li:hover ul, div#menu ul ul li:hover ul {
+	display:block;
+	width: 15em;
+	text-decoration: none;
+	padding: 5px;
+	background-color: #FFFFFF;
+	z-index: 500;
+}
+
+
+div#menu ul ul ul li:hover ul {
+	display:block;
+	width: 26em;
+	text-decoration: none;
+	padding: 5px;
+	background-color: #FFFFFF;
+	z-index: 500;
+}
+
+#menu ul ul ul ul a:link, #menu ul ul ul ul a:visited{
+	left:100%;
+	width: 26em;
+	font-weight: normal;
+	padding: 5px;
+	line-height: 14px;
+	z-index: 500;
+}
+
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	 =Search Boxes (ORTHO: commmon.css)
@@ -785,152 +891,3 @@ tr.headerrow th {
 
 
 /* THE END */
-/* under this, commented out */
-
-
-
-
-
-
-
-
-
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	 =Record.jsp,now in wdkCommon.css; comment out before delete: Sep 26 2012
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*
-.fixed {font-family:courier, fixed-width, monospace; font-size:10pt; color:#000000;}
-*/
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	 =UNUSED? comment out before delete: Sep 26 2012
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*
-#rightcolumn { 
-	float: left;
-	width: 25px;
-	margin-left: -25px; 
-}
-
-.twoColHybLt #container_au { 
-	width: 100%; 
-	background-color: #FFFFFF;
-	margin: 0 auto; 
-	border: 1px solid #000000;
-	text-align: left;
-} 
-
-.twoColHybLt #sidebar1 {
-	float: left; 
-	width: 12em;
-	color: #FFFFFF;
-	background-repeat: repeat-y;
-	padding: 15px 0;
-}
-
-.twoColHybLt #sidebar1 h3, .twoColHybLt #sidebar1 p {
-	margin-left: 10px; 
-	margin-right: 10px;
-}
-
-.twoColHybLt #mainContent { 
-	margin: 0 20px 0 13em; 
-} 
-*/
-
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	 =Generic  ==> moved to wdkCommon.css; comment out before delete: Sep 26 2012
-    .fltrt: this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page.
-    .fltlft:  this class can be used to float an element left in your page 
-    .clearfloat:  this class should be placed on a div or break element and should be the final element before the close of a container that should fully contain a float 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*
-.fltrt { 
-	float: right;
-	margin-left: 8px;
-}
-.fltlft { 
-	float: left;
-	margin-right: 8px;
-}
-.clearfloat {
-	clear:both;
-    height:0;
-    font-size: 1px;
-    line-height: 0px;
-}
-*/
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	 =Generic ==> moved to wdkCommon.css; comment out before delete: Sep 26 2012
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*
-h1 {
-	font-size: 170%;  
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	text-align: center;
-	margin-bottom: 14px;
-}
-
-h2 {
-	font-size: 150%;  
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	margin-bottom: 11px;
- 	text-align: left;
-	margin-left: 11px;
-}
-
-h3 {
-	font-size: 120%;  
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	margin-bottom: 11px;
- 	text-align: left;
-	margin-left: 11px;
-}
-
-body {
-	text-align: left;
-	color: #000000;
-	background-color: #ffffff;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	white-space: normal;
-	background-repeat: repeat-x;
-}
-
-
-a:link, a:visited {
-	text-decoration: none;
-}
-
-a:hover, a:active {
-	text-decoration: none;
-}
-
-td { 
-    padding: 4px 4px 4px 4px;
-}
-
-*/
-
-
-/* from sidebar */
-/*
-#leftcolumn {
-	float: left;
-	width: 220px;
-	margin-left: -100%;
-}
-
-.innertube3{
-	margin: 6px;
-}
-*/

@@ -71,8 +71,8 @@ var Setup = {
 
   configureMenuBar: function() {
     jQuery("#menu .sf-menu").supersubs({
-      minWidth: 15,
-      maxWidth: 25,
+      minWidth: 18,
+      maxWidth: 27,
       extraWidth: 1
     }).superfish();
   }

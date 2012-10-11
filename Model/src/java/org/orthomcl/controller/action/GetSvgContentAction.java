@@ -30,11 +30,6 @@ public class GetSvgContentAction extends WdkAction {
         "SELECT " + IMAGE_FIELD_NAME + " FROM apidb.OrthologGroup WHERE name = ?";
 
     @Override
-    protected ResponseType getResponseType() {
-      return ResponseType.svg;
-    }
-
-    @Override
     protected boolean shouldValidateParams() {
       return true;
     }
@@ -64,7 +59,7 @@ public class GetSvgContentAction extends WdkAction {
           resultSet = statement.executeQuery();
           if (resultSet.next()) {
               String svgContent = resultSet.getString("svg_content");
-              return new ActionResult()
+              return new ActionResult(ResponseType.svg)
                   .setRequestAttribute(ATTR_SVG_CONTENT, svgContent)
                   .setViewName(SUCCESS);
           }

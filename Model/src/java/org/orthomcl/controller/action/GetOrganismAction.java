@@ -15,11 +15,6 @@ import org.orthomcl.data.GroupLoader;
 
 public class GetOrganismAction extends WdkAction {
 
-    @Override
-    protected ResponseType getResponseType() {
-      return ResponseType.binary_data;
-    }
-
     @Override protected boolean shouldValidateParams() { return false; }
     @Override protected Map<String, ParamDef> getParamDefs() { return null; }
 
@@ -34,7 +29,8 @@ public class GetOrganismAction extends WdkAction {
 
         GroupLoader loader = new GroupLoader(connection);
         byte[] data = loader.getOrganismsData();
-        return new ActionResult().setStream(getStreamFromBytes(data));
+        return new ActionResult(ResponseType.binary_data)
+            .setStream(getStreamFromBytes(data));
       }
       finally {
         SqlUtils.closeQuietly(connection);

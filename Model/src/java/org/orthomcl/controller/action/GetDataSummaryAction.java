@@ -12,7 +12,6 @@ import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
 import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
-import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
@@ -34,11 +33,6 @@ public class GetDataSummaryAction extends WdkAction {
     private static final String MAP_RELEASE = SUMMARY_RELEASE;
   
     private static final String HELPER_QUESTION = "HelperQuestions.ByDefault";
-
-    @Override
-    protected ResponseType getResponseType() {
-      return ResponseType.html;
-    }
 
     @Override
     protected boolean shouldValidateParams() {

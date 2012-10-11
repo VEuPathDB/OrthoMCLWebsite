@@ -17,11 +17,6 @@ public class GetGroupAction extends WdkAction {
 
     private static final String PROP_GROUP = "group";
 
-    @Override
-    protected ResponseType getResponseType() {
-      return ResponseType.binary_data;
-    }
-
     @Override protected boolean shouldValidateParams() { return false; }
     @Override protected Map<String, ParamDef> getParamDefs() { return null; }
 
@@ -38,7 +33,8 @@ public class GetGroupAction extends WdkAction {
           connection = dataSource.getConnection();
           GroupLoader loader = new GroupLoader(connection);
           byte[] data = loader.getGroupData(groupName);
-          return new ActionResult().setStream(getStreamFromBytes(data));
+          return new ActionResult(ResponseType.binary_data)
+              .setStream(getStreamFromBytes(data));
       }
       finally {
           SqlUtils.closeQuietly(connection);

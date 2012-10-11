@@ -35,11 +35,6 @@ public class GetBiolayoutImageAction extends WdkAction {
         "WHERE name = ? AND " + IMAGE_FIELD_NAME + " IS NOT NULL";
 
     @Override
-    protected ResponseType getResponseType() {
-      return ResponseType.jpeg;
-    }
-
-    @Override
     protected boolean shouldValidateParams() {
       return true;
     }
@@ -64,7 +59,7 @@ public class GetBiolayoutImageAction extends WdkAction {
           resultSet = statement.executeQuery();
           if (resultSet.next()) {
               // find image, add to response
-              return new ActionResult().setFileName(BIOLAYOUT_DEFAULT_FILENAME)
+              return new ActionResult(ResponseType.jpeg).setFileName(BIOLAYOUT_DEFAULT_FILENAME)
                   .setStream(new DatabaseResultStream(resultSet, IMAGE_FIELD_NAME));
           }
           // otherwise throw exception; file should be found

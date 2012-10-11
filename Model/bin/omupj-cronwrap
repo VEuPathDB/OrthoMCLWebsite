@@ -21,7 +21,7 @@ export PATH=$GUS_HOME/bin:$PROJECT_HOME/install/bin:$PATH
 export PERL5LIB=$GUS_HOME/lib/perl
 export CGILIB=$BASE_GUS/cgi-lib
 
-CONF=${1-$CGILIB/proteomeJobConfig.txt}
+CONF=${1-$GUS_HOME/config/proteomeJob.config}
 
 if [[ ! -f $CONF ]]; then
     echo    

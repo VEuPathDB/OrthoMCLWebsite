@@ -16,7 +16,7 @@ use strict;
 use base 'CGI::Application';
 use CGI qw(-oldstyle_urls); # see Note 1
 
-my $svc_cfg_file = ($ENV{DOCUMENT_ROOT} . "/../cgi-lib/svc.config");
+my $svc_cfg_file = ($ENV{GUS_HOME} . "/config/orthomcl-svc.config");
 
 my $q;
 my %para;

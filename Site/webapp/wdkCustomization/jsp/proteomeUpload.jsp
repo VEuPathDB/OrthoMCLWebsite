@@ -6,12 +6,12 @@
 
   <imp:pageFrame refer="proteome" title="Upload your own Proteome">
 
-    <script type="text/javascript" src="${pageContext.request.contextPath}/wdk/js/lib/jquery.form.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/wdkCustomization/js/proteome.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/wdk/js/lib/jquery.form.js"><jsp:text /></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/wdkCustomization/js/proteome.js"><jsp:text /></script>
 
     <!-- BEGIN CONTENT -->
 
-    <div id="proteome-result" style="display:none;"></div>
+    <div id="proteome-result" style="display:none;"><jsp:text/></div>
 
       <h3 align="center">Assign your proteins to OrthoMCL Groups</h3>
       Use this tool to provisionally assign the proteins in a genome to OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.

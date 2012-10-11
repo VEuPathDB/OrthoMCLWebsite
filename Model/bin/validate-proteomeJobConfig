@@ -6,7 +6,7 @@ export BASE_GUS="${Bin%%gus_home/bin}"
 export CGILIB=$BASE_GUS/cgi-lib
 export GUS_HOME=$BASE_GUS/gus_home
 
-PJCONF=${1-$CGILIB/proteomeJobConfig.txt}
+PJCONF=${1-$GUS_HOME/config/proteomeJob.config}
 YAMLCONF="$CGILIB/config.yaml"
 
 if [[ ! -e "$PJCONF" ]]; then

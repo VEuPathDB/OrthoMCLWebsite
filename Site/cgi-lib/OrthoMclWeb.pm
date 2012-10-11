@@ -47,7 +47,7 @@ sub cgiapp_init {
   my $mode = $q->param("rm");
 
   if (!$mode || index($mode,"draw") < 0) {
-    $config = LoadFile("@cgilibTargetDir@/config.yaml");
+    $config = LoadFile("$ENV{GUS_HOME}/config/orthomcl-config.yaml");
     $self->param(config => $config);
     
     $self->dbh_config('orthomcl', 

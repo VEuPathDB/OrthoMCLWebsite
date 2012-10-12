@@ -65,7 +65,7 @@
       <pg:param name="sort" id="pager" />
     </c:if>
 
-    <!--------- PAGING TOP BAR ---------->
+    <!--         PAGING TOP BAR          -->
     <table class="pager" width="100%" border="0" cellpadding="3" cellspacing="0">
 	    <tr class="subheaderrow">
 	      <th style="text-align:left; white-space:nowrap;"> 
@@ -79,13 +79,13 @@
 	      </th>
 	    </tr>
     </table>
-    <!--------- END OF PAGING TOP BAR ---------->
+    <!--        END OF PAGING TOP BAR         -->
 
     <!-- content of current page -->
     <c:set var="sortingAttrNames" value="${wdkAnswer.sortingAttributeNames}"/>
     <c:set var="sortingAttrOrders" value="${wdkAnswer.sortingAttributeOrders}"/>
 
-    <!--------- RESULTS  ---------->
+    <!--        RESULTS          -->
     <div class="Results_Div flexigrid">
       <div class="bDiv">
         <div class="bDivBox">
@@ -123,9 +123,9 @@
         </div>
       </div>
     </div>
-    <!--------- END OF RESULTS  ---------->
+    <!--        END OF RESULTS          -->
 
-    <!--------- PAGING BOTTOM BAR ---------->
+    <!--        PAGING BOTTOM BAR         -->
     <table width="100%" border="0" cellpadding="3" cellspacing="0">
 	    <tr class="subheaderrow">
 	      <th style="text-align:left;white-space:nowrap;"> 
@@ -139,7 +139,7 @@
 	      </th>
 	    </tr>
     </table>
-    <!--------- END OF PAGING BOTTOM BAR ---------->
+    <!--        END OF PAGING BOTTOM BAR         -->
     
   </pg:pager>
 </jsp:root>

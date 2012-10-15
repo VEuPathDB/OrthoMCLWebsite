@@ -26,7 +26,7 @@
 
     <td id="group-quicksearch">
       <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">
-        <span class="head-search-tip" title="Enter a Group name. Use * as a wildcard (to obtain more than one). Click to enter multiple Group names".>
+        <span class="head-search-tip" title="Enter a Group name. Use * as a wildcard (to obtain more than one). Click to enter multiple Group names">
           <input type="hidden" name="questionFullName" value="${groupQuestion.fullName}"/>
           <input type="hidden" name="questionSubmit" value="Get Answer"/>
           <label>

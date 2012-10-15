@@ -11,8 +11,13 @@
   <!-- display page header with recordClass type in banner -->
   <c:set value="${wdkRecord.recordClass.type}" var="recordType"/>
 
+  <!-- if recordClass is Group, add sequence count as subtitle -->
+  <c:if test="${recordType eq 'Group'}">
+    <c:set value="(${wdkRecord.attributes['number_of_members'].value} sequences)" var="recordSubtitle"/>
+  </c:if>
+
   <imp:pageFrame refer="record" title="${recordType} Record page">
-    <imp:record record="${wdkRecord}"/>
+    <imp:record record="${wdkRecord}" recordSubtitle="${recordSubtitle}"/>
   </imp:pageFrame>
 
 </jsp:root>

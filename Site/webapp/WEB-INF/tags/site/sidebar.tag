@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
 
   <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
   <c:set var="project" value="${wdkModel.displayName}"/>
@@ -17,9 +18,9 @@
 	<c:forEach items="${helperQuestion.answerValue.records}" var="item">
 	  <c:set var="helperRecord" value="${item}"/>
 	</c:forEach>
-	<c:set var="organism_count" value="${helperRecord.attributes['organism_count']}"/>
-	<c:set var="protein_count" value="${helperRecord.attributes['protein_count']}"/>
-	<c:set var="group_count" value="${helperRecord.attributes['group_count']}"/>
+	<c:set var="organism_count" value="${helperRecord.attributes['organism_count'].value}"/>
+	<c:set var="protein_count" value="${helperRecord.attributes['protein_count'].value}"/>
+	<c:set var="group_count" value="${helperRecord.attributes['group_count'].value}"/>
 
   <span class="onload-function" data-function="Setup.configureSidebar"><jsp:text/></span>
 
@@ -30,9 +31,9 @@
 	  </h3>
 	  <div>
 	    <ul>
-	      <li><a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genomes: <b>${organism_count}</b></a></li>
-	      <li>Protein Sequences: <b>${protein_count}</b></li>
-	      <li>Ortholog Groups: <b>${group_count}</b></li>
+	      <li><a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genomes: <b><fmt:formatNumber value="${organism_count}"/></b></a></li>
+	      <li>Protein Sequences: <b><fmt:formatNumber value="${protein_count}"/></b></li>
+	      <li>Ortholog Groups: <b><fmt:formatNumber value="${group_count}"/></b></li>
 	    </ul>
 	  </div>
 	

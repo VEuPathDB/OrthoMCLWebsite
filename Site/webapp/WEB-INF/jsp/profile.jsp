@@ -14,7 +14,7 @@
       <c:if test="${requestScope.profileSucceed ne null}">
         <p><font color="blue">Your profile has been updated successfully.</font></p>
       </c:if>
-  
+
       <form name="profileForm" method="post" action="processProfile.do">
         <table width="650" border="0" class="user-form-table">
           <tr>

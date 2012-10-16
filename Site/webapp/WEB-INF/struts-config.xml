@@ -178,12 +178,6 @@
       validate="false">
     </action>
     <action
-      path="/processBasketQuestion"
-      type="org.gusdb.wdk.controller.action.ProcessBasketQuestionAction"
-      validate="false">
-      <forward name="processQuestion" path="/processFilter.do"/>
-    </action>
-    <action
       path="/showBasket"
       type="org.gusdb.wdk.controller.action.ShowBasketAction"
       validate="false">
@@ -365,14 +359,7 @@
     <action
       path="/showXmlDataContent"
       type="org.gusdb.wdk.controller.action.ShowXmlDataContentAction">
-    </action>
-    <action
-      path="/processTestForm"
-      type="org.gusdb.wdk.controller.action.ProcessTestFormAction"
-      name="testForm"
-      input="/testForm.jsp">
-      <forward name="process_test_form" path="/wdk/testFormResult.jsp"/>
-    </action>    
+    </action>  
    <action
       path="/addComment"
       type="org.apidb.apicommon.controller.NewCommentAction"

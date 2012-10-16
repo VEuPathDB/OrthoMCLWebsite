@@ -18,19 +18,19 @@ a:visited { color: #330099; }
 /***** Styling for the Contact Us pop-up box *****/
 
 .contact-us ul {
-	list-style: disc outside none;
-	margin: 1em 0em;
-	padding-left: 1em;
+  list-style: disc outside none;
+  margin: 1em 0em;
+  padding-left: 1em;
 }
 
 .contact-us td {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 /***** Styling for the 'About' page *****/
 
 div#about {
-	width: 100%;
+  width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
@@ -45,45 +45,50 @@ div#about h2 { font-size: 16px; }
 div#about p { margin: 15px; }
 div#about .question { font-weight:bold; }
 
-/*
-div#about .about-title {
-	width: 70%;
-	padding: 16px;
-	margin-top: 10px;
-	text-align: left;
+div#about .about-nav {
+  width: 70%;
+  text-align: right;
 }
-*/
+
+div#about .about-title {
+  width: 70%;
+  text-align: center;
+}
 
 div#about .section-title {
-	width: 70%;
-	padding: 6px;
-	-moz-border-radius: 20px;
+  width: 70%;
+  padding: 6px;
+  -moz-border-radius: 20px;
   -webkit-border-radius: 20px;
   -khtml-border-radius: 20px;
   border-radius: 20px;
 }
 
+div#about .section-title a {
+  float: right;
+}
+
 div#about .section-content {
   width: 65%;
-	padding: 15px;
+  padding: 15px;
   font-size: 14px;
-	text-align: left;
+  text-align: left;
 }
 
 div#about ol {
-	margin-left: 40px;
-	list-style-position: outside;
+  margin-left: 40px;
+  list-style-position: outside;
   list-style-type: decimal;
 }
 
 div#about li {
-	padding-top: 5px;
+  padding-top: 5px;
 }
 
 /***** Styling for the error page *****/
 
 #error-main {
-	width: 100%;
+  width: 100%;
   text-align: center;
   margin: 30px 8px;
 }
@@ -93,17 +98,17 @@ div#about li {
 }
 
 #error-main p {
-	margin: 15px auto 10px auto;
-	font-size: 16px;
-	text-align: center;
-	width: 550px;
+  margin: 15px auto 10px auto;
+  font-size: 16px;
+  text-align: center;
+  width: 550px;
 }
 
 #error-main .error-image {
-	width: 230px;
-	margin: 15px;
+  width: 230px;
+  margin: 15px;
   -moz-border-radius: 50px;
-  -webkit-border-radius: 50px;	
+  -webkit-border-radius: 50px;  
   -khtml-border-radius: 50px;
   border-radius: 50px;
 }
@@ -133,7 +138,7 @@ div#about li {
 #header2 {min-width:975px; clear:both;}
 
 div#header2 .ui-widget-content {
-	background:0;
+  background:0;
   border:0;
 }
 
@@ -150,11 +155,11 @@ table#quick-search a {
 /* from AllSites now included in includes.tag */
 /*
 #header2 {
-	color: #666666;
-	font-size: 10px; 
-	min-width: 980px;
-	height: 104px;
-	background-repeat: no-repeat;
+  color: #666666;
+  font-size: 10px; 
+  min-width: 980px;
+  height: 104px;
+  background-repeat: no-repeat;
 }
 */
 

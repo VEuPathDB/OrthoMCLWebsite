@@ -97,14 +97,14 @@ sub direct {
     }
 
     close FILE;
-    
+
     $self->header_props(
         -type=>'application/zip',
         '-Content-Disposition' => 'attachment; filename="' . $resultfile_basename . '"',
         '-content_length'      => $download_size,
     );
-    
-    
+
+
     return $output;
 }
 

@@ -18,8 +18,7 @@
 
       <br/><br/>The process takes between 6 to 24 hours depending upon server load.<br/><br/>
       
-      <form id="proteome" action="/cgi-bin/OrthoMclWeb.cgi" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="rm" value="proteomeQuery"/>
+      <form id="proteome" action="/cgi-bin/orthomclProteomeSvcUpload.cgi" method="post" enctype="multipart/form-data">
         <table align="center">
 		    <tr>
 		      <td>Sequence file to Upload: </td>

@@ -19,7 +19,7 @@
 #sidebar { 
   clear: both;
 	float: left; 
-	width: 230px; /* same width in <img> tag */
+	width: 208px;
 	margin: 5px 5px 5px 5px; 
 	font-size:12px;	
 }
@@ -39,6 +39,7 @@
 }
 
 #sidebar a.heading {
+/* font-weight:normal; */
 	height: 24px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 17px;
@@ -69,7 +70,7 @@ div#sidebar h3.ui-state-default {
       =SIDEBAR: sections content
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #sidebar div {
-   height: auto;
+/*   height:auto; */
    font-family: Arial, Helvetica, sans-serif;
    font-size: 12px;
    font-weight: normal;
@@ -96,7 +97,7 @@ div#sidebar h3.ui-state-default {
 #sidebar div ul#news,
 #sidebar div ul#communityEventList {
     border: 1px lightgrey solid;
-    height: 120px;
+    height: 70px;   /* 120px; */
     list-style-position: inside;
     margin-left: 0;
     overflow-y: auto;

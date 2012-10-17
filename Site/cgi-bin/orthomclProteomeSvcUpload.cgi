@@ -3,7 +3,7 @@
 use strict;
 use lib "../cgi-lib";
 
-use OrthoMclWeb;
+use ProteomeSvcUpload;
 
-my $webapp = OrthoMclWeb->new();
+my $webapp = ProteomeSvcUpload->new();
 $webapp->run();

@@ -17,7 +17,7 @@
 
   <fmt:setLocale value="en-US"/>
   <c:set var="newsCount" value="50"/>
-  <c:set var="sidebarWidth" value="208"/>
+  <c:set var="sidebarWidth" value="208"/> 
 
 
 <c:set var="xqSetMap" value="${wdkModel.xmlQuestionSetsMap}"/>
@@ -34,7 +34,7 @@
 <c:set var="dateStringPattern" value="dd MMMM yyyy HH:mm"/>
 
 
-	<!-- load help record and taxon info -->
+	<!-- ORTHO data summary -->
 	<c:set var="helperQuestion" value="${wdkModel.questionSetsMap['HelperQuestions'].questionsMap['ByDefault']}"/>
   <!-- must set user on question before retrieving answer value -->	
 	<jsp:setProperty name="helperQuestion" property="user" value="${wdkUser}"/>
@@ -139,7 +139,6 @@
 	    <span style="vertical-align:sub">Follow us on Facebook!</span>
     </a>
     <br/><br/>
-    <hr style="color:lightgrey"/>
 
 
  <b>Related Sites</b>
@@ -181,10 +180,12 @@
     </h3>
 	  <div> 
 
+ 
+
  <ul id="education">
-<!-- 	  <li>
-		  <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a> (video and pdf)</a>
-    </li> -->
+	  <li>
+		  <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a> (video and pdf)
+    </li> 
     <li>
       <a href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a>
     </li>
@@ -214,6 +215,10 @@
     </h3>
 	  <div> 
 
+   <c:url value="http://scholar.google.com/scholar" var="citingUsURL">
+      <c:param name="num"   value="10" />
+    </c:url>
+
  <ul id="information">
     <li>
       <a href="">How to Cite us</a>
@@ -222,7 +227,22 @@
       <a href="">Organisms in ${project}</a>
     </li>
 		<li>
-  <!--    <a href="http://scholar.google.com/scholar?as_q=&num=10&as_epq=&as_oq=OrthoMCL+PlasmoDB+ToxoDB+CryptoDB+TrichDB+GiardiaDB+TriTrypDB+AmoebaDB+MicrosporidiaDB+%22FungiDB%22+PiroplasmaDB+ApiDB+EuPathDB&as_eq=encrypt+cryptography+hymenoptera&as_occt=any&as_sauthors=&as_publication=&as_ylo=&as_yhi=&as_sdt=1.&as_sdtp=on&as_sdtf=&as_sdts=39&btnG=Search+Scholar&hl=en">Publications that Cite Us</a> 
+  <!--    <a href="http://scholar.google.com/scholar?
+as_q=&
+num=10&
+as_epq=&
+as_oq=OrthoMCL+PlasmoDB+ToxoDB+CryptoDB+TrichDB+GiardiaDB+TriTrypDB+AmoebaDB+MicrosporidiaDB+FungiDB+PiroplasmaDB+ApiDB+EuPathDB&
+as_eq=encrypt+cryptography+hymenoptera&
+as_occt=any
+&as_sauthors=&
+as_publication=&
+as_ylo=&as_yhi=&
+as_sdt=1.&
+as_sdtp=on&
+as_sdtf=&
+as_sdts=39&
+btnG=Search+Scholar&
+hl=en">Publications that Cite Us</a> 
    -->
     </li>
    	<li>

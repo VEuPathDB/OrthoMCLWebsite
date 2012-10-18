@@ -48,55 +48,38 @@
     <imp:wdkMenu />
 
     <li><a><span>Tools</span></a>
-	<ul>
-	    <li><a href="<c:url value="/showQuestion.do?questionFullName=SequenceQuestions.ByBlast"/>"><span>BLAST</span></a></li>
-  	    <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign proteins to groups</span></a></li>
-            <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li>
-	    <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li>
-
+	    <ul>
+	      <li><a href="<c:url value="/showQuestion.do?questionFullName=SequenceQuestions.ByBlast"/>"><span>BLAST</span></a></li>
+  	     <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign proteins to groups</span></a></li>
+         <!--   <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li> -->
+	       <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li>
     	</ul>
-
     </li>
 
     <li><a><span>Data Summary</span></a>
-  	<ul>
+  	  <ul>
    	    <li><a href="<c:url value='/getDataSummary.do?summary=data'/>"><span>Data Sources</span></a></li>
- 	    <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Summary Statistics</span></a></li>
-	</ul>
+ 	      <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Summary Statistics</span></a></li>
+	    </ul>
     </li>
 
-    <li><a><span>Downloads</span></a>
- 	<ul>
-    	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.About#downloads'/>"><span>Understanding Downloads</span></a></li>
-    	    <li><a href="/common/downloads">Data Files</a></li>
-    	    <li><a href="<c:url value='/showXmlDataContent.do?name=XmlQuestions.EuPathDBPubs'/>"><span>EuPathDB Publications</span></a></li> 
-  	</ul>
-    </li>
+    <li><a href="/common/downloads"><span>Downloads</span></a></li>
     
     <li><a><span>Community</span></a>
-	<ul>
-		<li>
-		<a href="http://twitter.com/eupathdb">
-                  <span>
-		    <img style="margin:0px;vertical-align:top" title="Follow us on twitter!" 
-                         src="${pageContext.request.contextPath}/wdkCustomization/images/twitter.gif" width="20">
-			&nbsp;Follow us on twitter!
-                  </span>
-		</a>
-    </li>
-    <li>
-		<a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
-                  <span>
-	            <img style="margin:0px;margin-left:1px;vertical-align:top" title="Follow us on facebook!" 
-                         src="${pageContext.request.contextPath}//wdkCustomization/images/facebook.png" width="18">
-                    &nbsp;Follow us on facebook!
-                  </span>
-		</a>
-		</li>
-
-    	    <li><a href="https://community.eupathdb.org"><span>Discussion Forums</span></a></li>
-	    <li><a href="<c:url value="/communityEvents.jsp"/>"><span>Upcoming Events</span></a></li>
-
+	    <ul>
+		    <li><a href="http://twitter.com/eupathdb">
+          <span><img style="margin:0px;vertical-align:top" title="Follow us on twitter!" 
+                      src="${pageContext.request.contextPath}/wdkCustomization/images/twitter.gif" width="20">
+			      &nbsp;Follow us on twitter!
+          </span></a>
+        </li>
+        <li><a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
+          <span><img style="margin:0px;margin-left:1px;vertical-align:top" title="Follow us on facebook!" 
+                     src="${pageContext.request.contextPath}//wdkCustomization/images/facebook.png" width="18">
+            &nbsp;Follow us on facebook!
+          </span></a>
+		    </li>
+<!--
   	    <c:choose>
     	    <c:when test="${extlAnswer_exception != null}">
 	    	<li><a href="#"><span><font color="#CC0033"><i>Error. related sites temporarily unavailable</i></font></span></a></li>
@@ -105,7 +88,8 @@
     		<li><a href="<c:url value="/showXmlDataContent.do?name=XmlQuestions.ExternalLinks"/>"><span>Related Sites</span></a></li>
     	    </c:otherwise>
     	    </c:choose>
-  	</ul>
+-->
+  	  </ul>
     </li>
 
   </ul>

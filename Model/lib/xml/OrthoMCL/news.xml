@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xmlAnswer>
+
+<!--
+   <record>
+       <attribute name="headline"></attribute>
+       <attribute name="date"></attribute>
+       <attribute name="tag"></attribute>
+       <attribute name="category"></attribute>
+       <attribute name="item">           
+         <![CDATA[
+          ]]>
+       </attribute>
+    </record>
+--> 
+   <record>
+       <attribute name="headline">OrthoMCL 5 released</attribute>
+       <attribute name="date">31 Mar 2011  9:00AM</attribute>
+       <attribute name="tag">ortho-5</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">           
+         <![CDATA[
+OrthoMCL-DB Version 5 is released. We have included 150 genomes in this release.
+          ]]>
+       </attribute>
+    </record>
+
+   <record>
+       <attribute name="headline">OrthoMCL 4 released</attribute>
+       <attribute name="date">31 Mar 2010 9:00AM</attribute>
+       <attribute name="tag">ortho-4</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">           
+         <![CDATA[
+OrthoMCL-DB Version 4 is released. There are 138 genomes included in version 4.
+          ]]>
+       </attribute>
+    </record>
+
+<record>
+       <attribute name="headline">OrthoMCL 3 released</attribute>
+       <attribute name="date">9 Oct 2009 12:00PM</attribute>
+       <attribute name="tag">ortho-3</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">           
+         <![CDATA[
+OrthoMCL-DB Version 3 is released.  The new dataset includes 128 genomes.  New web site features include: (1) a tool to assign your proteins to OrthoMCL groups (see the new tools menu);  (2) a mapping from Version 3 groups to Version 2 and 1 is available for searching, allowing you to track changes across versions;  (3) the phyletic pattern in the groups result page is configurable, so you can tailor it to the clades you are interested in. 
+        ]]>
+       </attribute>
+</record>
+
+
+<record>
+       <attribute name="headline">OrthoMCL 2 released</attribute>
+       <attribute name="date">28 Feb 2008 9:00</attribute>
+       <attribute name="tag">ortho-2</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">
+           
+         <![CDATA[
+OrthoMCL-DB Version 2 is released.  The new dataset includes an increased number of genomes (87).  New features on the web site include a system wide speed up; a significant speed up of the phyletic pattern query; improvements in query pages and group pages to accomodate the increased number of genomes; and use of public identifiers for sequences throughout the site, instead of assigned identifiers.  Perhaps most importantly, the production of the dataset has been moved to a pipeline system.  This will allow us to generate new versions at a much improved frequency.
+          ]]>
+       </attribute>
+    </record>
+<!--
+   <record>
+       <attribute name="headline"></attribute>
+       <attribute name="date"></attribute>
+       <attribute name="tag"></attribute>
+       <attribute name="category"></attribute>
+       <attribute name="item">
+           
+         <![CDATA[
+          ]]>
+       </attribute>
+    </record>
+--> 
+
+
+</xmlAnswer>

@@ -64,10 +64,10 @@ var Setup = {
 	
 	configureSidebar: function() {
 		$("#sidebar").accordion({
-			navigation:true,
-      heightStyle:"content",
-      active:1,
-		  icons:false,
+     active:1,									// not combine with navigation
+     // heightStyle:"content",  //for 1.9
+     autoHeight:false,
+		 icons:false
 		});
 	},
 

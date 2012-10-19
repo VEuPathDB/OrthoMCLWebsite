@@ -79,14 +79,6 @@
 	  <c:catch var="newsErr">
     <c:set var="i" value="1"/>
     <ul id="news">
-
-<li><b>Mar 31, 2011</b>: OrthoMCL-DB Version 5 is released. We have included 150 genomes in this release.
-</li>
-<li><b>May 31, 2010</b> : OrthoMCL-DB Version 4 is released. There are 138 genomes included in version 4.
-</li>
-<li><b>Oct 9, 2009</b> : OrthoMCL-DB Version 3 is released. The new dataset includes 128 genomes.  New web site features include: (1) a tool to assign your proteins to OrthoMCL groups (see the new tools menu);  (2) a mapping from Version 3 groups to Version 2 and 1 is available for searching, allowing you to track changes across versions;  (3) the phyletic pattern in the groups result page is configurable, so you can tailor it to the clades you are interested in.
-</li>
-
       <c:forEach items="${newsAnswer.recordInstances}" var="record">
 			  <c:if test="${i le newsCount }">  
           <c:set var="attrs" value="${record.attributesMap}"/>

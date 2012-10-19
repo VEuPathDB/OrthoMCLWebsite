@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<xmlAnswer>
+
+   <record>
+      <table name="relatedLinks">
+        <row>
+          <attribute name="title">EuPathDB</attribute>
+          <attribute name="url">http://www.EuPathDB.org</attribute>
+        </row>
+         <row>
+          <attribute name="title">EuPathDB Workshops</attribute>
+          <attribute name="url">http://workshop.eupathdb.org/</attribute>
+        </row> 
+        <row>
+          <attribute name="title">BRCs Pathogen Portal</attribute>
+          <attribute name="url">http://www.pathogenportal.org/</attribute>
+        </row> 
+        <row>
+          <attribute name="title">CryptoDB</attribute>
+          <attribute name="url">http://www.CryptoDB.org</attribute>
+        </row>
+        <row>
+          <attribute name="title">PlasmoDB</attribute>
+          <attribute name="url">http://www.PlasmoDB.org</attribute>
+        </row>
+        <row>
+          <attribute name="title">ToxoDB</attribute>
+          <attribute name="url">http://www.ToxoDB.org</attribute>
+        </row>
+     </table>
+
+
+   </record>
+</xmlAnswer>

@@ -82,6 +82,7 @@
   <target name="OrthoMCLWebsite-Installation" depends="EuPathSiteCommon-Installation,
                                                        OrthoMCLShared-Installation,
                                                        OrthoMCLWebsite/Site-Installation,
+                                                       OrthoMCLWebsite/View-Installation,
                                                        OrthoMCLWebsite/Model-Installation">
     <ant target="defaultProjectInstall"/>
   </target>  
@@ -120,6 +121,13 @@
     <ant target="defaultComponentInstall">
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
+    </ant>
+  </target>  
+
+ <target name="OrthoMCLWebsite/View-Installation">
+    <ant target="defaultComponentInstall">
+      <property name="project" value="OrthoMCLWebsite"/>
+      <property name="component" value="View"/>
     </ant>
   </target>  
 

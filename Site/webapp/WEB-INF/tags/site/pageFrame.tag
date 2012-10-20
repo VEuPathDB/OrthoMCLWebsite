@@ -8,6 +8,8 @@
               description="Value to appear in page's title"/>
   <jsp:directive.attribute name="refer" required="false" 
               description="Page calling this tag"/>
+  <jsp:directive.attribute name="headElement" required="false"
+              description="additional head elements"/>
 
   <c:set var="project" value="${applicationScope.wdkModel.displayName}" />
 

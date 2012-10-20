@@ -7,7 +7,6 @@
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested" %>
 
 <c:set var="xmlAnswer" value="${requestScope.wdkXmlAnswer}"/>
-<c:set var="banner" value="${xmlAnswer.question.displayName}"/>
 <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
 <c:set var="dateStringPattern" value="dd MMMM yyyy HH:mm"/>
 <fmt:setLocale value="en-US"/><%-- req. for date parsing when client browser (e.g. curl) doesn't send locale --%>
@@ -19,12 +18,7 @@
 </c:set>
 
 <imp:pageFrame title="${wdkModel.displayName} : News"
-                 banner="${banner}"
-                 parentDivision="${wdkModel.displayName}"
-                 parentUrl="/home.jsp"
-                 divisionName="News"
-                 division="news"
-                 headElement="${headElement}" >
+               headElement="${headElement}" >
 
 <!-- 
   Validate that the date string in the xml is parsable to a date object.
@@ -104,16 +98,18 @@
   <c:if test="${param.tag eq tag or param.tag == null or param.tag == ''}">
     <a name="newsItem${i}"/>
     <a name="${tag}"/>
-    <table id="news">
-  
+<!--    <table id="news">
     <c:if test="${i > 1}"><tr><td colspan="2"><hr></td></tr></c:if>
-    <tr class="rowLight"><td>
+-->
+    <c:if test="${i > 1}"><hr></c:if>
+<!--    <tr class="rowLight"><td> -->
  <!-- these headlines do not need to link once in the news page
       <a href="showXmlDataContent.do?name=XmlQuestions.News&amp;tag=${tag}"> -->
       <font color='black'><b>${headline}</b></font>
 <!-- </a>  -->
 	 (${fdate})<br><br>
-      ${item}</td></tr></table>
+      ${item}
+<!-- </td></tr></table> -->
     <c:set var="i" value="${i+1}"/>
   </c:if>
 

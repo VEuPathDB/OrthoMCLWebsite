@@ -33,6 +33,8 @@
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
   
+  <!-- Access twitter/facebook links, and configure menubar (superfish) -->
+  <script type="text/javascript" src="${base}/js/nav.js"></script>
   
   <c:if test="${refer eq 'home'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>

@@ -26,12 +26,7 @@
 	    </li>
 	    <imp:login/>
 	    <li class="empty-divider"><a href="javascript:void()" class="open-dialog-contact-us">Contact Us</a></li>
-	    <li class="socmedia-link no-divider">
-	      <a href="#"><img width="16" src="${pageContext.request.contextPath}/wdkCustomization/images/twitter.gif"/></a>
-	    </li>
-	    <li class="socmedia-link no-divider">
-	      <a href="#"><img width="16" src="${pageContext.request.contextPath}/wdkCustomization/images/facebook.png"/></a>
-	    </li>
+	    <imp:socialMedia/>
 	  </ul>
 	</div>
 </jsp:root>

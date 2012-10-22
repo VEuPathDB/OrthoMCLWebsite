@@ -1,7 +1,0 @@
-
-# configurations shared with cgi download script
-resultsDir = /var/www/Common/tmp/orthomclProteomeJob/results
-purgeWindow = 7
-resultfilePrefix = orthomclResult-
-resultfileExt = .zip 
-

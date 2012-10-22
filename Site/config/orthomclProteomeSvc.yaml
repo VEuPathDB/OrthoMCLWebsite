@@ -1,0 +1,9 @@
+# upload properties
+proteome_job_dir: /var/www/Common/tmp/orthomclProteomeJob/steve
+proteome_upload_is_offline: 0
+
+# service and download properties
+resultsDir: /var/www/Common/tmp/orthomclProteomeJob/results
+purgeWindow: 7
+resultfilePrefix: orthomclResult-
+resultfileExt: .zip 

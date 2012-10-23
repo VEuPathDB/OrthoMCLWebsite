@@ -90,7 +90,10 @@
 	
 	<div class="sequences">
 	  <c:url var="fastaLink" value="processQuestion.do?questionFullName=SequenceQuestions.ByAccession&amp;skip_to_download=1&amp;wdkReportFormat=fasta&amp;value(accession)=${primaryKey}"/>
-	  <a class="button" href="${fastaLink}">Download protein sequences</a>
+          <c:url var="strategyLink" value="processQuestion.do?questionFullName=SequenceQuestions.ByAccession&amp;value(accession)=${primaryKey}" />
+          Get Sequences:
+	  <a class="button ui-state-default ui-corner-all" href="${fastaLink}">As Fasta file</a>
+          <a class="button ui-state-default ui-corner-all" href="${strategyLink}">As new strategy</a>
 	  <c:set var="proteins" value="${wdkRecord.tables['Sequences']}"/>
 	  <imp:wdkTable tblName="${proteins.name}" isOpen="true"/>
 	</div>

@@ -34,7 +34,7 @@
   <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
   
   <!-- Access twitter/facebook links, and configure menubar (superfish) -->
-  <script type="text/javascript" src="${base}/js/nav.js"></script>
+  <script type="text/javascript" src="${base}/js/nav.js"><jsp:text/></script>
   
   <c:if test="${refer eq 'home'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>

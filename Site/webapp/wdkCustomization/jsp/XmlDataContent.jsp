@@ -31,7 +31,7 @@
 						        <tr>
 						          <c:set var="attrName" value="${recAttr.name}"/>
 						          <c:set var="attrVal" value="${recAttr.value}"/>
-						          <td width=1 nowrap align="right"><b>${attrName}:</b></td>
+						          <td width="1" nowrap="" align="right"><b>${attrName}:</b></td>
 						          <td>
 						            <!-- need to know if fieldVal should be hot linked -->
 						            <c:choose>

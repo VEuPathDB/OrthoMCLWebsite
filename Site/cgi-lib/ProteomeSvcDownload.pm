@@ -49,10 +49,9 @@ sub setup {
         'direct'  => 'direct',
         'AUTOLOAD'=> \&unknown,
     );
-    $self->tmpl_path($ENV{DOCUMENT_ROOT} . '/../cgi-bin/tmpl');
 
-    $tmpl = $self->load_tmpl("proteome_svc_download.tmpl");
-
+    my $templateText = getTmplText();
+    $tmpl =  HTML::Template->new(scalarref => \$templateText);
     $tmpl->param(JOB_ID => $job_id);
     $tmpl->param(BASEHREF => 'http://' . $ENV{SERVER_NAME});
     $tmpl->param(PAGETITLE => "OrthoMCL Database") unless $tmpl->param("PAGETITLE");
@@ -129,6 +128,43 @@ sub load_svc_configuration {
         $svc_cfg{$k} = $v;
     }
 }
+
+sub getTmplText {
+  my $text = <<EOF;
+<!-- BEGIN CONTENT -->
+<TABLE height="100%" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+    <TMPL_IF NOTFOUND>
+Could not find results for job id '<TMPL_VAR JOB_ID>'.<br>
+The likely cause is either the
+job id is incorrect or the job is older than <TMPL_VAR PURGE_WINDOW> days and the result
+has been deleted.
+    <TMPL_ELSE>
+    <TMPL_IF UNKNOWN_REQUEST>
+    I do not understand your request: <TMPL_VAR RM>. Please check your address.
+    <TMPL_ELSE>
+    <META HTTP-EQUIV='Refresh' CONTENT='3;URL=<TMPL_VAR DIRECT_DL_LINK>'>
+    <h4>Your OrthoMCL download for job '<TMPL_VAR JOB_ID>' will start shortly...</h4>
+or use this <a href="<TMPL_VAR DIRECT_DL_LINK>">direct link</a>.
+
+    </TMPL_IF>
+    </TMPL_IF>
+    
+    </td>
+  </tr>
+
+</TABLE>
+
+<!-- END CONTENT -->
+
+EOF
+  return $text;
+}
+
 1;
 
 

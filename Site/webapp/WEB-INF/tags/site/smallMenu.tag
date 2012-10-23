@@ -11,7 +11,12 @@
   <!-- top level menu -->
   <div id="nav-top-div">
 	  <ul id="nav-top">
-	    <li><a href="${pageContext.request.contextPath}/about.do">About OrthoMCL</a></li>
+	    <li>
+	      <a href="${pageContext.request.contextPath}/about.do">About OrthoMCL</a>
+	      <ul>
+	        <imp:aboutMenu/>
+	      </ul>
+	    </li>
 	    <li>
 	      <a href="javascript:void()">Help</a>
 	      <ul>

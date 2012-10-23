@@ -5,6 +5,7 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
   <imp:pageFrame title="${wdkModel.displayName} :: About" refer="about">
     <div id="about">
+      <!-- Provides section-selection drop-down
       <div class="about-nav">
         <a name="top">
           <form>
@@ -21,7 +22,7 @@
             </select>
           </form>
         </a>
-      </div>
+      </div> -->
       <div class="about-title">
         <h1>About OrthoMCL</h1>
       </div>

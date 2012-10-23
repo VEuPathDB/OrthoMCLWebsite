@@ -10,6 +10,7 @@
   <c:set var="xmlAnswer" value="${requestScope.wdkXmlAnswer}"/>
   <c:set var="banner" value="${xmlAnswer.question.displayName}"/>
   <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
+  <c:set var="base" value="${pageContext.request.contextPath}"/>
 
   <imp:pageFrame title="${wdkModel.displayName} : Did You Know">
     <div>
@@ -55,7 +56,7 @@
 													    </c:if>
 													    <br/><br/>${text}<br/>
 													    <c:if test="${image ne null and image ne ''}">
-													      <img src="${image}" alt=""/>
+													      <img src="${base}/wdk/${image}" alt=""/>
 													    </c:if>
 													  </td>
 													</tr>

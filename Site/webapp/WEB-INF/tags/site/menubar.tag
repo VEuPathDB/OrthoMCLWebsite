@@ -39,7 +39,7 @@
 
 <span class="onload-function" data-function="Setup.configureMenuBar"></span>
 
-<div id="menu">
+<div id="menu" class="ui-helper-clearfix">
 
 <!-- default style for this ul establishes 9em -->
   <ul class="sf-menu">

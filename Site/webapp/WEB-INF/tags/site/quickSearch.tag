@@ -30,7 +30,7 @@
           <input type="hidden" name="questionFullName" value="${groupQuestion.fullName}"/>
           <input type="hidden" name="questionSubmit" value="Get Answer"/>
           <label>
-            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByNameList">Search group:</a></b>
+            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByNameList">Group:</a></b>
           </label>
           <input type="text" class="search-box" name="value(${groupNameParam.name})" value="${groupNameParam.default}" />
           <input name="go" value="go" type="image" src="${pageContext.request.contextPath}/wdkCustomization/images/mag_glass.png"
@@ -50,7 +50,7 @@
           <input type="hidden" name="questionFullName" value="${sequenceQuestion.fullName}"/>
           <input type="hidden" name="questionSubmit" value="Get Answer"/>
           <label>
-            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByIdList">sequence:</a></b>
+            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByIdList">Sequence:</a></b>
           </label>
           <input type="text" class="search-box" name="value(${sourceIdParam.name})" value="${sourceIdParam.default}" />
           <input name="go" value="go" type="image" src="${pageContext.request.contextPath}/wdkCustomization/images/mag_glass.png"

@@ -16,7 +16,7 @@
       <h3 align="center">Assign your proteins to OrthoMCL Groups</h3>
       Use this tool to provisionally assign the proteins in a genome to OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.
 
-      <br/><br/>The process takes between 6 to 24 hours depending upon server load.<br/><br/>
+      <br/><br/>The process takes between 6 to 24 hours depending upon server load. You will receive mail when your results are ready, and can retrieve them for up to 48 hours from then.<br/><br/>
       
       <form id="proteome" action="/cgi-bin/orthomclProteomeSvcUpload.cgi" method="post" enctype="multipart/form-data">
         <table align="center">
@@ -56,6 +56,11 @@ orthomclResults/
                     # the mcl program, as described below in the Algorithms
                     # section
 </pre>
+    <br/><br/>
+    <b>Documentation</b>
+    <p>
+    Instructions on how to use this service are freely available in <a href="http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi0612s35/full">Unit 6.12 of the Current Protocols of Bioinformatics.</a>
+    </p>
     <br/><br/>
     <b>Algorithm</b>
     <p>

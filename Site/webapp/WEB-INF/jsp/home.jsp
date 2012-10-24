@@ -13,7 +13,7 @@
 	        <a title="Tools">Tools</a>
 	        <ul>
 	          <li><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
-	          <li><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign proteins to groups</a></li>
+	          <li><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
 	        </ul>
 	      </li>
 	    </ul>

@@ -1,22 +1,20 @@
-/* let OrthoMCL.css decide the color
-a { color: #330099; }
-a:hover { color: #3333FF; }
-a:visited { color: #330099; }
-*/
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =grey MENUBAR
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #menu {clear:both; position:relative; z-index:11;}
 #menu > ul.menu {float:none;}
 #menu #favorite-menu {float:right;}
-/*    #main-content, #footer { clear: both; background: url(../images/gradient.gif) repeat-x; }   */
 
-#footer { padding: 5px; text-align: center; }
-#footer #copyright { float: left; padding: 10px; }
-#footer #contact { float: right; text-align: right; }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =SEARCH page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #query-description-section { font-size: 12pt; margin: 10px; }
 
-/***** Styling for the Contact Us pop-up box *****/
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =Contact modal popup 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 .contact-us ul {
   list-style: disc outside none;
   margin: 1em 0em;
@@ -27,7 +25,9 @@ a:visited { color: #330099; }
   vertical-align: top;
 }
 
-/***** Styling for the 'About' page *****/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =ABOUT page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 div#about {
   width: 100%;
@@ -85,8 +85,11 @@ div#about li {
   padding-top: 5px;
 }
 
-/***** Styling for the error page *****/
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =ERROR page (WEB-INF/jsp/error.jsp)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #error-main {
   width: 100%;
   text-align: center;
@@ -114,16 +117,19 @@ div#about li {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      =FOOTER     from AllSites.css
+      =FOOTER     below from AllSites.css
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#footer { padding: 5px; text-align: center; }
+#footer #copyright { float: left; padding: 10px; }
+#footer #contact { float: right; text-align: right; }
+
 
 #footer{
    text-align: center;
    margin: 0 2.5%;
- /*  padding: 0px 0px 35px;     seems not to be needed 2011-12-06 */
-   min-width: 950px;   /* 1100px; */
+   min-width: 950px; 
    font-size: 10px;
-   width: 95%;  /* 75%  */
+   width: 95%;
    background-color:#FFFFFF;
    background-repeat: repeat-x;
    color: #505050;
@@ -151,16 +157,5 @@ div#header2 .ui-widget-content {
 table#quick-search a {
   font-size:120%;
 }
-
-/* from AllSites now included in includes.tag */
-/*
-#header2 {
-  color: #666666;
-  font-size: 10px; 
-  min-width: 980px;
-  height: 104px;
-  background-repeat: no-repeat;
-}
-*/
 
 

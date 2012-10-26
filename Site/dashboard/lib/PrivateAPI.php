@@ -59,6 +59,7 @@ class PrivateAPI {
             ),
             'modelname' => $wdk_meta_attr{'DisplayName'},
             'modelversion' => $wdk_meta_attr{'ModelVersion'},
+            'buildnumber' => $wdk_meta_attr{'BuildNumber'},
             'databases' => array(
                 'appdb' => array(
                     'servicename' => $adb_attr{'service_name'},

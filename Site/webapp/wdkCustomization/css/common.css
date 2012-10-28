@@ -117,25 +117,12 @@ div#about li {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      =FOOTER     below from AllSites.css
+      =FOOTER     using also css from AllSites.css
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-#footer { padding: 5px; text-align: center; }
+#footer { padding: 5px;}
 #footer #copyright { float: left; padding: 10px; }
-#footer #contact { float: right; text-align: right; }
+#footer #contact { float: right; text-align: right; font-size:120%;}
 
-
-#footer{
-   text-align: center;
-   margin: 0 2.5%;
-   min-width: 950px; 
-   font-size: 10px;
-   width: 95%;
-   background-color:#FFFFFF;
-   background-repeat: repeat-x;
-   color: #505050;
-   line-height: 1.2em;
-   clear: both;
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       =HEADER 

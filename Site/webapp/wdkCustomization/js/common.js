@@ -54,7 +54,12 @@ var Setup = {
               title: "Thank you!",
               buttons: [{
                 text: "OK",
-                click: function() { $(this).dialog("close"); }
+                click: function() {
+                  $(this).dialog("close");
+                  if (window.name == "wdk_window_contact_us") {
+                    window.close();
+                  }
+                }
               }],
               modal: true
             });

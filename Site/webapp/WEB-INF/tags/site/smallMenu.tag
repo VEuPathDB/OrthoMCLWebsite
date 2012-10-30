@@ -26,11 +26,11 @@
 	        <li><a href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a></li>
 	        <li><a href="http://workshop.eupathdb.org/current/index.php?page=schedule">Exercises from Workshop</a></li>
 	        <li><a href="http://www.genome.gov/Glossary/">NCBI's Glossary of Terms</a></li>
-	        <li><a href="javascript:void()" class="open-dialog-contact-us">Contact Us</a></li>
+	        <li><a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a></li>
 	      </ul>
 	    </li>
 	    <imp:login/>
-	    <li class="empty-divider"><a href="javascript:void()" class="open-dialog-contact-us">Contact Us</a></li>
+	    <li class="empty-divider"><a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a></li>
 	    <imp:socialMedia/>
 	  </ul>
 	</div>

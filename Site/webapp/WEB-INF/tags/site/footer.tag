@@ -28,7 +28,7 @@
     </div>
   
     <div id="contact">
-      Please <a href="javascript:void()" class="open-dialog-contact-us">Contact Us</a> 
+      Please <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a> 
       with any questions or comments.
       <br/>
       <a href="http://code.google.com/p/strategies-wdk/" target="_blank">

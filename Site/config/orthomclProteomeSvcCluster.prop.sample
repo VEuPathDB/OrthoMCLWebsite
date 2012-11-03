@@ -1,0 +1,61 @@
+
+################################################################################################################
+# Cluster specific properties for the proteome service.   For local properties see orthomclProtomeServiceServer.prop
+################################################################################################################
+
+
+# dir that controls the service on the web server.  (new jobs go into ./newJobs and results into ./results)
+# this is in the cluster prop file because it's value changes when we swap clusters
+serverControlDir=/var/www/Common/tmp/orthomclProteomeJob/steve
+
+
+# changes with each OrthoMCL Release
+# path on cluster to the FASTA file of OrthoMCL protein sequences
+blastDbFilePath=/genomics/eupath/orthomcl-mapping-service/release-5/db/proteinSeqs
+
+# Parent director for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
+clusterServerDir=/genomics/eupath/orthomcl-mapping-service/steve-test
+
+# clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
+#          Host orthomclProteomeJob-cluster
+#              Hostname rcluster.rcc.uga.edu
+#              IdentityFile ~/.ssh/orthomclProteomeJob
+#              IdentitiesOnly yes
+#              User mheiges
+#              ForwardX11 no
+#              ForwardAgent no
+clusterServer=orthomclProteomeJob-cluster
+
+# Cluster login username. This cluster user should have the public key installed for the
+# IdentityFile specified in ~/.ssh/config
+clusterUserName=sfischer    
+
+# Cluster queue name where BLAST tasks will be run.
+clusterQueue=all.q
+
+# Max memory (G) per node
+clusterMaxGigsPerNode=8
+
+# temporary scratch space for DJob
+nodePath=/genomics/eupath/orthomcl-mapping-service
+
+# parent directory on cluster for the NCBI blastall executable
+blastBinDir=/ifs/eupathdb/share/pkg/bio/current
+
+# A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
+# instead of the user's .bashrc to ensure a stable running environment.
+# Use full path or path relative to $HOME
+rcfile=/genomics/h/sfischer/GUSApp/trunk/cluster-setenv
+
+##############################################################################
+# DJob blast task settings.
+# These are static across releases and SGE-based clusters.
+##############################################################################
+
+numNodes=5
+slotsPerNode=1
+ppn=1
+nodeClass=DJob::DistribJob::SgeNode
+taskSize=100
+taskClass=DJob::DistribJobTasks::BlastSimilarityTask
+blastArgs=-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5

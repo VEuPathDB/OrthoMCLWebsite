@@ -1,0 +1,37 @@
+######################################################################################################
+# Properties for the local web server.   For cluster properties see orthomclProtomeServiceCluster.prop
+######################################################################################################
+
+# Full URL for orthmclresult CGI script. Trailing slash required.
+# used by service to include a link for results in user's email
+resultBaseUrl= http://sfischer.orthomcl.org/orthomcl.sfischer/proteomeDownload.do?jobId=
+
+# email to receive "server error" and other notifications requiring attention
+adminEmail=sfischer@pcbi.upenn.edu
+
+# read by upload form. set to 1 to prevent users from starting new jobs (web app will put up notice)
+uploadIsOffline=0
+
+# properties for downloading results
+purgeWindow=7
+
+##############################################################################
+# these change with each OrthoMCL Release
+##############################################################################
+
+# OrthoMCL groups file on webserver. This is the same file that is made available for download
+# so can just use that. The OrthoMCLShared/MapProteomeService/bin/orthomclMapProteomeToGroups 
+# script uses this.
+groupsFile=/var/www/Common/apiSiteFilesMirror/downloadSite/OrthoMCL/release-5/groups_OrthoMCL-5.txt.gz
+
+
+##############################################################################
+# Webserver directories. These are static across releases.
+##############################################################################
+
+# location of NCBI's formatdb command on webserver
+formatdbBinDir=/opt/ncbi-blast2/bin
+
+# location of mcl command on webserver
+mclBin=$GUS_HOME/bin/mcl
+

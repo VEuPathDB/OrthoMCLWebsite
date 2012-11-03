@@ -12,6 +12,9 @@ use Time::HiRes qw( clock_gettime CLOCK_REALTIME );
 
 my $startTime = clock_gettime(CLOCK_REALTIME);
 
+my $SERVER_CONFIG_FILE = "$ENV{GUS_HOME}/config/orthomclProteomeSvcServer.prop";
+my $CLUSTER_CONFIG_FILE = "$ENV{GUS_HOME}/config/orthomclProteomeSvcCluster.prop";
+
 sub cgiapp_init {
   my $self = shift;
 
@@ -26,14 +29,14 @@ sub setup {
 
   # Timing info
   my $currentTime = clock_gettime(CLOCK_REALTIME);
-  print STDERR "Begin setup(): " . ($currentTime - $startTime) . ".\n";    
+  print STDERR "Begin setup(): " . ($currentTime - $startTime) . ".\n";
 
   $self->start_mode('proteomeUploadForm');
   $self->run_modes([qw(proteomeUploadForm)]);
 
   # Timing info
   $currentTime = clock_gettime(CLOCK_REALTIME);
-  print STDERR "End setup(): " . ($currentTime - $startTime) . ".\n";    
+  print STDERR "End setup(): " . ($currentTime - $startTime) . ".\n";
 }
 
 
@@ -44,7 +47,6 @@ sub proteomeUploadForm {
   my $currentTime = clock_gettime(CLOCK_REALTIME);
   print STDERR "Begin cgiapp_init(): " . ($currentTime - $startTime) . ".\n";
 
-  my $config = LoadFile("$ENV{GUS_HOME}/config/orthomclProteomeSvc.yaml");
   $currentTime = clock_gettime(CLOCK_REALTIME);
   print STDERR "Begin proteomeQuery(): " . ($currentTime - $startTime) . ".\n";
 
@@ -59,10 +61,10 @@ sub proteomeUploadForm {
     exit;
   }
 
-  my $job_dir = $config->{proteome_job_dir};
+  my $job_dir = $self->getConfig('serverControlDir');
   my $job_id = getNewJobId($job_dir);
 
-  my $upload_dir = $job_dir . "/" . $job_id;
+  my $upload_dir = $job_dir . "/newJobs/" . $job_id;
 
   #print STDERR "making job dir: " . $upload_dir . "\n";
 
@@ -144,5 +146,34 @@ Thanks for submitting your proteins.
 EOF
   return $text;
 }
+
+sub getConfig {
+  my ($self, $tag) = @_;
+
+  if (!$self->{config}) {
+    $self->readConfigFile($SERVER_CONFIG_FILE);
+    $self->readConfigFile($CLUSTER_CONFIG_FILE);
+  }
+  die ("Config files do not have a property '$tag'\n") unless defined($self->{config}->{$tag});
+  return $self->{config}->{$tag};
+}
+
+sub readConfigFile {
+  my ($self, $file) = @_;
+
+  open(F, $file) || die("Can't open config file '$file'\n");
+
+  while (<F>) {
+    chomp;
+    s/\s+$//;
+    next if /^\#/ or /^$/;
+    /^(\w+)\=(.+)/ || die "illegal line '$_' in config file '$file'\n";
+    my $key=$1;
+    my $val=$2;
+    $self->{config}->{$key} = $val;
+  }
+
+}
+
 
 1;

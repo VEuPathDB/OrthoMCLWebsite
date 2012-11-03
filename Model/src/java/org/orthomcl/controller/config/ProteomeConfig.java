@@ -1,39 +1,53 @@
 package org.orthomcl.controller.config;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
+import java.io.File;
 
-public class ProteomeConfig {
+import org.apache.log4j.Logger;
+import org.gusdb.wdk.model.PropFileReader;
 
-  public static final String CONFIG_FILE =
-      System.getenv("GUS_HOME") + "/config/orthomcl-svc.config";
-
-  public static final String[] REQUIRED_PROPS =
-    { "isAvailable" };
+public class ProteomeConfig extends PropFileReader {
   
-  public static final Properties _props;
+  @SuppressWarnings("unused")
+  private static final Logger LOG = Logger.getLogger(ProteomeConfig.class.getName());
   
-  static {
-    try {
-      _props = new Properties();
-      _props.load(new FileReader(CONFIG_FILE));
-      for (String key : REQUIRED_PROPS) {
-        if (!_props.containsKey(key)) {
-          throw new IOException("Proteome config file missing property [ " + key + "].");
-        }
-      }
-    }
-    catch (IOException ioe) {
-      throw new RuntimeException("Cannot load config file [ " + CONFIG_FILE + " ]", ioe);
-    }
+  private static final String FS = System.getProperty("file.separator");
+  
+  private static final String RELATIVE_CONFIG_FILE = "config/orthomclProteomeSvcServer.prop";
+
+  private static final String RESULT_FILE_PREFIX = "orthomclResult-";
+  private static final int DEFAULT_PURGE_WINDOW = 7;
+
+  private static final String CONTROL_DIR = "controlDir";
+  private static final String PURGE_WINDOW = "purgeWindow";
+  private static final String NOT_AVAILABLE = "uploadIsOffline";
+  
+  private static final String[] REQUIRED_PROPS =
+    { PURGE_WINDOW, NOT_AVAILABLE, CONTROL_DIR };
+
+  private String _gusHome;
+  
+  public ProteomeConfig(String gusHome) {
+    _gusHome = gusHome;
+    loadProperties();
+  };
+  
+  @Override
+  protected String getPropertyFile() {
+    return _gusHome + FS + RELATIVE_CONFIG_FILE;
   }
 
-  public static boolean isServiceAvailable() {
-    String val = (String)_props.get("isAvailable");
-    return ("true").equalsIgnoreCase(val) || ("yes").equalsIgnoreCase(val);
+  @Override
+  protected String[] getRequiredProps() {
+    return REQUIRED_PROPS;
   }
   
+  // getters for properties
+  public boolean isServiceAvailable() { return !getBoolValue(NOT_AVAILABLE); }
+  public int     getPurgeWindow()     { return getIntValue(PURGE_WINDOW, DEFAULT_PURGE_WINDOW); }
+  public String  getResultsDir()      { return getStringValue(CONTROL_DIR) + FS + "results"; }
   
-  
+  public File getZipFile(String id) {
+    return new File(getResultsDir() + FS + RESULT_FILE_PREFIX + id + ".zip");
+  }
+
 }

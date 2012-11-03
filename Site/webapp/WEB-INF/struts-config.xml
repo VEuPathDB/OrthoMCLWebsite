@@ -162,13 +162,6 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
     </action>
 
-
-
-
-
-
-
-
     <!-- Other, "unconverted" actions -->
 
     <action
@@ -492,6 +485,11 @@
         parameter="org.orthomcl.controller.action.ProteomeUploadAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
       <forward name="success" path="/wdkCustomization/jsp/proteomeUpload.jsp"/>
+    </action>
+    <action path="/proteomeDownload"
+        parameter="org.orthomcl.controller.action.ProteomeDownloadAction"
+        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
+      <forward name="input" path="/WEB-INF/jsp/proteomeNotFound.jsp"/>
     </action>
 
   </action-mappings>

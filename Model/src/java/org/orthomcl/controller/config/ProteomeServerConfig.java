@@ -8,8 +8,6 @@ public class ProteomeServerConfig extends PropFileReader {
   @SuppressWarnings("unused")
   private static final Logger LOG = Logger.getLogger(ProteomeServerConfig.class.getName());
   
-  private static final String FS = System.getProperty("file.separator");
-  
   private static final String RELATIVE_CONFIG_FILE = "config/orthomclProteomeSvcServer.prop";
 
   private static final int DEFAULT_PURGE_WINDOW = 7;

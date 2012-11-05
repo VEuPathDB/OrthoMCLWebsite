@@ -10,14 +10,19 @@
               description="Page calling this tag"/>
   <jsp:directive.attribute name="headElement" required="false"
               description="additional head elements"/>
+  <jsp:directive.attribute name="bufferContent" required="false"
+              description="whether to create margin, border, padding around main div"/>
 
-  <c:set var="project" value="${applicationScope.wdkModel.displayName}" />
+  <c:set var="project" value="${applicationScope.wdkModel.displayName}"/>
+  <c:set var="mainContentClass" value="${bufferContent eq 'true' ? 'buffered-content' : '' }"/>
 
   <!-- jsp:output tag for doctype no longer supports simple HTML5 declaration -->
   <jsp:text>&lt;!DOCTYPE html&gt;</jsp:text>
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      ${headElement}
+      
       <title>
         <c:out value="${title}" default="WDK ${project}"/>
       </title>
@@ -40,7 +45,7 @@
 				<imp:sidebar/>
 			</c:if>
 		
-      <div id="main-content">
+      <div id="main-content" class="${mainContentClass}">
         <jsp:doBody/>
       </div>
 

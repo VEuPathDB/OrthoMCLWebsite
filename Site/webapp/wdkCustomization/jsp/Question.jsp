@@ -8,7 +8,7 @@
   <!-- Must wrap page content in page frame only if partial is not specified as true -->
   <c:choose>
     <c:when test="${empty partial or partial eq false}">
-      <imp:pageFrame title="Search for ${wdkQuestion.recordClass.type}s by ${wdkQuestion.displayName}" refer="question">
+      <imp:pageFrame title="Search for ${wdkQuestion.recordClass.type}s by ${wdkQuestion.displayName}" refer="question" bufferContent="true">
         <imp:questionPageContent/>
       </imp:pageFrame>
     </c:when>

@@ -1,7 +1,5 @@
 package org.orthomcl.controller.config;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.gusdb.wdk.model.PropFileReader;
 

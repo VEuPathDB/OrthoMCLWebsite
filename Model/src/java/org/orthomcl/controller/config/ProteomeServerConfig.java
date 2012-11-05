@@ -8,7 +8,7 @@ import org.gusdb.wdk.model.PropFileReader;
 public class ProteomeServerConfig extends PropFileReader {
   
   @SuppressWarnings("unused")
-  private static final Logger LOG = Logger.getLogger(ProteomeConfig.class.getName());
+  private static final Logger LOG = Logger.getLogger(ProteomeServerConfig.class.getName());
   
   private static final String FS = System.getProperty("file.separator");
   

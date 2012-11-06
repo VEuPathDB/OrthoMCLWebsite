@@ -9,6 +9,7 @@ public class ProteomeServerConfig extends PropFileReader {
   private static final Logger LOG = Logger.getLogger(ProteomeServerConfig.class.getName());
   
   private static final String RELATIVE_CONFIG_FILE = "config/orthomclProteomeSvcServer.prop";
+  public static final String RESULTS_ACTION_URL = "proteomeDownload.do?jobId=";
 
   private static final int DEFAULT_PURGE_WINDOW = 7;
 

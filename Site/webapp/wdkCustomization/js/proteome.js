@@ -67,7 +67,7 @@ function Proteome() {
 
     this.displayResponse = function() {
         //$.unblockUI();
-        $("#proteome-result").dialog({ modal: true });
+        $("#proteome-result").dialog({ modal: true, width: 'auto' });
     }
 }
 

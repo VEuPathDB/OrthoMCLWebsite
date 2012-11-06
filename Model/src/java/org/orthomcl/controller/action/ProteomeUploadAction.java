@@ -17,7 +17,9 @@ public class ProteomeUploadAction extends GenericPageAction {
   protected ActionResult handleRequest(ParamGroup params) throws Exception {
     return new ActionResult().setViewName(SUCCESS)
         .setRequestAttribute("isServiceAvailable",
-            new ProteomeServerConfig(getGusHome()).isServiceAvailable());
+            new ProteomeServerConfig(getGusHome()).isServiceAvailable())
+        .setRequestAttribute("resultBaseUrl",
+            getRequestData().getWebAppBaseUrl() + "/" + ProteomeServerConfig.RESULTS_ACTION_URL);
   }
 
 }

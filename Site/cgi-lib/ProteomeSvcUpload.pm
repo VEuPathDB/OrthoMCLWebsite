@@ -54,6 +54,7 @@ sub proteomeUploadForm {
   my $file_name = $q->param("seq_file");
   my $email = $q->param("email");
   my $job_name = $q->param("job_name");
+  my $result_base_url = $q->param("result_url_base");
 
   if ( !$file_name ) {
     print $q->header ( );
@@ -64,6 +65,7 @@ sub proteomeUploadForm {
   my $job_dir = $self->getConfig('serverControlDir');
   my $job_id = getNewJobId($job_dir);
 
+  my $result_url = $result_base_url . $job_id;
   my $upload_dir = $job_dir . "/newJobs/" . $job_id;
 
   #print STDERR "making job dir: " . $upload_dir . "\n";
@@ -89,6 +91,7 @@ sub proteomeUploadForm {
   print INFOFILE "submitted=" . localtime() . "\n";
   print INFOFILE "jobName=$job_name\n";
   print INFOFILE "jobId=$job_id\n";
+  print INFOFILE "resultUrl=$result_url\n";
   close INFOFILE;
 
   my $templateText = getTmplText();
@@ -131,16 +134,17 @@ sub getNewJobId {
 sub getTmplText {
   my $text = <<EOF;
 <!-- BEGIN CONTENT -->
-
-  <h3>Proteins Submitted</h3>
-  <TMPL_IF JOB_NAME><p>Job name: <b><code><TMPL_VAR JOB_NAME></code></b></p></TMPL_IF>
-  <p>Email: <b><code><TMPL_VAR EMAIL></code></b>
-  <p>Sequence file uploaded: <b><code><TMPL_VAR FILE_NAME></code></b>
-  <p>You will receive an email soon indicating that the job has been submitted to the queue.
-  <p>You will receive another email in many hours when the job is complete.
-<p>
-Thanks for submitting your proteins.
-
+  <div class="prot-upload">
+    <h3>Proteins Submitted</h3>
+    <p>You will receive an email soon indicating that the job has been submitted to the queue.</p>
+    <p>You will receive another email in many hours when the job is complete.</p>
+    <ul>
+      <TMPL_IF JOB_NAME><li>Job name: <strong><code><TMPL_VAR JOB_NAME></code></strong></li></TMPL_IF>
+      <li>Sequence file uploaded: <strong><code><TMPL_VAR FILE_NAME></code></strong></li>
+      <li>Email: <strong><code><TMPL_VAR EMAIL></code></strong></li>
+    </ul>
+    <p>Thanks for submitting your proteins!</p>
+  </div>
 <!-- END CONTENT -->
 
 EOF

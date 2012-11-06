@@ -54,7 +54,7 @@
 
   <p>
     The following graph represents the clustering result of the proteins in 
-    ortholog group #{groupName}.
+    ortholog group ${groupName}.
   </p>
   <ul>
     <li>

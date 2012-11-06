@@ -16,7 +16,7 @@
     <c:set value="(${wdkRecord.attributes['number_of_members'].value} sequences)" var="recordSubtitle"/>
   </c:if>
 
-  <imp:pageFrame refer="record" title="${recordType} Record page">
+  <imp:pageFrame refer="record" title="${recordType} Record page" bufferContent="true">
     <imp:record record="${wdkRecord}" recordSubtitle="${recordSubtitle}"/>
   </imp:pageFrame>
 

@@ -9,6 +9,14 @@ div.buffered-content {
   text-align: left;
 }
 
+/* clear record-specific style and use
+   buffered-content like the rest of the site */
+div.Workspace {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
 p.indented {
   margin-left: 11px;
 }

@@ -10,15 +10,15 @@ div.buffered-content {
 }
 
 p.indented {
-	margin-left: 11px;
+  margin-left: 11px;
 }
 
 /*~~~~~~~~~~~~~ Proteome Upload Form ~~~~~~~~~~~~~*/
 
 div.prot-upload {
-	margin-left: auto;
-	margin-right: auto;
-	width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 620px;
   line-height: 1.2;
 }
 

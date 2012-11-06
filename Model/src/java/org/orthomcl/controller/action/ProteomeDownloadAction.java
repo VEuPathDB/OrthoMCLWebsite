@@ -12,6 +12,7 @@ import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
+import org.gusdb.wdk.model.PropFileReader;
 import org.orthomcl.controller.config.ProteomeClusterConfig;
 import org.orthomcl.controller.config.ProteomeServerConfig;
 
@@ -28,9 +29,6 @@ public class ProteomeDownloadAction extends WdkAction {
   private static final String PROTEOME_ID = "jobId";
   private static final String PURGE_WINDOW = "purgeWindow";
   private static final String RESULT_FILE_PREFIX = "orthomclResult-";
-  private static final String FS = System.getProperty("file.separator");
-  
-
   
   @Override
   protected boolean shouldValidateParams() {
@@ -65,8 +63,6 @@ public class ProteomeDownloadAction extends WdkAction {
   }
 
     protected File getZipFile(ProteomeClusterConfig config, String id) {
-    return new File(config.getResultsDir() + FS + RESULT_FILE_PREFIX + id + ".zip");
+    return new File(config.getResultsDir() + PropFileReader.FS + RESULT_FILE_PREFIX + id + ".zip");
   }
-
-
 }

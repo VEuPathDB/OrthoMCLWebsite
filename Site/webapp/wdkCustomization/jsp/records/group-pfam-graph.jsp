@@ -42,39 +42,43 @@
   </table>
 
   <h3>List of Protein Domain Architectures</h3>
-  <table id="proteins" maxLength="${maxLength}" width="100%">
-    <tr>
-      <th>Accession</th>
-      <th>Length</th>
-      <th id="ruler" width="100%"></th>
-    </tr>
-    <c:set var="odd" value="${true}"/>
-    <c:forEach items="${proteinGroups}" var="proteinGroup">
-      <c:set var="sourceId" value="${proteinGroup[0]['source_id'].value}"/>
-      <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-      <c:set var="odd" value="${!odd}"/>
-      <tr class="protein ${rowClass}">
-        <td class="source-id">
-          <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${sourceId}' />">${sourceId}</a>
-        </td>
-        <td class="length">${proteinGroup[0]['length']}</td>
-        <td>
-          <div class="domains">
-            <div class="protein-graph"><jsp:text/></div>
-            <c:forEach items="${proteinGroup}" var="row">
-				      <c:set var="name" value="${row['primary_identifier'].value}"/>
-				      <c:set var="start" value="${row['start_min']}"/>
-				      <c:set var="end" value="${row['end_max']}"/>
-				      <c:if test="${not empty name}">
-				        <div class="domain" id="${name}" start="${start}" end="${end}"
-				             title="${name} (location: [${start} - ${end}])">
-				          <div></div>
-				        </div>
-				      </c:if>
-				    </c:forEach>
-          </div>
-        </td>
+  <table id="proteins" class="wdk-data-table" data-sorting="[true, true, false]" maxLength="${maxLength}" width="100%">
+    <thead>
+      <tr>
+        <th>Accession</th>
+        <th>Length</th>
+        <th id="ruler" width="100%"></th>
       </tr>
-    </c:forEach>
+    </thead>
+    <tbody>
+      <c:set var="odd" value="${true}"/>
+      <c:forEach items="${proteinGroups}" var="proteinGroup">
+        <c:set var="sourceId" value="${proteinGroup[0]['source_id'].value}"/>
+        <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+        <c:set var="odd" value="${!odd}"/>
+        <tr class="protein ${rowClass}">
+          <td class="source-id">
+            <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${sourceId}' />">${sourceId}</a>
+          </td>
+          <td class="length">${proteinGroup[0]['length']}</td>
+          <td>
+            <div class="domains">
+              <div class="protein-graph"><jsp:text/></div>
+              <c:forEach items="${proteinGroup}" var="row">
+                <c:set var="name" value="${row['primary_identifier'].value}"/>
+                <c:set var="start" value="${row['start_min']}"/>
+                <c:set var="end" value="${row['end_max']}"/>
+                <c:if test="${not empty name}">
+                  <div class="domain" id="${name}" start="${start}" end="${end}"
+                       title="${name} (location: [${start} - ${end}])">
+                    <div></div>
+                  </div>
+                </c:if>
+              </c:forEach>
+            </div>
+          </td>
+        </tr>
+      </c:forEach>
+    </tbody>
   </table>
 </jsp:root>

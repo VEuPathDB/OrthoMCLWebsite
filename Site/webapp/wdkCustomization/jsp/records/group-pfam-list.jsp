@@ -38,31 +38,35 @@
 	</table>
 
 	<h3>List of Protein Domain Architectures</h3>
-	<table id="proteins" maxLength="${maxLength}" width="100%">
-	  <tr>
-	    <th>Accession</th>
-	    <th>Protein Length</th>
-	    <th>Pfam Domain</th>
-	    <th>Domain Start</th>
-	    <th>Domain End</th>
-	  </tr>
+	<table id="proteins" class="wdk-data-table" maxLength="${maxLength}" width="100%">
+    <thead>
+      <tr>
+        <th>Accession</th>
+        <th>Protein Length</th>
+        <th>Pfam Domain</th>
+        <th>Domain Start</th>
+        <th>Domain End</th>
+      </tr>
+    </thead>
 	
-	  <c:set var="odd" value="${true}" />
-	  <c:set var="previous_id" value="${''}" />
-	  <c:forEach items="${proteins}" var="row">
-	    <c:set var="source_id" value="${row['source_id'].value}" />
-	    <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-	    <c:set var="odd" value="${!odd}" />
-	    <tr class="protein ${rowClass}">
-	      <td class="source-id">
-	        <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${source_id}">${source_id}</a>
-	      </td>
-	      <td class="length">${row['length']}</td>
-	      <td>${row['primary_identifier'].value}</td>
-	      <td>${row['start_min']}</td>
-	      <td>${row['end_max']}</td>
-	    </tr>
-	  </c:forEach>
+    <tbody>
+      <c:set var="odd" value="${true}" />
+      <c:set var="previous_id" value="${''}" />
+      <c:forEach items="${proteins}" var="row">
+        <c:set var="source_id" value="${row['source_id'].value}" />
+        <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+        <c:set var="odd" value="${!odd}" />
+        <tr class="protein ${rowClass}">
+          <td class="source-id">
+            <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${source_id}">${source_id}</a>
+          </td>
+          <td class="length">${row['length']}</td>
+          <td>${row['primary_identifier'].value}</td>
+          <td>${row['start_min']}</td>
+          <td>${row['end_max']}</td>
+        </tr>
+      </c:forEach>
+    </tbody>
 	</table>
 
 </jsp:root>

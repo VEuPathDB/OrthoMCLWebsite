@@ -16,7 +16,7 @@
 
   <fmt:setLocale value="en-US"/>
   <c:set var="newsCount" value="50"/>
-  <c:set var="sidebarWidth" value="208"/> 
+  <c:set var="sidebarWidth" value="211"/>  
 
 	<c:set var="xqSetMap" value="${wdkModel.xmlQuestionSetsMap}"/>
 	<c:set var="xqSet" value="${xqSetMap['XmlQuestions']}"/>
@@ -191,7 +191,7 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ ABOUT ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
       <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
-      <a class="heading" id='informationAndHelp' href="#">About</a>
+      <a class="heading" id='informationAndHelp' href="#">About OrthoMCL</a>
     </h3>
 	  <div>
       <ul id="information">

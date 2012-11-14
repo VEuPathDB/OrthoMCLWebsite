@@ -16,8 +16,7 @@
   <!-- comment out to use WDK's style -->
   <!-- include third party CSS first, so that we can easily override rules -->
   <!--<link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
-  <!-- OLD: using superfish instead 
-     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/apycom-menu/menu.css"/> -->
+
   <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/superfish/css/superfish.css"/>
   <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/common.css"/>
 
@@ -28,7 +27,6 @@
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/supersubs.js"><jsp:text/></script>
-  <!-- <script type="text/javascript" src="${base}/wdkCustomization/js/lib/apycom-menu.js"><jsp:text/></script> -->
 
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
@@ -41,6 +39,14 @@
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/home.css"/>
   </c:if>
   
+  <c:if test="${refer eq 'about'}">
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/about.css"/>
+  </c:if>
+
+  <c:if test="${refer eq 'proteome'}">
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/proteome.css"/>
+  </c:if>
+
   <c:if test="${refer eq 'summary'}">
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/results.css"/>
   </c:if>

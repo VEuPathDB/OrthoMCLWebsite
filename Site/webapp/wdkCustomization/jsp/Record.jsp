@@ -18,8 +18,6 @@
 
 
   <imp:pageFrame refer="record" title="${recordType} Record page" bufferContent="true">
-    <script src="${pageContext.request.contextPath}/wdkCustomization/js/record.js">
-      <jsp:text/></script>
     <imp:record record="${wdkRecord}" recordSubtitle="${recordSubtitle}"/>
   </imp:pageFrame>
 

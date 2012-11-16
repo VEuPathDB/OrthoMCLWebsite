@@ -5,7 +5,7 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
   
   <imp:pageFrame refer="data-source" title="Release Summary">
-    <imp:wdkTable tblName="ReleaseSummary" isOpen="true"/>
+    <imp:wdkTable tblName="ReleaseSummary" isOpen="true" dataTable="true"/>
   </imp:pageFrame>
 
 </jsp:root>

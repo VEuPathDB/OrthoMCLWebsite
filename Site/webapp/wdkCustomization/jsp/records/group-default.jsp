@@ -95,7 +95,7 @@
 	  <a class="button ui-state-default ui-corner-all" href="${fastaLink}">As Fasta file</a>
           <a class="button ui-state-default ui-corner-all" href="${strategyLink}">As new strategy</a>
 	  <c:set var="proteins" value="${wdkRecord.tables['Sequences']}"/>
-	  <imp:wdkTable tblName="${proteins.name}" isOpen="true"/>
+	  <imp:wdkTable tblName="${proteins.name}" isOpen="true" dataTable="true"/>
 	</div>
 	
 </jsp:root>

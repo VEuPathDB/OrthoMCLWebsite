@@ -31,7 +31,8 @@
 
     <td id="group-quicksearch">
       <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">
-        <span class="head-search-tip" title="Search a group with group name or sequence id. Use * as a wildcard (to obtain more than one). Click label to enter multiple Group names">
+        <span class="head-search-tip"
+            title="Use * as a wildcard, as in *inase, kin*se, kinas*. Do not use AND, OR. Use quotation marks to find an exact phrase. Click on 'Group Text Search' to access the advanced group search page.">
           <input type="hidden" name="questionFullName" value="${groupQuestion.fullName}"/>
           <input type="hidden" name="questionSubmit" value="Get Answer"/>
           <input type="hidden" name="value(${groupWdkRecordTypeParam.name})"
@@ -46,7 +47,7 @@
               value="${groupPrimaryKeyColumnParam.default}" />
           <input type="hidden" name="value(${groupProjectIdParam.name})" value="OrthoMCL" />
           <label>
-            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByNameList">Group:</a></b>
+            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByTextSearch">Group Text Search:</a></b>
           </label>
           <input type="text" class="search-box" name="value(${groupTextExpressionParam.name})"
               value="${groupTextExpressionParam.default}" />
@@ -69,7 +70,8 @@
 
     <td id="sequence-quicksearch">
       <form method="get" action="<c:url value='/processQuestionSetsFlat.do' />">
-        <span class="head-search-tip" title="Search sequence(s) with source id or group name. Use * as a wildcard (to obtain more than one). Click label to enter multiple source ids.">
+        <span class="head-search-tip"
+            title="Use * as a wildcard, as in *inase, kin*se, kinas*. Do not use AND, OR. Use quotation marks to find an exact phrase. Click on 'Sequence Text Search' to access the advanced sequence search page.">
           <input type="hidden" name="questionFullName" value="${sequenceQuestion.fullName}"/>
           <input type="hidden" name="questionSubmit" value="Get Answer"/>
           <input type="hidden" name="value(${sequenceWdkRecordTypeParam.name})"
@@ -88,7 +90,7 @@
               value="${sequencePrimaryKeyColumnParam.default}" />
           <input type="hidden" name="value(${sequenceProjectIdParam.name})" value="OrthoMCL" />
           <label>
-            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByIdList">Sequence:</a></b>
+            <b><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByTextSearch">Sequence Text Search:</a></b>
           </label>
           <input type="text" class="search-box" name="value(${sequenceTextExpressionParam.name})" value="${sequenceTextExpressionParam.default}" />
           <input name="go" value="go" type="image" src="${pageContext.request.contextPath}/wdkCustomization/images/mag_glass.png"

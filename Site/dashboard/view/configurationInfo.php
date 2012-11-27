@@ -28,7 +28,7 @@ $properties = $properties_config->attributes();
         copying directly into the model-config.xml as the attribute names shown here may not match the RNG spec.</i>
 
 <pre>
-<?
+<?php
 ksort($model_data_tree);
 foreach ($model_data_tree as $section => $data) {
   print "<b>" . $section . "</b><blockquote>" ;
@@ -53,7 +53,7 @@ WDK built-in properties and properties defined in
 the <code>model.prop</code> <i>at the time the webapp was loaded</i>.
 </p>
 <pre>
-<?
+<?php
 ksort($properties);
 foreach ($properties as $k => $v) {
   print $k . " = " . htmlentities($v) . "\n";

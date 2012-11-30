@@ -1,16 +1,21 @@
-#search-bubbles { text-align: center; }
-#search-bubbles > ul, #search-bubbles > ul > li { display: inline-table; }
-#search-bubbles > ul > li { width: 200px; margin: 20px; padding: 2px;}
-#search-bubbles > ul > li > a { font-size: 12pt; padding: 5px; } 
-#search-bubbles > ul > li > ul { text-align: left; font-size: 10pt; padding: 3px; }
-#search-bubbles > ul > li > ul ul { margin: 0px 0px 3px 20px;  }
-#search-bubbles > ul > li > ul li { padding: 2px; }
-#search-bubbles > ul > li > ul a { padding-left: 15px; }
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =Search bubbles  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#search-bubbles > ul > li > ul a.category { font-weight: bold; cursor: pointer; background:url(../images/square-plus.gif) 0px 2px no-repeat; }
-#search-bubbles > ul > li > ul a.category.opened { background:url(../images/square-minus.gif) 0px 2px no-repeat; }
-
-
+#contentcolumn,#search-bubbles { 
+  text-align: center; 
+	margin-top:5px; 
+	margin-bottom:12px;
+}
+#contentcolumn > ul,#search-bubbles > ul {
+   display: inline-table;margin-top:10px;white-space:nowrap; 
+}
+#contentcolumn > ul > li,#search-bubbles > ul > li { 
+  width: 200px; 
+	margin: 10px; 
+	padding: 2px;
+	display: inline-table;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       =SIDEBAR

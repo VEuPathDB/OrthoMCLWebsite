@@ -85,7 +85,11 @@ table#quick-search a {
 	 =STRUCTURE :  contentwrapper css provided by wdk
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
- 
+ #search-bubbles {
+	background-image: url(/assets/images/OrthoMCL/footer.png);
+	border: 1px solid #345ca1;
+}
+
 #contentcolumn {
 	background-image: url(/assets/images/OrthoMCL/footer.png);
 	border: 1px solid #345ca1;

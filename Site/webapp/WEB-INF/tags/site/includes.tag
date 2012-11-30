@@ -35,7 +35,8 @@
   <script type="text/javascript" src="${base}/js/nav.js"><jsp:text/></script>
   
   <c:if test="${refer eq 'home'}">
-    <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script>
+<!-- no need in ortho to open close categories in bubbles
+    <script type="text/javascript" src="${base}/wdkCustomization/js/home.js"><jsp:text/></script> -->
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/home.css"/>
   </c:if>
   

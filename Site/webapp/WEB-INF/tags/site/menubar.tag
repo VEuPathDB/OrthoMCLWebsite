@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
-<%@ taglib prefix="imp" tagdir="/WEB-INF/tags/imp" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -18,6 +17,8 @@
 
 
 <!-- for external links -->
+<jsp:useBean id="constants" class="org.eupathdb.common.model.JspConstants"/>
+
 <c:set var="xqSetMap" value="${wdkModel.xmlQuestionSetsMap}"/>
 <c:set var="xqSet" value="${xqSetMap['XmlQuestions']}"/>
 <c:set var="xqMap" value="${xqSet.questionsMap}"/>
@@ -52,7 +53,8 @@
 	      <li><a href="<c:url value="/showQuestion.do?questionFullName=SequenceQuestions.ByBlast"/>"><span>BLAST</span></a></li>
   	     <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign your proteins to groups</span></a></li>
          <!--   <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li> -->
-	      <!--  <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li> -->
+				 <li><a href="${constants.orthoGoogleUrl}">Publications that Use OrthoMCL</a></li>
+	       <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li>
     	</ul>
     </li>
 

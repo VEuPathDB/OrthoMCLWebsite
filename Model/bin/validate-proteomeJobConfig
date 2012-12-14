@@ -6,11 +6,19 @@ export BASE_GUS="${Bin%%gus_home/bin}"
 export CGILIB=$BASE_GUS/cgi-lib
 export GUS_HOME=$BASE_GUS/gus_home
 
-PJCONF=${1-$GUS_HOME/config/proteomeJob.config}
-YAMLCONF="$CGILIB/config.yaml"
+SERVER_CONF=${1-$GUS_HOME/config/orthomclProteomeSvcServer.prop}
+CLUSTER_CONF=${2-$GUS_HOME/config/orthomclProteomeSvcCluster.prop}
 
-if [[ ! -e "$PJCONF" ]]; then
-    echo "File '$PJCONF' not found"
+if [[ ! -e "$SERVER_CONF" ]]; then
+    echo "File '$SERVER_CONF' not found"
+    if [[ "$CGILIB" =~ "project_home" ]]; then
+        echo "Be sure to run this script from \$GUS_HOME, not \$PROJECT_HOME"
+    fi
+    exit 1
+fi
+
+if [[ ! -e "$CLUSTER_CONF" ]]; then
+    echo "File '$CLUSTER_CONF' not found"
     if [[ "$CGILIB" =~ "project_home" ]]; then
         echo "Be sure to run this script from \$GUS_HOME, not \$PROJECT_HOME"
     fi
@@ -19,9 +27,8 @@ fi
 
 # crudely strip any spaces around '=' and source it.
 # Some lines are not valid for eval, so we squash the warnings
-eval "$(cat $PJCONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
-
-eval "$(cat $YAMLCONF | egrep 'proteome_job_dir' | sed 's/: /=/')" 2> /dev/null
+eval "$(cat $SERVER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
+eval "$(cat $CLUSTER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
 
 function abort() {
     msg=$1
@@ -49,11 +56,13 @@ function ok() {
 }
 
 function is_local_dir() {
- test -d $1
+ local dir=$1
+ [[ "x$dir" != 'x' && -d $dir ]]
 }
 
 function is_local_file() {
- test -f $1
+ local file=$1
+ [[ "x$file" != 'x' && -f $file ]]
 }
 
 function is_remote_dir() {
@@ -66,46 +75,46 @@ function is_remote_file() {
 
 echo "#### WEBSERVER CHECKS #####################################################"
 
-echo -n "checking adminEmail ... "
+echo -n "checking adminEmail (Server.prop) ... "
 if [[ ! $adminEmail =~ "@" ]]; then
     abort "adminEmail '$adminEmail' looks invalid"
 fi
 ok
 
 
-echo -n "checking resultBaseUrl ... "
-if [[ ! $resultBaseUrl =~ "/$" ]]; then
-    abort "resultBaseUrl needs trailing slash '/'"
+echo -n "checking resultBaseUrl (Server.prop) ... "
+status=$(curl -sLI -w '%{http_code}' $resultBaseUrl -o /dev/null)
+if [[ $status -ne 200 ]]; then
+    abort "resultBaseUrl returned HTTP Status $status"
 fi
 ok
 
-echo -n "checking groupsFile ... "
+echo -n "checking groupsFile (Server.prop) ... "
 is_local_file $groupsFile || \
     abort "invalid file for groupsFile:\n'$groupsFile'" 
 ok
 
-echo -n "checking controlDir ... "
-is_local_dir $controlDir || \
-    abort "invalid directory for controlDir:\n'$controlDir'" 
+echo -n "checking serverControlDir (Cluster.prop) ... "
+is_local_dir $serverControlDir || \
+    abort "invalid directory for serverControlDir:\n'$serverControlDir'" 
 ok
 
-echo -n "checking resultDir ... "
-is_local_dir $resultDir || \
-    abort "invalid directory for resultDir:\n'$resultDir'" 
+echo -n "checking serverControlDir (Cluster.prop) ... "
+is_local_dir $serverControlDir || \
+    abort "invalid directory for serverControlDir:\n'$serverControlDir'" 
 ok
 
-echo -n "checking proteome_job_dir (config.yaml) ... "
-is_local_dir $proteome_job_dir || \
-    abort "invalid directory for proteome_job_dir:\n'$proteome_job_dir'" 
+echo -n "checking for 'results' subdirectory of serverControlDir ... "
+is_local_dir "$serverControlDir/results" || \
+    abort "$serverControlDir/results not found" 
 ok
 
-echo -n "checking proteome_job_dir (config.yaml) is subdirectory of controlDir ... "
-if [[ "$controlDir" != "$(dirname "$proteome_job_dir")" ]]; then
-    abort "proteome_job_dir:\n'$proteome_job_dir' is not sub to '$controlDir'" 
-fi
+echo -n "checking for 'newJobs' subdirectory of serverControlDir ... "
+is_local_dir "$serverControlDir/newJobs" || \
+    abort "$serverControlDir/newJobs not found" 
 ok
 
-echo -n "checking formatdbBinDir ... "
+echo -n "checking formatdbBinDir (Server.prop) ... "
 is_local_dir $formatdbBinDir || \
     abort "invalid directory for formatdbBinDir:\n'$formatdbBinDir'" 
 ok
@@ -117,28 +126,30 @@ ok
 
 echo "#### CLUSTER CHECKS #######################################################"
 
-echo -n "checking clusterUserName and clusterServer ... "
+echo "Cluster is $clusterServer"
+
+echo -n "checking login with clusterUserName and clusterServer (Cluster.prop) ... "
 remote_cmd_without_env date || \
     abort "failed $clusterUserName@$clusterServer\nCheck clusterUserName and clusterServer"
 ok
 
-echo -n "checking nodePath ... "
+echo -n "checking nodePath (Cluster.prop) ... "
 is_remote_dir $nodePath || \
     abort "invalid directory for nodePath:\n'$nodePath'"
 ok
 
 
-echo -n "checking blastDbFilePath ... "
+echo -n "checking blastDbFilePath (Cluster.prop) ... "
 is_remote_file $blastDbFilePath || \
     abort "invalid file for blastDbFilePath:\n'$blastDbFilePath'"
 ok
 
-echo -n "checking blastBinDir ... "
+echo -n "checking blastBinDir (Cluster.prop) ... "
 is_remote_dir $blastBinDir || \
     abort "invalid directory for blastBinDir:\n'$blastBinDir'"
 ok
 
-echo -n "checking rcfile ... "
+echo -n "checking rcfile (Cluster.prop) ... "
 is_remote_file $rcfile || \
     abort "invalid file for rcfile:\n'$rcfile'"
 ok
@@ -148,17 +159,17 @@ remote_cmd_with_env "qsub -help" || \
     abort "Could not run qsub.\nCheck that SGE environment is set in rcfile '$rcfile'."
 ok
 
-echo -n "checking clusterQueue ... "
+echo -n "checking clusterQueue (Cluster.prop) ... "
 remote_cmd_with_env "qconf -sql | grep $clusterQueue" || \
     abort "invalid clusterQueue:\n'$clusterQueue'"
 ok
 
-echo -n "checking nodeClass (and \$PERL5LIB in rcfile) ... "
+echo -n "checking nodeClass (and \$PERL5LIB in rcfile) (Cluster.prop) ... "
 remote_cmd_with_env "perl -e 'use $nodeClass'" || \
     abort "failed value for nodeClass:\n'$nodeClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
 ok
 
-echo -n "checking taskClass (and \$PERL5LIB in rcfile)... "
+echo -n "checking taskClass (and \$PERL5LIB in rcfile) (Cluster.prop) ... "
 remote_cmd_with_env "perl -e 'use $taskClass'" || \
     abort "failed value for taskClass:\n'$taskClass'\nConfirm that PERL5LIB is being set on the cluster\n(hint: check $rcfile)"
 ok

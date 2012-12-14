@@ -73,6 +73,15 @@ function is_remote_file() {
   remote_cmd_without_env "test -f $1"
 }
 
+function local_mode() {
+  stat -c '%a' $1
+}
+
+function is_local_world_readable_dir() {
+  stat -c '%A' $1 | grep -q '^d......r.x'
+}
+
+
 echo "#### WEBSERVER CHECKS #####################################################"
 
 echo -n "checking adminEmail (Server.prop) ... "
@@ -109,9 +118,19 @@ is_local_dir "$serverControlDir/results" || \
     abort "$serverControlDir/results not found" 
 ok
 
+echo -n "checking 'results' is world readable ... "
+is_local_world_readable_dir "$serverControlDir/results" || \
+    abort "$serverControlDir/results is not world readable" 
+ok
+
 echo -n "checking for 'newJobs' subdirectory of serverControlDir ... "
 is_local_dir "$serverControlDir/newJobs" || \
     abort "$serverControlDir/newJobs not found" 
+ok
+
+echo -n "checking file mode of 'newJobs' ... "
+[[ $(local_mode "$serverControlDir/newJobs") == "777" ]] || \
+    abort "$serverControlDir/newJobs mode is not 0777, apache probably can not write" 
 ok
 
 echo -n "checking formatdbBinDir (Server.prop) ... "

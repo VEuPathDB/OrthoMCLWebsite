@@ -44,7 +44,7 @@
 				        <table>
 				          <tr>
 				            <td colspan="${numCols}">
-				              <input type="checkbox" name="selectedFields" value="default" onclick="uncheckFields(1);" checked="checked"/>
+				              <input type="checkbox" name="selectedFields" value="default" onclick="wdk.uncheckFields(1);" checked="checked"/>
 				              Default (same as in <a href="${pageContext.request.contextPath}/showSummary.do?step=${step_id}">result</a>), or...
 				            </td>
 				          </tr>
@@ -55,8 +55,8 @@
 				    <tr>
 				      <td valign="top">&#160;</td>
 				      <td align="center">
-				        <input type="button" value="select all" onclick="checkFields(1)"/>
-				        <input type="button" value="clear all" selected="yes" onclick="checkFields(0)"/>
+				        <input type="button" value="select all" onclick="wdk.checkFields(1)"/>
+				        <input type="button" value="clear all" selected="yes" onclick="wdk.checkFields(0)"/>
 				      </td>
 				    </tr>
 				    <tr>

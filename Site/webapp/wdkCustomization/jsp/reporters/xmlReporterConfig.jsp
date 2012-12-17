@@ -49,9 +49,9 @@
             <tr>
               <td valign="top">&#160;</td>
               <td align="center">
-                <input type="button" value="select all" onclick="makeSelection(1)"/>
-                <input type="button" value="clear all" selected="yes" onclick="makeSelection(0)"/>
-                <input type="button" value="select inverse" selected="yes" onclick="makeSelection(-1)"/>
+                <input type="button" value="select all" onclick="wdk.makeSelection(1)"/>
+                <input type="button" value="clear all" selected="yes" onclick="wdk.makeSelection(0)"/>
+                <input type="button" value="select inverse" selected="yes" onclick="wdk.makeSelection(-1)"/>
               </td>
             </tr>
             <tr>

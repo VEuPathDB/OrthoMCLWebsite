@@ -13,7 +13,7 @@
 
 
 <script type="text/javascript">
-  $(function() { assignTooltips('.head-search-tip'); });
+  $(function() { wdk.tooltips.assignTooltips('.head-search-tip'); });
 </script>
 
 <table id="quick-search">

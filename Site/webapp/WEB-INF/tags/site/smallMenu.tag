@@ -5,7 +5,7 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
 
   <!-- functions to be called when page loads -->
-  <span class="onload-function" data-function="setUpNavDropDowns"><jsp:text/></span>
+  <span class="onload-function" data-function="wdk.setUpNavDropDowns"><jsp:text/></span>
   <span class="onload-function" data-function="Setup.setUpContactUsLogic"><jsp:text/></span>
 
   <!-- top level menu -->
@@ -21,7 +21,7 @@
 	      <a href="javascript:void()">Help</a>
 	      <ul>
 	        <c:if test="${refer eq 'summary'}">
-	          <li><a href="javascript:void()" onclick="dykOpen()">Did You Know...</a></li>
+	          <li><a href="javascript:void()" onclick="wdk.dyk.dykOpen()">Did You Know...</a></li>
 	        </c:if>
 	        <li><a href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a></li>
 	        <li><a href="http://workshop.eupathdb.org/current/index.php?page=schedule">Exercises from Workshop</a></li>

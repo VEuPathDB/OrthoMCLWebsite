@@ -195,7 +195,7 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         });
 
         // register mouse over events
-        assignStickyTooltipByElement(stub.find(".taxon"));
+        wdk.tooltips.assignStickyTooltipByElement(stub.find(".taxon"));
 
         stub.find(".taxon").hover(function() {
             if ($(this).attr("color-backup")) return;

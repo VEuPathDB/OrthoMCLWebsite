@@ -11,7 +11,8 @@
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
   <!-- includes the original wdk includes -->
-  <wdk:includes refer="${refer}"/>
+  <wdk:wdkStylesheets refer="${refer}"/>
+  <wdk:wdkJavascripts refer="${refer}"/>
   
   <!-- comment out to use WDK's style -->
   <!-- include third party CSS first, so that we can easily override rules -->

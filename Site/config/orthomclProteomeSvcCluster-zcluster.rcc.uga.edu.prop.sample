@@ -1,0 +1,64 @@
+
+################################################################################################################
+# Cluster specific properties for the proteome service.   For local properties see orthomclProtomeServiceServer.prop
+################################################################################################################
+
+
+# dir that controls the service on the web server.  (new jobs go into ./newJobs and results into ./results)
+# this is in the cluster prop file because it's value changes when we swap clusters.
+# For Production QA sites (e.g. q1.orthomcl.org): use the hostname that be in service at release.
+# That is, use '/build-N/w1.orthomcl.org' not '/build-N/q1.orthomcl.org'. The build-N subdirectory
+# will keep it from colliding with the live site and this won't have to be updated with the site release.
+serverControlDir=/var/www/Common/orthomcl-mapping-service/build-5/@@HOST@@/queues/zcluster.rcc.uga.edu
+
+
+# changes with each OrthoMCL Release
+# path on cluster to the FASTA file of OrthoMCL protein sequences
+blastDbFilePath=/scratch/jcklab/eupath/orthomcl-mapping-service/build-5/db/proteinSeqs
+
+# Parent directory for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
+clusterServerDir=/scratch/jcklab/eupath/orthomcl-mapping-service/build-5/@@HOST@@/queues/zcluster.rcc.uga.edu
+
+# clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
+#          Host orthomclProteomeJob-cluster
+#              Hostname rcluster.rcc.uga.edu
+#              IdentityFile ~/.ssh/orthomclProteomeJob
+#              IdentitiesOnly yes
+#              User mheiges
+#              ForwardX11 no
+#              ForwardAgent no
+clusterServer=orthomclProteomeJob-ZCLUSTER
+
+# Cluster login username. This cluster user should have the public key installed for the
+# IdentityFile specified in ~/.ssh/config
+clusterUserName=mheiges    
+
+# Cluster queue name where BLAST tasks will be run.
+clusterQueue=rcc-30d
+
+# Max memory (G) per node
+clusterMaxGigsPerNode=8
+
+# temporary scratch space for DJob
+nodePath=/scratch/jcklab/eupath/orthomcl-mapping-service/scratch
+
+# parent directory on cluster for the NCBI blastall executable
+blastBinDir=/usr/local/ncbiblast/2.2.9
+
+# A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
+# instead of the user's .bashrc to ensure a stable running environment.
+# Use full path or path relative to $HOME
+rcfile=/scratch/jcklab/eupath/orthomcl-mapping-service/build-@@BUILD_NUMBER@@/@@HOST@@/setenv
+
+##############################################################################
+# DJob blast task settings.
+# These are static across releases and SGE-based clusters.
+##############################################################################
+
+numNodes=5
+slotsPerNode=1
+ppn=1
+nodeClass=DJob::DistribJob::SgeNode
+taskSize=100
+taskClass=DJob::DistribJobTasks::BlastSimilarityTask
+blastArgs=-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5

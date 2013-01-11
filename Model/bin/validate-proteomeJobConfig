@@ -1,18 +1,62 @@
 #!/bin/bash
 
+# Two ways to run: 
+#   Without options
+#     $ validate-proteomeJobConfig 
+#   will check orthomclProteomeSvcServer.prop and orthomclProteomeSvcCluster.prop in the 
+#   'gus_home/config' directory that is relative to this script.
+#   
+#   Specifying the Server and Cluter prop files (full or relative paths)
+#     $ validate-proteomeJobConfig  orthomclProteomeSvcServer.prop orthomclProteomeSvcCluster-zcluster.rcc.uga.edu.prop
+#    will check those prop files. This is useful to check configurations before putting them in service. 
+
 ##################################################################################################
 # FUNCTIONS
 ##################################################################################################
+this_script=$(basename $0)
+
+function usage_brief() {
+    cat <<EOF 
+For help, run
+   $this_script --help
+EOF
+}
+
+function usage() {
+    cat <<EOF
+
+Validate most of the configuation settings for the OrthoMCL 
+proteome mapping service.
+
+Two ways to run: 
+  1. Without options:
+
+    $ validate-proteomeJobConfig 
+
+  which will check orthomclProteomeSvcServer.prop and 
+  orthomclProteomeSvcCluster.prop in the 'gus_home/config' 
+  directory that is relative to this script.
+  
+  2. Specifying the Server and Cluter prop files (full or relative paths)
+
+    $ validate-proteomeJobConfig  orthomclProteomeSvcServer.prop \\
+        orthomclProteomeSvcCluster-zcluster.rcc.uga.edu.prop
+
+   will check those prop files. This is useful to check configurations 
+   before putting them in service. 
+EOF
+}
 
 function abort() {
     msg=$1
     echo
     echo -e '\E[;31m'"\033[1m$msg\033[0m"
+    usage_brief
     exit 1
 }
 
 function info() {
-    msg=$1
+    msg="$1"
     echo -e '\E[;34m'"\033[1mINFO: $msg\033[0m"
 }
 
@@ -76,6 +120,11 @@ function is_local_world_readable_dir() {
 ##################################################################################################
 # SETUP
 ##################################################################################################
+
+if [[ "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
 
 Bin="$(dirname $(readlink -f "$0"))"
 export BASE_GUS="${Bin%%gus_home/bin}"

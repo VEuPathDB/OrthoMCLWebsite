@@ -1,41 +1,23 @@
 #!/bin/bash
 
-
-Bin="$(dirname $(readlink -f "$0"))"
-export BASE_GUS="${Bin%%gus_home/bin}"
-export CGILIB=$BASE_GUS/cgi-lib
-export GUS_HOME=$BASE_GUS/gus_home
-export CONF_DIR=$GUS_HOME/config
-
-SERVER_CONF=${1-$GUS_HOME/config/orthomclProteomeSvcServer.prop}
-CLUSTER_CONF=${2-$GUS_HOME/config/orthomclProteomeSvcCluster.prop}
-
-if [[ ! -e "$SERVER_CONF" ]]; then
-    echo "File '$SERVER_CONF' not found"
-    if [[ "$CGILIB" =~ "project_home" ]]; then
-        echo "Be sure to run this script from \$GUS_HOME, not \$PROJECT_HOME"
-    fi
-    exit 1
-fi
-
-if [[ ! -e "$CLUSTER_CONF" ]]; then
-    echo "File '$CLUSTER_CONF' not found"
-    if [[ "$CGILIB" =~ "project_home" ]]; then
-        echo "Be sure to run this script from \$GUS_HOME, not \$PROJECT_HOME"
-    fi
-    exit 1
-fi
-
-# crudely strip any spaces around '=' and source it.
-# Some lines are not valid for eval, so we squash the warnings
-eval "$(cat $SERVER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
-eval "$(cat $CLUSTER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
+##################################################################################################
+# FUNCTIONS
+##################################################################################################
 
 function abort() {
     msg=$1
     echo
-    echo -e '\E[;31m'"\033[1m$1\033[0m"
+    echo -e '\E[;31m'"\033[1m$msg\033[0m"
     exit 1
+}
+
+function info() {
+    msg=$1
+    echo -e '\E[;34m'"\033[1mINFO: $msg\033[0m"
+}
+
+function ok() {
+  echo -e '\E[;32m'"\033[1mOK\033[0m"
 }
 
 function remote_cmd_without_env() {
@@ -50,14 +32,6 @@ function remote_cmd_with_env() {
 
 function lscmd() {
   ls $1 >/dev/null 2>&1
-}
-
-function ok() {
-  echo -e '\E[;32m'"\033[1mOK\033[0m"
-}
-
-function info() {
-  echo -e '\E[;34m'"\033[1mINFO:\033[0m" $1
 }
 
 function is_local_dir() {
@@ -99,6 +73,44 @@ function is_local_world_readable_dir() {
   stat -c '%A' $1 | grep -q '^d......r.x'
 }
 
+##################################################################################################
+# SETUP
+##################################################################################################
+
+Bin="$(dirname $(readlink -f "$0"))"
+export BASE_GUS="${Bin%%gus_home/bin}"
+export GUS_HOME=$BASE_GUS/gus_home
+export CONF_DIR=$GUS_HOME/config
+
+SERVER_CONF=${1-$GUS_HOME/config/orthomclProteomeSvcServer.prop}
+CLUSTER_CONF=${2-$GUS_HOME/config/orthomclProteomeSvcCluster.prop}
+
+if [[ ! -e "$SERVER_CONF" ]]; then
+    echo "File '$SERVER_CONF' not found"
+    if [[ "$BASE_GUS" =~ "project_home" ]]; then
+        abort "You appear to be running \$PROJECT_HOME's copy of this script.\nUse the copy that is in \$GUS_HOME."
+    fi
+    exit 1
+fi
+
+if [[ ! -e "$CLUSTER_CONF" ]]; then
+    echo "File '$CLUSTER_CONF' not found"
+    if [[ "$BASE_GUS" =~ "project_home" ]]; then
+        abort "You appear to be running \$PROJECT_HOME's copy of this script.\nUse the copy that is in \$GUS_HOME."
+    fi
+    exit 1
+fi
+
+
+# Crudely strip any spaces around '=' and source the results like an rc file to set
+# BASH variables for checking.
+# Some lines are not valid for eval, so we squash the warnings
+eval "$(cat $SERVER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
+eval "$(cat $CLUSTER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
+
+##################################################################################################
+# SPECIFIC VALIDATIONS
+##################################################################################################
 
 echo "#### WEBSERVER CHECKS #####################################################"
 

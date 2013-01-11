@@ -5,6 +5,7 @@ Bin="$(dirname $(readlink -f "$0"))"
 export BASE_GUS="${Bin%%gus_home/bin}"
 export CGILIB=$BASE_GUS/cgi-lib
 export GUS_HOME=$BASE_GUS/gus_home
+export CONF_DIR=$GUS_HOME/config
 
 SERVER_CONF=${1-$GUS_HOME/config/orthomclProteomeSvcServer.prop}
 CLUSTER_CONF=${2-$GUS_HOME/config/orthomclProteomeSvcCluster.prop}
@@ -55,6 +56,10 @@ function ok() {
   echo -e '\E[;32m'"\033[1mOK\033[0m"
 }
 
+function info() {
+  echo -e '\E[;34m'"\033[1mINFO:\033[0m" $1
+}
+
 function is_local_dir() {
  local dir=$1
  [[ "x$dir" != 'x' && -d $dir ]]
@@ -63,6 +68,19 @@ function is_local_dir() {
 function is_local_file() {
  local file=$1
  [[ "x$file" != 'x' && -f $file ]]
+}
+
+function is_local_symlink() {
+ local file=$1
+ [[ "x$file" != 'x' && -L $file ]]
+}
+
+function local_symlink_reference() {
+ local file=$1
+ if [[ "x$file" != 'x' && -L $file ]]; then
+   readlink -f $file
+ fi
+
 }
 
 function is_remote_dir() {
@@ -103,10 +121,17 @@ is_local_file $groupsFile || \
     abort "invalid file for groupsFile:\n'$groupsFile'" 
 ok
 
-echo -n "checking serverControlDir (Cluster.prop) ... "
-is_local_dir $serverControlDir || \
-    abort "invalid directory for serverControlDir:\n'$serverControlDir'" 
+echo -n "checking orthomclProteomeSvcCluster.prop exists ... "
+is_local_file "$CONF_DIR/orthomclProteomeSvcCluster.prop" || \
+    abort "file not found:\n'$CONF_DIR/orthomclProteomeSvcCluster.prop'" 
 ok
+
+if [[ `is_local_symlink "$CONF_DIR/orthomclProteomeSvcCluster.prop"` ]]; then
+   info "cluster property file is symlinked to"
+   echo '  ' "$(basename "$(local_symlink_reference $CONF_DIR/orthomclProteomeSvcCluster.prop)")"
+else
+    info "orthomclProteomeSvcCluster.prop is not a symlink" 
+fi
 
 echo -n "checking serverControlDir (Cluster.prop) ... "
 is_local_dir $serverControlDir || \

@@ -12,9 +12,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.gusdb.wdk.model.AnswerValue;
-import org.gusdb.wdk.model.RecordInstance;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
+import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.report.Reporter;
 import org.json.JSONException;
 

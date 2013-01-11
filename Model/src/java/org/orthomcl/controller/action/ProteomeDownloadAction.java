@@ -12,7 +12,7 @@ import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
-import org.gusdb.wdk.model.PropFileReader;
+import org.gusdb.wdk.model.config.PropFileReader;
 import org.orthomcl.controller.config.ProteomeClusterConfig;
 import org.orthomcl.controller.config.ProteomeServerConfig;
 

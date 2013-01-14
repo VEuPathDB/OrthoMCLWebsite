@@ -51,7 +51,6 @@ function abort() {
     msg=$1
     echo
     echo -e '\E[;31m'"\033[1m$msg\033[0m"
-    usage_brief
     exit 1
 }
 
@@ -215,8 +214,8 @@ is_local_dir "$serverControlDir/newJobs" || \
 ok
 
 echo -n "checking file mode of 'newJobs' ... "
-[[ $(local_mode "$serverControlDir/newJobs") == "777" ]] || \
-    abort "$serverControlDir/newJobs mode is not 0777, apache probably can not write" 
+[[ $(local_mode "$serverControlDir/newJobs") =~ 777$ ]] || \
+    abort "$serverControlDir/newJobs mode is not 777, apache probably can not write" 
 ok
 
 echo -n "checking formatdbBinDir (Server.prop) ... "
@@ -243,6 +242,38 @@ is_remote_dir $nodePath || \
     abort "invalid directory for nodePath:\n'$nodePath'"
 ok
 
+echo -n "checking serverControlDir (Cluster.prop) ... "
+is_local_dir $serverControlDir || \
+    abort "invalid directory for serverControlDir:\n'$serverControlDir'"
+ok
+
+echo -n "checking clusterServerDir (Cluster.prop) ... "
+is_remote_dir $clusterServerDir || \
+    abort "invalid directory for clusterServerDir:\n'$clusterServerDir'"
+ok
+
+echo -n "checking presence of newJobs directory on cluster ... "
+is_remote_dir $clusterServerDir/newJobs || \
+    abort "invalid directory for newJobs:\n'$clusterServerDir/newJobs'"
+ok
+
+echo -n "checking presence of phase1/failedJobs directory on cluster ... "
+is_remote_dir $clusterServerDir/phase1/failedJobs || \
+    abort "invalid directory for phase1/failedJobs:\n'$clusterServerDir/phase1/failedJobs'"
+ok
+echo -n "checking presence of phase1/runningJobs directory on cluster ... "
+is_remote_dir $clusterServerDir/phase1/runningJobs || \
+    abort "invalid directory for phase1/runningJobs:\n'$clusterServerDir/phase1/runningJobs'"
+ok
+
+echo -n "checking presence of phase2/failedJobs directory on cluster ... "
+is_remote_dir $clusterServerDir/phase2/failedJobs || \
+    abort "invalid directory for phase2/failedJobs:\n'$clusterServerDir/phase2/failedJobs'"
+ok
+echo -n "checking presence of phase2/runningJobs directory on cluster ... "
+is_remote_dir $clusterServerDir/phase2/runningJobs || \
+    abort "invalid directory for phase2/runningJobs:\n'$clusterServerDir/phase2/runningJobs'"
+ok
 
 echo -n "checking blastDbFilePath (Cluster.prop) ... "
 is_remote_file $blastDbFilePath || \

@@ -2,6 +2,8 @@
 # example: 
 PROJECT_ID = OrthoMCL
 
+SITE_ADMIN_EMAIL=mheiges@uga.edu, aurreco@uga.edu
+
 #
 # The file needs to exist in gus_home/config/PROJECT_ID/
 # even if it is empty.

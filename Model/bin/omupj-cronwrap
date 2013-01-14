@@ -21,15 +21,25 @@ export PATH=$GUS_HOME/bin:$PROJECT_HOME/install/bin:$PATH
 export PERL5LIB=$GUS_HOME/lib/perl
 export CGILIB=$BASE_GUS/cgi-lib
 
-CONF=${1-$GUS_HOME/config/proteomeJob.config}
 
-if [[ ! -f $CONF ]]; then
+CLUSTER_CONF=${1-$GUS_HOME/config/orthomclProteomeSvcCluster.prop}
+SERVER_CONF=$GUS_HOME/config/orthomclProteomeSvcServer.prop
+
+if [[ ! -f $CLUSTER_CONF ]]; then
     echo    
-    echo "$CONF not found. Quitting."
+    echo "$CLUSTER_CONF not found. Quitting."
     exit 1;
 fi
 
-TMPDIR="$(grep controlDir "$CONF" | cut -d'=' -f2 | sed "s/ //g" )"
+TMDIR_KEY=serverControlDir
+TMPDIR="$(grep $TMDIR_KEY "$CLUSTER_CONF" | cut -d'=' -f2 | sed "s/ //g" )"
+if [[ ! -d "$TMPDIR" ]]; then
+  echo
+  echo "Directory '$TMPDIR' not found."
+  echo "Check value of $TMDIR_KEY in $CLUSTER_CONF."
+  exit
+fi
+
 LOG=$TMPDIR/runlog
 LASTLOG=$TMPDIR/runlog.$$
 
@@ -42,8 +52,8 @@ if [[ -f $LOG ]]; then
       gzip -f ${LOG}.1
     fi
 fi
-
-$Bin/orthomclManageUserProteomeJob "$CONF" > $LASTLOG 2>&1
+#  $GUS_HOME/config/orthomclProteomeSvcServer.prop $GUS_HOME/config/orthomclProteomeSvcCluster-delta.prop
+$Bin/orthomclManageUserProteomeJob "$SERVER_CONF" "$CLUSTER_CONF" > $LASTLOG 2>&1
 EXIT=$?
 
 if [[ -f $LASTLOG ]]; then 

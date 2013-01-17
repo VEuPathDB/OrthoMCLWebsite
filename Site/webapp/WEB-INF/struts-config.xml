@@ -73,7 +73,7 @@
     <action path="/contactUs"
         parameter="org.eupathdb.common.controller.action.ContactUsAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <forward name="success" path="/wdk/jsp/jsonResponse.jsp"/>
+      <forward name="success" path="/WEB-INF/jsp/contactBack.jsp"/>
     </action>
 
     <!-- User Account Maintenance Actions -->

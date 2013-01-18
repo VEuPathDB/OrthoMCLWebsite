@@ -5,53 +5,56 @@ var Setup = {
 
   setUpContactUsLogic: function() {
     var $form = $("#contact-us");
+    var $container = $("#contact-files");
 
-    // add/remove files from form
+    var addFile = function(idx) {
+      return $('<div><input type="file" name="attachment' + idx + '"/> </div>')
+      .appendTo($container);
+    };
+
+    var $addButton = $("<div><a href='#'>Add another file</a></div>")
+    .css("margin-top", "1em")
+    .on("click", "a", function(e) {
+      e.preventDefault();
+
+      var fileRow = addFile($(":file", fileRow).length + 1);
+      $(this).parent().detach();
+      $(":file", fileRow).last().trigger("click");
+    });
+
+    // handle file changes
     $form.on("change", ":file", function(e) {
 
-      var $files = $(":file", $form);
-
-      if ($files.length >= 3) {
-        return;
-      }
-
-      var $container = $("#contact-files");
-
-      var addFile = function(idx) {
-        return $('<div><input type="file" name="attachment' + idx + '"/> </div>')
-        .appendTo($container);
-      };
-
-      // add additional file input, and add/remove links
-      $(" <a href='#'>remove</a>")
-      .click(function(e) {
-        e.preventDefault();
-
-        $(this).parent().remove();
-
-        var $resFiles = $(":file", $form)
-
-        if ($resFiles.length === 0) {
-          addFile(1);
-        }
-
-        $resFiles.each(function(idx, file) {
-          file.name = "attachment" + (idx + 1);
-        });
-
-      })
-      .insertAfter($(":file", $container).last());
-
-      if ($(":file", $form).length < 3) {
-        $("<a href='#'>add another file</a>")
+      if ($(this).parent().has(".remove_file").length === 0) {
+        // add additional file input, and add/remove links
+        $("<span><a href='#'>Remove file</a></span>")
+        .addClass("remove_file")
+        .css("margin-left", "0.4em")
         .click(function(e) {
           e.preventDefault();
 
-          var fileRow = addFile($files.length + 1);
-          $(this).remove();
-          $(":file", fileRow).click();
+          $(this).parent().remove();
+
+          var $resFiles = $(":file", $form)
+
+          if ($resFiles.length === 0) {
+            addFile(1);
+          }
+
+          $resFiles.each(function(idx, file) {
+            file.name = "attachment" + (idx + 1);
+          });
+
+          if ($(":file", $form).length < 3) {
+            $addButton.insertAfter($container);
+          }
+
         })
-        .insertAfter($container);
+        .insertAfter($(":file", $container).last());
+      }
+
+      if ($(":file", $form).length < 3) {
+        $addButton.insertAfter($container);
       }
     });
 

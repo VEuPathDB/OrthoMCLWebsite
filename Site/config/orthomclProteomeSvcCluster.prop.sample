@@ -6,15 +6,15 @@
 
 # dir that controls the service on the web server.  (new jobs go into ./newJobs and results into ./results)
 # this is in the cluster prop file because it's value changes when we swap clusters
-serverControlDir=/var/www/Common/tmp/orthomclProteomeJob/steve
+serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/zcluster.rcc.uga.edu
 
 
 # changes with each OrthoMCL Release
 # path on cluster to the FASTA file of OrthoMCL protein sequences
-blastDbFilePath=/genomics/eupath/orthomcl-mapping-service/release-5/db/proteinSeqs
+blastDbFilePath=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/db/proteinSeqs
 
-# Parent director for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
-clusterServerDir=/genomics/eupath/orthomcl-mapping-service/steve-test
+# Parent directory for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
+clusterServerDir=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/@@CLUSTER_HOSTNAME@@
 
 # clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
 #          Host orthomclProteomeJob-cluster
@@ -24,28 +24,31 @@ clusterServerDir=/genomics/eupath/orthomcl-mapping-service/steve-test
 #              User mheiges
 #              ForwardX11 no
 #              ForwardAgent no
-clusterServer=orthomclProteomeJob-cluster
+# clusterUserName=orthomclProteomeJob-cluster
+clusterServer=@@CLUSTER_HOSTNAME@@
 
 # Cluster login username. This cluster user should have the public key installed for the
-# IdentityFile specified in ~/.ssh/config
-clusterUserName=sfischer    
+# IdentityFile specified in ~/.ssh/config .
+# clusterUserName=sfischer
+clusterUserName=@@CLUSTER_USERNAME@@    
 
 # Cluster queue name where BLAST tasks will be run.
-clusterQueue=all.q
+#clusterQueue=all.q
+clusterQueue=@@CLUSTER_QUEUE@@
 
 # Max memory (G) per node
 clusterMaxGigsPerNode=8
 
 # temporary scratch space for DJob
-nodePath=/genomics/eupath/orthomcl-mapping-service
+nodePath=@@EUPATHDB_BASE@@/orthomcl-mapping-service/scratch
 
 # parent directory on cluster for the NCBI blastall executable
-blastBinDir=/ifs/eupathdb/share/pkg/bio/current
+blastBinDir=@@EUPATHDB_BASE@@/workflow-software/software/ncbi_blast/2.2.25/bin
 
 # A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
 # instead of the user's .bashrc to ensure a stable running environment.
 # Use full path or path relative to $HOME
-rcfile=/genomics/h/sfischer/GUSApp/trunk/cluster-setenv
+rcfile=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/setenv
 
 ##############################################################################
 # DJob blast task settings.

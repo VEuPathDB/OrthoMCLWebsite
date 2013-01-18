@@ -1,0 +1,154 @@
+#!/usr/bin/perl
+
+# Use orthomclProteomeSvcCluster.prop.sample and orthomclProteomeSvcServer.prop.sample
+# files to generate cluster-specific configurations for OrthoMCL proteome
+# mapping service. Basically, copy the sample files and do string substitutions on
+# @@MACROS@@.
+# The output are
+# orthomclProteomeSvcServer.prop (specific for a given website)
+# and a cluster specific prop, e.g. orthomclProteomeSvcCluster-zcluster.rcc.uga.edu.prop
+#
+# The mapping service requires 'orthomclProteomeSvcCluster.prop' but that can be
+# a symlink to one of the cluster-specific configurations. This script does not manage
+# such symlinks - those need to managed manually.
+
+# This script is unsupported. Use at your own risk.
+
+#       configure-proteomeJob \
+#       --admin_email=mheiges@uga.edu   \
+#       --ortho_website=mheiges.orthomcl.org  \
+#       --cluster_queue=rcc-30d   \
+#       --cluster_hostname=zcluster.rcc.uga.edu  \
+#       --cluster_username=mheiges \
+#       --eupathdb_base=/scratch/jcklab/eupath
+
+use strict;
+use File::Basename;
+use File::Path qw(make_path);
+use Getopt::Long;
+use Cwd qw(realpath);
+use XML::Twig;
+use XML::Simple;
+use File::Copy;
+use EuPathSiteCommon::Model::ModelXML;
+
+
+my ($this_script) = basename $0;
+print $this_script . ' $Revision: 52040 $' . "\n";
+
+####################################################################
+# user input
+####################################################################
+
+# macros in prop files for substitition
+#
+# ADMIN_EMAIL
+# BUILD_NUMBER
+# CLUSTER_QUEUE
+# CLUSTER_HOSTNAME
+# CLUSTER_USERNAME
+# EUPATHDB_BASE
+# ORTHO_BUILD_NO
+# ORTHO_WEBSITE
+
+my (
+    $admin_email,
+    $ortho_website,
+    $ortho_buildno,
+    $cluster_queue,
+    $cluster_hostname,
+    $cluster_username,
+    $eupathdb_base 
+);
+
+{
+  local $SIG{__WARN__} = sub { 
+    my $message = shift;
+    die "FATAL: " . $message;
+  };
+
+  my $optRslt = GetOptions(
+      "admin_email=s"        => \$admin_email,
+      "ortho_website=s"      => \$ortho_website,
+      "cluster_queue=s"      => \$cluster_queue,
+      "cluster_hostname=s"   => \$cluster_hostname,
+      "cluster_username=s"   => \$cluster_username,
+      "eupathdb_base=s"      => \$eupathdb_base,
+      );
+
+}
+
+die "missing options\n" unless ($admin_email && 
+    $ortho_website &&
+    $cluster_queue &&
+    $cluster_hostname &&
+    $cluster_username &&
+    $eupathdb_base);
+
+my $target_site = lc $ortho_website;
+
+
+####################################################################
+# system values
+####################################################################
+my $web_base_dir = '/var/www';
+my $site_symlink = "$web_base_dir/$target_site";
+my $project_home = realpath("$site_symlink/project_home");
+my $gus_home = realpath("$site_symlink/gus_home");
+my $wdk_config_dir = "$gus_home/config";
+
+# read for product version number
+my $wdk_model_xml = "$gus_home/lib/wdk/OrthoMCL.xml";
+
+my $model = EuPathSiteCommon::Model::ModelXML->new('OrthoMCL.xml');
+my $ortho_build_no = $model->getBuildNumberByProjectId('OrthoMCL');
+
+####################################################################
+# copy from samples
+####################################################################
+
+my %config_files = (
+    'cluster_prop' => {
+        'source' => "$project_home/OrthoMCLWebsite/Site/config/orthomclProteomeSvcCluster.prop.sample",
+        'dest' => "$gus_home/config/orthomclProteomeSvcCluster-${cluster_hostname}.prop"
+        },
+    'server_prop' => {
+        'source' => "$project_home/OrthoMCLWebsite/Site/config/orthomclProteomeSvcServer.prop.sample",
+        'dest' => "$gus_home/config/OrthoMCLWebsite/Site/config/orthomclProteomeSvcServer.prop"
+        },
+);
+
+# Install all configuration files from source sample files.
+# Note that later we may reopen the source file and parse it into the dest file,
+# so this blanket copy step may include some unnecessary copying.
+for my $cf (keys %config_files) {
+   print dirname($config_files{$cf}{'dest'}) . "\n";
+    make_path(dirname($config_files{$cf}{'dest'}), {verbose => 1});
+    copy( 
+        $config_files{$cf}{'source'},
+        $config_files{$cf}{'dest'} 
+    ) or die "copy $config_files{$cf}{'source'} failed : $!";
+}
+
+
+####################################################################
+# Config File Parsing
+####################################################################
+
+#open(IN, $config_files{'cluster_prop'}{'dest'}) || die "could not open " . $config_files{'cluster_prop'}{'dest'} . "\n";
+
+{
+    local ($^I, @ARGV) = ('', $config_files{'cluster_prop'}{'dest'});   
+    while (<>) {
+        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/;        
+        s/\@\@ADMIN_EMAIL\@\@/$admin_email/;
+        s/\@\@CLUSTER_QUEUE\@\@/$cluster_queue/;
+        s/\@\@CLUSTER_HOSTNAME\@\@/$cluster_hostname/;
+        s/\@\@CLUSTER_USERNAME\@\@/$cluster_username/;
+        s/\@\@EUPATHDB_BASE\@\@/$eupathdb_base/;
+        s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/;
+        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/;
+
+        print;       
+    }
+}

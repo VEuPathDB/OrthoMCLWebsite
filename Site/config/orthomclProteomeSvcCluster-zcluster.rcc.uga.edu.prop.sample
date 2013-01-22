@@ -9,15 +9,15 @@
 # For Production QA sites (e.g. q1.orthomcl.org): use the hostname that be in service at release.
 # That is, use '/build-N/w1.orthomcl.org' not '/build-N/q1.orthomcl.org'. The build-N subdirectory
 # will keep it from colliding with the live site and this won't have to be updated with the site release.
-serverControlDir=/var/www/Common/orthomcl-mapping-service/build-5/@@HOST@@/queues/zcluster.rcc.uga.edu
+serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/zcluster.rcc.uga.edu
 
 
 # changes with each OrthoMCL Release
 # path on cluster to the FASTA file of OrthoMCL protein sequences
-blastDbFilePath=/scratch/jcklab/eupath/orthomcl-mapping-service/build-5/db/proteinSeqs
+blastDbFilePath=/scratch/jcklab/eupath/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/db/proteinSeqs
 
 # Parent directory for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
-clusterServerDir=/scratch/jcklab/eupath/orthomcl-mapping-service/build-5/@@HOST@@/queues/zcluster.rcc.uga.edu
+clusterServerDir=/scratch/jcklab/eupath/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/zcluster.rcc.uga.edu
 
 # clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
 #          Host orthomclProteomeJob-cluster
@@ -48,7 +48,7 @@ blastBinDir=/usr/local/ncbiblast/2.2.9
 # A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
 # instead of the user's .bashrc to ensure a stable running environment.
 # Use full path or path relative to $HOME
-rcfile=/scratch/jcklab/eupath/orthomcl-mapping-service/build-@@BUILD_NUMBER@@/@@HOST@@/setenv
+rcfile=/scratch/jcklab/eupath/orthomcl-mapping-service/build-@@BUILD_NUMBER@@/@@ORTHO_WEBSITE@@/setenv
 
 ##############################################################################
 # DJob blast task settings.

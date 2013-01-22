@@ -6,7 +6,7 @@
 
 # dir that controls the service on the web server.  (new jobs go into ./newJobs and results into ./results)
 # this is in the cluster prop file because it's value changes when we swap clusters
-serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/zcluster.rcc.uga.edu
+serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/@@CLUSTER_HOSTNAME@@
 
 
 # changes with each OrthoMCL Release

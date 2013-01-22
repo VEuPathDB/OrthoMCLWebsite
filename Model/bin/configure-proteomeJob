@@ -129,7 +129,7 @@ my %config_files = (
         },
     'server_prop' => {
         'source' => "$project_home/OrthoMCLWebsite/Site/config/orthomclProteomeSvcServer.prop.sample",
-        'dest' => "$gus_home/config/OrthoMCLWebsite/Site/config/orthomclProteomeSvcServer.prop"
+        'dest' => "$gus_home/config/orthomclProteomeSvcServer.prop"
         },
 );
 
@@ -137,7 +137,6 @@ my %config_files = (
 # Note that later we may reopen the source file and parse it into the dest file,
 # so this blanket copy step may include some unnecessary copying.
 for my $cf (keys %config_files) {
-   print dirname($config_files{$cf}{'dest'}) . "\n";
     make_path(dirname($config_files{$cf}{'dest'}), {verbose => 1});
     copy( 
         $config_files{$cf}{'source'},
@@ -153,18 +152,52 @@ for my $cf (keys %config_files) {
 #open(IN, $config_files{'cluster_prop'}{'dest'}) || die "could not open " . $config_files{'cluster_prop'}{'dest'} . "\n";
 
 {
-    local ($^I, @ARGV) = ('', $config_files{'cluster_prop'}{'dest'});   
+    my @configs_to_patch = map { $config_files{$_}{'dest'} } keys %config_files;
+
+    local ($^I, @ARGV) = ('', @configs_to_patch);
+    print "Writing\n  " . join("\n  ", @configs_to_patch);
+
     while (<>) {
-        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/;        
-        s/\@\@ADMIN_EMAIL\@\@/$admin_email/;
-        s/\@\@CLUSTER_QUEUE\@\@/$cluster_queue/;
-        s/\@\@CLUSTER_HOSTNAME\@\@/$cluster_hostname/;
-        s/\@\@CLUSTER_SSH_HOSTALIAS\@\@/$cluster_ssh_hostalias/;
-        s/\@\@CLUSTER_USERNAME\@\@/$cluster_username/;
-        s/\@\@EUPATHDB_BASE\@\@/$eupathdb_base/;
-        s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/;
-        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/;
+        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/g;        
+        s/\@\@ADMIN_EMAIL\@\@/$admin_email/g;
+        s/\@\@CLUSTER_QUEUE\@\@/$cluster_queue/g;
+        s/\@\@CLUSTER_HOSTNAME\@\@/$cluster_hostname/g;
+        s/\@\@CLUSTER_SSH_HOSTALIAS\@\@/$cluster_ssh_hostalias/g;
+        s/\@\@CLUSTER_USERNAME\@\@/$cluster_username/g;
+        s/\@\@EUPATHDB_BASE\@\@/$eupathdb_base/g;
+        s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/g;
+        s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/g;
 
         print;       
     }
+    
+    print "\n";
 }
+
+####################################################################
+# mkdirs
+####################################################################
+
+# can't easily create directories on cluster and even on localhost, this can
+# make a mess if the configuration values are wrong. For now, assume directories
+# are created as part of the initial install and missing dirs will be caught by the 
+# configuration validation script.
+
+# my $cluster_queue_dir="/var/www/Common/orthomcl-mapping-service/build-${ortho_build_no}/${ortho_website}/queues/$cluster_hostname";
+# print "\n";
+# print "Making directories:\n";
+# print "${cluster_queue_dir}/{results,newJobs,{phase1,phase2}/{failedJobs,runningJobs}}\n";
+# system("mkdir -p  ${cluster_queue_dir}/{results,newJobs,{phase1,phase2}/{failedJobs,runningJobs}}");
+# chmod 0777, "${cluster_queue_dir}/newJobs";
+
+####################################################################
+# Recommendations
+####################################################################
+
+print << "EOF"
+
+It is recommended that you validate this configuration with
+
+validate-proteomeJobConfig $config_files{'server_prop'}{'dest'} $config_files{'cluster_prop'}{'dest'}
+
+EOF

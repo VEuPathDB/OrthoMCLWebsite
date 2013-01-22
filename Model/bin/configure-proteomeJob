@@ -19,8 +19,21 @@
 #       --ortho_website=mheiges.orthomcl.org  \
 #       --cluster_queue=rcc-30d   \
 #       --cluster_hostname=zcluster.rcc.uga.edu  \
+#       --cluster_ssh_hostalias=orthomclProteomeJob-ZCLUSTER  \
 #       --cluster_username=mheiges \
 #       --eupathdb_base=/scratch/jcklab/eupath
+
+
+#       configure-proteomeJob \
+#       --admin_email=mheiges@uga.edu   \
+#       --ortho_website=mheiges.orthomcl.org  \
+#       --cluster_queue=all.q   \
+#       --cluster_hostname=delta.genomics.upenn.edu  \
+#       --cluster_ssh_hostalias=orthomclProteomeJob-DELTA  \
+#       --cluster_username=mheiges \
+#       --eupathdb_base=/genomics/eupath
+
+
 
 use strict;
 use File::Basename;
@@ -57,6 +70,7 @@ my (
     $ortho_buildno,
     $cluster_queue,
     $cluster_hostname,
+    $cluster_ssh_hostalias,
     $cluster_username,
     $eupathdb_base 
 );
@@ -68,12 +82,13 @@ my (
   };
 
   my $optRslt = GetOptions(
-      "admin_email=s"        => \$admin_email,
-      "ortho_website=s"      => \$ortho_website,
-      "cluster_queue=s"      => \$cluster_queue,
-      "cluster_hostname=s"   => \$cluster_hostname,
-      "cluster_username=s"   => \$cluster_username,
-      "eupathdb_base=s"      => \$eupathdb_base,
+      "admin_email=s"             => \$admin_email,
+      "ortho_website=s"           => \$ortho_website,
+      "cluster_queue=s"           => \$cluster_queue,
+      "cluster_hostname=s"        => \$cluster_hostname,
+      "cluster_ssh_hostalias=s"   => \$cluster_ssh_hostalias,
+      "cluster_username=s"        => \$cluster_username,
+      "eupathdb_base=s"           => \$eupathdb_base,
       );
 
 }
@@ -144,6 +159,7 @@ for my $cf (keys %config_files) {
         s/\@\@ADMIN_EMAIL\@\@/$admin_email/;
         s/\@\@CLUSTER_QUEUE\@\@/$cluster_queue/;
         s/\@\@CLUSTER_HOSTNAME\@\@/$cluster_hostname/;
+        s/\@\@CLUSTER_SSH_HOSTALIAS\@\@/$cluster_ssh_hostalias/;
         s/\@\@CLUSTER_USERNAME\@\@/$cluster_username/;
         s/\@\@EUPATHDB_BASE\@\@/$eupathdb_base/;
         s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/;

@@ -25,7 +25,7 @@ clusterServerDir=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_
 #              ForwardX11 no
 #              ForwardAgent no
 # clusterUserName=orthomclProteomeJob-cluster
-clusterServer=@@CLUSTER_HOSTNAME@@
+clusterServer=@@CLUSTER_SSH_HOSTALIAS@@
 
 # Cluster login username. This cluster user should have the public key installed for the
 # IdentityFile specified in ~/.ssh/config .

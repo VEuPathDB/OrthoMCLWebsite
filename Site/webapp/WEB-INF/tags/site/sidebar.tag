@@ -44,7 +44,7 @@
 	<c:set var="group_count" value="${helperRecord.attributes['group_count'].value}"/>
 
   <!-- jquery accordion configuration -->
-  <span class="onload-function" data-function="Setup.configureSidebar"><jsp:text/></span>
+  <span class="onload-function" data-function="eupath.setup.configureSidebar"><jsp:text/></span>
 
 
   <div id="sidebar">

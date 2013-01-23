@@ -38,7 +38,7 @@
 <c:set var="basketCount" value="${wdkUser.basketCount}"/>
 
 
-<span class="onload-function" data-function="Setup.configureMenuBar"><jsp:text/></span>
+<span class="onload-function" data-function="eupath.setup.configureMenuBar"><jsp:text/></span>
 
 <div id="menu" class="ui-helper-clearfix">
 

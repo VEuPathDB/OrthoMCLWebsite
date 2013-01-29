@@ -7,6 +7,10 @@
 # resultBaseUrl= http://sfischer.orthomcl.org/orthomcl.sfischer/proteomeDownload.do?jobId=
 resultBaseUrl= http://@@ORTHO_WEBSITE@@/orthomcl/proteomeDownload.do?jobId=
 
+# Directory for final zipped results available for user download.
+# This directory is the same for all service queues and builds.
+resultsDir=/var/www/Common/orthomcl-mapping-service/results
+
 # email to receive "server error" and other notifications requiring attention
 adminEmail=@@ADMIN_EMAIL@@
 

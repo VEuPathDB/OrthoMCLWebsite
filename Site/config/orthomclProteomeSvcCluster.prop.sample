@@ -4,8 +4,12 @@
 ################################################################################################################
 
 
-# dir that controls the service on the web server.  (new jobs go into ./newJobs and results into ./results)
-# this is in the cluster prop file because it's value changes when we swap clusters
+# dir that controls the service on the web server
+# (e.g. new jobs go into ./newJobs).
+# this is in the cluster prop file because it's value 
+# changes when we swap clusters.
+# See also 'resultsDir' in the orthomclProteomeSvcServer.prop
+# to set the location for depositing final results for user download.
 serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/@@CLUSTER_HOSTNAME@@
 
 

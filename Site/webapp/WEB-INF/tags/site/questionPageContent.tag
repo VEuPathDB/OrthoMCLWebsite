@@ -5,7 +5,7 @@
     xmlns:html="http://jakarta.apache.org/struts/tags-html"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   
-  <c:set var="recordType" value="${wdkQuestion.recordClass.type}"/>
+  <c:set var="recordType" value="${wdkQuestion.recordClass.displayName}"/>
   <c:set var="webProps" value="${wdkQuestion.propertyLists['websiteProperties']}" />
   <c:set var="hideOperation" value="${false}" />
   <c:set var="hideTitle" value="${false}" />

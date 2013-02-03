@@ -88,6 +88,11 @@
 	  </table>  
 	</div>
 	
+	<div class="EcNumbers">
+	  <c:set var="ecNumbers" value="${wdkRecord.tables['EcNumber']}"/>
+	  <imp:wdkTable tblName="${ecNumbers.name}" isOpen="true" dataTable="true"/>
+	</div>
+
 	<div class="sequences">
 	  <c:url var="fastaLink" value="processQuestion.do?questionFullName=SequenceQuestions.ByAccession&amp;skip_to_download=1&amp;wdkReportFormat=fasta&amp;value(accession)=${primaryKey}"/>
           <c:url var="strategyLink" value="processQuestion.do?questionFullName=SequenceQuestions.ByAccession&amp;value(accession)=${primaryKey}" />

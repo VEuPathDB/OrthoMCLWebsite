@@ -62,7 +62,7 @@ public class ProteomeDownloadAction extends WdkAction {
 
   }
 
-    protected File getZipFile(ProteomeClusterConfig config, String id) {
+  protected File getZipFile(ProteomeClusterConfig config, String id) {
     return new File(config.getResultsDir() + PropFileReader.FS + RESULT_FILE_PREFIX + id + ".zip");
   }
 }

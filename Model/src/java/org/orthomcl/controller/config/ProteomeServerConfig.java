@@ -15,9 +15,10 @@ public class ProteomeServerConfig extends PropFileReader {
 
   private static final String PURGE_WINDOW = "purgeWindow";
   private static final String NOT_AVAILABLE = "uploadIsOffline";
+  private static final String RESULTS_DIR = "resultsDir";
   
   private static final String[] REQUIRED_PROPS =
-    { PURGE_WINDOW, NOT_AVAILABLE };
+  { PURGE_WINDOW, NOT_AVAILABLE, RESULTS_DIR };
 
   private String _gusHome;
   
@@ -39,4 +40,6 @@ public class ProteomeServerConfig extends PropFileReader {
   // getters for properties
   public boolean isServiceAvailable() { return !getBoolValue(NOT_AVAILABLE); }
   public int     getPurgeWindow()     { return getIntValue(PURGE_WINDOW, DEFAULT_PURGE_WINDOW); }
+  public String  getResultsDir() {     return getStringValue(RESULTS_DIR); }
+
 }

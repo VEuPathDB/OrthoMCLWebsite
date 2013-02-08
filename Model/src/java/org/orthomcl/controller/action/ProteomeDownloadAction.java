@@ -13,7 +13,6 @@ import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.config.PropFileReader;
-import org.orthomcl.controller.config.ProteomeClusterConfig;
 import org.orthomcl.controller.config.ProteomeServerConfig;
 
 /**
@@ -43,10 +42,9 @@ public class ProteomeDownloadAction extends WdkAction {
   @Override
   protected ActionResult handleRequest(ParamGroup params) throws Exception {
     
-    ProteomeClusterConfig clusterConfig = new ProteomeClusterConfig(getGusHome());
     ProteomeServerConfig serverConfig = new ProteomeServerConfig(getGusHome());
     String proteomeId = params.getValue(PROTEOME_ID);
-    File zipFile = getZipFile(clusterConfig, proteomeId);
+    File zipFile = getZipFile(serverConfig, proteomeId);
     LOG.debug("Looking for file: " + zipFile.getAbsolutePath());
     
     return (zipFile.exists() && zipFile.isFile() && zipFile.canRead()) ?
@@ -62,7 +60,7 @@ public class ProteomeDownloadAction extends WdkAction {
 
   }
 
-  protected File getZipFile(ProteomeClusterConfig config, String id) {
+  protected File getZipFile(ProteomeServerConfig config, String id) {
     return new File(config.getResultsDir() + PropFileReader.FS + RESULT_FILE_PREFIX + id + ".zip");
   }
 }

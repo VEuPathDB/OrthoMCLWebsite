@@ -32,8 +32,4 @@ public class ProteomeClusterConfig extends PropFileReader {
     return REQUIRED_PROPS;
   }
   
-  // getters for properties
-  public String  getResultsDir() {
-    return getStringValue(CONTROL_DIR) + FS + "results";
-  }
 }

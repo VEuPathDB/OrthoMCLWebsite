@@ -27,6 +27,11 @@ function initial() {
     // load the saved status
     loadState();
     displayNodes();
+
+    // tooltips for species
+    $(".species").qtip({
+      position: { at: "bottom center" }
+    });
 }
 
 function compareTaxons(a, b) {
@@ -99,8 +104,8 @@ function displayClade(node, content) {
 }
 
 function displaySpecies(node, content) {
-    content.push("<td class=\"species\" onmouseover=\"return escape('<i>");
-    content.push(node.name.replace(/'/g, "\\'"), "</i> (", node.abbrev, ")');\">");
+    content.push("<td class=\"species\" title=\"<i>");
+    content.push(node.name.replace(/'/g, "\\'"), "</i> (", node.abbrev, ")\">");
     content.push("<image id=\"", node.id, "_check\" ");
     content.push(" src=\"wdkCustomization/images/", urls[node.state], "\" ");
     content.push(" style=\"cursor:pointer;\" ");
@@ -209,7 +214,8 @@ function calcText () {
     query = rootStrs.join(" AND ");
 
     document.getElementById("query_top").value = query;
-    document.getElementById("query_bottom").value = query;
+    // text input currently not on bottom of page
+    // document.getElementById("query_bottom").value = query;
 }
 
 function nodeText(nodeId) {

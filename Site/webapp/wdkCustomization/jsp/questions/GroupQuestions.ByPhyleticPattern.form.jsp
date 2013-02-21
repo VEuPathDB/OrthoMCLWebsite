@@ -28,22 +28,18 @@
   </div>
 
   <p>
-    Use this query to find groups that have a particular phyletic pattern, i.e.,
-    that include or exclude taxa or species that you specify.
+    Find Ortholog Groups that have a particular phyletic pattern, i.e., that include or exclude taxa or species that you specify.
   </p>
   <p>
-    Click on +/- to show or hide subtaxa and species.
+  The search is controlled by the Phyletic Pattern Expression (PPE) shown in the text box. Use either the text box or the graphical tree display, or both, to specify your pattern.  The graphical tree display is a friendly way to generate a pattern expression.  You can always edit the expression directly.  For PPE help see the bottom of this page.
   </p>
   <p>
-    Click on the <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/dc.gif"/> icon to
-    specify which taxa or species to include or exclude in the profile.  This
-    fills in the text box with an equivalent <a
-    href="/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">PPE
-    grammar</a> expression.  To refine the query, edit the expression in the
-    text box as needed, following the PPE grammar as described on the <a
-    href="/cgi-bin/OrthoMclWeb.cgi?rm=groupQueryForm&amp;type=ppexpression">
-    Advanced Phyletic Pattern Query</a> page. Hit <b>Execute Phyletic Query</b>
-    to run the query.
+    In the graphical tree display:
+    <ul>
+    <li>Click on -/+ to show or hide subtaxa and species.</li>
+    <li>Click on the <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/dc.gif"/> icon to specify which taxa or species to include or exclude in the profile.</li>
+    <li>Refer to the legend below to understand other icons.</li>
+     </ul>
   </p>
 
   <!-- show error messages, if any -->

@@ -145,7 +145,7 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
             div += " <img class=\"expand-handle\" src=\"/images/expand" + exp + ".gif\" title=\"Display all species of " + root.name + "\" />";
             div += " <img class=\"collapse-handle\" src=\"/images/collapse" + col + ".gif\"  title=\"Display only summary of " + root.name + "\" />";
             div += " <img class=\"hide-handle\" src=\"/images/hide" + hid + ".gif\"  title=\"Hide all species of " + root.name + "\" />";
-            div += "&nbsp;<div class=\"description\">" +  root.getPath() + "<br /><i>" + root.name;
+            div += "&nbsp;<div class=\"description tooltip\">" +  root.getPath() + "<br /><i>" + root.name;
             if (root.common_name) div += " (" + root.common_name + ")";
             div += "</i></div>";
             div += "</td>"
@@ -195,7 +195,18 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         });
 
         // register mouse over events
-        wdk.tooltips.assignStickyTooltipByElement(stub.find(".taxon"));
+        stub.find(".taxon").qtip({ 
+          content: {
+            text: function(api) {
+              return $(this).find('.tooltip').clone();
+            }
+          },
+          position: {
+            at: "bottom right",
+            my: "top right",
+            adjust: { y: 4 }
+          }
+        });
 
         stub.find(".taxon").hover(function() {
             if ($(this).attr("color-backup")) return;

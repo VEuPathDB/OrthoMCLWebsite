@@ -7,6 +7,7 @@
   <jsp:useBean id="constants" class="org.eupathdb.common.model.JspConstants"/>
   
   <c:set var="base" value="${pageContext.request.contextPath}"/>
+  <c:set var="project" value="${applicationScope.wdkModel.displayName}"/>
 
   <li><a href="${base}/about.do#release">Current Release</a></li>
   <li><a href="${base}/about.do#methods">Methods</a></li>

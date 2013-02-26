@@ -27,20 +27,29 @@
     </c:forEach>
   </div>
 
-  <p>
-    Find Ortholog Groups that have a particular phyletic pattern, i.e., that include or exclude taxa or species that you specify.
-  </p>
-  <p>
-  The search is controlled by the Phyletic Pattern Expression (PPE) shown in the text box. Use either the text box or the graphical tree display, or both, to specify your pattern.  The graphical tree display is a friendly way to generate a pattern expression.  You can always edit the expression directly.  For PPE help see the bottom of this page.
-  </p>
-  <p>
-    In the graphical tree display:
-    <ul>
-    <li>Click on -/+ to show or hide subtaxa and species.</li>
-    <li>Click on the <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/dc.gif"/> icon to specify which taxa or species to include or exclude in the profile.</li>
-    <li>Refer to the legend below to understand other icons.</li>
-     </ul>
-  </p>
+  <div class="content-pane notcollapsible">
+    <p>
+      Find Ortholog Groups that have a particular phyletic pattern, i.e., that include or exclude taxa or species that you specify.
+    </p>
+
+    <br/>
+
+    <p>
+    The search is controlled by the Phyletic Pattern Expression (PPE) shown in the text box. Use either the text box or the graphical tree display, or both, to specify your pattern.  The graphical tree display is a friendly way to generate a pattern expression.  You can always edit the expression directly.  For PPE help see the bottom of this page.
+    </p>
+
+    <br/>
+    <br/>
+
+    <p>
+      In the graphical tree display:
+      <ul class="cirbulletlist" style="padding-top:0.4em; padding-left:0.6em">
+      <li>Click on -/+ to show or hide subtaxa and species.</li>
+      <li>Click on the <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/dc.gif"/> icon to specify which taxa or species to include or exclude in the profile.</li>
+      <li>Refer to the legend below to understand other icons.</li>
+       </ul>
+    </p>
+  </div>
 
   <!-- show error messages, if any -->
   <div class="usererror">

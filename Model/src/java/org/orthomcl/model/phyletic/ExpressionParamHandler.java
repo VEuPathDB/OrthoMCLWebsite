@@ -85,7 +85,7 @@ public class ExpressionParamHandler implements ParamHandler {
             throw new WdkModelException(ex);
         }
         finally {
-            SqlUtils.closeResultSet(resultSet);
+            SqlUtils.closeResultSetAndStatement(resultSet);
         }
         return terms;
     }

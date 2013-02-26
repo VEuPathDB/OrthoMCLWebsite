@@ -31,7 +31,8 @@
       <link rel="icon" type="image/png" href="/assets/images/${project}/favicon.ico"/>
       <link rel="shortcut icon" href="/assets/images/${project}/favicon.ico"/>
       
-      <imp:includes refer="${refer}"/>
+      <imp:stylesheets refer="${refer}"/>
+      <imp:javascripts refer="${refer}"/>
     </head>
   
     <body>

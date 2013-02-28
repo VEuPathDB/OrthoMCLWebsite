@@ -53,15 +53,15 @@
 	      <li><a href="<c:url value="/showQuestion.do?questionFullName=SequenceQuestions.ByBlast"/>"><span>BLAST</span></a></li>
   	     <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign your proteins to groups</span></a></li>
          <!--   <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li> -->
-				 <li><a href="${constants.orthoGoogleUrl}">Publications that Use OrthoMCL</a></li>
-	       <li><a href="<c:url value="/serviceList.jsp"/>"><span>Searches via Web Services</span></a></li>
+				 <li><a href="${constants.orthoGoogleUrl}">Publications that mention OrthoMCL</a></li>
+	       <li><a href="<c:url value="/serviceList.jsp"/>"><span>Web Services</span></a></li>
     	</ul>
     </li>
 
     <li><a><span>Data Summary</span></a>
   	  <ul>
-   	    <li><a href="<c:url value='/getDataSummary.do?summary=data'/>"><span>Data Sources</span></a></li>
- 	      <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Summary Statistics</span></a></li>
+ 	      <li><a href="<c:url value='/getDataSummary.do?summary=release'/>"><span>Genome Statistics</span></a></li>
+   	    <li><a href="<c:url value='/getDataSummary.do?summary=data'/>"><span>Genome Sources</span></a></li>
 	    </ul>
     </li>
 

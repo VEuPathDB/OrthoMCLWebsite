@@ -56,7 +56,7 @@
 	  </h3>
 	  <div>
 	    <ul>
-	      <li><a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genomes: <b><fmt:formatNumber value="${organism_count}"/></b></a></li>
+	      <li><a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Genomes: <b><fmt:formatNumber value="${organism_count}"/></b></a></li>
 	      <li>Protein Sequences: <b><fmt:formatNumber value="${protein_count}"/></b></li>
 	      <li>Ortholog Groups: <b><fmt:formatNumber value="${group_count}"/></b></li>
 	    </ul>

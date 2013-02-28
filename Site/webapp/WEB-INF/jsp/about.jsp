@@ -34,15 +34,14 @@
         <div class="section-content">
           <p>
             The genome data for this release was acquired from these
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">data sources</a>.
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genome Sources</a>.
             The number of sequences and groups in each genome is shown in the
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">release summary</a>.
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Genome Statistics</a>.
           </p>
           <p>
             <strong>Downloads:</strong>
             Go to the <a href="/common/downloads">download site</a> to get the protein sequences
-            used in this release, and the ortholog groups.  To get the (huge) file of all-vs-all
-            blast contact us at help@orthomcl.org.
+            used in this release and the ortholog groups.
           </p>
         </div>
         <div class="section-title">
@@ -183,6 +182,12 @@
               PLoS ONE 2007 2(4): e383.
                 <a href="http://www.plosone.org/article/info:doi%2F10.1371%2Fjournal.pone.0000383">[Full Text]</a><br/>
                 * Recommended in <a href="http://www.f1000biology.com/article/id/1092076">Faculty1000</a>
+            </li>
+            <li>
+            Fischer, S., Brunk, B. P., Chen, F., Gao, X., Harb, O. S., Iodice, J. B., Shanmugam, D., Roos, D. S. and Stoeckert, C. J.<br/>
+            Using OrthoMCL to Assign Proteins to OrthoMCL-DB Groups or to Cluster Proteomes Into New Ortholog Groups<br/>
+            Current Protocols in Bioinformatics. 2011 35:6.12.1–6.12.19.
+              <a href="http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi0612s35/full">[Full Text]</a>
             </li>
           </ol>
         </div>

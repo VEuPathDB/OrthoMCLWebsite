@@ -15,7 +15,7 @@
   <li><a href="${base}/about.do#faq">Frequently Asked Questions</a></li>
   <li><a href="${base}/about.do#software">Software</a></li>
   <li><a href="${base}/about.do#pubs">Publications</a></li>
-  <li><a href="${constants.publicationUrl}">Publications that Cite Us</a></li>
+  <li><a href="${constants.publicationUrl}">Publications mentioning OrthoMCL</a></li>
   <li><a href="${base}/about.do#acknowledge">Acknowledgements</a></li>
   <li><a href="http://eupathdb.org/tutorials/eupathdbFlyer.pdf">EuPathDB Brochure</a></li>
   <li><a href="/proxystats/awstats.pl?config=${fn:toLowerCase(project)}.org">Website Usage Statistics</a></li>

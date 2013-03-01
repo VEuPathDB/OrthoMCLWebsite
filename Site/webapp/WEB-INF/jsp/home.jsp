@@ -12,10 +12,10 @@
 	      <imp:searchCategories />
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
-					<img src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
+					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
 	        <ul id="info">
-	          <li><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
-	          <li><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
+	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
+	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
 	        </ul>
           <div id="infobottom"><jsp:text/></div>
 	      </li>

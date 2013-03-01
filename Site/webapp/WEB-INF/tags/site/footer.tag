@@ -41,7 +41,7 @@
       <a href="http://toxodb.org"><img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/toxodb_w50.png" width="30"/></a>&#160;&#160;
       <a href="http://trichdb.org"><img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/trichdb_w65.png" height="30"/></a>&#160;&#160;
       <a href="http://tritrypdb.org"><img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/tritrypdb_w40.png" width="25"/></a>&#160;&#160;&#160;
-      <a href="http://orthomcl.org"><img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/ortho-icon-30x30.png" width="27"/></a>
+      <a href="http://orthomcl.org"><img border="0" src="/assets/images/OrthoMCL/Ortho-3D-lighter-50.png" width="35"/></a>
     </div>
   </div>
 

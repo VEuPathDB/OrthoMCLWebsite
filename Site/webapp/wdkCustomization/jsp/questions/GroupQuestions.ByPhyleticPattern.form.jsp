@@ -39,7 +39,6 @@
     </p>
 
     <br/>
-    <br/>
 
     <p>
       In the graphical tree display:

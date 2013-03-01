@@ -35,12 +35,16 @@
     </c:forEach>
   </div>
 
-  <div id="taxon-display"></div>
+  <div id="legend-wrapper">
+    <h4 id="legend-label">Legend:</h4>
+    <div id="legend">
+      <div class="count"><span count="0">&#160;0&#160;</span> no ortholog </div>
+      <div class="count"><span count="1">&#160;1&#160;</span> one ortholog </div>
+      <div class="count"><span count="2">&#160;n&#160;</span> more than one ortholog </div>
+    </div>
 
-  <div id="legend">
-    <div class="count"><span count="0">&#160;0&#160;</span> no ortholog; </div>
-    <div class="count"><span count="1">&#160;1&#160;</span> one ortholog; </div>
-    <div class="count"><span count="2">&#160;n&#160;</span> more than one ortholog; </div>
+    <div id="taxon-display"></div>
+    <div style="clear:both"><jsp:text/></div>
   </div>
 
   <div id="control">

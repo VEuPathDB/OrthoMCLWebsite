@@ -2,6 +2,17 @@
     text-align: center;
 }
 
+#legend-wrapper {
+    background-color: whitesmoke;
+    padding-top: 0.4em;
+}
+
+#legend-label {
+  float: left;
+  padding: 2px 4px;
+  font-size: smaller;
+}
+
 #legend {
     float: left;
     width: 200px;
@@ -22,10 +33,17 @@
     display: none;
 }
 
-#taxon-display { float: right; margin: 5px; }
+#taxon-display {
+  float: left;
+  margin: 5px; 
+}
 
 #taxon-display .taxon {
     font-size: 8pt;
+}
+
+#taxon-display tr > th, #taxon-display tr > td {
+  border: none;
 }
 
 #taxon-display .taxon .name {
@@ -33,6 +51,8 @@
     width: 32px;
     float: right;
     text-align: center;
+    padding: 1px;
+    line-height: 11px;
 }
 
 #taxon-display .taxon .description {
@@ -41,7 +61,8 @@
 
 #taxon-display .taxon .expand-handle, #taxon-display .taxon .collapse-handle, #taxon-display .taxon .hide-handle {
     cursor: pointer;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 #result {
@@ -135,6 +156,19 @@
     text-align: center;
 }
 
-#sequences {
+#sequences, #control {
     clear: both;
 }
+
+.expand-handle.off,
+.collapse-handle.off,
+.hide-handle.off {
+  position: relative;
+  top: -1px;
+}
+
+#phyletic-pattern {
+  margin-bottom: 1em;
+}
+
+.ui-button-text-only .ui-button-text { padding: 0; }

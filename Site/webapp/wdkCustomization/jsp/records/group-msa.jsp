@@ -12,8 +12,12 @@
   <div id="msa">
     <c:choose>
       <c:when test="${empty msa.value}">
+      <!--
         Multiple Sequence Alignment not available for this ortholog group, <br />
         since it contains more than 100 genes.
+      -->
+      <div style="color:darkred;">We're sorry, multiple sequence alignments are only available
+        for groups with 100 or fewer sequences.</div>
       </c:when>
       <c:otherwise>
         <pre>

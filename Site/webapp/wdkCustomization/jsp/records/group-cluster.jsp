@@ -16,6 +16,9 @@
     ortholog group ${groupName}. The interactive graph requires SVG support of
     your browser.
   </p>
+
+  <br/>
+
   <ul>
     <li>
       Each dot represent a protein, and different proteins from the same 
@@ -56,6 +59,9 @@
     The following graph represents the clustering result of the proteins in 
     ortholog group ${groupName}.
   </p>
+
+  <br/>
+
   <ul>
     <li>
       Each dot represent a protein, and different proteins from the same 

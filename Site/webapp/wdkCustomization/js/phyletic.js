@@ -129,22 +129,23 @@ PhyleticViewManager.configureControls = function(manager, workspace) {
 PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         var stub = workspace.find("#taxon-display");
         var div = "<table><tr>";
-        var even = false;
+        var cols = 4;
+        var count = 0;
         for(var abbrev in manager.rootMap) {
-            even = !even;
-            if (even) div += "</tr><tr>";
+            if (count++ % cols == 0) div += "</tr><tr>";
 
             var cookie = $.cookie(COOKIE_TAXON_PREFIX + abbrev);
             var exp = "", col = "", hid ="";
-            if (cookie == "c") { col = "_h"; }
-            else if (cookie == "h") { hid = "_h"; }
-            else { exp = "_h"; }
+            var exp_class = "off",  col_class = "off", hid_class = "off";
+            if (cookie == "c") { col = "_h"; exp_class = ""; }
+            else if (cookie == "h") { hid = "_h"; col_class = ""; }
+            else { exp = "_h"; exp_class = ""; }
             var root = this.rootMap[abbrev];
             div += "<td class=\"taxon\" abbrev=\"" + abbrev + "\">";
             div += " <div class=\"name\">" + abbrev + "</div>&nbsp;&nbsp;&nbsp;";
-            div += " <img class=\"expand-handle\" src=\"/images/expand" + exp + ".gif\" title=\"Display all species of " + root.name + "\" />";
-            div += " <img class=\"collapse-handle\" src=\"/images/collapse" + col + ".gif\"  title=\"Display only summary of " + root.name + "\" />";
-            div += " <img class=\"hide-handle\" src=\"/images/hide" + hid + ".gif\"  title=\"Hide all species of " + root.name + "\" />";
+            div += " <img class=\"expand-handle " + exp_class + "\" src=\"/images/expand" + exp + ".gif\" title=\"Display all species of " + root.name + "\" />";
+            div += " <img class=\"collapse-handle " + col_class + "\" src=\"/images/collapse" + col + ".gif\"  title=\"Display only summary of " + root.name + "\" />";
+            div += " <img class=\"hide-handle " + hid_class + "\" src=\"/images/hide" + hid + ".gif\"  title=\"Hide all species of " + root.name + "\" />";
             div += "&nbsp;<div class=\"description tooltip\">" +  root.getPath() + "<br /><i>" + root.name;
             if (root.common_name) div += " (" + root.common_name + ")";
             div += "</i></div>";
@@ -158,9 +159,9 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         var cookie_options = { path: '/', expires: 30 };
         stub.find(".taxon .expand-handle").click(function() {
             var handle = $(this);
-            handle.attr("src", "/images/expand_h.gif")
-            handle.siblings(".collapse-handle").attr("src", "/images/collapse.gif");
-            handle.siblings(".hide-handle").attr("src", "/images/hide.gif");
+            handle.attr("src", "/images/expand_h.gif").removeClass("off");
+            handle.siblings(".collapse-handle").attr("src", "/images/collapse.gif").addClass("off");
+            handle.siblings(".hide-handle").attr("src", "/images/hide.gif").addClass("off");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
             var branch = workspace.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
@@ -171,9 +172,9 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         });
         stub.find(".taxon .collapse-handle").click(function() {
             var handle = $(this);
-            handle.attr("src", "/images/collapse_h.gif")
-            handle.siblings(".expand-handle").attr("src", "/images/expand.gif");
-            handle.siblings(".hide-handle").attr("src", "/images/hide.gif");
+            handle.attr("src", "/images/collapse_h.gif").removeClass("off");
+            handle.siblings(".expand-handle").attr("src", "/images/expand.gif").addClass("off");
+            handle.siblings(".hide-handle").attr("src", "/images/hide.gif").addClass("off");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
             var branch = workspace.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");
@@ -184,9 +185,9 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
         });
         stub.find(".taxon .hide-handle").click(function() {
             var handle = $(this);
-            handle.attr("src", "/images/hide_h.gif")
-            handle.siblings(".expand-handle").attr("src", "/images/expand.gif");
-            handle.siblings(".collapse-handle").attr("src", "/images/collapse.gif");
+            handle.attr("src", "/images/hide_h.gif").removeClass("off");
+            handle.siblings(".expand-handle").attr("src", "/images/expand.gif").addClass("off");
+            handle.siblings(".collapse-handle").attr("src", "/images/collapse.gif").addClass("off");
 
             var abbrev = handle.parent(".taxon").attr("abbrev");
             var branch = workspace.find("#groups .group .phyletic-pattern .branch[abbrev=\"" + abbrev + "\"]");

@@ -124,10 +124,10 @@ function GroupManager() {
         var manager = this;
         var stub = view.find("#taxon-display");
         var div = "<table><tr>";
-        var even = false;
+        var cols = 3;
+        var count = 1;
         for(var abbrev in manager.rootMap) {
-            even = !even;
-            if (even) div += "</tr><tr>";
+            if (count++ % 3 == 0) div += "</tr><tr>";
 
             var cookie = $.cookie(COOKIE_TAXON_PREFIX + abbrev);
             var exp = "", col = "", hid ="";

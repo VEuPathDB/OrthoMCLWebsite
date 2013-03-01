@@ -18,55 +18,63 @@
 
   <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
 
-  <h3>List of Domains (present in this group)</h3>
-  <table id="domains" count="${domainCount}" seed="${groupName}">
-	  <tr>
-	    <th>Accession</th>
-	    <th>Name</th>
-	    <th>Description</th>
-	  </tr>
-	  <c:set var="odd" value="${true}" />
-	  <c:forEach items="${domains}" var="domain">
-	    <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-	    <c:set var="odd" value="${!odd}" />
-	    <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
-	      <td>${domain["primary_identifier"]}</td>
-	      <td>${domain["secondary_identifier"]}</td>
-	      <td>${domain["remark"]}</td>
-	    </tr>
-	  </c:forEach>
-	</table>
-
-	<h3>List of Protein Domain Architectures</h3>
-	<table id="proteins" class="wdk-data-table" maxLength="${maxLength}" width="100%">
-    <thead>
-      <tr>
-        <th>Accession</th>
-        <th>Protein Length</th>
-        <th>Pfam Domain</th>
-        <th>Domain Start</th>
-        <th>Domain End</th>
-      </tr>
-    </thead>
-	
-    <tbody>
-      <c:set var="odd" value="${true}" />
-      <c:set var="previous_id" value="${''}" />
-      <c:forEach items="${proteins}" var="row">
-        <c:set var="source_id" value="${row['source_id'].value}" />
-        <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-        <c:set var="odd" value="${!odd}" />
-        <tr class="protein ${rowClass}">
-          <td class="source-id">
-            <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${source_id}">${source_id}</a>
-          </td>
-          <td class="length">${row['length']}</td>
-          <td>${row['primary_identifier'].value}</td>
-          <td>${row['start_min']}</td>
-          <td>${row['end_max']}</td>
+  <!-- <h3>List of Domains (present in this group)</h3> -->
+  <imp:toggle name="pfam-domains-list" displayName="List of Domains (present in this group)" isOpen="true">
+    <jsp:attribute name="content">
+      <table id="domains" count="${domainCount}" seed="${groupName}">
+        <tr>
+          <th>Accession</th>
+          <th>Name</th>
+          <th>Description</th>
         </tr>
-      </c:forEach>
-    </tbody>
-	</table>
+        <c:set var="odd" value="${true}" />
+        <c:forEach items="${domains}" var="domain">
+          <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+          <c:set var="odd" value="${!odd}" />
+          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
+            <td>${domain["primary_identifier"]}</td>
+            <td>${domain["secondary_identifier"]}</td>
+            <td>${domain["remark"]}</td>
+          </tr>
+        </c:forEach>
+      </table>
+    </jsp:attribute>
+  </imp:toggle>
+
+  <!-- <h3>List of Protein Domain Architectures</h3> -->
+  <imp:toggle name="protein-domain-architectures" displayName="List of Protein Domain Architectures" isOpen="true">
+    <jsp:attribute name="content">
+      <table id="proteins" class="wdk-data-table" maxLength="${maxLength}" width="100%">
+        <thead>
+          <tr>
+            <th>Accession</th>
+            <th>Protein Length</th>
+            <th>Pfam Domain</th>
+            <th>Domain Start</th>
+            <th>Domain End</th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <c:set var="odd" value="${true}" />
+          <c:set var="previous_id" value="${''}" />
+          <c:forEach items="${proteins}" var="row">
+            <c:set var="source_id" value="${row['source_id'].value}" />
+            <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+            <c:set var="odd" value="${!odd}" />
+            <tr class="protein ${rowClass}">
+              <td class="source-id">
+                <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${source_id}">${source_id}</a>
+              </td>
+              <td class="length">${row['length']}</td>
+              <td>${row['primary_identifier'].value}</td>
+              <td>${row['start_min']}</td>
+              <td>${row['end_max']}</td>
+            </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+    </jsp:attribute>
+  </imp:toggle>
 
 </jsp:root>

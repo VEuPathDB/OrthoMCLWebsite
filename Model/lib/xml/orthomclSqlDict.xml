@@ -364,7 +364,7 @@ WHERE seqref.db_ref_id = ref.db_ref_id
 <![CDATA[ 
 SELECT ogs.aa_sequence_id 
 FROM apidb.OrthologGroupAaSequence ogs, apidb.OrthologGroup og
-WHERE lower(og.name) = lower(?)
+WHERE og.name = upper(?)
 UNION
 SELECT seqref.aa_sequence_id
 FROM Dots.AaSequenceDbRef seqref, Sres.DbRef ref,
@@ -385,7 +385,7 @@ WHERE seqref.db_ref_id = ref.db_ref_id
 SELECT DISTINCT aa_sequence_id 
 FROM dots.ExternalAaSequence s, apidb.OrthomclTaxon t
 WHERE lower(s.source_id) = lower(?)
-AND lower(t.three_letter_abbrev) = lower(?)
+AND t.three_letter_abbrev = lower(?)
 AND t.taxon_id = s.taxon_id
 UNION
 SELECT seqref.aa_sequence_id
@@ -741,7 +741,7 @@ WHERE eas.taxon_id = ot.taxon_id
 AND og.ortholog_group_id(+) = ogs.ortholog_group_id
 AND ot.orthomcl_taxon_id = orr.orthomcl_taxon_id
 AND eas.aa_sequence_id = ogs.aa_sequence_id(+)
-AND lower(ot.three_letter_abbrev) = lower(?)
+AND ot.three_letter_abbrev = lower(?)
 AND lower(eas.source_id) = lower(?)
 ]]>
        </sql>
@@ -766,7 +766,7 @@ AND df.aa_feature_id = al.aa_feature_id
 AND df.aa_feature_id = dbaf.aa_feature_id
 AND dbaf.db_ref_id = db.db_ref_id
 AND eas.taxon_id = ot.taxon_id
-AND lower(ot.three_letter_abbrev) = lower(?)
+AND ot.three_letter_abbrev = lower(?)
 AND lower(eas.source_id) = lower(?)
 ORDER BY al.start_min ASC, al.end_max DESC
 ]]>
@@ -934,7 +934,7 @@ FROM apidb.OrthologGroupAaSequence ogs,
      apidb.OrthomclTaxon t,
      dots.externalaasequence s
 WHERE lower(s.source_id) = lower(?)
-  AND lower(t.three_letter_abbrev) = lower(?)
+  AND t.three_letter_abbrev = lower(?)
   AND s.taxon_id = t.taxon_id
   AND ogs.aa_sequence_id = s.aa_sequence_id
   AND g.ortholog_group_id  = ogs.ortholog_group_id

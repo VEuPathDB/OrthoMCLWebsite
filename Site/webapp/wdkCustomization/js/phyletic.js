@@ -205,6 +205,7 @@ PhyleticViewManager.createTaxonDisplay = function(manager, workspace) {
           position: {
             at: "bottom right",
             my: "top right",
+            viewport: $(window),
             adjust: { y: 4 }
           }
         });
@@ -291,11 +292,14 @@ PhyleticViewManager.createGroupDisplay = function(manager, workspace) {
 
         // register mouse over events
         workspace.find("#groups .group .phyletic-pattern .taxon").qtip({ 
-            content: {
-		text: function(api) {
-			return $(this).find('.tooltip').clone();
-		}
-	    }
+          content: {
+            text: function(api) {
+              return $(this).find('.tooltip').clone();
+            }
+          },
+          position: {
+            viewport: $(window),
+          }
         });
     }
 

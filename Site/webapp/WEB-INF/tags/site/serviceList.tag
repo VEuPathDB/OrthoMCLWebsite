@@ -139,17 +139,17 @@
     <ul>
       <li>(1) What is the name and purpose of the search.
         <span style="position:relative;left:${margin};">
-          <br/>Under <span style="font-style:italic;font-weight:bold">&lt;method name=....&gt;</span>
+          <br/>Under <span style="font-style:italic;font-weight:bold">&amp;lt;method name=....&amp;gt;</span>
           <br/>In our example: <span style="font-style:italic;font-weight:bold">
-            &lt;doc title="description"&gt;Find genes whose .....
-            Molecular weights are ......&lt;/doc&gt;</span>
+            &amp;lt;doc title="description"&amp;gt;Find genes whose .....
+            Molecular weights are ......&amp;lt;/doc&amp;gt;</span>
         </span>
         <br/>
       </li>
 
       <li>(2) What is the service URL. 
         <span style="position:relative;left:${margin};">
-          <br/>Under <span style="font-style:italic;font-weight:bold">&lt;resource path=....&gt;</span>. 
+          <br/>Under <span style="font-style:italic;font-weight:bold">&amp;lt;resource path=....&amp;gt;</span>. 
           <br/>It includes an extension that indicates the format requested for the result (XML or JSON).
           <br/>In our example: <span style="font-style:italic;color: blue">
             http://${wdkModelDispName}.org/webservices/GeneQuestions/GenesByMolecularWeight.xml</span>
@@ -159,8 +159,8 @@
 
       <li>(3) How to constrain your search.
         <span style="position:relative;left:${margin};">
-          <br/>Under <span style="font-style:italic;font-weight:bold"> &lt;param name=.....&gt;</span>. 
-          <br/>If a default value is provided under &lt;doc title="default"&gt;.....&lt;/doc&gt;,
+          <br/>Under <span style="font-style:italic;font-weight:bold"> &amp;lt;param name=.....&amp;gt;</span>. 
+          <br/>If a default value is provided under &amp;lt;doc title="default"&amp;gt;.....&amp;lt;/doc&amp;gt;,
           then providing the parameter is optional.
           <br/>In our example: <span style="font-style:italic;color: blue">
             min_molecular_weight=10000, max_molecular_weight=50000</span>.
@@ -170,7 +170,7 @@
 
       <li>(4) What to return for each ID in the result.
         <span style="position:relative;left:${margin};">
-          <br/>Under <span style="font-style:italic;font-weight:bold"> &lt;param name=.....&gt;</span> too.
+          <br/>Under <span style="font-style:italic;font-weight:bold"> &amp;lt;param name=.....&amp;gt;</span> too.
           <br/>These are the same for all searches of a given record type
           (e.g., for all gene searches). Output-fields are single-valued
           attributes while output-tables are multi-valued (array).

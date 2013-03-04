@@ -68,6 +68,32 @@ table#quick-search a {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      =WEBSERVICES page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#webservices-list {
+  height: auto;
+  min-height: 295px;
+  text-align: left;
+}
+
+#webservices-list h3 {
+  margin-top: 16px;
+  margin-bottom: 5px;
+}
+
+#webservices-list li {
+  line-height: 1.5em;
+  list-style-type: none;
+}
+
+#webservices-list li ul li {
+  line-height: 1.1em;
+  list-style-type: none;
+  margin-left: 22px;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       =Summary page 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #release-overview ul {

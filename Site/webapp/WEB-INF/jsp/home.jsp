@@ -9,7 +9,7 @@
   <imp:pageFrame title="OrthoMCL" refer="home">
 	  <div id="contentcolumn">
 	    <ul>
-	      <imp:searchCategories />
+	      <imp:searchCategories from="home"/>
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
 					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />

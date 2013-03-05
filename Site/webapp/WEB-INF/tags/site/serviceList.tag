@@ -19,41 +19,6 @@
 
     <c:set var="margin" value="15px"/>
 
-    <!-- this should be read from the model -->
-    <c:if test="${wdkModelDispName eq 'FungiDB'}">
-          <c:set var="organism" value="Aspergillus clavatus"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'AmoebaDB'}">
-          <c:set var="organism" value="Entamoeba dispar"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'CryptoDB'}">
-          <c:set var="organism" value="Cryptosporidium parvum,Cryptosporidium hominis"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'EuPathDB'}">
-          <c:set var="organism" value="Cryptosporidium parvum,Leishmania major,Toxoplasma gondii"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'MicrosporidiaDB'}">
-            <c:set var="organism" value="Encephalitozoon cuniculi"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'PiroplasmaDB'}">
-            <c:set var="organism" value="Babesia bovis,Theileria annulata,Theileria parva"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'PlasmoDB'}">
-            <c:set var="organism" value="Plasmodium falciparum,Plasmodium knowlesi"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'ToxoDB'}">
-            <c:set var="organism" value="Toxoplasma gondii,Neospora caninum"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'GiardiaDB'}">
-            <c:set var="organism" value="Giardia Assemblage A,Giardia Assemblage B"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'TrichDB'}">
-            <c:set var="organism" value="Trichomonas vaginalis"/>
-    </c:if>
-    <c:if test="${wdkModelDispName eq 'TriTrypDB'}">
-            <c:set var="organism" value="Leishmania braziliensis,Trypanosoma brucei"/>
-    </c:if>
-
     <!-- display wdkModel introduction text -->
     <h1>Searches via Web Services</h1>
     <br/>
@@ -71,12 +36,11 @@
 
     For example, this URL: <br/>
     <span style="position:relative;left:${margin};font-size:150%">
-      <a href="${baseUrl}/webservices/GeneQuestions/GenesByMolecularWeight.xml?min_molecular_weight=10000&amp;max_molecular_weight=50000&amp;organism=${organism}&amp;o-fields=gene_type,organism">
-        http://${wdkModelDispName}.org/webservices/GeneQuestions/GenesByMolecularWeight.xml?
-        <br/>min_molecular_weight=10000&amp;
-        <br/>max_molecular_weight=50000&amp;
-        <br/>organism=${organism}&amp;
-        <br/>o-fields=gene_type,organism</a>
+      <a href="${baseUrl}/webservices/GroupQuestions/BySequenceCount.xml?sequence_count_min=100&amp;sequence_count_max=102&amp;o-fields=group_name,ec_numbers">
+        http://${wdkModelDispName}.org/webservices/GroupQuestions/BySequenceCount.xml?
+        <br/>sequence_count_min=100&amp;
+        <br/>sequence_count_max=102&amp;
+        <br/>o-fields=group_name,ec_numbers</a>
     </span>
 
     <br/>
@@ -84,8 +48,8 @@
     Corresponds to this request: 
     <br/>
     <span style="font-style:italic;font-weight:bold;position:relative;left:${margin};">
-      Find all (${organism}) genes that have molecular weight between 10,000 and 50,000. 
-      <br/>For each gene ID in the result, return its gene type and organism.
+      Find all groups that have a sequence count between 100 and 102. 
+      <br/>For each group ID in the result, return its group name and EC numbers.
       <br/>Provide the result in an XML document.
     </span>
 
@@ -141,8 +105,8 @@
         <span style="position:relative;left:${margin};">
           <br/>Under <span style="font-style:italic;font-weight:bold">&amp;lt;method name=....&amp;gt;</span>
           <br/>In our example: <span style="font-style:italic;font-weight:bold">
-            &amp;lt;doc title="description"&amp;gt;Find genes whose .....
-            Molecular weights are ......&amp;lt;/doc&amp;gt;</span>
+            &amp;lt;doc title="description"&amp;gt;Find groups whose .....
+            Sequence counts are ......&amp;lt;/doc&amp;gt;</span>
         </span>
         <br/>
       </li>
@@ -152,7 +116,7 @@
           <br/>Under <span style="font-style:italic;font-weight:bold">&amp;lt;resource path=....&amp;gt;</span>. 
           <br/>It includes an extension that indicates the format requested for the result (XML or JSON).
           <br/>In our example: <span style="font-style:italic;color: blue">
-            http://${wdkModelDispName}.org/webservices/GeneQuestions/GenesByMolecularWeight.xml</span>
+            http://${wdkModelDispName}.org/webservices/GroupQuestions/BySequenceCount.xml</span>
         </span>
         <br/>
       </li>
@@ -163,7 +127,7 @@
           <br/>If a default value is provided under &amp;lt;doc title="default"&amp;gt;.....&amp;lt;/doc&amp;gt;,
           then providing the parameter is optional.
           <br/>In our example: <span style="font-style:italic;color: blue">
-            min_molecular_weight=10000, max_molecular_weight=50000</span>.
+            sequence_count_min=100, sequence_count_max=102</span>.
         </span>
         <br/>
       </li>
@@ -172,10 +136,10 @@
         <span style="position:relative;left:${margin};">
           <br/>Under <span style="font-style:italic;font-weight:bold"> &amp;lt;param name=.....&amp;gt;</span> too.
           <br/>These are the same for all searches of a given record type
-          (e.g., for all gene searches). Output-fields are single-valued
+          (e.g., for all group searches). Output-fields are single-valued
           attributes while output-tables are multi-valued (array).
           <br/>In our example: <span style="font-style:italic;color: blue">
-            o-fields=gene_type,organism_full&amp;o-tables=EcNumber</span>
+            o-fields=group_name,ec_numbers&amp;o-tables=EcNumber</span>
         </span>
       </li>
     </ul>

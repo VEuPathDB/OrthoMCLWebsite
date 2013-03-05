@@ -37,18 +37,29 @@
   </form-beans>
   
   <global-exceptions>
+    <exception key="global.error.user" path="/showErrorPage.do?type=user" scope="request"
+               type="org.gusdb.wdk.model.WdkUserException"/>
+    <exception key="global.error.model" path="/showErrorPage.do?type=model" scope="request"
+               type="org.gusdb.wdk.model.WdkModelException"/>
+    <exception key="global.error.runtime" path="/showErrorPage.do?type=runtime" scope="request"
+               type="java.lang.RuntimeException"/>
+    <exception key="global.error.other" path="/showErrorPage.do?type=other" scope="request"
+               type="java.lang.Exception"/>
+    <!--
     <exception type="java.lang.Exception"
                path="/WEB-INF/jsp/error.jsp"
                key="error.global.message"/>
     <exception type="java.lang.RuntimeException"
                path="/WEB-INF/jsp/error.jsp"
                key="error.global.message"/>
+    -->
   </global-exceptions>
 
   <global-forwards type="org.apache.struts.action.ActionForward">
     <forward name="home" path="/WEB-INF/jsp/home.jsp"/>
     <forward name="needs_login" path="/showLogin.do"/>
-    <forward name="application_error" path="/WEB-INF/jsp/error.jsp"/>
+    <!--<forward name="application_error" path="/WEB-INF/jsp/error.jsp"/>-->
+    <forward name="application_error" path="/wdkCustomization/jsp/Error.jsp"/>
   </global-forwards>
 
   <action-mappings>

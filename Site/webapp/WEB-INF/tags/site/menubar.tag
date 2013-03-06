@@ -69,12 +69,15 @@
     
     <li><a><span>Community</span></a>
 	    <ul>
+        <!--
 		    <li><a href="http://twitter.com/eupathdb">
           <span><span class="twitter_small"><jsp:text/></span> &nbsp;Follow us on twitter!</span></a>
         </li>
         <li><a href="https://www.facebook.com/pages/EuPathDB/133123003429972">
           <span><span class="facebook_small"><jsp:text/></span> &nbsp;Follow us on facebook!</span></a>
 		    </li>
+        -->
+        <imp:socialMedia small="true" label="true"/>
 <!--
   	    <c:choose>
     	    <c:when test="${extlAnswer_exception != null}">

@@ -114,18 +114,19 @@
       <a  class="heading" id='community' href="#">Community Resources</a>
     </h3>
 	  <div>
+        <!--
 	    <a style="line-height:24px" href="javascript:gotoTwitter()">
-            <!--<img style="margin-left:17px;float:left;vertical-align:middle" title="Follow us on Twitter!" src="/assets/images/twitter.gif" width="25"/>-->
             <span class="twitter"><jsp:text/></span>
 		    <span>Follow us on Twitter!</span>
 	    </a>
 	    <br/>
 	    <a href="javascript:gotoFacebook()">
-            <!-- <img style="margin-left:19px;float:left;vertical-align:middle" title="Follow us on Facebook!" src="/assets/images/facebook-icon.png" width="22"/> -->
             <span class="facebook"><jsp:text/></span>
 		    <span>Follow us on Facebook!</span>
 	    </a>
-	    <br/><br/>
+        -->
+        <ul><imp:socialMedia label="true"/></ul>
+	    <br/>
 		  
 		  <b>Related Sites</b>
 		  <c:choose>

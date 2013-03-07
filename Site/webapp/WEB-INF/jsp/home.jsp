@@ -8,16 +8,16 @@
 
   <imp:pageFrame title="OrthoMCL" refer="home">
 	  <div id="contentcolumn">
-	    <ul>
+	    <ul id="bubbles">
 	      <imp:searchCategories from="home"/>
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
 					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
-	        <ul id="info">
+	        <ul class="info">
 	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
 	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
 	        </ul>
-          <div id="infobottom"><jsp:text/></div>
+          <div class="infobottom"><jsp:text/></div>
 	      </li>
 	    </ul>
 	  </div>	  

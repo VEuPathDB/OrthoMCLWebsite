@@ -22,6 +22,10 @@
   <!-- Access twitter/facebook links, and configure menubar (superfish) -->
   <script type="text/javascript" src="${base}/js/nav.js"><jsp:text/></script>
 
+  <c:if test="${refer eq 'summary'}">
+    <script type="text/javascript" src="${base}/wdkCustomization/js/customStrategy.js"><jsp:text/></script>
+  </c:if>
+
   <c:if test="${refer eq 'summary' or refer eq 'record'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/phyletic.js"><jsp:text/></script>
   </c:if>

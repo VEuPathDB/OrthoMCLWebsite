@@ -10,7 +10,15 @@
   border-left: 0px;
 }
 
-ul {
+#Record_Views .wdk-record-table td {
+  border: none;
+}
+
+#Record_Views .wdk-record-table td:first-child {
+  width: 9em;
+}
+
+#Record_Views .ui-tabs-panel ul {
   list-style: disc;
   margin-left: 2em;
   padding: 0.4em 0.6em;

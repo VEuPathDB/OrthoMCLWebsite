@@ -51,7 +51,8 @@
     <li><a><span>Tools</span></a>
 	    <ul>
 	      <li><a href="<c:url value="/showQuestion.do?questionFullName=SequenceQuestions.ByBlast"/>"><span>BLAST</span></a></li>
-  	     <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign your proteins to groups</span></a></li>
+  	      <li><a href="<c:url value="/proteomeUpload.do"/>"><span>Assign your proteins to groups</span></a></li>
+              <li><a href="/common/downloads/software"><span>Download OrthoMCL software</span></a></li>
          <!--   <li><a href="/pubcrawler/${project}"><span>PubMed and Entrez</span></a></li> -->
 				 <li><a href="${constants.orthoGoogleUrl}">Publications that mention OrthoMCL</a></li>
 	       <li><a href="<c:url value="/serviceList.jsp"/>"><span>Web Services</span></a></li>

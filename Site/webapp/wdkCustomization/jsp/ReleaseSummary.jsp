@@ -45,7 +45,7 @@
                  <c:set var="taxonKey" value="${row['three_letter_abbrev'].value}" />
                  <c:set var="taxon" value="${taxons[taxonKey]}" />
                  <c:set var="root" value="${taxon.root}" />
-                 <td class="taxon-root" style="background-color:${root.color}"
+                 <td class="taxon-root" width="80" style="background-color:${root.color}"
                      title="${root.name}">
                    ${root.abbrev}
                  </td>

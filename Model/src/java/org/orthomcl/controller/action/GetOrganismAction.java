@@ -5,13 +5,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.gusdb.fgputil.db.SqlUtil;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
-import org.gusdb.wdk.model.dbms.SqlUtils;
-import org.orthomcl.data.GroupLoader;
 
 public class GetOrganismAction extends WdkAction {
 
@@ -33,7 +32,7 @@ public class GetOrganismAction extends WdkAction {
             .setStream(getStreamFromBytes(data));
       }
       finally {
-        SqlUtils.closeQuietly(connection);
+        SqlUtil.closeQuietly(connection);
       }
     }
 }

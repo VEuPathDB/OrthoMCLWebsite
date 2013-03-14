@@ -6,10 +6,8 @@ package org.orthomcl.controller.action;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.gusdb.wdk.controller.CConstants;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
@@ -34,14 +32,14 @@ public class GetDataSummaryAction extends WdkAction {
 
   private static final String PARAM_SUMMARY = "summary";
 
-  private static final String SUMMARY_DATA = "data";
+  //private static final String SUMMARY_DATA = "data";
   private static final String SUMMARY_RELEASE = "release";
 
   private static final String ATTR_HELPER_RECORD = CConstants.WDK_RECORD_KEY;
   private static final String ATTR_TAXONS = "taxons";
   private static final String ATTR_SUMMARY = "summaryTable";
 
-  private static final String MAP_DATA = SUMMARY_DATA;
+  //private static final String MAP_DATA = SUMMARY_DATA;
   private static final String MAP_RELEASE = SUMMARY_RELEASE;
 
   private static final String HELPER_QUESTION = "HelperQuestions.ByDefault";

@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.gusdb.fgputil.db.DatabaseResultStream;
+import org.gusdb.fgputil.db.SqlUtil;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
@@ -16,8 +18,6 @@ import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.dbms.DatabaseResultStream;
-import org.gusdb.wdk.model.dbms.SqlUtils;
 
 public class GetBiolayoutImageAction extends WdkAction {
   
@@ -69,7 +69,7 @@ public class GetBiolayoutImageAction extends WdkAction {
       catch (Exception e) {
         // only make sure to close open objects if exception is thrown;
         //   if code above was successful, objects will be closed by WdkAction
-        SqlUtils.closeQuietly(resultSet, statement, conn);
+        SqlUtil.closeQuietly(resultSet, statement, conn);
         throw e;
       }
     }

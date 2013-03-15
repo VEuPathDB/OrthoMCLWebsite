@@ -140,7 +140,7 @@
     <location>/wdkCustomization/jsp/Error.jsp</location>
   </error-page>
   <error-page>
-    <exception-type>java.lang.IOException</exception-type>
+    <exception-type>java.io.IOException</exception-type>
     <location>/wdkCustomization/jsp/Error.jsp</location>
   </error-page>
   <error-page>

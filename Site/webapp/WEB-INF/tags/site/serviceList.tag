@@ -35,7 +35,7 @@
     <br/>
 
     For example, this URL: <br/>
-    <span style="position:relative;left:${margin};font-size:150%">
+    <span style="position:relative;left:${margin};font-size:110%">
       <a href="${baseUrl}/webservices/GroupQuestions/BySequenceCount.xml?sequence_count_min=100&amp;sequence_count_max=102&amp;o-fields=group_name,ec_numbers">
         http://${wdkModelDispName}.org/webservices/GroupQuestions/BySequenceCount.xml?
         <br/>sequence_count_min=100&amp;

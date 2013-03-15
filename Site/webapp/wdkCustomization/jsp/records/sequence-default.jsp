@@ -152,7 +152,7 @@
 
       <c:set var="domainCount" value="${fn:length(domains)}" />
       <c:set var="maxLength" value="${wdkRecord.attributes['length']}" />
-  <imp:toggle name="pfam-domains" displayName="List of Domains (present in this group)" isOpen="true">
+  <imp:toggle name="pfam-domains" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
       <table id="domains" count="${domainCount}" seed="${sourceId}">
         <tr>

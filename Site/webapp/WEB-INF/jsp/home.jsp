@@ -6,6 +6,8 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
+  <jsp:useBean id="constants" class="org.eupathdb.common.model.JspConstants"/>
+
   <imp:pageFrame title="OrthoMCL" refer="home">
 	  <div id="contentcolumn">
 	    <ul id="bubbles">

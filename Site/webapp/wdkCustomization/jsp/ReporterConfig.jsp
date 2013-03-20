@@ -10,7 +10,7 @@
   <c:set var="format" value="${wdkReportFormat}"/>
 
   <!-- display page header -->
-  <imp:pageFrame title="Download Results" refer="reporter">
+  <imp:pageFrame title="Download Results" refer="reporter" bufferContent="true">
 
     <!-- table sets the red line on top -->
     <table border="0" width="100%" cellpadding="1" cellspacing="0" bgcolor="white" class="thinTopBorders">

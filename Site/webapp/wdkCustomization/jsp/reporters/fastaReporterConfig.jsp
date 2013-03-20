@@ -13,15 +13,13 @@
   <c:set var="format" value="${requestScope.wdkReportFormat}"/>
 
   <!-- display page header -->
-  <imp:pageFrame title="Create and download a FASTA Report">
-
-    <!-- display description for page -->
-    <p>
-      <b>Download the protein sequences in FASTA format.</b>
-    </p>
+  <imp:pageFrame title="Create and download a FASTA Report" bufferContent="true">
 
     <!-- display the parameters of the question, and the format selection form -->
     <imp:reporter/>
+
+    <!-- display description for page -->
+    <h3>Download the protein sequences in FASTA format.</h3>
 
     <!-- handle empty result set situation -->
     <c:choose>
@@ -30,7 +28,7 @@
       </c:when>
       <c:otherwise>
         <!-- content of current page -->
-				<form name="downloadConfigForm" method="get" action="getDownloadResult.do">
+				<form name="downloadConfigForm" method="get" action="getDownloadResult.do" class="onload-function" data-function="wdk.reporter.init">
 				  <input type="hidden" name="step" value="${step_id}"/>
 				  <input type="hidden" name="wdkReportFormat" value="${format}"/>
 				  <table>

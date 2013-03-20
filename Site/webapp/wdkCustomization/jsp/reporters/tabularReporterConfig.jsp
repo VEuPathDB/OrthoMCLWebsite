@@ -13,16 +13,14 @@
   <c:set var="format" value="${requestScope.wdkReportFormat}"/>
 
   <!-- display page header -->
-  <imp:pageFrame title="Create and download a Report in Tabular Format">
-
-    <!-- display description for page -->
-    <p>
-      <b>Generate a tab delimited report of your query result.  Select columns to
-      include in the report.  Optionally include a first line with column names</b>
-    </p>
+  <imp:pageFrame title="Create and download a Report in Tabular Format" bufferContent="true">
 
     <!-- display the parameters of the question, and the format selection form -->
     <imp:reporter/>
+
+    <!-- display description for page -->
+    <h3>Generate a tab delimited report of your query result.  Select columns to
+      include in the report.  Optionally include a first line with column names</h3>
 
     <!-- handle empty result set situation -->
     <c:choose>
@@ -32,7 +30,7 @@
       <c:otherwise>
 
         <!-- content of current page -->
-				<form name="downloadConfigForm" method="get" action="getDownloadResult.do">
+				<form name="downloadConfigForm" method="get" action="getDownloadResult.do" class="onload-function" data-function="wdk.reporter.init">
 				  <table>
 				    <tr>
 				      <td valign="top"><b>Columns:</b></td>
@@ -44,7 +42,7 @@
 				        <table>
 				          <tr>
 				            <td colspan="${numCols}">
-				              <input type="checkbox" name="selectedFields" value="default" onclick="wdk.uncheckFields(1);" checked="checked"/>
+				              <input type="checkbox" name="selectedFields" value="default" checked="checked"/>
 				              Default (same as in <a href="${pageContext.request.contextPath}/showSummary.do?step=${step_id}">result</a>), or...
 				            </td>
 				          </tr>
@@ -55,8 +53,8 @@
 				    <tr>
 				      <td valign="top">&#160;</td>
 				      <td align="center">
-				        <input type="button" value="select all" onclick="wdk.checkFields(1)"/>
-				        <input type="button" value="clear all" selected="yes" onclick="wdk.checkFields(0)"/>
+				        <input type="button" value="select all"/>
+				        <input type="button" value="clear all"/>
 				      </td>
 				    </tr>
 				    <tr>

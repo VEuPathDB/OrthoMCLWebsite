@@ -13,16 +13,14 @@
   <c:set var="format" value="${requestScope.wdkReportFormat}"/>
 
   <!-- display page header -->
-  <imp:pageFrame title="Create and download a Full Records Report">
-
-    <!-- display description for page -->
-    <p>
-      <b>Generate a report that contents the complete information for each
-      record.  Select columns to include in the report.</b>
-    </p>
+  <imp:pageFrame title="Create and download a Full Records Report" bufferContent="true">
 
     <!-- display the parameters of the question, and the format selection form -->
     <imp:reporter/>
+
+    <!-- display description for page -->
+    <h3>Generate a report that contents the complete information for each
+      record.  Select columns to include in the report.</h3>
 
     <!-- handle empty result set situation -->
     <c:choose>
@@ -32,7 +30,7 @@
       <c:otherwise>
 
         <!-- content of current page -->
-        <form name="downloadConfigForm" method="get" action="getDownloadResult.do">
+        <form name="downloadConfigForm" method="get" action="getDownloadResult.do" class="onload-function" data-function="wdk.reporter.init">
           <table>
             <tr>
               <td valign="top"><b>Columns:</b></td>
@@ -49,9 +47,9 @@
             <tr>
               <td valign="top">&#160;</td>
               <td align="center">
-                <input type="button" value="select all" onclick="wdk.makeSelection(1)"/>
-                <input type="button" value="clear all" selected="yes" onclick="wdk.makeSelection(0)"/>
-                <input type="button" value="select inverse" selected="yes" onclick="wdk.makeSelection(-1)"/>
+                <input type="button" value="select all"/>
+                <input type="button" value="clear all"/>
+                <input type="button" value="select inverse"/>
               </td>
             </tr>
             <tr>

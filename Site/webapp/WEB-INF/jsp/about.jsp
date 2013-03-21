@@ -128,14 +128,19 @@
               </p>
             </li>
             <li>
-              <span class="question">How can I find all E. coli genes which have human orthologs?</span>
+              <span class="question">How can I find all <i>E. coli</i> genes (protein sequences) which have human orthologs?</span>
               <p>
-                OrthoMCL-DB is designed to provide complicated query features. In this case, several steps are required to find the answer:
+                OrthoMCL-DB includes the <a href="http://code.google.com/p/strategies-wdk/">StrategiesWDK</a> system to allow you to form complex search strategies. In this case, several steps are required to find the answer:
                 <ol>
-                  <li>Identify the groups that satisfy this phyletic pattern criteria, using "eco+hsa=2T" at <a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=GroupQuestions.ByPhyleticPattern">Phyletic Pattern Expression (PPE) Group Query page</a> (eco and hsa are the abbreviation names for E. coli and H. sapiens).</li>
-                  <li>Identify all genes belonging to the groups identified in Step (a), by selecting the group query result from Step a and clicking on "GROUP QUERY INTO SEQUENCE QUERY" at <a href="${pageContext.request.contextPath}/showApplication.do">Group Query History page</a>. This will automatically redirect you to the Sequence Query History page, where all genes belonging to the groups identified in Step (a) are deposited as a new sequence query.</li>
-                  <li>Identify all E. coli genes, by searching for "ecol" in "Taxon_Abbreviation" at <a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByTaxonomy">Accession/Keyword Sequence Query page</a>.</li>
-                  <li>You can do an initial search for groups and sequences, and then refine the results by adding steps onto the search in <a href="${pageContext.request.contextPath}/showApplication.do">Strategy workspace</a>. You can further download the list of gene IDs or sequences in different format from the download link in the same Strategy workspace.</li>
+                  <li>Find all ortholog groups that contain both human and <i>E. coli</i> sequences.  To do this, on the OrthoMCL home page select the "Phyletic Pattern" search under the "Identify Ortholog Groups" heading.  On that search's page, follow these steps</li>
+                  <ol>
+                    <li>Click once on the gray circle next to "ecol" and click once on the gray circle next to "hsap".  Clicking once will convert the gray circle into a green check mark indicating that the organism or phyletic group have been selected.</li>
+                    <li>An alternative method for defining the phyletic pattern is to use an orthology phyletic pattern expression.  For this example the expression would be "ecol+hsap=2T".  Additional details describing phyletic pattern expressions are available on the search page.</li>
+                    <li>Once you are satisfied with the selected parameters, click on the "Get Answer" button.  The search will return all OrthoMCL groups that contain both <i>E. coli</i> and human sequences.</li>
+                  </ol>
+                  <li>Retrieve the list of sequences contained in the identified groups.  Click on the "Add Step" button and select "Transform to Sequences" in the popup window, then click on "continue."  This transformation will return all sequences found in all the groups from the previous step.  This will include <i>E. coli</i> and human sequences in addition to all other sequences found in these groups.</li>
+                  <li>Limit the list of results to those from <i>E. coli</i>. Click on the "Add Step" button and select "Taxonomy" under the "Search for Sequences by:" category in the popup window.</li>
+                  <li>Type the taxon abbreviation for <i>E. coli</i> "ecol". Select the intersect operation for combining search results and click on 'Run Step".</li>
                 </ol>
               </p>
             </li>

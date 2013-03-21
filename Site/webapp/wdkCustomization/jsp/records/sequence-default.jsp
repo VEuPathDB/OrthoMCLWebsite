@@ -6,8 +6,6 @@
 <!-- get wdkRecord from proper scope -->
 <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
 <c:set var="sourceId" value="${wdkRecord.attributes['full_id']}" />
-<c:set var="proteins" value="${wdkRecord.tables['ProteinPFams']}" />
-<c:set var="domains" value="${wdkRecord.tables['PFams']}" />
 
 <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
 
@@ -150,11 +148,11 @@
   <c:choose>
     <c:when test="${wdkTable.name == 'PFamDomains'}">
 
-      <c:set var="domainCount" value="${fn:length(domains)}" />
+      <c:set var="domainCount" value="${fn:length(wdkTable)}" />
       <c:set var="maxLength" value="${wdkRecord.attributes['length']}" />
   <imp:toggle name="pfam-domains" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
-      <table id="domains" count="${domainCount}" seed="${sourceId}">
+      <table id="domains" class="recordTable wdk-data-table" count="${domainCount}" seed="${sourceId}">
         <tr>
           <th>Accession</th>
           <th>Name</th>
@@ -190,7 +188,7 @@
           <td>
             <div class="domains">
               <div class="protein-graph"> </div>
-              <c:forEach items="${proteins}" var="row">
+              <c:forEach items="${wdkTable}" var="row">
                 <c:set var="name" value="${row['primary_identifier'].value}" />
                 <c:set var="start" value="${row['start_min']}" />
                 <c:set var="end" value="${row['end_max']}" />

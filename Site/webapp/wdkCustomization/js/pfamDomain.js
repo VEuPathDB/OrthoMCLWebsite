@@ -50,11 +50,13 @@ function PfamManager() {
         var manager = this;
         // the function generates 168 colors, and max domain # per group should be smaller than this.
         // if the domain # is bigger than that, should change the DIFF to 2
-        var domainCount = parseInt($("#Record_Views #domains").attr("count"));
+        var domains = manager.loadDomains();
+        var domainCount = 0;
+        for(var domain in domains) { domainCount++; }
         var colors = manager.generateColors(manager, 3);
         if (domainCount > colors.length)
             colors = manager.generateColors(manager, 2);
-        var domains = manager.loadDomains(colors);
+        manager.assignColors(domains, colors);
         manager.loadProteins(domains);
     }
 
@@ -104,18 +106,28 @@ function PfamManager() {
         if (sval.length == 1) sval = '0' + sval;
         return sval;
     };
-        
-    this.loadDomains = function(colors) {
-        var domains = new Array();
-        var index = 0;
+
+    this.loadDomains = function() {
+        var domains = { };
         $("#Record_Views #domains .domain").each(function() {
             var name = $(this).attr("id");
-            var color = colors[index];
-            $(this).find(".legend").css(color);
-            domains[name] = color;
-            index++;
+            domains[name] = "";
         });
         return domains;
+    };
+        
+    this.assignColors = function(domains, colors) {
+        var index = 0;
+        for (var domain in domains) {
+          domains[domain] = colors[index];
+          index++;
+        }
+
+        $("#Record_Views #domains .domain").each(function() {
+            var name = $(this).attr("id");
+            $(this).find(".legend").css(domains[name]);
+            index++;
+        });
     };
 
     this.loadProteins = function(domains) {

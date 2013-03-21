@@ -6,11 +6,20 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
-  <c:set var="groupName" value="${wdkRecord.attributes['group_name']}"/>
+  <c:set var="groupName" value="${wdkRecord.attributes['group_name'].value}"/>
+  <c:set var="memberCount" value="${wdkRecord.attributes['number_of_members'].value}"/>
 
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/wdkCustomization/css/svg.css"/>
 
   <h2>Interactive Cluster Graph</h2>
+
+<c:choose>
+  <c:when test="${memberCount > 500}">
+    <p class="warning">The cluster graph is not available for this Ortholog group ${groupName}. 
+       The graph is available for groups with 500 sequences or less only.</p>
+  </c:when>
+
+  <c:otherwise>
   <p>
     The following graph represents the clustering results of the proteins in 
     ortholog group ${groupName}. The interactive graph requires SVG support of
@@ -76,5 +85,8 @@
   </ul>
 
   <img src="${pageContext.request.contextPath}/getBiolayout.do?group=${groupName}"/>
+
+  </c:otherwise>
+</c:choose>
 
 </jsp:root>

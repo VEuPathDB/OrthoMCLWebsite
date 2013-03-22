@@ -52,7 +52,7 @@
 				    </tr>
 				    <tr>
 				      <td valign="top">&#160;</td>
-				      <td align="center">
+				      <td>
 				        <input type="button" value="select all"/>
 				        <input type="button" value="clear all"/>
 				      </td>

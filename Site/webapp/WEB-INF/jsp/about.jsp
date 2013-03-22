@@ -51,7 +51,7 @@
         <div class="section-content">
           <p>
             The methods used to build OrthoMCL-DB are formally described in the
-            <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a>
+            <a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub">OrthoMCL Algorithm Document</a>
           </p>
         </div>
         <div class="section-title">

@@ -80,13 +80,13 @@ orthomclResults/
           </p>
           <p><strong>Algorithm</strong></p>
           <p>
-            Please refer to the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">
+            Please refer to the <a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub">
             OrthoMCL Algorithm Document</a> for details about how OrthoMCL-DB is created.
             <ul>
               <li>BLASTP of your proteins against self and against OrthoMCL proteins.  Cutoff of e-5, and 50% match.</li>
               <li>For proteins that have an above-threshold match: assign the group from the best matching OrthoMCL protein.  If the best OrthoMCL protein does not have a group, assign NO_GROUP.</li>
-              <li>For remaining proteins: use the InParalog algorithm described in the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a> to find potential paralog pairs.</li>
-              <li>Submit those pairs to the <a href="http://www.micans.org/mcl/">MCL</a> program (see the <a href="http://docs.google.com/View?id=dd996jxg_1gsqsp6">OrthoMCL Algorithm Document</a>).</li>
+              <li>For remaining proteins: use the InParalog algorithm described in the <a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub">OrthoMCL Algorithm Document</a> to find potential paralog pairs.</li>
+              <li>Submit those pairs to the <a href="http://www.micans.org/mcl/">MCL</a> program (see the <a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub">OrthoMCL Algorithm Document</a>).</li>
             </ul>
           </p>
       

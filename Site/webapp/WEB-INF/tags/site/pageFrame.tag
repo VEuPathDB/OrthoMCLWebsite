@@ -11,10 +11,11 @@
   <jsp:directive.attribute name="headElement" required="false"
               description="additional head elements"/>
   <jsp:directive.attribute name="bufferContent" required="false"
+              type="java.lang.Boolean"
               description="whether to create margin, border, padding around main div"/>
 
   <c:set var="project" value="${applicationScope.wdkModel.displayName}"/>
-  <c:set var="mainContentClass" value="${bufferContent eq 'true' ? 'buffered-content' : '' }"/>
+  <c:set var="mainContentClass" value="${empty bufferContent or bufferContent ? 'buffered-content' : '' }"/>
 
   <!-- jsp:output tag for doctype no longer supports simple HTML5 declaration -->
   <jsp:text>&lt;!DOCTYPE html&gt;</jsp:text>

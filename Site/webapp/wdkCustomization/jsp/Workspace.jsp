@@ -3,7 +3,7 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-  <imp:pageFrame refer="summary" title="My Strategies">
+  <imp:pageFrame refer="summary" title="My Strategies" bufferContent="false">
     <imp:strategyWorkspace includeDYK="true"/>
   </imp:pageFrame>
 </jsp:root>

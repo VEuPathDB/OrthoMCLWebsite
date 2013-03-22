@@ -8,7 +8,7 @@
 
   <jsp:useBean id="constants" class="org.eupathdb.common.model.JspConstants"/>
 
-  <imp:pageFrame title="OrthoMCL" refer="home">
+  <imp:pageFrame title="OrthoMCL" refer="home" bufferContent="false">
 	  <div id="contentcolumn">
 	    <ul id="bubbles">
 	      <imp:searchCategories from="home"/>

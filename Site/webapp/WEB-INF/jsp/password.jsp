@@ -4,7 +4,7 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-  <imp:pageFrame title="${wdkModel.displayName} :: Change Password" refer="password">
+  <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Change Password" refer="password">
     <div class="user-form-frame">
 		  <!-- show error messages, if any -->
       <imp:errors/>

@@ -5,7 +5,7 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
   <c:set var="global" value="${wdkUser.globalPreferences}"/>
-  <imp:pageFrame title="${wdkModel.displayName} :: Update User Profile" refer="profile">
+  <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Update User Profile" refer="profile">
     <div class="user-form-frame">  
       <!-- show error messages, if any -->
       <imp:errors/>

@@ -4,7 +4,7 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>  
-  <imp:pageFrame title="${wdkModel.displayName} :: Registration" refer="register">
+  <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Registration" refer="register">
     <div class="user-form-frame">
 		  <!-- display the success information if the user registered successfully -->
 		  <c:choose>

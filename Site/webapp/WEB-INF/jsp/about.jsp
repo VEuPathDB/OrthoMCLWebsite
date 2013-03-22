@@ -3,7 +3,7 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-  <imp:pageFrame title="${wdkModel.displayName} :: About" refer="about">
+  <imp:pageFrame title="${wdkModel.displayName} :: About" refer="about" bufferContent="false">
     <div id="about">
       <!-- Provides section-selection drop-down
       <div class="about-nav">

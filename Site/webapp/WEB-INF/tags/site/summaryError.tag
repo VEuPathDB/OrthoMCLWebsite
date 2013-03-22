@@ -29,7 +29,9 @@
   <h2>Step/Query Details</h2>
   <p>
     The following is the detail information about the current invalid step. If
-    you have any questions about this step, please <a href="javascript:void(0);"
+    you have any questions about this step, please
+    <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
+    <a href="javascript:void(0);"
     target="_blank" onClick="poptastic(this.href); return false;">contact us</a>,
     and copy the information below in the message.
   </p>

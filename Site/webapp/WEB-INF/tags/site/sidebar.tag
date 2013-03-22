@@ -186,7 +186,7 @@
 		      <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Glossary">Our Glossary</a>
 		    </li>
 		    <li>
-		      <a href="${base}/help.jsp" target="_blank" onClick="poptastic(this.href); return false;">Contact Us</a>
+          <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
 		    </li>
 		  </ul>
 	  </div>

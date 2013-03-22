@@ -221,9 +221,9 @@
         </div>
         <div class="section-content">
           <p>
-            Feel free to contact us with comments or questions by filling out the form
-            <a href="javascript:void()" class="open-dialog-contact-us">here</a>, or emailing us at
-            <a href="mailto:help@orthomcl.org">help@orthomcl.org</a>.
+            Feel free to contact us with comments or questions by filling out the
+            <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
+            form, or emailing us at <a href="mailto:help@orthomcl.org">help@orthomcl.org</a>.
           </p>
         </div>
       </div>

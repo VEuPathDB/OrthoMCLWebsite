@@ -65,8 +65,8 @@
     <div id="phyletic-legend">
       <b>Key:</b> <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/dc.gif"/> =no constraints
       | <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/yes.gif"/> =must be in group
-      | <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/no.gif"/> =must not be in group
       | <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/maybe.gif"/> =at least one subtaxon must be in group
+      | <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/no.gif"/> =must not be in group
       | <img border="0" src="${pageContext.request.contextPath}/wdkCustomization/images/unk.gif"/> =mixture of constraints
     </div>
     <div id="phyletic-tree">
@@ -96,7 +96,7 @@
           abbrev: "${abbreviation}",
           name: "${name}",
           common_name: "${commonName}",
-          state: 0,
+          state: 'dc',
           is_species: (${isSpecies} == 0) ? false : true,
           index: ${sortIndex},
           children: new Array()

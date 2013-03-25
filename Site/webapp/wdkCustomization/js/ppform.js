@@ -1,4 +1,12 @@
-var urls = new Array("dc.gif", "yes.gif", "no.gif", "maybe.gif", "unk.gif");
+var urls = {
+  dc:     "dc.gif",
+  yes:    "yes.gif",
+  no:     "no.gif",
+  maybe:  "maybe.gif",
+  unk:    "unk.gif"
+};
+var branch_states = ['dc', 'yes', 'maybe', 'no', 'unk'];
+var leaf_states = ['dc', 'yes', 'no'];
 var taxons = { };
 var roots = [];
 var inLeaves;
@@ -130,26 +138,29 @@ function toggleFold(nodeId) {
 
 function toggleState(nodeId) {
     var imgState = document.getElementById(nodeId + "_check");
+    var taxon = taxons[nodeId];
    
-    if (taxons[nodeId].children.length) {
-        taxons[nodeId].state = (taxons[nodeId].state + 1) % 4;
-        imgState.src = "wdkCustomization/images/" + urls[taxons[nodeId].state];
+    if (taxon.children.length) {
+        taxon.state = branch_states[(_.indexOf(branch_states, taxon.state) + 1) % 4];
+        //taxon.state = (taxon.state + 1) % 4;
+        imgState.src = "wdkCustomization/images/" + urls[taxon.state];
 
-	for (var i = 0, j = taxons[nodeId].children.length; i < j; ++i) {
-            if (taxons[nodeId].state < 3) {
-                setState(taxons[nodeId].children[i].id, taxons[nodeId].state);
+	for (var i = 0, j = taxon.children.length; i < j; ++i) {
+            if (taxon.state != 'maybe') {
+                setState(taxon.children[i].id, taxon.state);
             }
             else {
-                setState(taxons[nodeId].children[i].id, 0);
+                setState(taxon.children[i].id, 'dc');
             }
         }
     }
     else {
-        taxons[nodeId].state = (taxons[nodeId].state + 1) % 3;
-        imgState.src = "wdkCustomization/images/" + urls[taxons[nodeId].state];
+        taxon.state = leaf_states[(_.indexOf(leaf_states, taxon.state) + 1) % 3];
+        //taxon.state = (taxon.state + 1) % 3;
+        imgState.src = "wdkCustomization/images/" + urls[taxon.state];
     }
 
-    if (nodeId != taxons[nodeId].parent_id) {
+    if (nodeId != taxon.parent_id) {
         fixParent(nodeId);
     }
     calcText();
@@ -157,13 +168,14 @@ function toggleState(nodeId) {
 
 function setState(nodeId, nodeState) {
     var imgState = document.getElementById(nodeId + "_check");
+    var taxon = taxons[nodeId];
    
-    taxons[nodeId].state = nodeState;
+    taxon.state = nodeState;
     imgState.src = "wdkCustomization/images/" + urls[nodeState];
    
-    if (taxons[nodeId].children.length) {
-        for (var i = 0, j = taxons[nodeId].children.length; i < j; ++i) {
-            setState(taxons[nodeId].children[i].id, nodeState);
+    if (taxon.children.length) {
+        for (var i = 0, j = taxon.children.length; i < j; ++i) {
+            setState(taxon.children[i].id, nodeState);
         }
     }
 }
@@ -171,21 +183,23 @@ function setState(nodeId, nodeState) {
 function fixParent (nodeId) {
     var parentId = taxons[nodeId].parent_id;
     var parentImg = document.getElementById(parentId + "_check");
+    var parent = taxons[parentId];
+    var taxon = taxons[nodeId];
     
-    taxons[parentId].state = 0;
+    parent.state = 'dc';
 
-    for (var i = 0, j = taxons[parentId].children.length; i < j; ++i) {
-        if (taxons[nodeId].state == 3 || taxons[nodeId].state != taxons[parentId].children[i].state) {
-	    taxons[parentId].state = 4;
-            parentImg.src = "wdkCustomization/images/" + urls[taxons[parentId].state];
+    for (var i = 0, j = parent.children.length; i < j; ++i) {
+        if (taxon.state == 'maybe' || taxon.state != parent.children[i].state) {
+	    parent.state = 'unk';
+            parentImg.src = "wdkCustomization/images/" + urls[parent.state];
             break;
         }
     }
-    if (!taxons[parentId].state) {
-        taxons[parentId].state = taxons[nodeId].state;
-        parentImg.src = "wdkCustomization/images/" + urls[taxons[parentId].state];
+    if (!parent.state || parent.state == 'dc') {
+        parent.state = taxon.state;
+        parentImg.src = "wdkCustomization/images/" + urls[parent.state];
     }
-    if (parentId != taxons[parentId].parent_id) {
+    if (parentId != parent.parent_id) {
 	fixParent(parentId);
     }
 }
@@ -222,16 +236,16 @@ function nodeText(nodeId) {
     var nodeStr;
 
     if (taxons[nodeId].children.length) {
-    if (taxons[nodeId].state == 1) {
+    if (taxons[nodeId].state == 'yes') {
         nodeStr = taxons[nodeId].abbrev + "=" + countLeaves(nodeId) + "T";
     }
-    else if (taxons[nodeId].state == 2) {
+    else if (taxons[nodeId].state == 'no') {
         nodeStr = taxons[nodeId].abbrev + "=0T"
     }
-    else if (taxons[nodeId].state == 3) {
+    else if (taxons[nodeId].state == 'maybe') {
         nodeStr = taxons[nodeId].abbrev + ">=1T";
     }
-    else if (taxons[nodeId].state == 4) {
+    else if (taxons[nodeId].state == 'unk') {
 	var childStrs = [];
         for (var i = 0, j = taxons[nodeId].children.length; i < j; ++i) {
             var resp = nodeText(taxons[nodeId].children[i].id);
@@ -243,10 +257,10 @@ function nodeText(nodeId) {
     }
     }
     else {
-        if (taxons[nodeId].state == 1) {
+        if (taxons[nodeId].state == 'yes') {
             inLeaves.push(taxons[nodeId].abbrev);
         }
-        else if (taxons[nodeId].state == 2) {
+        else if (taxons[nodeId].state == 'no') {
             outLeaves.push(taxons[nodeId].abbrev);
         }
     }

@@ -55,8 +55,8 @@ function Svg() {
         $("#All line").each(function() {
             var queryId = $(this).attr("query");
             var subjectId = $(this).attr("subject");
-            var query = $("circle#" + queryId);
-            var subject = $("circle#" + subjectId);
+            var query = $("circle[id='" + queryId + "']");
+            var subject = $("circle[id='" + subjectId + "']");
             var type = $(this).parent().attr("id");
             if (type == "Normal") type = "Other Similar match";
             $(this).hover(function() {

@@ -152,32 +152,7 @@
       <c:set var="maxLength" value="${wdkRecord.attributes['length']}" />
   <imp:toggle name="pfam-domains" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
-      <table id="domains" class="recordTable wdk-data-table" count="${domainCount}" seed="${sourceId}">
-        <tr>
-          <th>Accession</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Legend</th>
-        </tr>
-        <c:set var="odd" value="${true}" />
-        <c:forEach items="${wdkTable}" var="domain">
-          <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-          <c:set var="odd" value="${!odd}" />
-          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
-            <td>${domain["primary_identifier"]}</td>
-            <td>${domain["secondary_identifier"]}</td>
-            <td>${domain["remark"]}</td>
-            <td>${domain["start_min"]}</td>
-            <td>${domain["end_max"]}</td>
-            <td><div class="legend"> </div></td>
-          </tr>
-        </c:forEach>
-      </table>
 
-
-      <br />
       <h4>Domain Architecture</h4>
       <table id="proteins" maxLength="${maxLength}" width="100%">
 
@@ -203,6 +178,32 @@
           </td>
         </tr>
       </table>
+
+      <br />
+      <table id="domains" class="recordTable wdk-data-table" count="${domainCount}" seed="${sourceId}">
+        <tr>
+          <th>Accession</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Legend</th>
+        </tr>
+        <c:set var="odd" value="${true}" />
+        <c:forEach items="${wdkTable}" var="domain">
+          <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+          <c:set var="odd" value="${!odd}" />
+          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
+            <td>${domain["primary_identifier"]}</td>
+            <td>${domain["secondary_identifier"]}</td>
+            <td>${domain["remark"]}</td>
+            <td>${domain["start_min"]}</td>
+            <td>${domain["end_max"]}</td>
+            <td><div class="legend"> </div></td>
+          </tr>
+        </c:forEach>
+      </table>
+
 
     </jsp:attribute>
   </imp:toggle>

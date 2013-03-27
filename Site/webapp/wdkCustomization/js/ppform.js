@@ -13,6 +13,9 @@ var inLeaves;
 var outLeaves;
 
 function initial() {
+    // reset roots, otherwise we might get duplicate nodes in subsequent revises
+    roots = [];
+
     // resolve the children of each node
     for (var taxon_id in taxons) {
         var taxon = taxons[taxon_id];

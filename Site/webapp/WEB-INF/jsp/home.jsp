@@ -11,7 +11,7 @@
   <imp:pageFrame title="OrthoMCL" refer="home" bufferContent="false">
 	  <div id="contentcolumn">
 	    <ul id="bubbles">
-	      <imp:searchCategories from="home"/>
+	      <imp:searchCategoriesAll from="home"/>
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
 					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />

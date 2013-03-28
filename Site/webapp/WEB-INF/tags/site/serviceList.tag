@@ -90,7 +90,7 @@
 
     <!-- show all questionSets in model, driven by categories as in menubar -->
     <ul id="webservices-list">
-      <imp:searchCategories from="webservices" />
+      <imp:searchCategoriesAll from="webservices" />
     </ul>
 
     <br/>

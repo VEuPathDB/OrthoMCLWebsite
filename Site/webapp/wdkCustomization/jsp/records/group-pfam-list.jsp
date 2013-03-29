@@ -19,13 +19,14 @@
   <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
 
   <!-- <h3>List of Domains (present in this group)</h3> -->
-  <imp:toggle name="pfam-domains-list" displayName="List of Domains (present in this group)" isOpen="true">
+  <imp:toggle name="pfam-domains-list" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
       <table id="domains" count="${domainCount}" seed="${groupName}">
         <tr>
           <th>Accession</th>
           <th>Name</th>
           <th>Description</th>
+          <th>Count</th>
         </tr>
         <c:set var="odd" value="${true}" />
         <c:forEach items="${domains}" var="domain">
@@ -35,6 +36,7 @@
             <td>${domain["primary_identifier"]}</td>
             <td>${domain["secondary_identifier"]}</td>
             <td>${domain["remark"]}</td>
+            <td>${domain["count"]}</td>
           </tr>
         </c:forEach>
       </table>
@@ -42,7 +44,7 @@
   </imp:toggle>
 
   <!-- <h3>List of Protein Domain Architectures</h3> -->
-  <imp:toggle name="protein-domain-architectures" displayName="List of Protein Domain Architectures" isOpen="true">
+  <imp:toggle name="protein-domain-architectures" displayName="Protein Domain Locations" isOpen="true">
     <jsp:attribute name="content">
       <table id="proteins" class="wdk-data-table" maxLength="${maxLength}" width="100%">
         <thead>

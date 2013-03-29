@@ -54,14 +54,15 @@
             
           </p>
            In overview:
-           <ul>
+           <ul class="cirbulletlist">
            <li>All-v-all BLASTP of the proteins.</li>
-           <li>Compute <i>percent match length</i></li>
-             <ul>
+           <li>Compute <i>percent match length</i>
+             <ul class="cirbulletlist">
              <li>Select whichever is shorter, the query or subject sequence.  Call that sequence S.</li>
              <li>Count all amino acids in S that participate in any HSP.</li>
              <li>Divide that count by the length of S and multiply by 100</li>
              </ul>
+           </li>
            <li>Apply thresholds to blast result.  Keep matches with E-Value &lt; 1e-5 percent match length &gt;= 50%</li>
            <li>Find potential inparalog, ortholog and co-ortholog <i>pairs</i> using the Orthomcl Pairs program.  (These are the pairs that are counted to form the <i>Average % Connectivity</i> statistic per group.)</li>
            <li>Use the <a href="http://micans.org/mcl/">MCL</a> program to cluster the pairs into groups</li>

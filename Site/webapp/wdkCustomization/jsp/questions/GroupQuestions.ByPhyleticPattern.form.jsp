@@ -35,7 +35,7 @@
     <br/>
 
     <p>
-    The search is controlled by the Phyletic Pattern Expression (PPE) shown in the text box. Use either the text box or the graphical tree display, or both, to specify your pattern.  The graphical tree display is a friendly way to generate a pattern expression.  You can always edit the expression directly.  For PPE help see the bottom of this page.
+      The search is controlled by the Phyletic Pattern Expression (PPE) shown in the text box. Use either the text box or the graphical tree display, or both, to specify your pattern.  The graphical tree display is a friendly way to generate a pattern expression.  You can always edit the expression directly.  For PPE help see the <a style="text-decoration: underline" href="#query-description-section">instructions at the bottom of this page.</a>
     </p>
 
     <br/>

@@ -38,9 +38,13 @@
           <input type="hidden" name="value(${groupWdkRecordTypeParam.name})"
               value="${groupWdkRecordTypeParam.default}" />
           <input type="hidden" name="array(${groupTextFieldsParam.name})"
-              value="PFam domain names and descriptions" />
+              value="sequences (IDs / descriptions / taxa)" />
           <input type="hidden" name="array(${groupTextFieldsParam.name})"
-              value="Sequence IDs descriptions and taxa" />
+              value="PFam domains (names and descriptions)" />
+          <input type="hidden" name="array(${groupTextFieldsParam.name})"
+              value="EC numbers (and descriptions)" />
+          <input type="hidden" name="array(${groupTextFieldsParam.name})"
+              value="ortholog group ID" />
           <input type="hidden" name="value(${groupDetailTableParam.name})"
               value="${groupDetailTableParam.default}" />
           <input type="hidden" name="value(${groupPrimaryKeyColumnParam.name})"
@@ -77,13 +81,15 @@
           <input type="hidden" name="value(${sequenceWdkRecordTypeParam.name})"
               value="${sequenceWdkRecordTypeParam.default}" />
           <input type="hidden" name="array(${sequenceTextFieldsParam.name})"
-              value="Product" />
+              value="product" />
           <input type="hidden" name="array(${sequenceTextFieldsParam.name})"
-              value="PFam domain names and descriptions" />
+              value="taxon" />
           <input type="hidden" name="array(${sequenceTextFieldsParam.name})"
-              value="Taxon" />
+              value="PFam domains (names and descriptions)" />
           <input type="hidden" name="array(${sequenceTextFieldsParam.name})"
-              value="Old OrthoMCL groups (from previous releases)" />
+              value="EC numbers (and descriptions)" />
+          <input type="hidden" name="array(${sequenceTextFieldsParam.name})"
+              value="ortholog group ID (in current or previous OrthoMCL releases)" />
           <input type="hidden" name="value(${sequenceDetailTableParam.name})"
               value="${sequenceDetailTableParam.default}" />
           <input type="hidden" name="value(${sequencePrimaryKeyColumnParam.name})"

@@ -26,7 +26,7 @@
       <table id="domains" count="${domainCount}" seed="${groupName}">
         <tr>
           <th>Accession</th>
-          <th>Name</th>
+          <th>Symbol</th>
           <th>Description</th>
           <th>Count</th>
           <th>Legend</th>
@@ -35,11 +35,11 @@
         <c:forEach items="${domains}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${not odd}" />
-          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}">
-            <td>${domain["primary_identifier"]}</td>
-            <td>${domain["secondary_identifier"]}</td>
-            <td>${domain["remark"]}</td>
-            <td>${domain["count"]}</td>
+          <tr id="${domain['accession']}" class="domain ${rowClass}">
+            <td>${domain["accession"]}</td>
+            <td>${domain["symbol"]}</td>
+            <td>${domain["description"]}</td>
+            <td>${domain["occurrences"]}</td>
             <td><div class="legend"> </div></td>
           </tr>
         </c:forEach>
@@ -73,7 +73,7 @@
                 <div class="domains">
                   <div class="protein-graph"><jsp:text/></div>
                   <c:forEach items="${proteinGroup}" var="row">
-                    <c:set var="name" value="${row['primary_identifier'].value}"/>
+                    <c:set var="name" value="${row['accession'].value}"/>
                     <c:set var="start" value="${row['start_min']}"/>
                     <c:set var="end" value="${row['end_max']}"/>
                     <c:if test="${not empty name}">

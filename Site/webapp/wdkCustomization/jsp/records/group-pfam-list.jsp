@@ -24,7 +24,7 @@
       <table id="domains" count="${domainCount}" seed="${groupName}">
         <tr>
           <th>Accession</th>
-          <th>Name</th>
+          <th>Symbol</th>
           <th>Description</th>
           <th>Count</th>
         </tr>
@@ -32,11 +32,11 @@
         <c:forEach items="${domains}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${!odd}" />
-          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
-            <td>${domain["primary_identifier"]}</td>
-            <td>${domain["secondary_identifier"]}</td>
-            <td>${domain["remark"]}</td>
-            <td>${domain["count"]}</td>
+          <tr id="${domain['accession']}" class="domain ${rowClass}" >
+            <td>${domain["accession"]}</td>
+            <td>${domain["symbol"]}</td>
+            <td>${domain["description"]}</td>
+            <td>${domain["occurrences"]}</td>
           </tr>
         </c:forEach>
       </table>
@@ -69,7 +69,7 @@
                 <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${source_id}">${source_id}</a>
               </td>
               <td class="length">${row['length']}</td>
-              <td>${row['primary_identifier'].value}</td>
+              <td>${row['accession'].value}</td>
               <td>${row['start_min']}</td>
               <td>${row['end_max']}</td>
             </tr>

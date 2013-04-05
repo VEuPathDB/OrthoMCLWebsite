@@ -10,7 +10,11 @@
 
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
-  <wdk:wdkJavascripts refer="${refer}"/>
+  <jsp:useBean id="websiteRelease" class="org.eupathdb.common.controller.WebsiteReleaseConstants"/>
+
+  <c:set var="min" value="${requestScope.WEBSITE_RELEASE_STAGE ge websiteRelease.feature}"/>
+  <!-- JavaScript provided by WDK -->
+  <imp:wdkJavascripts refer="${refer}" min="${min}"/>
 
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>

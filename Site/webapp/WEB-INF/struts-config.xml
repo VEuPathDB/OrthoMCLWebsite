@@ -86,6 +86,13 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
       <forward name="success" path="/WEB-INF/jsp/contactBack.jsp"/>
     </action>
+    <action path="/showErrorPage"
+        parameter="org.gusdb.wdk.controller.action.standard.ShowErrorPageAction"
+        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper"
+        scope="request">
+    </action>
+
+
 
     <!-- User Account Maintenance Actions -->
     

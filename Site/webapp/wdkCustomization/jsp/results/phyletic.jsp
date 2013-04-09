@@ -2,6 +2,7 @@
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:pg="http://jsptags.com/tags/navigation/pager"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
@@ -105,6 +106,8 @@
 								  <c:forEach items="${pkValues}" var="pkValue">
 								    <c:set var="recordLinkKeys" value="${recordLinkKeys}&amp;${pkValue.key}=${pkValue.value}"/>
 								  </c:forEach>
+                  <c:set var="keywords" value="${record.summaryAttributes['keywords']}"/>
+                  <c:set var="descriptions" value="${record.summaryAttributes['descriptions']}"/>
 								  <td width="100">
 								    <a href="${pageContext.request.contextPath}/showRecord.do?name=${rcName}${recordLinkKeys}">${primaryKey}</a>
 								  </td>
@@ -112,6 +115,12 @@
 								  <!-- load the taxon count -->
 								  <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}"/>
 								  <td id="${primaryKey}" class="group">
+                    <c:if test="${keywords ne ''}">
+                      <div class="attr-keywords">Keyword(s): ${keywords}</div>
+                    </c:if>
+                    <c:if test="${descriptions ne ''}">
+                      <div class="attr-descriptions">Pfam Domain(s): ${descriptions}</div>
+                    </c:if>
 								    <div class="count-data">
 								      <c:forEach items="${taxonCounts}" var="row">
 								        <div class="count" taxon-id="${row['taxon_id']}">${row['count']}</div>

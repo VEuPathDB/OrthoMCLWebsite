@@ -171,3 +171,15 @@
 }
 
 .ui-button-text-only .ui-button-text { padding: 0; }
+
+.attr-keywords, .attr-descriptions {
+    padding: 0.4em;
+}
+
+.attr-keywords {
+    background: #eeeecc;
+}
+
+.attr-descriptions {
+    background: #eeccee;
+}

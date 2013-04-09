@@ -10,17 +10,17 @@
 
   <imp:pageFrame title="OrthoMCL" refer="home" bufferContent="false">
 	  <div id="contentcolumn">
-	    <ul id="bubbles">
+	    <ul id="bubbles" class="ui-helper-clearfix">
 	      <imp:searchCategoriesAll from="home"/>
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
 					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
 	        <ul class="info">
-	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
-	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
-	          <li style="list-style-type:disc;margin-left:2em;"><a href="/common/downloads/software">Download OrthoMCL software</a></li>
-	          <li style="list-style-type:disc;margin-left:2em;"><a href="${pageContext.request.contextPath}/serviceList.jsp">Web Services</a></li>
-                  <li style="list-style-type:disc;margin-left:2em;"><a href="${constants.orthoGoogleUrl}">Publications mentioning OrthoMCL</a></li>
+	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
+	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>
+	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="/common/downloads/software">Download OrthoMCL software</a></li>
+	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="${pageContext.request.contextPath}/serviceList.jsp">Web Services</a></li>
+                  <li style="list-style-type:disc;margin-left:1.5em;"><a href="${constants.orthoGoogleUrl}">Publications mentioning OrthoMCL</a></li>
 	        </ul>
           <div class="infobottom"><jsp:text/></div>
 	      </li>

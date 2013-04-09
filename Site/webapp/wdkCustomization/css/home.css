@@ -8,13 +8,16 @@
 	margin-bottom:12px;
 }
 #contentcolumn > ul,#search-bubbles > ul {
-   display: inline-table;margin-top:10px;white-space:nowrap; 
+   /*display: inline-table; floating list elements instead*/
+   margin-top:10px;
+   white-space:nowrap; 
 }
 #contentcolumn > ul > li,#search-bubbles > ul > li { 
-  width: 200px; 
+  	width: 30%; 
 	margin: 10px; 
 	padding: 2px;
-	display: inline-table;
+	/*display: inline-table; floating list elements instead*/
+	float:left;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

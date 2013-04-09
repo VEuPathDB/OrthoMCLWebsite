@@ -28,6 +28,7 @@ a:hover, a:active {
 
 #header2 {
 	background-image: url(/assets/images/OrthoMCL/backgroundtop_s.jpg);
+	min-width: 1032px; /* prevent logo from wrapping on smaller resolutions */
 }
 
 #header_rt {
@@ -86,6 +87,11 @@ table#quick-search a {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #bubbles .info {
   min-height: 276px;
+  margin: auto;
+}
+
+#bubbles .infobottom {
+	margin: auto;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

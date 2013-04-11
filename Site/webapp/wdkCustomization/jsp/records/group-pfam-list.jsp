@@ -16,7 +16,7 @@
   <c:set var="domainCount" value="${fn:length(domains)}"/>
   <c:set var="maxLength" value="${wdkRecord.attributes['max_length']}"/>
 
-  <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
+  <span class="onload-function" data-function="eupathdb.pfamDomain.init"><jsp:text/></span>
 
   <!-- <h3>List of Domains (present in this group)</h3> -->
   <imp:toggle name="pfam-domains-list" displayName="PFam Domains" isOpen="true">

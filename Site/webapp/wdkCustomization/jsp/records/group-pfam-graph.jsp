@@ -18,7 +18,7 @@
   <c:set var="domainCount" value="${fn:length(domains)}"/>
   <c:set var="maxLength" value="${wdkRecord.attributes['max_length']}"/>
 
-  <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
+  <span class="onload-function" data-function="eupathdb.pfamDomain.init"><jsp:text/></span>
 
   
   <!-- <h3>List of Domains (present in this group)</h3> -->
@@ -81,7 +81,6 @@
                     <c:if test="${not empty name}">
                       <div class="domain" id="${name}" start="${start}" end="${end}"
                            title="${name} (location: [${start} - ${end}])">
-                        <div></div>
                       </div>
                     </c:if>
                   </c:forEach>

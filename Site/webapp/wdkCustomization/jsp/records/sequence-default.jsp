@@ -7,7 +7,7 @@
 <c:set value="${requestScope.wdkRecord}" var="wdkRecord"/>
 <c:set var="sourceId" value="${wdkRecord.attributes['full_id']}" />
 
-<span class="onload-function" data-function="initializePfams"><jsp:text/></span>
+<span class="onload-function" data-function="eupathdb.pfamDomain.init"><jsp:text/></span>
 
 <table width="100%" class="wdk-record-table">
 
@@ -171,7 +171,6 @@
                   <div class="domain" id="${name}" start="${start}" end="${end}"
                        data-index="${row['domain_index']}" data-max="${row['max_index']}"
                        title="${name} (location: [${start} - ${end}])">
-                    <div> </div>
                   </div>
                 </c:if>
               </c:forEach>

@@ -99,6 +99,7 @@
               <c:set var="i" value="0"/>
               <c:forEach items="${answerRecords}" var="record">
                 <c:set var="rowClass" value="${i % 2 eq 0 ? 'lines' : 'linesalt'}"/>
+                <c:set var="tables" value="${record.tables}" />
                 <tr class="${rowClass}">
                   <c:set value="${record.primaryKey}" var="primaryKey"/>
 								  <c:set var="pkValues" value="${primaryKey.values}"/>
@@ -116,10 +117,20 @@
 								  <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}"/>
 								  <td id="${primaryKey}" class="group">
                     <c:if test="${keywords ne ''}">
-                      <div class="attr-keywords">Keyword(s): ${keywords}</div>
+                      <div class="attr-keyword-freq">
+                         Keyword(s): 
+                         <c:forEach items="${tables['KeywordFrequency']}" var="row">
+                           <span class="keyword" data-frequency="${row['frequency']}">${row['keyword']}</span>
+                         </c:forEach>
+                      </div>
                     </c:if>
                     <c:if test="${descriptions ne ''}">
-                      <div class="attr-descriptions">Pfam Domain(s): ${descriptions}</div>
+                      <div class="attr-descriptions">
+                         Pfam Domain(s): 
+                         <c:forEach items="${tables['DomainFrequency']}" var="row">
+                           <span class="keyword" data-frequency="${row['frequency']}">${row['keyword']}</span>
+                         </c:forEach>
+                      </div>
                     </c:if>
 								    <div class="count-data">
 								      <c:forEach items="${taxonCounts}" var="row">

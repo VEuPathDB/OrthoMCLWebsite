@@ -12,7 +12,7 @@
   <c:set var="groupName" value="${wdkRecord.attributes['group_name']}"/>
   <c:set var="proteins" value="${wdkRecord.tables['ProteinPFams']}"/>
   <c:set var="domains" value="${wdkRecord.tables['PFams']}"/>
-  <c:set var="proteinGroups" value="${wdkfn:groupAttributeRecordsBySource(proteins)}"/>
+  <c:set var="proteinGroups" value="${wdkfn:groupAttributeRecordsBySource(proteins, 'full_id')}"/>
 
   <!-- generate domain colors -->
   <c:set var="domainCount" value="${fn:length(domains)}"/>
@@ -20,6 +20,7 @@
 
   <span class="onload-function" data-function="initializePfams"><jsp:text/></span>
 
+  
   <!-- <h3>List of Domains (present in this group)</h3> -->
   <imp:toggle name="pfam-domains" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
@@ -35,7 +36,8 @@
         <c:forEach items="${domains}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${not odd}" />
-          <tr id="${domain['accession']}" class="domain ${rowClass}">
+          <tr id="${domain['accession']}" class="domain ${rowClass}" 
+              data-index="${domain['domain_index']}" data-max="${domain['max_index']}">
             <td>${domain["accession"]}</td>
             <td>${domain["symbol"]}</td>
             <td>${domain["description"]}</td>
@@ -61,12 +63,12 @@
         <tbody>
           <c:set var="odd" value="${true}"/>
           <c:forEach items="${proteinGroups}" var="proteinGroup">
-            <c:set var="sourceId" value="${proteinGroup[0]['source_id'].value}"/>
+            <c:set var="sourceId" value="${proteinGroup[0]['full_id'].value}"/>
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}"/>
             <tr class="protein ${rowClass}">
               <td class="source-id">
-                <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;source_id=${sourceId}' />">${sourceId}</a>
+                <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${sourceId}">${sourceId}</a>
               </td>
               <td class="length">${proteinGroup[0]['length']}</td>
               <td>
@@ -91,4 +93,5 @@
       </table>
     </jsp:attribute>
   </imp:toggle>
+
 </jsp:root>

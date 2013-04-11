@@ -164,11 +164,12 @@
             <div class="domains">
               <div class="protein-graph"> </div>
               <c:forEach items="${wdkTable}" var="row">
-                <c:set var="name" value="${row['primary_identifier'].value}" />
+                <c:set var="name" value="${row['accession'].value}" />
                 <c:set var="start" value="${row['start_min']}" />
                 <c:set var="end" value="${row['end_max']}" />
                 <c:if test="${name ne null and name ne ''}">
                   <div class="domain" id="${name}" start="${start}" end="${end}"
+                       data-index="${row['domain_index']}" data-max="${row['max_index']}"
                        title="${name} (location: [${start} - ${end}])">
                     <div> </div>
                   </div>
@@ -193,10 +194,11 @@
         <c:forEach items="${wdkTable}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${!odd}" />
-          <tr id="${domain['primary_identifier']}" class="domain ${rowClass}" >
-            <td>${domain["primary_identifier"]}</td>
-            <td>${domain["secondary_identifier"]}</td>
-            <td>${domain["remark"]}</td>
+          <tr id="${domain['accession']}" class="domain ${rowClass}"
+              data-index="${domain['domain_index']}" data-max="${domain['max_index']}" >
+            <td>${domain["accession"]}</td>
+            <td>${domain["symbol"]}</td>
+            <td>${domain["description"]}</td>
             <td>${domain["start_min"]}</td>
             <td>${domain["end_max"]}</td>
             <td><div class="legend"> </div></td>

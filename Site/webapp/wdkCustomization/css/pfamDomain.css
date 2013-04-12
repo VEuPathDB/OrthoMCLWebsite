@@ -1,19 +1,27 @@
 #domains .domain .legend {width:200px;}
 
-#domains .domain .legend div, #proteins .protein .domains .domain > div {height:4px;}
+#domains .domain .legend div, #proteins .protein .domains .domain > div {height:5px;}
+
+#domains .domain .legend,
+#proteins .protein .domains .domain
+{border: 1px solid #eee; border-radius: 5px;}
 
 #domains .domain .legend div:first-child,
 #proteins .protein .domains .domain > div:first-child
-{height:4px; border-radius: 5px 5px 0 0;}
+{border-radius: 5px 5px 0 0;}
 
 #domains .domain .legend div:last-child,
 #proteins .protein .domains .domain > div:last-child
-{height:4px; border-radius: 0 0 5px 5px;}
+{border-radius: 0 0 5px 5px;}
 
 #proteins .protein .domains {position:relative;}
 
-#proteins .protein .domains .protein-graph {margin:7px 0px; background-color:#333333; height:5px;}
+#proteins .protein .domains .protein-graph {margin:11px 0px; background-color:#666; height:1px;}
 
-#proteins .protein .domains .domain {top:-6px; position:absolute; display:block;}
+#proteins .protein .domains .domain {top:-11px; position:absolute; display:block;}
 
 #proteins .protein .domains .domain > div {min-width:5px;}
+
+#Record_Views table.dataTable tr.even, #Record_Views tr.rowMedium { background-color: rgb(240, 240, 240); }
+#Record_Views tr.rowMedium { background-color: whitesmoke; }
+#Record_Views th, #Record_Views td { vertical-align: middle; }

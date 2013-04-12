@@ -6,7 +6,7 @@ wdk.util.namespace("eupathdb.pfamDomain", function(ns, $) {
     "rgb(71, 145, 213)",  // dark blue
     "rgb(193, 235, 248)", // light blue
     "orange",
-    "yellow",
+    "rgb(235, 235, 0)",  // yellow
     "black",
     "rgb(190, 190, 190)", // grey
     "rgb(255, 192, 203)", // light red

@@ -75,12 +75,13 @@
                 <div class="domains">
                   <div class="protein-graph"><jsp:text/></div>
                   <c:forEach items="${proteinGroup}" var="row">
-                    <c:set var="name" value="${row['accession'].value}"/>
+                    <c:set var="accession" value="${row['accession'].value}"/>
+                    <c:set var="symbol" value="${row['symbol'].value}"/>
                     <c:set var="start" value="${row['start_min']}"/>
                     <c:set var="end" value="${row['end_max']}"/>
-                    <c:if test="${not empty name}">
-                      <div class="domain" id="${name}" start="${start}" end="${end}"
-                           title="${name} (location: [${start} - ${end}])">
+                    <c:if test="${not empty accession}">
+                      <div class="domain" id="${accession}" start="${start}" end="${end}"
+                           title="${accession} ${symbol} (location: [${start} - ${end}])">
                       </div>
                     </c:if>
                   </c:forEach>

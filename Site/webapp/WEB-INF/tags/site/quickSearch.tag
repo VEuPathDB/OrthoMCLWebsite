@@ -12,10 +12,6 @@
 <c:set var="questionSets" value="${wdkModel.questionSetsMap}"/>
 
 
-<script type="text/javascript">
-  $(function() { wdk.tooltips.assignTooltips('.head-search-tip'); });
-</script>
-
 <table id="quick-search">
   <tr>
 
@@ -106,3 +102,26 @@
     </td>
   </tr>
 </table>
+
+<script type="text/javascript">
+  $(function() { wdk.tooltips.assignTooltips('.head-search-tip'); });
+  var group_quicksearch_text_expression = $.cookie("group_quicksearch_text_expression");
+  var sequence_quicksearch_text_expression = $.cookie("sequence_quicksearch_text_expression");
+
+  if (group_quicksearch_text_expression) {
+    $("#group-quicksearch form input[name='value(text_expression)']")
+    .val(group_quicksearch_text_expression);
+  }
+
+  if (sequence_quicksearch_text_expression) {
+    $("#sequence-quicksearch form input[name='value(text_expression)']")
+    .val(sequence_quicksearch_text_expression);
+  }
+
+  $("#group-quicksearch form, #sequence-quicksearch form").on("submit", function() {
+    $.cookie(this.parentNode.id.replace("-", "_") + "_text_expression",
+        $(this).find("input[name='value(text_expression)']").val());
+  });
+  
+</script>
+

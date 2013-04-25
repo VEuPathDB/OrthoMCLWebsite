@@ -172,14 +172,19 @@
 
 .ui-button-text-only .ui-button-text { padding: 0; }
 
-.attr-keywords, .attr-descriptions {
+.attr-keyword-freq, .attr-descriptions {
     padding: 0.4em;
+    font-weight: bold;
 }
 
-.attr-keywords {
-    background: #eeeecc;
+.attr-keyword-freq label, .attr-descriptions label {
+    width: 100px;
+    display: inline-block;
+    text-align: right;
+    font-weight: normal;
+    padding-right: 0.4em;
 }
 
-.attr-descriptions {
-    background: #eeccee;
+.attr-keyword-freq, .attr-descriptions {
+    background: white;
 }

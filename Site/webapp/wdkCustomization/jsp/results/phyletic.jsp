@@ -116,22 +116,28 @@
 								  <!-- load the taxon count -->
 								  <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}"/>
 								  <td id="${primaryKey}" class="group">
-                    <c:if test="${keywords ne ''}">
-                      <div class="attr-keyword-freq">
-                         Keyword(s): 
-                         <c:forEach items="${tables['KeywordFrequency']}" var="row">
-                           <span class="keyword" data-frequency="${row['frequency']}">${row['keyword']}</span>
-                         </c:forEach>
-                      </div>
-                    </c:if>
-                    <c:if test="${descriptions ne ''}">
+                    <div class="attr-keyword-freq">
+                       <label>Keywords:</label>
+                       <c:forEach items="${tables['KeywordFrequency']}" var="row" varStatus="loop">
+                         <span class="keyword" title="frequency: ${row['frequency']}" 
+                           data-frequency="${row['frequency']}">${row['keyword']}<c:if test="${not loop.last}">; </c:if>
+                         </span>
+                       </c:forEach>
+                      <c:if test="${keywords eq ''}">
+                        <span class="keyword" data-frequency="0">n/a</span>
+                      </c:if>
+                    </div>
                       <div class="attr-descriptions">
-                         Pfam Domain(s): 
-                         <c:forEach items="${tables['DomainFrequency']}" var="row">
-                           <span class="keyword" data-frequency="${row['frequency']}">${row['keyword']}</span>
-                         </c:forEach>
-                      </div>
-                    </c:if>
+                       <label>Pfam Domains:</label>
+                       <c:forEach items="${tables['DomainFrequency']}" var="row" varStatus="loop">
+                         <span class="keyword" title="frequency: ${row['frequency']}" 
+                           data-frequency="${row['frequency']}">${row['keyword']}<c:if test="${not loop.last}">; </c:if>
+                         </span>
+                       </c:forEach>
+                      <c:if test="${descriptions eq ''}">
+                        <span class="keyword" data-frequency="0">n/a</span>
+                      </c:if>
+                    </div>
 								    <div class="count-data">
 								      <c:forEach items="${taxonCounts}" var="row">
 								        <div class="count" taxon-id="${row['taxon_id']}">${row['count']}</div>

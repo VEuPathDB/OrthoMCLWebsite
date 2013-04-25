@@ -55,6 +55,7 @@ PhyleticViewManager.initialize = function() {
         manager.configureControls(manager, workspace);
         manager.createTaxonDisplay(manager, workspace);
         manager.createGroupDisplay(manager, workspace);
+        manager.colorAttributesByFrequency(manager, workspace);
 
         // remove select columns from pager
         $(".pager .addAttributesButton").hide();
@@ -335,4 +336,13 @@ PhyleticViewManager.getCounts = function(manager, workspace, groupId) {
         });
         return counts; 
     }
+
+PhyleticViewManager.colorAttributesByFrequency = function(manager, workspace) {
+    workspace.find(".attr-keyword-freq .keyword, .attr-descriptions .keyword").each(function() {
+        var $this = $(this);
+        var freq = $this.data("frequency");
+        var cLevel = Math.floor(200 - 200 * freq);
+        $this.css("color", "rgb(" + [cLevel, cLevel, cLevel].join(",") + ")");
+    })
+}
 

@@ -17,6 +17,9 @@ serverControlDir=/var/www/Common/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO
 # path on cluster to the FASTA file of OrthoMCL protein sequences
 blastDbFilePath=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/db/proteinSeqs
 
+# maximum jobs allowed to run at one time, including both phase 1 and phase 2.
+maxJobs=10
+
 # Parent directory for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
 clusterServerDir=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORTHO_WEBSITE@@/queues/@@CLUSTER_HOSTNAME@@
 

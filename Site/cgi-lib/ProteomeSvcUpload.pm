@@ -144,6 +144,7 @@ sub getTmplText {
       <li>Email: <strong><code><TMPL_VAR EMAIL></code></strong></li>
     </ul>
     <p>Thanks for submitting your proteins!</p>
+    <form><p><input type="button" value="OK" onclick="jQuery('#proteome-result').dialog('close')"/></p></form>
   </div>
 <!-- END CONTENT -->
 

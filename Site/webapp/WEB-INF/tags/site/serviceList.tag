@@ -76,8 +76,8 @@
           file properly (you will see a page full of terms with no structure).
         </li>
         <li>To construct the URL in the example above, you would check the
-          <a href="/webservices/GeneQuestions/GenesByMolecularWeight.wadl">Molecular Weight</a>
-          WADL located below under <b>Protein Attributes</b>
+          <a href="/webservices/GroupQuestions/BySequenceCount.wadl">Number of Sequences</a>
+          WADL located below under <b>Group Statistics</b>
         </li>
       </ul>
     </span>

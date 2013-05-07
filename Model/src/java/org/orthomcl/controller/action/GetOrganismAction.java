@@ -5,7 +5,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.gusdb.fgputil.db.SqlUtil;
+import org.gusdb.fgputil.IoUtil;
+import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
@@ -30,10 +31,10 @@ public class GetOrganismAction extends WdkAction {
         GroupLoader loader = new GroupLoader(connection);
         byte[] data = loader.getOrganismsData();
         return new ActionResult(ResponseType.binary_data)
-            .setStream(getStreamFromBytes(data));
+            .setStream(IoUtil.getStreamFromBytes(data));
       }
       finally {
-        SqlUtil.closeQuietly(connection);
+        SqlUtils.closeQuietly(connection);
       }
     }
 }

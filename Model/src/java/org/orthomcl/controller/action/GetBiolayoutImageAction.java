@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.gusdb.fgputil.db.DatabaseResultStream;
-import org.gusdb.fgputil.db.SqlUtil;
+import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
@@ -69,7 +69,7 @@ public class GetBiolayoutImageAction extends WdkAction {
       catch (Exception e) {
         // only make sure to close open objects if exception is thrown;
         //   if code above was successful, objects will be closed by WdkAction
-        SqlUtil.closeQuietly(resultSet, statement, conn);
+        SqlUtils.closeQuietly(resultSet, statement, conn);
         throw e;
       }
     }

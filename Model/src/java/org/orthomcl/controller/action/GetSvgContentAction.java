@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.gusdb.fgputil.db.SqlUtil;
+import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
@@ -70,7 +70,7 @@ public class GetSvgContentAction extends WdkAction {
       }
       return ActionResult.EMPTY_RESULT;
     } finally {
-      SqlUtil.closeQuietly(resultSet, statement, conn);
+      SqlUtils.closeQuietly(resultSet, statement, conn);
     }
   }
 

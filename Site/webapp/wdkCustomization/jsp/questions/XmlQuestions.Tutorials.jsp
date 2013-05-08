@@ -14,14 +14,7 @@
 <c:set var="tutAnswer" value="${requestScope.wdkXmlAnswer}"/>
 
 
-<imp:pageFrame title="${wdkModel.displayName} : Tutorials"
-                 banner="${banner}"
-                 parentDivision="${wdkModel.displayName}"
-                 parentUrl="/home.jsp"
-                 divisionName="Tutorials"
-                 division="tutorials"
-                 headElement="${headElement}" >
-
+<imp:pageFrame title="${wdkModel.displayName} : Tutorials">
 
 
        <c:choose>

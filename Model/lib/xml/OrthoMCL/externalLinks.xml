@@ -4,7 +4,7 @@
 <xmlAnswer>
 
    <record>
-      <table name="relatedLinks">
+      <table name="communityLinks">
         <row>
           <attribute name="title">Mammalian Orthology</attribute>
           <attribute name="url">http://www.informatics.jax.org/orthology.shtml</attribute>

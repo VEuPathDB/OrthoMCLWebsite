@@ -12,17 +12,7 @@
 
 <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
 
-<imp:pageFrame title="${wdkModel.displayName} : ${banner}"
-                 banner="${banner}"
-                 parentDivision="${wdkModel.displayName}"
-                 parentUrl="/home.jsp"
-                 divisionName="Useful Links"
-                 division="links">
-
-<table border=0 width=100% cellpadding=3 cellspacing=0 bgcolor=white class=thinTopBottomBorders> 
-
- <tr>
-  <td bgcolor=white valign=top>
+<imp:pageFrame title="${wdkModel.displayName}">
 
 <%-- handle empty result set situation --%>
 <c:choose>
@@ -60,11 +50,5 @@
 
   </c:otherwise>
 </c:choose>
-
-
-  </td>
-  <td valign=top class=dottedLeftBorder></td> 
-</tr>
-</table> 
 
 </imp:pageFrame>

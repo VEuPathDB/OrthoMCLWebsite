@@ -167,26 +167,14 @@
     </h3>
 	  <div>
 		  <ul id="education">
-			  <li>
-				  <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a> (video and pdf)
+		    <li>
+		      <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a> (video and pdf)
 		    </li> 
 		    <li>
-		      <a href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a>
-		    </li>
-		    <li>
-		      <a href="http://workshop.eupathdb.org/current/index.php?page=schedule">Exercises from our most recent Workshop</a> (English)
-		    </li>
-		    <li>
-		      <a href="http://workshop.eupathdb.org/2011/index.php?page=schedule">Exercises from 2011 Workshop</a> (English and Spanish)
-		    </li>
-			  <li>
 		      <a href="http://www.genome.gov/Glossary/">NCBI's Glossary of Terms</a>
 		    </li>
-			  <li>
-		      <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Glossary">Our Glossary</a>
-		    </li>
 		    <li>
-          <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
+		      <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
 		    </li>
 		  </ul>
 	  </div>

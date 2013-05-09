@@ -15,6 +15,18 @@
     </record>
 --> 
    <record>
+       <attribute name="headline">OrthoMCL 5 Strategies-WDK version released (beta)</attribute>
+       <attribute name="date">10 May 2013  9:00AM</attribute>
+       <attribute name="tag">ortho-5-wdk</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">           
+         <![CDATA[
+OrthoMCL-DB Version 5-WDK (Beta) is released.  It uses the new <a href="http://code.google.com/p/strategies-wdk/">Strategies-WDK</a> based web site.  Version 6 is on the way in the first half of 2013.  It will be the first build using a new backend system that will help us get releases out at a faster rate.
+          ]]>
+       </attribute>
+    </record>
+
+   <record>
        <attribute name="headline">OrthoMCL 5 released</attribute>
        <attribute name="date">31 Mar 2011  9:00AM</attribute>
        <attribute name="tag">ortho-5</attribute>

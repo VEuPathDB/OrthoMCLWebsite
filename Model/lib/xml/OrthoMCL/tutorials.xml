@@ -21,7 +21,7 @@
        <attribute name="uid">40</attribute>
        <table name="files">
         <row>
-           <attribute name="projects">AmoebaDB,EuPathDB,CryptoDB,GiardiaDB,FungiDB,MicrosporidiaDB,PiroplasmaDB,PlasmoDB,ToxoDB,TrichDB,TriTrypDB</attribute>
+           <attribute name="projects">OrthoMCL</attribute>
            <attribute name="fileName.mov">unavailable</attribute>
            <attribute name="fileName.avi">unavailable</attribute>
            <attribute name="fileName.flv">Favorites/favorites_viewlet_swf.html</attribute>
@@ -31,45 +31,6 @@
          </row>
        </table>
    </record>
-
-
-<record>
-       <attribute name="title">Identify Genes based on Gene ID</attribute>
-       <attribute name="description">How to us the search 'Identify Genes based on Gene ID', to find genes by entering a list of gene IDs.</attribute>
-       <attribute name="uid">19Sept2012_1</attribute>
-       <table name="files">
-        <row>
-           <attribute name="projects">AmoebaDB,EuPathDB,CryptoDB,GiardiaDB,FungiDB,MicrosporidiaDB,PiroplasmaDB,PlasmoDB,ToxoDB,TrichDB,TriTrypDB</attribute>
-           <attribute name="fileName.mov">watch?v=yyhqMSxkg98</attribute>
-           <attribute name="fileName.avi">unavailable</attribute>
-           <attribute name="fileName.flv">Identify Genes by Gene ID/identify_genes_by_gene_id_viewlet_swf.html</attribute>
-           <attribute name="fileName.pdf">unavailable</attribute>
-           <attribute name="duration">2 min</attribute>
-           <attribute name="size">6.4 mb</attribute>
-         </row>
-       </table>
-   </record>
-   
-
-
-<record>
-       <attribute name="title">Identify Genes based on Text</attribute>
-       <attribute name="description">How to use the search, 'Identify Genes based on Text', to find genes whose gene records or annotations contain the same word or phrase.</attribute>
-       <attribute name="uid">19Sept2012_3</attribute>
-       <table name="files">
-        <row>
-           <attribute name="projects">OrthoMCL</attribute>
-           <attribute name="fileName.mov">watch?v=GtRd8TXtJhU</attribute>
-           <attribute name="fileName.avi">unavailable</attribute>
-           <attribute name="fileName.flv">Identify Genes by Text/identify_genes_by_text_viewlet_swf.html</attribute>
-           <attribute name="fileName.pdf">unavailable</attribute>
-           <attribute name="duration">2 min</attribute>
-           <attribute name="size">6.2 mb</attribute>
-         </row>
-       </table>
-   </record>
-  
-
 
 
  <record>
@@ -159,24 +120,7 @@
          </row>
        </table>
    </record>
-   
-
- <record>
-       <attribute name="title">Text Search</attribute>
-       <attribute name="description">How to identify genes based on any text term in the gene record.</attribute>
-       <attribute name="uid">150</attribute>
-       <table name="files">
-        <row>
-           <attribute name="projects">OrthoMCL</attribute>
-           <attribute name="fileName.mov">watch?v=rfgWp9IEi8s</attribute>
-           <attribute name="fileName.avi">unavailable</attribute>
-           <attribute name="fileName.flv">TextSearch/Text_Search_viewlet_swf.html</attribute>
-           <attribute name="fileName.pdf">Text_Search.pdf</attribute>
-           <attribute name="duration">4 min</attribute>
-           <attribute name="size">3.2 mb</attribute>
-         </row>
-       </table>
-   </record>
+ 
 
 
  </xmlAnswer>

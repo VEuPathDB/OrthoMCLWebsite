@@ -22,7 +22,7 @@ public class GetOrganismAction extends WdkAction {
     @Override
     protected ActionResult handleRequest(ParamGroup params) throws Exception {
       // get connection
-      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      DataSource dataSource = getWdkModel().getModel().getAppDb().getDataSource();
       Connection connection = null;
       
       try {

@@ -9,10 +9,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
-import org.gusdb.wdk.model.dbms.SqlUtils;
 import org.gusdb.wdk.model.query.param.Param;
 import org.gusdb.wdk.model.query.param.ParamHandler;
 import org.gusdb.wdk.model.user.User;
@@ -69,11 +69,11 @@ public class ExpressionParamHandler implements ParamHandler {
     private Map<String, Integer> getTerms() throws WdkUserException,
             WdkModelException {
         Map<String, Integer> terms = new LinkedHashMap<String, Integer>();
-        DataSource dataSource = wdkModel.getQueryPlatform().getDataSource();
+        DataSource dataSource = wdkModel.getAppDb().getDataSource();
         ResultSet resultSet = null;
         try {
             resultSet =
-                    SqlUtils.executeQuery(wdkModel, dataSource, TAXON_SQL,
+                    SqlUtils.executeQuery(dataSource, TAXON_SQL,
                             "ortho-exp-param-handler-taxon", 1000);
             int order = 0;
             while (resultSet.next()) {

@@ -53,7 +53,7 @@ public class GetSvgContentAction extends WdkAction {
     String groupName = params.getValue(PARAM_GROUP_NAME);
 
     // read svg_content from database
-    DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+    DataSource dataSource = getWdkModel().getModel().getAppDb().getDataSource();
     Connection conn = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;

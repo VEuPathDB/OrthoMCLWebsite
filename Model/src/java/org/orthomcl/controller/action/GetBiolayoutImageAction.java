@@ -48,7 +48,7 @@ public class GetBiolayoutImageAction extends WdkAction {
     protected ActionResult handleRequest(ParamGroup params) throws Exception {
       
       // read image from database
-      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      DataSource dataSource = getWdkModel().getModel().getAppDb().getDataSource();
       Connection conn = null;
       PreparedStatement statement = null;
       ResultSet resultSet = null;

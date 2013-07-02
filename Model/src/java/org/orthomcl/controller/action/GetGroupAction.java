@@ -27,7 +27,7 @@ public class GetGroupAction extends WdkAction {
       String groupName = params.getValue(PROP_GROUP);
 
       // get connection
-      DataSource dataSource = getWdkModel().getModel().getQueryPlatform().getDataSource();
+      DataSource dataSource = getWdkModel().getModel().getAppDb().getDataSource();
       Connection connection = null;
 
       try {

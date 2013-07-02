@@ -22,9 +22,8 @@ import java.util.ArrayList;
 import javax.servlet.jsp.JspException;
 import javax.sql.DataSource;
 
-import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.dbms.DBPlatform;
-import org.gusdb.wdk.model.dbms.SqlUtils;
+import org.gusdb.fgputil.db.SqlUtils;
+import org.gusdb.fgputil.db.pool.DatabaseInstance;
 
 public class SiteMessagesTag extends WdkTagBase {
 
@@ -44,7 +43,7 @@ public class SiteMessagesTag extends WdkTagBase {
         messages = new ArrayList<String>();
         ResultSet rs = null;
         PreparedStatement ps = null;
-        DBPlatform loginPlatform = wdkModel.getUserPlatform();
+        DatabaseInstance loginPlatform = wdkModel.getUserDb();
         StringBuffer sql = new StringBuffer();
        
         sql.append(" SELECT m.message_text                                       ");
@@ -68,8 +67,6 @@ public class SiteMessagesTag extends WdkTagBase {
                 messages.add(rs.getString(1) );
             }
         } catch (SQLException sqle) {
-            throw new JspException(sqle);
-        } catch (WdkModelException sqle) {
             throw new JspException(sqle);
         } finally {
             SqlUtils.closeResultSetAndStatement(rs);

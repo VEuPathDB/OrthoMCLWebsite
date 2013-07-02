@@ -1,7 +1,7 @@
 package org.orthomcl.controller.config;
 
 import org.apache.log4j.Logger;
-import org.gusdb.wdk.model.config.PropFileReader;
+import org.gusdb.fgputil.PropFileReader;
 
 public class ProteomeServerConfig extends PropFileReader {
   

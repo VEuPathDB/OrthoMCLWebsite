@@ -25,7 +25,7 @@ public class ProteomeServerConfig extends PropFileReader {
   public ProteomeServerConfig(String gusHome) {
     _gusHome = gusHome;
     loadProperties();
-  };
+  }
   
   @Override
   protected String getPropertyFile() {

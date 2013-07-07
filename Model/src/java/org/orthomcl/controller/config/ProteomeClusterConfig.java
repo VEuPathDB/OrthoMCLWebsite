@@ -20,7 +20,7 @@ public class ProteomeClusterConfig extends PropFileReader {
   public ProteomeClusterConfig(String gusHome) {
     _gusHome = gusHome;
     loadProperties();
-  };
+  }
   
   @Override
   protected String getPropertyFile() {

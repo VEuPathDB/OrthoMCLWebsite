@@ -38,16 +38,19 @@ public class ExpressionParamHandler implements ParamHandler {
         this.parser = new ExpressionParser();
     }
 
+    @Override
     public void setParam(Param param) {
         // this.param = param;
     }
 
+    @Override
     public void setWdkModel(WdkModel wdkModel) throws WdkUserException,
             WdkModelException {
         this.wdkModel = wdkModel;
         this.terms = getTerms();
     }
 
+    @Override
     public String transform(User user, String internalValue)
             throws WdkModelException {
         logger.debug("transforming phyletic param: " + internalValue);
@@ -66,8 +69,7 @@ public class ExpressionParamHandler implements ParamHandler {
         return sql.toString();
     }
 
-    private Map<String, Integer> getTerms() throws WdkUserException,
-            WdkModelException {
+    private Map<String, Integer> getTerms() throws WdkModelException {
         Map<String, Integer> terms = new LinkedHashMap<String, Integer>();
         DataSource dataSource = wdkModel.getAppDb().getDataSource();
         ResultSet resultSet = null;

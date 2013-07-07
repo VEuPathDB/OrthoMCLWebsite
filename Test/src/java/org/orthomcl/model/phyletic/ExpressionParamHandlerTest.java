@@ -1,33 +1,18 @@
 package org.orthomcl.model.phyletic;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-
 import org.gusdb.wdk.model.Utilities;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.user.User;
-import org.json.JSONException;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 public class ExpressionParamHandlerTest {
 
     private final User user;
     private final ExpressionParamHandler handler;
 
-    public ExpressionParamHandlerTest() throws WdkModelException,
-            NoSuchAlgorithmException, WdkModelException, InstantiationException,
-            IllegalAccessException, ClassNotFoundException,
-            ParserConfigurationException, TransformerFactoryConfigurationError,
-            TransformerException, IOException, SAXException, SQLException,
-            JSONException, WdkUserException {
+    public ExpressionParamHandlerTest() throws WdkModelException, WdkUserException {
         String projectId = System.getProperty(Utilities.ARGUMENT_PROJECT_ID);
         String gusHome = System.getProperty(Utilities.SYSTEM_PROPERTY_GUS_HOME);
         WdkModel wdkModel = WdkModel.construct(projectId, gusHome);

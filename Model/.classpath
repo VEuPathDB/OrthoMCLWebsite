@@ -11,5 +11,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/orthomcl/orthomcl-data-common/1.0.0/orthomcl-data-common-1.0.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/orthomcl/orthomcl-data-data/1.0.0/orthomcl-data-data-1.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/fgputil-util"/>
+	<classpathentry kind="lib" path="/WSF Plugin/lib/java/org.json-chargebee-1.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

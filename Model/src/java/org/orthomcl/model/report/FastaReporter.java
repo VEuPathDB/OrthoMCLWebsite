@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.orthomcl.model.report;
 
 import java.io.OutputStream;
@@ -58,6 +55,7 @@ public class FastaReporter extends Reporter {
     hasDescription = (strDescription != null && (strDescription.equals("yes") || strDescription.equals("true")));
   }
 
+  @Override
   public String getConfigInfo() {
     return "You can choose to include organism or descriptions into the defline of FASTA file";
   }

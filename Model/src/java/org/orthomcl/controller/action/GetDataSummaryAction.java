@@ -3,8 +3,6 @@
  */
 package org.orthomcl.controller.action;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,13 +15,11 @@ import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
 import org.gusdb.wdk.model.jspwrap.RecordBean;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
-import org.json.JSONException;
 
 /**
  * @author jerric
@@ -82,8 +78,7 @@ public class GetDataSummaryAction extends WdkAction {
   }
 
   private Map<String, Taxon> loadTaxons(RecordBean record)
-      throws NoSuchAlgorithmException, WdkModelException, WdkUserException,
-      SQLException, JSONException {
+      throws WdkModelException {
     Map<String, Taxon> taxons = new LinkedHashMap<>();
     Map<Integer, Integer> parents = new HashMap<>();
     Map<Integer, String> abbreviations = new HashMap<>();

@@ -27,17 +27,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 import javax.servlet.jsp.JspException;
-
 import javax.sql.DataSource;
 
-import org.apidb.apicommon.taglib.wdk.WdkTagBase;
 import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.fgputil.db.pool.DatabaseInstance;
-import org.gusdb.wdk.model.WdkModelException;
 
 public class SiteXmlMessagesTag extends WdkTagBase {
 
@@ -47,6 +43,7 @@ public class SiteXmlMessagesTag extends WdkTagBase {
     private String range;
     private String stopDateSort = "ASC";
 
+    @Override
     public void doTag() throws JspException {
         super.doTag();
         
@@ -65,9 +62,7 @@ public class SiteXmlMessagesTag extends WdkTagBase {
             messages = fetchMessages(projectName, messageCategory, stopDateSort, range);
         } catch (SQLException sqle) {
             throw new JspException(sqle);
-        } catch (WdkModelException e) {
-            throw new JspException(e);
-		}
+        }
 
         StringBuffer xml =  new StringBuffer();
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -87,7 +82,7 @@ public class SiteXmlMessagesTag extends WdkTagBase {
 
     private ArrayList<ArrayList<String>> fetchMessages(
             String projectName, String messageCategory, 
-            String stopDateSort, String range) throws SQLException, WdkModelException {
+            String stopDateSort, String range) throws SQLException {
 
         ArrayList<ArrayList<String>> messages = new ArrayList<ArrayList<String>>();
         ResultSet rs = null;
@@ -122,7 +117,7 @@ public class SiteXmlMessagesTag extends WdkTagBase {
     }
 
     private PreparedStatement specificProjectPreparedStatement(
-            String projectName, String messageCategory, String range) throws SQLException, WdkModelException {
+            String projectName, String messageCategory, String range) throws SQLException {
 
         PreparedStatement ps;
         DatabaseInstance loginPlatform = wdkModel.getUserDb();
@@ -152,7 +147,7 @@ public class SiteXmlMessagesTag extends WdkTagBase {
     }
     
     private PreparedStatement allProjectsPreparedStatement(
-            String messageCategory, String range) throws SQLException, WdkModelException {
+            String messageCategory, String range) throws SQLException {
 
         PreparedStatement ps;
         DatabaseInstance loginPlatform = wdkModel.getUserDb();

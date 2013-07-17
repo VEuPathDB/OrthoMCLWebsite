@@ -156,10 +156,6 @@ fi
 # Some lines are not valid for eval, so we squash the warnings
 eval "$(cat $SERVER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
 eval "$(cat $CLUSTER_CONF | sed 's/ *=/=/' | sed 's/= */=/')" 2> /dev/null
-# This is the active cluster configuration: orthomclProteomeSvcCluster.prop which
-# might be a symlink pointing to a configuration other than the one we are validating.
-# We source it too but append '_active' to the variable names so they don't clash.
-eval "$(cat $ACTIVE_CLUSTER_CONF | sed 's/ *=/=/' | sed 's/= */=/' | sed 's/=/_active=/')" 2> /dev/null
 
 ##################################################################################################
 # SPECIFIC VALIDATIONS
@@ -200,10 +196,6 @@ if is_local_symlink "$CONF_DIR/orthomclProteomeSvcCluster.prop"; then
 else
     info "orthomclProteomeSvcCluster.prop is not a symlink" 
 fi
-
-# Mentioning the active configuration (not necessarily what we are validating)
-# is kinda confusing, so I'm taking it out.
-#info "Uploads to the website will be deposited in\n  $serverControlDir_active"
 
 echo -n "checking serverControlDir (Cluster.prop) ... "
 is_local_dir $serverControlDir || \

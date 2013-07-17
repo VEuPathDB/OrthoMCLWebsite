@@ -29,7 +29,7 @@ my %dblinkMap;
 ####################################################################
 # shared
 my $g_platform = "Oracle";
-my $g_userLoginSchema = "userlogins3";
+my $g_userLoginSchema = "userlogins4";
 my $g_showConnections = "false";
 my $g_showConnectionsInterval = "10";
 my $g_showConnectionsDuration = "600";
@@ -55,7 +55,7 @@ my $userDb_connectionUrl = "";
 my $userDb_maxIdle = "1";
 my $userDb_minIdle = "0";
 my $userDb_wdkEngineSchema = "wdkengine." ;
-my $userDb_userSchema = "userlogins3.";
+my $userDb_userSchema = "userlogins4.";
 
 my $site_admin_email = 'sfischer@pcbi.upenn.edu, jerric@pcbi.upenn.edu, aurreco@uga.edu, mheiges@uga.edu, rdoherty@pcbi.upenn.edu, dfalke@uga.edu';
 

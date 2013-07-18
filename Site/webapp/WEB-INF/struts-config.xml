@@ -170,7 +170,8 @@
         parameter="org.gusdb.wdk.controller.action.user.ProcessResetPasswordAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper"
         name="resetPasswordForm">
-      <forward name="success" path="/showPassword.do"/>
+      <forward name="success" path="/WEB-INF/jsp/resetpwd.jsp"/>
+      <forward name="show_password" path="/showPassword.do" redirect="true"/>    
     </action>
     
     <!-- Web Service Actions -->

@@ -144,7 +144,7 @@ function toggleState(nodeId) {
     var taxon = taxons[nodeId];
    
     if (taxon.children.length) {
-        taxon.state = branch_states[(_.indexOf(branch_states, taxon.state) + 1) % 4];
+        taxon.state = branch_states[(branch_states.indexOf(taxon.state) + 1) % 4];
         //taxon.state = (taxon.state + 1) % 4;
         imgState.src = "wdkCustomization/images/" + urls[taxon.state];
 
@@ -158,7 +158,7 @@ function toggleState(nodeId) {
         }
     }
     else {
-        taxon.state = leaf_states[(_.indexOf(leaf_states, taxon.state) + 1) % 3];
+        taxon.state = leaf_states[(leaf_states.indexOf(taxon.state) + 1) % 3];
         //taxon.state = (taxon.state + 1) % 3;
         imgState.src = "wdkCustomization/images/" + urls[taxon.state];
     }

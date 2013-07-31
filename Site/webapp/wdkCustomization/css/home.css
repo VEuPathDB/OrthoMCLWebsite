@@ -75,6 +75,9 @@
 
 /* cancelling jquery style */
 
+div#sidebar h3 {
+  padding: 0;
+}
 div#sidebar h3.ui-state-active {
 	background:0;
   border:0;

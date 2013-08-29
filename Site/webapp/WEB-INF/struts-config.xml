@@ -372,6 +372,15 @@
       path="/downloadStep"
       type="org.gusdb.wdk.controller.action.DownloadStepAnswerValueAction">
     </action>
+    <action path="/showPublicStrats"
+        parameter="org.gusdb.wdk.controller.action.ShowPublicStratsAction"
+        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
+      <forward name="success" path="/wdk/jsp/showPublicStrats.jsp"/>
+    </action>
+    <action path="/processPublicStratStatus"
+        parameter="org.gusdb.wdk.controller.action.ProcessPublicStratsStatusAction"
+        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
+    </action>
     <action
       path="/renameStep"
       type="org.gusdb.wdk.controller.action.ProcessRenameStepAction"

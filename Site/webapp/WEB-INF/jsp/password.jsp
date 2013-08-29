@@ -33,14 +33,19 @@
 							    </tr>
 							  </c:when>
 							  <c:otherwise>
-							    <!-- check if there's an error message to display -->
-							    <c:if test="${requestScope.changePasswordError ne null}">
-							      <tr>
-							        <td colspan="2">
-							          <font color="red">${requestScope.changePasswordError}</font>
-							        </td>
-							      </tr>
-							    </c:if>
+                  <!-- check if there's an error message to display -->
+                  <c:if test="${not empty changePasswordError}">
+                    <tr><td colspan="2"><font color="red">${changePasswordError}</font></td></tr>
+                  </c:if>
+                  <c:if test="${validator.errorsPresent}}">
+                    <c:forEach var="error" items="${validator.errorList}">
+                      <tr>
+                        <td colspan="2">
+                          <font color="red">${error}</font>
+                        </td>
+                      </tr>
+                    </c:forEach>
+                  </c:if>
 							    <tr>
 							      <td align="right" width="200" nowrap="nowrap">&#160;<br/>Current User: </td>
 							      <td align="left">&#160;<br/>${wdkUser.firstName} ${wdkUser.lastName}</td>
@@ -63,7 +68,7 @@
 							    </tr>
 							    <tr>
 							      <td colspan="2" align="center">
-							        <input type="submit" name="changeButton" value="Change" onclick="return User.validatePasswordFields();"/>
+							        <input type="submit" value="Change" onclick="return User.validatePasswordFields();"/>
 							      </td>
 							    </tr>
 							    <tr>

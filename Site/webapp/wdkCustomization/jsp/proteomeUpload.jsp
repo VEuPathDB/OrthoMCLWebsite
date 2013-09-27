@@ -23,11 +23,10 @@
             OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.
           </p>
           <p>
-            The process takes between 6 to 24 hours depending upon server load.
-            You will receive mail when your results are ready, and can retrieve
-            them for up to 48 hours from then.
+            The process usually takes between 6 to 24 hours, but up to 72, depending upon server load and job size.
+            You will receive mail when your results are ready, and can retrieve them for up to 48 hours from then.
           </p>
-	  <p><b>Please Note:</b> This service has occasional delays and/or down time. We appreciate your patience when this happens.  The service is computationally expensive and runs on an external compute cluster which sometimes has wait times or disruptions that are out of our control.  If you have not gotten results after 24 hours please feel free to contact us.
+	  <p><b>Please Note:</b> This service has occasional delays and/or down time. We appreciate your patience when this happens.  The service is computationally expensive and runs on an external compute cluster which sometimes has wait times or disruptions that are out of our control.  If you have not gotten results after 72 hours please feel free to contact us.
 	    </p>
 
           <div id="upload-form">

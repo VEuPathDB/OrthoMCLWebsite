@@ -27,6 +27,8 @@
             You will receive mail when your results are ready, and can retrieve
             them for up to 48 hours from then.
           </p>
+	  <p><b>Please Note:</b> This service has occasional delays and/or down time. We appreciate your patience when this happens.  The service is computationally expensive and runs on an external compute cluster which sometimes has wait times or disruptions that are out of our control.  If you have not gotten results after 24 hours please feel free to contact us.
+	    </p>
 
           <div id="upload-form">
             <form id="proteome" action="/cgi-bin/orthomclProteomeSvcUpload.cgi" method="post" enctype="multipart/form-data">

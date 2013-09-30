@@ -106,6 +106,26 @@
 				  <a class="small" href="${base}/showXmlDataContent.do?name=XmlQuestions.News">All ${project} News >>></a>
 			  </c:otherwise>
 		  </c:choose>
+
+
+<!-- TWITTER WIDGET, code generated in twitter.com, EuPathDB account settings -->
+                 <a class="twitter-timeline" data-chrome="nofooter" height="50"  href="https://twitter.com/eupathdb" data-widget-id="3448
+17818073714691">Tweets by @eupathdb</a>
+                 <script>
+                 !function(d,s,id){
+                                var js,fjs=d.getElementsByTagName(s)[0],
+                                                                p=/^http:/.test(d.location)?'http':'https';
+                                if(!d.getElementById(id)){
+                                                                js=d.createElement(s);
+                                                                js.id=id;
+                                                                js.src=p+"://platform.twitter.com/widgets.js";
+                                                                fjs.parentNode.insertBefore(js,fjs);
+                                                                }
+                                }(document,"script","twitter-wjs");
+                 </script>
+
+
+
 	  </div>
 	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ COMMUNITY, LINKS ~~~~~~~~~~~~~~~~~~~~~~~  -->

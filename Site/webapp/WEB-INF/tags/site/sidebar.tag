@@ -74,7 +74,7 @@
 	 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ NEWS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
 	    <img src="/assets/images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
-	    <a class="heading" href="#">News</a>
+	    <a class="heading" href="#">News and Tweets</a>
 	  </h3>
 
 
@@ -120,16 +120,7 @@
                           </c:otherwise>
                   </c:choose>
 
-
-
-</div>
-
- <!-- ~~~~~~~~~~~~~~~~~~~~~~~ TWITTER ~~~~~~~~~~~~~~~~~~~~~~~  -->
-	  <h3>
-	    <img src="/assets/images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
-	    <a class="heading" href="#">EuPathDB Tweets</a>
-	  </h3>
-<div>
+<br/>
 
 <!-- TWITTER WIDGET, code generated in twitter.com, EuPathDB account settings -->
  		 <a class="twitter-timeline" data-chrome="nofooter" height="50"  href="https://twitter.com/eupathdb" data-widget-id="344817818073714691">Tweets by @eupathdb</a>
@@ -145,6 +136,7 @@
 								}
 				}(document,"script","twitter-wjs");
 		 </script>
+
 </div>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ COMMUNITY, LINKS ~~~~~~~~~~~~~~~~~~~~~~~  -->

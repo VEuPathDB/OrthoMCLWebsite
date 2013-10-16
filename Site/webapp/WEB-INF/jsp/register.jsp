@@ -5,7 +5,9 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>  
   <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Registration" refer="register">
-    <div class="user-form-frame">
+ 
+
+   <div class="user-form-frame">
 		  <!-- display the success information if the user registered successfully -->
 		  <c:choose>
 		    <c:when test="${requestScope.registerSucceed ne null}">
@@ -14,20 +16,17 @@
 		      <p>Please <a href="${pageContext.request.contextPath}/login.do">log in</a> and change your password to one that you'll remember.</p>
 		    </c:when>
 		    <c:otherwise>
-	        <div align="left" style="font-size:1.2em; width:700px; margin-left:auto; margin-right:auto; border:1px solid black; padding:5px; line-height:1.5em;">
-		        <p><b>Why register/subscribe?</b> So you can:</p>
-		        <div id="cirbulletlist">
-		          <ul>
-		            <li>Have your strategies back the next time you login</li>
-		            <li>Add a comment on genes and sequences</li>
-		            <li>Set site preferences, such as items per page displayed in the query result</li>
-		          </ul>
-		        </div>
-	        </div>
+
 	        <br/>
           <!-- registration form -->
-          <form name="registerForm" method="post" action="processRegister.do" >
-		        <table width="650" class="user-form-table">
+  
+        <form name="registerForm" method="post" action="processRegister.do" >
+					<div style="text-align:center">
+						<b>IMPORTANT:</b> If you already registered in another site<br/>
+						(AmoebaDB, EuPathDB, CryptoDB ,GiardiaDB, MicrosporidiaDB, OrthoMCL, PiroplasmaDB, PlasmoDB, ToxoDB, TrichDB or TriTrypDB)<br/>
+						you do NOT need to register again.
+					</div><br/>
+		      <table width="650" class="user-form-table">
 		          <c:choose>
 		            <c:when test="${wdkUser ne null and wdkUser.guest ne true}">
 		              <tr>
@@ -75,47 +74,164 @@
 							      <td align="left"><input type="text" name="openId" value="${requestScope.openId}" size="50"/></td>
 							    </tr> -->
 							    <tr>
-							      <td colspan="2" align="center">
-							        <input type="submit" name="registerButton" value="Submit"  onclick="return User.validateRegistrationForm();"/>
-							      </td>
+							     
 							    </tr>
 							  </c:otherwise>
 		          </c:choose>
 		        </table>
+
+
+				<div style="text-align:center">
+          Send me email alerts about: 
+					<br/>
+
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_amoebadb != null}">
+              <input type="checkbox" name="preference_global_email_amoebadb" checked="yes">AmoebaDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_amoebadb">AmoebaDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_apidb != null}">
+              <input type="checkbox" name="preference_global_email_apidb" checked="yes">EuPathDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_apidb">EuPathDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_cryptodb != null}">
+              <input type="checkbox" name="preference_global_email_cryptodb" checked="yes">CryptoDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_cryptodb">CryptoDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_giardiadb != null}">
+              <input type="checkbox" name="preference_global_email_giardiadb" checked="yes">GiardiaDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_giardiadb">GiardiaDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_microsporidiadb != null}">
+              <input type="checkbox" name="preference_global_email_microsporidiadb" checked="yes">MicrosporidiaDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_microsporidiadb">MicrosporidiaDB</input>
+           </c:otherwise>
+				</c:choose>
+				<c:choose>
+					 <c:when test="${requestScope.preference_global_email_piroplasmadb != null}">
+              <input type="checkbox" name="preference_global_email_ortho" checked="yes">OrthoMCL</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_ortho">OrthoMCL</input>
+           </c:otherwise>
+        </c:choose>
+				<c:choose>
+					 <c:when test="${requestScope.preference_global_email_piroplasmadb != null}">
+              <input type="checkbox" name="preference_global_email_piroplasmadb" checked="yes">PiroplasmaDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_piroplasmadb">PiroplasmaDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_plasmodb != null}">
+              <input type="checkbox" name="preference_global_email_plasmodb" checked="yes">PlasmoDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_plasmodb">PlasmoDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_toxodb != null}">
+              <input type="checkbox" name="preference_global_email_toxodb" checked="yes">ToxoDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_toxodb">ToxoDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_trichdb != null}">
+              <input type="checkbox" name="preference_global_email_trichdb" checked="yes">TrichDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_trichdb">TrichDB</input>
+           </c:otherwise>
+        </c:choose>
+        <c:choose>
+           <c:when test="${requestScope.preference_global_email_tritrypdb != null}">
+              <input type="checkbox" name="preference_global_email_tritrypdb" checked="yes">TriTrypDB</input>
+           </c:when>
+           <c:otherwise>
+              <input type="checkbox" name="preference_global_email_tritrypdb">TriTrypDB</input>
+           </c:otherwise>
+        </c:choose>
+
+					<br/><br/><input type="submit" name="registerButton" value="Register"  onclick="return User.validateRegistrationForm();"/>
+
+				</div>
 		      </form>
+
+				<br/>
+				<div style="width:550px;border:1px  solid black;padding:5px;line-height:1.5em;margin-right:auto;margin-left:auto;">
+						<p><b>Why register/subscribe?</b> So you can:</p>
+						<div id="cirbulletlist">
+							<ul>
+								<li>Have your strategies back the next time you login</li>
+								<li>Use your basket to store temporarily IDs of interest, and either save (in a step) or download the IDs</li>
+								<li>Use your favorites to store IDs of permanent interest, for faster access to its record page</li>
+								<li>Add a comment on genes and sequences</li>
+								<li>Set site preferences, such as items per page displayed in the query result</li>
+								<li>Opt to receive infrequent alerts (at most monthly), by selecting (above) from which EuPathDB sites</li>
+							</ul>
+						</div>
+				</div>
+
 		    </c:otherwise>
 		  </c:choose>
+
 		  <br/>
-		  <div align="left" style="line-height:1.5em;">
-        <hr/>
-			  <div style="font-size:1.2em;">
-			    <b>&#160;&#160;&#160;Privacy Policy</b>
-			  </div>
-			  <table style="margin-left:10px;">
-			    <tr>
-			      <td width="40%">
-			        <p><b>How we will use your email:</b></p>
-			        <div id="cirbulletlist">
-			          <ul>
-			            <li>Confirm your subscription</li>
-			            <li>Send you infrequent alerts if you subscribe to receive them</li>
-			            <li>NOTHING ELSE.  We will not release the email list.</li>
-			          </ul>
-			        </div>
-			      </td>
-			      <td>
-			        <p><b>How we will use your name and institution:</b></p>
-			        <div id="cirbulletlist">
-			          <ul>
-			            <li>If you add a comment to a Gene or a Sequence, your name and institution will be displayed with the comment</li>
-			            <li>NOTHING ELSE.  We will not release your name or institution.</li>
-			          </ul>
-			        </div>
-			      </td>
-			    </tr>
-			  </table>
-        <hr/>
-		  </div>  <!-- div align left -->
+
+			<div style="width:550px;border:1px solid black;padding:5px;line-height:1.5em;margin-right:auto;margin-left:auto;">
+				<div style="font-size:1.2em;">
+					<b>EuPathDB Websites Privacy Policy</b> 
+				</div>
+
+				<table><tr>
+						<td width="40%">
+							<p><b>How we will use your email:</b> </p>
+							<div id="cirbulletlist">
+								<ul>
+									<li>Confirm your subscription</li>
+									<li>Send you infrequent alerts if you subscribe to receive them</li>
+									<li>NOTHING ELSE.  We will not release the email list.</li>
+								</ul>
+							</div>
+						</td>
+						
+						<td>
+							<p><b>How we will use your name and institution:</b></p>
+							<div id="cirbulletlist">
+								<ul>
+									<li>If you add a comment to a Gene or a Sequence, your name and institution will be displayed with the comment</li>
+									<li>NOTHING ELSE.  We will not release your name or institution. </li> 
+								</ul>
+							</div>
+						</td>
+						
+				</tr></table>
+			</div> 
+
 		</div> <!-- div align center -->
+
+
+
   </imp:pageFrame>
 </jsp:root>

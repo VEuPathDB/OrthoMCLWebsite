@@ -33,7 +33,7 @@
     </style>
 	  </defs>
 	
-	  <script xlink:href="${pageContext.request.contextPath}/wdk/js/lib/jquery-1.7.min.js" type="application/ecmascript"></script>
+	  <script xlink:href="${pageContext.request.contextPath}/wdk/js/lib/jquery.js" type="application/ecmascript"></script>
 	  <script xlink:href="${pageContext.request.contextPath}/wdkCustomization/js/svg.js" type="application/ecmascript"></script>
 	
 	  <rect x="0" y="0" width="800" height="90" fill="rgb(220,220,220)"/>

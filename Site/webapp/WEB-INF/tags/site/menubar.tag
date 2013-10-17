@@ -78,6 +78,7 @@
           <span><span class="facebook_small"><jsp:text/></span> &nbsp;Follow us on facebook!</span></a>
 		    </li>
         -->
+        <li><a href="javascript:wdk.publicStrats.goToPublicStrats()">Public Strategies</a></li>
         <imp:socialMedia small="true" label="true"/>
 <!--
   	    <c:choose>

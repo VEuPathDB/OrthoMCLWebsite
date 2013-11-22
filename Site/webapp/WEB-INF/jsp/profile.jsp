@@ -43,24 +43,14 @@
                 </td>
               </tr>
               
-              <!-- temporarily disable email updating until build 20 -->
               <tr>
-                <td align="right" width="50%" nowrap="nowrap">Email: </td>
-                <td aligh="left">
-                  ${wdkUser.email}
-                  <input type="hidden" name="email" value="${wdkUser.email}"/>
-                  <input type="hidden" name="confirmEmail" value="${wdkUser.email}"/>
-                </td>
-              </tr>
-              
-              <!-- <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Email: </td>
                 <td align="left"><input type="text" name="email" value="${wdkUser.email}" size="20"/></td>
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Re-type email: </td>
                 <td align="left"><input type="text" name="confirmEmail" value="${wdkUser.email}" size="20"/></td>
-              </tr> -->
+              </tr>
               <tr>
                 <td colspan="2" align="left"><hr/><b>User Information:</b></td>
               </tr>
@@ -106,7 +96,7 @@
               </tr>
               <tr>
                 <td colspan="2" align="center">
-                  <a href="#" onclick="return User.validateProfileForm();">
+                  <a href="#" onclick="return wdk.user.validateProfileForm();">
                     <img class="button" border="0" src="${pageContext.request.contextPath}/images/update_profile.gif"/>
                   </a>
                 </td>

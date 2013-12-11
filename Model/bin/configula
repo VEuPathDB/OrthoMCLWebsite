@@ -45,7 +45,6 @@ required:
  commentDb.instance: $emc->{'userDb_database'}
  commentDb.login: $emc->{'userDb_login'}
  commentDb.password: $emc->{'userDb_password'}
- webServiceUrl: $emc->{'webServiceUrl'}
  gushome: $emc->{'gus_home'}
 
  plasmoPubsURL: 'http://v4-4.plasmodb.org/publications/publications-v5.php?uid=28&gid='

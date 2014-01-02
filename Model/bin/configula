@@ -23,7 +23,7 @@ use WDK::Model::Configula;
 
 my ($this) = basename $0;
 
-my $wmc = EuPathSiteCommon::Model::Configula->new({
+my $wmc = WDK::Model::Configula->new({
   'modelName' => 'OrthoMCL',
 });
 

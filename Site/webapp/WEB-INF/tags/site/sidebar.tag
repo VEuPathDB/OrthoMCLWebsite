@@ -10,6 +10,9 @@
 
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
+<!-- JSP constants -->
+<jsp:useBean id="constants" class="org.eupathdb.common.model.JspConstants"/>
+
   <c:set var="wdkModel" value="${applicationScope.wdkModel}"/>
   <c:set var="project" value="${wdkModel.displayName}"/>
   <c:set var="wdkUser" value="${sessionScope.wdkUser}"/>
@@ -37,6 +40,8 @@
 	<jsp:setProperty name="helperQuestion" property="user" value="${wdkUser}"/>
 	<!-- compile records and obtain statistics -->
 	<c:forEach items="${helperQuestion.answerValue.records}" var="item">
+
+
 	  <c:set var="helperRecord" value="${item}"/>
 	</c:forEach>
 	<c:set var="organism_count" value="${helperRecord.attributes['organism_count'].value}"/>
@@ -48,12 +53,13 @@
 
 
   <div id="sidebar">
-  
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ DATA STATISTICS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
 		  <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12"/>
 	    <a class="heading" id="stats" href="#">Data Summary</a>
 	  </h3>
+
 	  <div>
 	    <ul>
 	      <li><a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Genomes: <b><fmt:formatNumber value="${organism_count}"/></b></a></li>
@@ -62,57 +68,83 @@
 	    </ul>
 	  </div>
 	
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~ NEWS ~~~~~~~~~~~~~~~~~~~~~~~  -->
+   
+
+
+	 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ NEWS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
 	    <img src="/assets/images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
-	    <a class="heading" href="#">News</a>
+	    <a class="heading" href="#">News and Tweets</a>
 	  </h3>
-	  <div>
-		  <c:choose>
-			  <c:when test="${newsAnswer.resultSize lt 1}">
-			    No news now, please check back later.<br/>
-			  </c:when>
-			  <c:otherwise>
-				  <c:catch var="newsErr">
-				    <c:set var="i" value="1"/>
-				    <ul id="news">
-				      <c:forEach items="${newsAnswer.recordInstances}" var="record">
-							  <c:if test="${i le newsCount }">  
-				          <c:set var="attrs" value="${record.attributesMap}"/>
-				          <c:set var='tmp' value="${attrs['tag']}"/>
-				          <c:set var='shorttag' value=''/>
-				          <c:forEach var="k" begin="0" end="${fn:length(tmp)}" step='3'>
-				            <c:set var='shorttag'>${shorttag}${fn:substring(tmp, k, k+1)}</c:set>
-				          </c:forEach>
-				            
-				          <fmt:parseDate pattern="${dateStringPattern}" var="pdate" value="${attrs['date']}"/> 
-				          <fmt:formatDate var="fdate" value="${pdate}" pattern="d MMMM yyyy"/>
-				      
-				          <li id="n-${shorttag}"><b>${fdate}</b>
-				            <a href="${base}/showXmlDataContent.do?name=XmlQuestions.News#${attrs['tag']}">
-				              ${attrs['headline']}
-				            </a>
-				          </li>
-				        </c:if>
-				        <c:set var="i" value="${i+1}"/>
-				      </c:forEach>
-				    </ul>
-			    </c:catch>
-			
-			    <c:if test="${newsErr ne null}">
-					  <i>News temporarily unavailable<br/></i>
-				  </c:if>
-				  <br/>
-				  <a class="small" href="${base}/showXmlDataContent.do?name=XmlQuestions.News">All ${project} News >>></a>
-			  </c:otherwise>
-		  </c:choose>
-	  </div>
-	
+
+
+
+<div>
+
+ <c:choose>
+                          <c:when test="${newsAnswer.resultSize lt 1}">
+                            No news now, please check back later.<br/>
+                          </c:when>
+                          <c:otherwise>
+                                  <c:catch var="newsErr">
+                                    <c:set var="i" value="1"/>
+                                    <ul id="news">
+                                      <c:forEach items="${newsAnswer.recordInstances}" var="record">
+                                                          <c:if test="${i le newsCount }">  
+                                          <c:set var="attrs" value="${record.attributesMap}"/>
+                                          <c:set var='tmp' value="${attrs['tag']}"/>
+                                          <c:set var='shorttag' value=''/>
+                                          <c:forEach var="k" begin="0" end="${fn:length(tmp)}" step='3'>
+                                            <c:set var='shorttag'>${shorttag}${fn:substring(tmp, k, k+1)}</c:set>
+                                          </c:forEach>
+                                            
+                                          <fmt:parseDate pattern="${dateStringPattern}" var="pdate" value="${attrs['date']}"/> 
+                                          <fmt:formatDate var="fdate" value="${pdate}" pattern="d MMMM yyyy"/>
+                                      
+                                          <li id="n-${shorttag}"><b>${fdate}</b>
+                                            <a href="${base}/showXmlDataContent.do?name=XmlQuestions.News#${attrs['tag']}">
+                                              ${attrs['headline']}
+                                            </a>
+                                          </li>
+                                        </c:if>
+                                        <c:set var="i" value="${i+1}"/>
+                                      </c:forEach>
+                                    </ul>
+                            </c:catch>
+
+                            <c:if test="${newsErr ne null}">
+                                          <i>News temporarily unavailable<br/></i>
+                                  </c:if>
+                                  <br/>
+                                  <a class="small" href="${base}/showXmlDataContent.do?name=XmlQuestions.News">All ${project} News >>></a>
+                          </c:otherwise>
+                  </c:choose>
+
+<br/>
+
+<!-- TWITTER WIDGET, code generated in twitter.com, EuPathDB account settings -->
+ 		 <a class="twitter-timeline" data-chrome="nofooter" height="50"  href="https://twitter.com/eupathdb" data-widget-id="344817818073714691">Tweets by @eupathdb</a>
+		 <script>
+		 !function(d,s,id){
+				var js,fjs=d.getElementsByTagName(s)[0],
+								p=/^http:/.test(d.location)?'http':'https';
+				if(!d.getElementById(id)){
+								js=d.createElement(s);
+								js.id=id;
+								js.src=p+"://platform.twitter.com/widgets.js";
+								fjs.parentNode.insertBefore(js,fjs);
+								}
+				}(document,"script","twitter-wjs");
+		 </script>
+
+</div>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ COMMUNITY, LINKS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
       <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a  class="heading" id='community' href="#">Community Resources</a>
     </h3>
+
 	  <div>
         <!--
 	    <a style="line-height:24px" href="javascript:gotoTwitter()">
@@ -165,11 +197,20 @@
       <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a class="heading" id='tutorials' href="#">Education and Tutorials</a>
     </h3>
+
 	  <div>
 		  <ul id="education">
+				<li id='edu-05'>
+					<a target="_blank" href="${constants.youtubeUrl}">
+						YouTube Tutorials Channel
+						<img style="width:20px;display:inline;vertical-align:middle;" src="/assets/images/youtube_32x32.png"/>
+					</a>
+				</li>
 		    <li>
 		      <a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a> (video and pdf)
 		    </li> 
+				<li id='edu-2'><a target="_blank" href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a></li>
+				<li id='edu-3-1'><a target="_blank" href="http://workshop.eupathdb.org/most_recent/index.php?page=schedule">Exercises from our most recent Workshop</a> (English)</li>
 		    <li>
 		      <a href="http://www.genome.gov/Glossary/">NCBI's Glossary of Terms</a>
 		    </li>

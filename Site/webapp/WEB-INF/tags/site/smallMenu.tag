@@ -8,6 +8,8 @@
   <span class="onload-function" data-function="wdk.setUpNavDropDowns"><jsp:text/></span>
   <span class="onload-function" data-function="eupath.setup.setUpContactUsLogic"><jsp:text/></span>
 
+<c:set var="base" value="${pageContext.request.contextPath}"/>
+
   <!-- top level menu -->
   <div id="nav-top-div">
 	  <ul id="nav-top">
@@ -23,6 +25,7 @@
 	        <c:if test="${refer eq 'summary'}">
 	          <li><a href="javascript:void()" onclick="wdk.dyk.dykOpen()">Did You Know...</a></li>
 	        </c:if>
+           <li><a href="${base}/showXmlDataContent.do?name=XmlQuestions.Tutorials">Web Tutorials</a></li>
 	        <li><a href="http://workshop.eupathdb.org/current/">EuPathDB Workshop</a></li>
 	        <li><a href="http://workshop.eupathdb.org/current/index.php?page=schedule">Exercises from Workshop</a></li>
 	        <li><a href="http://www.genome.gov/Glossary/">NCBI's Glossary of Terms</a></li>

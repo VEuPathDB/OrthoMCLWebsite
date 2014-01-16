@@ -4,8 +4,10 @@
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
+  <import file="${projectsDir}/EuPathSiteCommon/build.xml" />
+  <import file="${projectsDir}/OrthoMCLShared/build.xml" />
 
- <target name="EuPathSiteCommon-Installation">
+  <target name="EuPathSiteCommon-Installation">
     <ant antfile="../EuPathSiteCommon/build.xml" target="EuPathSiteCommon-Installation">
       <property name="project" value="EuPathSiteCommon"/>
       <property name="version" value="??"/>
@@ -42,7 +44,7 @@
     </ant>
   </target>
 
-<target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
+  <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLWebService" />
       <property name="project" value="OrthoMCLWebService"/>

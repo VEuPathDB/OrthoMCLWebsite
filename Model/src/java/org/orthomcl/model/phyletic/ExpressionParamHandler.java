@@ -15,9 +15,10 @@ import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.query.param.Param;
 import org.gusdb.wdk.model.query.param.ParamHandler;
+import org.gusdb.wdk.model.query.param.StringParamHandler;
 import org.gusdb.wdk.model.user.User;
 
-public class ExpressionParamHandler implements ParamHandler {
+public class ExpressionParamHandler extends StringParamHandler {
 
     private static final String TAXON_SQL = "SELECT three_letter_abbrev "
             + " FROM apidb.orthomcltaxon ORDER BY three_letter_abbrev";
@@ -28,40 +29,32 @@ public class ExpressionParamHandler implements ParamHandler {
 
     private static final Logger logger = Logger.getLogger(ExpressionParamHandler.class);
 
-    private final ExpressionParser parser;
+    private final ExpressionParser parser = new ExpressionParser();
     private Map<String, Integer> terms;
     private WdkModel wdkModel;
 
     // private Param param;
 
-    public ExpressionParamHandler() {
-        this.parser = new ExpressionParser();
+    public ExpressionParamHandler() { }
+
+    public ExpressionParamHandler(ExpressionParamHandler handler, Param param) {
+       super(handler, param);
     }
 
     @Override
-    public void setParam(Param param) {
-        // this.param = param;
+    public ParamHandler clone(Param param) {
+      return new ExpressionParamHandler(this, param);
     }
 
     @Override
-    public void setWdkModel(WdkModel wdkModel) throws WdkUserException,
-            WdkModelException {
-        this.wdkModel = wdkModel;
-        this.terms = getTerms();
-    }
-
-    @Override
-    public String transform(User user, String internalValue)
+    public String toInternalValue(User user, String stableValue, Map<String, String> contextValues)
             throws WdkModelException {
-        logger.debug("transforming phyletic param: " + internalValue);
+        logger.debug("transforming phyletic param: " + stableValue);
 
-        // remove the enclosing quotes
-        if (internalValue.startsWith("'") && internalValue.endsWith("'"))
-            internalValue =
-                    internalValue.substring(1, internalValue.length() - 1);
+        this.terms = getTerms();
 
         // parse the expression and get the tree structure
-        ExpressionNode root = parser.parse(internalValue);
+        ExpressionNode root = parser.parse(stableValue);
 
         StringBuilder sql = new StringBuilder(GROUP_SQL);
         sql.append(" WHERE " + composeSql(root));

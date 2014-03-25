@@ -6,20 +6,8 @@
 
   <import file="${projectsDir}/EuPathSiteCommon/build.xml" />
   <import file="${projectsDir}/OrthoMCLShared/build.xml" />
+  <import file="${projectsDir}/OrthoMCLWebService/build.xml" />  
 
-  <target name="EuPathSiteCommon-Installation">
-    <ant antfile="../EuPathSiteCommon/build.xml" target="EuPathSiteCommon-Installation">
-      <property name="project" value="EuPathSiteCommon"/>
-      <property name="version" value="??"/>
-    </ant>
-  </target>
-
-  <target name="EuPathSiteCommon-WebInstallation">
-    <ant antfile="../EuPathSiteCommon/build.xml" target="EuPathSiteCommon-WebInstallation">
-      <property name="project" value="EuPathSiteCommon"/>
-      <property name="version" value="??"/>
-    </ant>
-  </target>
 
   <target name="EuPathSiteCommon-Checkout" unless="EuPathSiteCommon.present">
     <ant target="defaultProjectCheckout" inheritAll="false">
@@ -29,14 +17,6 @@
     </ant>
   </target>
 
-  <target name="OrthoMCLShared-Installation">
-    <ant antfile="../OrthoMCLShared/build.xml" target="OrthoMCLShared-Installation">
-      <property name="project" value="OrthoMCLShared"/>
-      <property name="version" value="??"/>
-    </ant>
-  </target>
-  
-     
   <target name="OrthoMCLShared-Checkout" unless="OrthoMCLShared.present"> 
     <ant target="defaultProjectCheckout" inheritAll="false">
       <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLShared"/>
@@ -75,6 +55,10 @@
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLShared"/>
     </ant>
+    <ant target="defaultProjectUpdate">
+      <property name="project" value="OrthoMCLWebService"/>
+    </ant>
+
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
@@ -83,6 +67,7 @@
 
   <target name="OrthoMCLWebsite-Installation" depends="EuPathSiteCommon-Installation,
                                                        OrthoMCLShared-Installation,
+                                                       OrthoMCLWebService-Installation,
                                                        OrthoMCLWebsite/Site-Installation,
                                                        OrthoMCLWebsite/View-Installation,
                                                        OrthoMCLWebsite/Model-Installation">

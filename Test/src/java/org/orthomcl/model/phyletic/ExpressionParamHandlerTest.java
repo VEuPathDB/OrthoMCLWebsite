@@ -1,9 +1,10 @@
 package org.orthomcl.model.phyletic;
 
+import java.util.HashMap;
+
 import org.gusdb.wdk.model.Utilities;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.user.User;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class ExpressionParamHandlerTest {
     private final User user;
     private final ExpressionParamHandler handler;
 
-    public ExpressionParamHandlerTest() throws WdkModelException, WdkUserException {
+    public ExpressionParamHandlerTest() throws WdkModelException {
         String projectId = System.getProperty(Utilities.ARGUMENT_PROJECT_ID);
         String gusHome = System.getProperty(Utilities.SYSTEM_PROPERTY_GUS_HOME);
         WdkModel wdkModel = WdkModel.construct(projectId, gusHome);
@@ -39,7 +40,7 @@ public class ExpressionParamHandlerTest {
 
     private void testExpression(String exp) throws WdkModelException {
         System.out.println("Expression: " + exp);
-        String sql = handler.transform(user, exp);
+        String sql = handler.toInternalValue(user, exp, new HashMap<String,String>());
         System.out.println("SQL: " + sql);
     }
 }

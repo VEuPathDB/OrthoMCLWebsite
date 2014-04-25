@@ -30,7 +30,6 @@ public class ExpressionParamHandler extends StringParamHandler {
 
     private final ExpressionParser parser = new ExpressionParser();
     private Map<String, Integer> terms;
-    private WdkModel wdkModel;
 
     // private Param param;
 

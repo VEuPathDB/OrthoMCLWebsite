@@ -38,7 +38,21 @@
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
   </listener>
-  
+
+  <!-- mitigation for Struts1 security hole CVE-2014-0114 -->
+  <filter>
+    <filter-name>ParamFilter</filter-name>
+    <filter-class>org.gusdb.wdk.controller.filter.ParameterFilter</filter-class>
+    <init-param>
+      <param-name>excludeParams</param-name>
+      <param-value>(.*\.|^|.*|\[('|"))(c|C)lass(\.|('|")]|\[).*</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>ParamFilter</filter-name>
+    <servlet-name>wdkEuPathDbBrc</servlet-name>
+  </filter-mapping>
+
   <servlet>
     <servlet-name>OrthoMCLWebsite</servlet-name>
     <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>

@@ -15,7 +15,7 @@ resultsDir=/var/www/Common/orthomcl-mapping-service/results
 adminEmail=@@ADMIN_EMAIL@@
 
 # read by upload form. set to 1 to prevent users from starting new jobs (web app will put up notice)
-uploadIsOffline=0
+uploadIsOffline=@@UPLOAD_OFFLINE@@
 
 # properties for downloading results
 purgeWindow=7

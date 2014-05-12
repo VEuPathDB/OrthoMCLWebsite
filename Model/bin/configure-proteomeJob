@@ -22,7 +22,7 @@
 #       --cluster_ssh_hostalias=orthomclProteomeJob-ZCLUSTER  \
 #       --cluster_username=mheiges \
 #       --eupathdb_base=/scratch/jcklab/eupath
-
+#       --upload_offline=0
 
 #       configure-proteomeJob \
 #       --admin_email=mheiges@uga.edu   \
@@ -32,6 +32,7 @@
 #       --cluster_ssh_hostalias=orthomclProteomeJob-DELTA  \
 #       --cluster_username=mheiges \
 #       --eupathdb_base=/genomics/eupath
+#       --upload_offline=1
 
 
 
@@ -64,6 +65,7 @@ print $this_script . ' $Revision: 52040 $' . "\n";
 # EUPATHDB_BASE
 # ORTHO_BUILD_NO
 # ORTHO_WEBSITE
+# UPLOAD_OFFLINE
 
 my (
     $admin_email,
@@ -73,7 +75,8 @@ my (
     $cluster_hostname,
     $cluster_ssh_hostalias,
     $cluster_username,
-    $eupathdb_base 
+    $eupathdb_base,
+    $upload_offline,
 );
 
 {
@@ -90,6 +93,7 @@ my (
       "cluster_ssh_hostalias=s"   => \$cluster_ssh_hostalias,
       "cluster_username=s"        => \$cluster_username,
       "eupathdb_base=s"           => \$eupathdb_base,
+      "upload_offline=s"          => \$upload_offline,
       );
 
 }
@@ -169,6 +173,7 @@ for my $cf (keys %config_files) {
         s/\@\@EUPATHDB_BASE\@\@/$eupathdb_base/g;
         s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/g;
         s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/g;
+        s/\@\@UPLOAD_OFFLINE\@\@/$upload_offline/g;
 
         print;       
     }

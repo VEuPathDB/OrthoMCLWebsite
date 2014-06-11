@@ -12,7 +12,6 @@ import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.ResponseType;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
-import org.orthomcl.data.GroupLoader;
 
 public class GetGroupAction extends WdkAction {
 

@@ -15,6 +15,7 @@ import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.WdkModelException;
+import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
 import org.gusdb.wdk.model.jspwrap.RecordBean;
@@ -78,7 +79,7 @@ public class GetDataSummaryAction extends WdkAction {
   }
 
   private Map<String, Taxon> loadTaxons(RecordBean record)
-      throws WdkModelException {
+      throws WdkModelException, NumberFormatException, WdkUserException {
     Map<String, Taxon> taxons = new LinkedHashMap<>();
     Map<Integer, Integer> parents = new HashMap<>();
     Map<Integer, String> abbreviations = new HashMap<>();
@@ -117,7 +118,7 @@ public class GetDataSummaryAction extends WdkAction {
   }
 
   private void assignRoots(Map<String, Taxon> taxons, TableValue rootTable)
-      throws WdkModelException {
+      throws WdkModelException, WdkUserException {
     Map<String, String> roots = new HashMap<>();
     for (Map<String, AttributeValue> row : rootTable) {
       String abbrev = (String) row.get("taxon_abbrev").getValue();

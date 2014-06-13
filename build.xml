@@ -4,15 +4,14 @@
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <import file="${projectsDir}/EuPathSiteCommon/build.xml" />
+  <import file="${projectsDir}/OrthoMCLWebService/build.xml" />
   <import file="${projectsDir}/OrthoMCLShared/build.xml" />
-  <import file="${projectsDir}/OrthoMCLWebService/build.xml" />  
 
 
-  <target name="EuPathSiteCommon-Checkout" unless="EuPathSiteCommon.present">
+  <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
     <ant target="defaultProjectCheckout" inheritAll="false">
-      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/EuPathSiteCommon"/>
-      <property name="project" value="EuPathSiteCommon"/>
+      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLWebService"/>
+      <property name="project" value="OrthoMCLWebService"/>
       <property name="version" value="??"/>
     </ant>
   </target>
@@ -24,24 +23,14 @@
     </ant>
   </target>
 
-  <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
-    <ant target="defaultProjectCheckout" inheritAll="false">
-      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLWebService" />
-      <property name="project" value="OrthoMCLWebService"/>
-      <property name="version" value="??"/>
-    </ant>
-  </target>
-
   
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildCheckout">
-    <available file="../OrthoMCLWebService" type="dir" property="OrthoMCLWebService.present" />
-    <available file="../EuPathSiteCommon" type="dir"  property="EuPathSiteCommon.present" />
+    <available file="../OrthoMCLWebService" type="dir"  property="OrthoMCLWebService.present" />
     <available file="../OrthoMCLShared" type="dir"  property="OrthoMCLShared.present" />
-    <antcall target="OrthoMCLWebService-Checkout" />
-    <antcall target="EuPathSiteCommon-Checkout"/>
+    <antcall target="OrthoMCLWebService-Checkout"/>
     <antcall target="OrthoMCLShared-Checkout"/>
   </target>
 
@@ -50,13 +39,10 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildUpdate">
     <ant target="defaultProjectUpdate">
-      <property name="project" value="EuPathSiteCommon"/>
+      <property name="project" value="OrthoMCLWebService"/>
     </ant>
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLShared"/>
-    </ant>
-    <ant target="defaultProjectUpdate">
-      <property name="project" value="OrthoMCLWebService"/>
     </ant>
 
   </target>
@@ -65,12 +51,11 @@
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-Installation" depends="EuPathSiteCommon-Installation,
+  <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebService-Installation,
                                                        OrthoMCLShared-Installation,
-                                                       OrthoMCLWebService-Installation,
-                                                       OrthoMCLWebsite/Site-Installation,
+                                                       OrthoMCLWebsite/Model-Installation,
                                                        OrthoMCLWebsite/View-Installation,
-                                                       OrthoMCLWebsite/Model-Installation">
+                                                       OrthoMCLWebsite/Site-Installation">
     <ant target="defaultProjectInstall"/>
   </target>  
 
@@ -122,7 +107,7 @@
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-WebInstallation" depends="EuPathSiteCommon-WebInstallation,
+  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebService-WebInstallation,
                                                           OrthoMCLWebsite-Installation,
                                                           OrthoMCLWebsite/Site-WebInstallation,
                                                           OrthoMCLWebsite/Site-DashboardInstallation">

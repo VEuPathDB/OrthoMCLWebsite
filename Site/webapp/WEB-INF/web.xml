@@ -124,7 +124,7 @@
  
   <filter-mapping>
 	<filter-name>WSF</filter-name>
-	<url-pattern>/wsf/*</url-pattern>
+	<url-pattern>/services/WsfService/*</url-pattern>
   </filter-mapping>
   <!-- End of WSF Restful service filter -->
   

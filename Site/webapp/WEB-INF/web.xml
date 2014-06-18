@@ -1,9 +1,9 @@
-<?xml version="1.0" ?>
-<web-app version="2.4" 
-         xmlns="http://java.sun.com/xml/ns/j2ee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
-                             http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:web="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <context-param>
     <param-name>GUS_HOME</param-name>
@@ -24,6 +24,12 @@
     <param-name>wdkCustomViewDir_param</param-name>
     <param-value>/customPages/</param-value>
   </context-param>
+
+  <!-- For internal WSF support -->
+  <context-param>
+    <param-name>wsfConfigDir_param</param-name>
+    <param-value>/WEB-INF/wdk-model/config/</param-value>
+  </context-param>
   
   <listener>
     <listener-class>org.gusdb.wdk.controller.ApplicationInitListener</listener-class>
@@ -32,12 +38,34 @@
   <listener>
     <listener-class>org.gusdb.wdk.jmx.JmxInitListener</listener-class>
   </listener>
-  
+
+  <listener>
+    <listener-class>net.bull.javamelody.SessionListener</listener-class>
+  </listener>
+
   <!-- The Apache file upload library starts a cleanup thread to remove temporary files -->
   <!--    This listener destroys that thread when the webapp is unloaded.               -->
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
   </listener>
+
+  <filter>
+    <filter-name>MDCServletFilter</filter-name>
+    <filter-class>org.gusdb.wdk.controller.filter.MDCServletFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MDCServletFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>CheckLoginFilter</filter-name>
+    <filter-class>org.gusdb.wdk.controller.filter.CheckLoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CheckLoginFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
   <!-- mitigation for Struts1 security hole CVE-2014-0114 -->
   <filter>
@@ -53,6 +81,37 @@
     <servlet-name>wdkEuPathDbBrc</servlet-name>
   </filter-mapping>
 
+  <!-- JavaMelody monitoring plugin configuration -->
+  <filter>
+    <filter-name>monitoring-display</filter-name>
+    <filter-class>org.eupathdb.common.controller.MelodyDisplayFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>monitoring-display</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>monitoring</filter-name>
+    <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+    <init-param>
+      <param-name>disabled</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>storage-directory</param-name>
+      <param-value>melody-data</param-value>
+    </init-param>
+    <init-param>
+      <param-name>log</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>monitoring</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- End JavaMelody monitoring plugin configuration -->
+  
   <servlet>
     <servlet-name>OrthoMCLWebsite</servlet-name>
     <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
@@ -75,35 +134,10 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
-<!-- Internal WSF support -->
-  <context-param>
-    <param-name>wsfConfigDir_param</param-name>
-    <param-value>/WEB-INF/wdk-model/config/</param-value>
-  </context-param>
-
+  <!-- Internal WSF Support -->
   <servlet>
     <servlet-name>AxisServlet</servlet-name>
-    <servlet-class>
-        org.apache.axis.transport.http.AxisServlet
-    </servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>AdminServlet</servlet-name>
-    <servlet-class>
-        org.apache.axis.transport.http.AdminServlet
-    </servlet-class>
-    <load-on-startup>100</load-on-startup>
-  </servlet>
-  <servlet>
-    <servlet-name>SOAPMonitorService</servlet-name>
-    <servlet-class>
-        org.apache.axis.monitor.SOAPMonitorService
-    </servlet-class>
-    <init-param>
-      <param-name>SOAPMonitorPort</param-name>
-      <param-value>5001</param-value>
-    </init-param>
-    <load-on-startup>100</load-on-startup>
+    <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>AxisServlet</servlet-name>
@@ -117,48 +151,29 @@
     <servlet-name>AxisServlet</servlet-name>
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>SOAPMonitorService</servlet-name>
+    <servlet-class>org.apache.axis.monitor.SOAPMonitorService</servlet-class>
+    <init-param>
+      <param-name>SOAPMonitorPort</param-name>
+      <param-value>5001</param-value>
+    </init-param>
+    <load-on-startup>100</load-on-startup>
+  </servlet>
   <servlet-mapping>
     <servlet-name>SOAPMonitorService</servlet-name>
     <url-pattern>/SOAPMonitor</url-pattern>
   </servlet-mapping>
   <!-- End Internal WSF support -->
 
+  <!-- The Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
   <!-- Error Page Mappings -->
-<!--
-  <error-page>
-    <exception-type>java.lang.RuntimeException</exception-type>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>400</error-code>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>404</error-code>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
--->
-
- <!-- as in api sites -->
-
- <error-page>
-    <exception-type>java.lang.RuntimeException</exception-type>
-    <location>/wdkCustomization/jsp/Error.jsp</location>
-  </error-page>
-  <error-page>
-    <exception-type>java.io.IOException</exception-type>
-    <location>/wdkCustomization/jsp/Error.jsp</location>
-  </error-page>
-  <error-page>
-    <exception-type>javax.servlet.ServletException</exception-type>
     <location>/wdkCustomization/jsp/Error.jsp</location>
   </error-page>
   <error-page>
@@ -174,32 +189,20 @@
      <location>/500.jsp</location>
   </error-page>
 
-
-  <jsp-config>  
-  <taglib>
-    <taglib-uri>/WEB-INF/tld-third-party/struts-html.tld</taglib-uri>
-    <taglib-location>/WEB-INF/tld-third-party/struts-html.tld</taglib-location>
-  </taglib>
-
-  <taglib>
-    <taglib-uri>/WEB-INF/tld-third-party/pager-taglib.tld</taglib-uri>
-    <taglib-location>/WEB-INF/tld-third-party/pager-taglib.tld</taglib-location>
-  </taglib>
-
-  <taglib>
-    <taglib-uri>http://jakarta.apache.org/taglibs/random-1.0</taglib-uri>
-    <taglib-location>/WEB-INF/tld-third-party/taglibs-random.tld</taglib-location>
-  </taglib>
+  <!-- Declare tag libs for JSP and tags -->
+  <jsp-config>
+    <taglib>
+      <taglib-uri>/WEB-INF/tld-third-party/struts-html.tld</taglib-uri>
+      <taglib-location>/WEB-INF/tld-third-party/struts-html.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>/WEB-INF/tld-third-party/pager-taglib.tld</taglib-uri>
+      <taglib-location>/WEB-INF/tld-third-party/pager-taglib.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://jakarta.apache.org/taglibs/random-1.0</taglib-uri>
+      <taglib-location>/WEB-INF/tld-third-party/taglibs-random.tld</taglib-location>
+    </taglib>
   </jsp-config>
- 
-  <filter>
-    <filter-name>CheckLoginFilter</filter-name>
-    <filter-class>org.gusdb.wdk.controller.CheckLoginFilter</filter-class>
-  </filter>
-  
-  <filter-mapping>
-    <filter-name>CheckLoginFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
 
 </web-app>

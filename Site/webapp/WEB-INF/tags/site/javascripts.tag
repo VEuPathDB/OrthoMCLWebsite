@@ -12,9 +12,9 @@
 
   <jsp:useBean id="websiteRelease" class="org.eupathdb.common.controller.WebsiteReleaseConstants"/>
 
-  <c:set var="min" value="${requestScope.WEBSITE_RELEASE_STAGE ge websiteRelease.feature}"/>
+  <c:set var="debug" value="${requestScope.WEBSITE_RELEASE_STAGE ge websiteRelease.development}"/>
   <!-- JavaScript provided by WDK -->
-  <imp:wdkJavascripts refer="${refer}"/>
+  <imp:wdkJavascripts refer="${refer}" debug="${debug}"/>
 
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>

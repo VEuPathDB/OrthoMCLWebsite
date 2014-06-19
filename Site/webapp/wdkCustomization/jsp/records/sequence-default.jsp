@@ -181,28 +181,32 @@
 
       <br />
       <table id="domains" class="recordTable wdk-data-table" count="${domainCount}" seed="${sourceId}">
-        <tr>
-          <th>Accession</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Legend</th>
-        </tr>
-        <c:set var="odd" value="${true}" />
-        <c:forEach items="${wdkTable}" var="domain">
-          <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
-          <c:set var="odd" value="${!odd}" />
-          <tr id="${domain['accession']}" class="domain ${rowClass}"
-              data-index="${domain['domain_index']}" data-max="${domain['max_index']}" >
-            <td>${domain["accession"]}</td>
-            <td>${domain["symbol"]}</td>
-            <td>${domain["description"]}</td>
-            <td>${domain["start_min"]}</td>
-            <td>${domain["end_max"]}</td>
-            <td><div class="legend"> </div></td>
+        <thead>
+          <tr>
+            <th>Accession</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Legend</th>
           </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+          <c:set var="odd" value="${true}" />
+          <c:forEach items="${wdkTable}" var="domain">
+            <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
+            <c:set var="odd" value="${!odd}" />
+            <tr id="${domain['accession']}" class="domain ${rowClass}"
+                data-index="${domain['domain_index']}" data-max="${domain['max_index']}" >
+              <td>${domain["accession"]}</td>
+              <td>${domain["symbol"]}</td>
+              <td>${domain["description"]}</td>
+              <td>${domain["start_min"]}</td>
+              <td>${domain["end_max"]}</td>
+              <td><div class="legend"> </div></td>
+            </tr>
+          </c:forEach>
+        </tbody>
       </table>
 
 

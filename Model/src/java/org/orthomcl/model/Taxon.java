@@ -1,5 +1,6 @@
-package org.orthomcl.controller.action;
+package org.orthomcl.model;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,8 @@ public class Taxon implements Comparable<Taxon> {
   private boolean species;
   private Taxon parent;
   private Taxon root;
-  private String color;
+  private String groupColor;
+  private Color color;
   private Map<Integer, Taxon> children;
 
   public Taxon(int id) {
@@ -97,12 +99,27 @@ public class Taxon implements Comparable<Taxon> {
     this.root = root;
   }
 
-  public String getColor() {
+  public Color getColor() {
     return color;
   }
 
-  public void setColor(String color) {
+  public void setColor(Color color) {
     this.color = color;
+  }
+
+  /**
+   * @return the groupColor
+   */
+  public String getGroupColor() {
+    return groupColor;
+  }
+
+  /**
+   * @param groupColor
+   *          the groupColor to set
+   */
+  public void setGroupColor(String groupColor) {
+    this.groupColor = groupColor;
   }
 
   @Override

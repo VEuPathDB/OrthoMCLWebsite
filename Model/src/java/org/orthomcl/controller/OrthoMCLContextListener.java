@@ -1,9 +1,9 @@
 package org.orthomcl.controller;
 
+import org.eupathdb.common.model.InstanceManager;
 import org.gusdb.wdk.controller.ApplicationInitListener;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
-import org.orthomcl.model.InstanceManager;
 
 public class OrthoMCLContextListener extends ApplicationInitListener {
 
@@ -14,7 +14,7 @@ public class OrthoMCLContextListener extends ApplicationInitListener {
    */
   @Override
   protected WdkModel createWdkModel(String project, String gusHome) throws WdkModelException {
-    return InstanceManager.getWdkModel(project);
+    return InstanceManager.getInstance(WdkModel.class, project);
   }
 
 }

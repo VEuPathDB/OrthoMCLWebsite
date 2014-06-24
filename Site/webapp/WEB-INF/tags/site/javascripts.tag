@@ -40,6 +40,7 @@
 
   <c:if test="${refer eq 'record'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/pfamDomain.js"><jsp:text/></script>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   </c:if>
 
 </jsp:root>

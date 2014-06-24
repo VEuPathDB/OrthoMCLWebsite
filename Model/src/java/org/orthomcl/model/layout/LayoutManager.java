@@ -17,15 +17,18 @@ public class LayoutManager implements Manageable<LayoutManager> {
 
   private static final String LAYOUT_ATTRIBUTE = "layout";
 
+  private String projectId;
+  
   @Override
   public LayoutManager getInstance(String projectId, String gusHome) throws WdkModelException {
     LayoutManager layoutManager = new LayoutManager();
+    layoutManager.projectId = projectId;
     return layoutManager;
   }
 
   public Layout getLayout(User user, String name) throws WdkModelException, WdkUserException {
     // first load group
-    GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, name);
+    GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
     Group group = groupManager.getGroup(groupRecord);
     Layout layout = new Layout(name);

@@ -511,7 +511,7 @@
 
     <!-- OrthoMCL-specific actions -->
     <action path="/showLayout"
-        parameter="org.orthomcl.controller.action.GetLayoutAction"
+        parameter="org.orthomcl.controller.action.ShowLayoutAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
       <forward name="layout" path="/wdkCustomization/jsp/records/group-layout.jsp"/>
     </action>

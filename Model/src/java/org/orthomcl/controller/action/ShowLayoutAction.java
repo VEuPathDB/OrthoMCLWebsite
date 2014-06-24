@@ -18,7 +18,7 @@ public class ShowLayoutAction extends WdkAction {
 
   private static final Logger logger = Logger.getLogger(ShowLayoutAction.class.getName());
 
-  private static final String PARAM_GROUP_NAME = "group";
+  private static final String PARAM_GROUP_NAME = "group_name";
   
   private static final String ATTR_LAYOUT = "layout";
   
@@ -26,7 +26,7 @@ public class ShowLayoutAction extends WdkAction {
 
   @Override
   protected boolean shouldValidateParams() {
-    return true;
+    return false;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ShowLayoutAction extends WdkAction {
 
     // get the layout data
     String groupName = params.getValue(PARAM_GROUP_NAME);
-    LayoutManager layoutManager = InstanceManager.getInstance(LayoutManager.class, groupName);
+    LayoutManager layoutManager = InstanceManager.getInstance(LayoutManager.class, getWdkModel().getProjectId());
     Layout layout = layoutManager.getLayout(userBean.getUser(), groupName);
     
     ActionResult result = new ActionResult().setViewName(MAP_LAYOUT);

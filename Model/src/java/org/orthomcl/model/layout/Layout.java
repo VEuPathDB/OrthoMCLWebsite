@@ -9,7 +9,7 @@ import org.orthomcl.model.GenePair;
 public class Layout {
 
   private final String groupName;
-  private final Map<String, Node> nodes;
+  private final Map<Integer, Node> nodes;
   private final Map<GenePair, Edge> edges;
 
   public Layout(String groupName) {
@@ -34,11 +34,11 @@ public class Layout {
     return nodes.values();
   }
   
-  public Node getNode(String sourceId) {
-    return nodes.get(sourceId);
+  public Node getNode(int index) {
+    return nodes.get(index);
   }
   
   public void addNode(Node node) {
-    this.nodes.put(node.getGene().getSourceId(), node);
+    this.nodes.put(node.getIndex(), node);
   }
 }

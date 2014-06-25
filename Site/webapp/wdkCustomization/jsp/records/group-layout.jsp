@@ -11,7 +11,7 @@
   <!-- ORTHO data summary -->
   <imp:pageFrame refer="data-source" title="${layout.groupName} Cluster Graph">
 
-  <svg width="800px" height="800px">
+  <svg width="${layout.size}px" height="${layout.size}px">
     <c:forEach items="${layout.edges}" var="edge">
       <line class="edge ${edge.type}" x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" x2="${edge.nodeB.x}" y2="${edge.nodeB.y}"
 	        data-type="${edge.type}" data-evalue="${edge.evalue}" data-query="${edge.queryId}" data-subject="${edge.subjectId}" />

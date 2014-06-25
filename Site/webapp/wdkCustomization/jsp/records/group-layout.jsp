@@ -8,21 +8,46 @@
 
   <c:set var="layout" value="${requestScope.layout}" />
 
-  <!-- ORTHO data summary -->
-  <imp:pageFrame refer="data-source" title="${layout.groupName} Cluster Graph">
+  <div class="group-layout">
 
-  <svg width="${layout.size}px" height="${layout.size}px">
-    <c:forEach items="${layout.edges}" var="edge">
-      <line class="edge ${edge.type}" x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" x2="${edge.nodeB.x}" y2="${edge.nodeB.y}"
-	        data-type="${edge.type}" data-evalue="${edge.evalue}" data-query="${edge.queryId}" data-subject="${edge.subjectId}" />
-    </c:forEach>
+    <div class="layout-data">
+      <div class="nodes">
+        <c:forEach items="${layout.nodes}" var="node">
+          <c:set var="gene" value="${node.gene}" />
+          <span class="gene" id="${node.index}" data-sourceId="${gene.sourceId}" data-taxon="${gene.taxon.abbrev}">
+            ${gene.description}
+          </span>
+        </c:forEach>
+      </div>
+      <div class="edges">
+        <c:forEach items="${layout.edges}" var="edge">
+          <span class="score" id="${edge.nodeA.index}-${edge.nodeB.index}"
+                data-evalue="${edge.evalue}" data-query="${edge.nodeA.index}" data-subject="${edge.nodeB.index}" />
+        </c:forEach>
+      </div>
+    </div>
+
+    <svg class="canvas" width="${layout.size}px" height="${layout.size}px" viewBox="0 0 ${layout.size} ${layout.size}">
+      <rect class="background" style="fill:red" />
+      <c:forEach items="${layout.edgesByType}" var="edgeGroup">
+        <g class="edges ${edgeGroup.key}">
+          <c:forEach items="${edgeGroup.value}" var="edge">
+            <line class="edge" id="${edge.nodeA.index}-${edge.nodeB.index}" 
+                  x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" x2="${edge.nodeB.x}" y2="${edge.nodeB.y}" />
+          </c:forEach>
+        </g>
+      </c:forEach>
 	
-	<c:forEach items="${layout.nodes}" var="node">
-	  <c:set var="gene" value="${node.gene}" />
-	  <circle id="${gene.sourceId}" class="node ${gene.taxon.abbrev}" cx="${node.x}" cy="${node.y}" r="10" />
-	</c:forEach>
-  </svg>
+      <c:forEach items="${layout.nodes}" var="nodeGroup">
+        <g class="nodes ${nodeGroup.key}">
+          <c:forEach items="${nodeGroup.value}" var="node">
+            <c:set var="gene" value="${node.gene}" />
+            <circle id="${node.index}" class="node ${gene.taxon.abbrev}" cx="${node.x}" cy="${node.y}" r="6" />
+          </c:forEach>
+        </g>
+      </c:forEach>
+    </svg>
 
-  </imp:pageFrame>
+  </div>
 
 </jsp:root>

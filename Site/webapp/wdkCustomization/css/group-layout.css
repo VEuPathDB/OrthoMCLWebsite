@@ -1,0 +1,10 @@
+.group-layout .layout-data { display:none; }
+.group-layout .canvas .background { width:100%; height:100%; fill:red; }
+
+.group-layout .canvas line { stroke-width:2px; }
+.group-layout .canvas line.Ortholog { stroke:red; }
+.group-layout .canvas line.Coortholog { stroke:yellow; }
+.group-layout .canvas line.Inparalog { stroke:green; }
+.group-layout .canvas line.Normal { stroke:gray; }
+
+.group-layout .canvas circle { } 

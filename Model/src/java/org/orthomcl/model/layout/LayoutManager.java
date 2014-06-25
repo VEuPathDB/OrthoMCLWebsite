@@ -20,6 +20,8 @@ public class LayoutManager implements Manageable<LayoutManager> {
 
   private static final int DEFAULT_SIZE = 800;
 
+  private static final int MARGIN = 25;
+
   private String projectId;
 
   @Override
@@ -94,6 +96,8 @@ public class LayoutManager implements Manageable<LayoutManager> {
   private void scaleLayout(Layout layout, int size) {
     Collection<Node> nodes = layout.getNodes();
 
+    size -= MARGIN * 2;
+
     // find min & max coordinates
     double minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE;
     double maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
@@ -109,14 +113,14 @@ public class LayoutManager implements Manageable<LayoutManager> {
     }
 
     double width = maxx - minx, height = maxy - miny;
-    double ratio = size / Math.max(width, height);
+    double ratio = 100D * size / Math.max(width, height);
     double dx = (width > height) ? 0 : (height - width) / 2;
     double dy = (width > height) ? (width - height) / 2 : 0;
 
     // scale the coordinates to a range of [0...size];
     for (Node node : nodes) {
-      double x = (node.getX() - minx + dx) * ratio;
-      double y = (node.getY() - miny + dy) * ratio;
+      double x = Math.round((node.getX() - minx + dx) * ratio) / 100D + MARGIN;
+      double y = Math.round((node.getY() - miny + dy) * ratio) / 100D + MARGIN;
       node.setLocation(x, y);
     }
   }

@@ -32,12 +32,38 @@ public class Layout {
     return edges.values();
   }
   
+  public Map<String, List<Edge>> getEdgesByType() {
+    Map<String, List<Edge>> edges = new HashMap<>();
+    for (Edge edge : this.edges.values()) {
+      List<Edge> list = edges.get(edge.getType().name());
+      if (list == null) {
+        list = new ArrayList<>();
+        edges.put(edge.getType().name(), list);
+      }
+      list.add(edge);
+    }
+    return edges;
+  }
+
   public void addEdge(Edge edge) {
     this.edges.put(edge, edge);
   }
   
   public Collection<Node> getNodes() {
     return nodes.values();
+  }
+
+  public Map<String, List<Node>> getNodesByTaxon() {
+    Map<String, List<Node>> nodes = new HashMap<>();
+    for (Node node : this.nodes.values()) {
+      List<Node> list = nodes.get(node.getTaxon().getAbbrev());
+      if (list == null) {
+        list = new ArrayList<>();
+        nodes.put(node.getTaxon().getAbbrev());
+      }
+      list.add(node);
+    }
+    return nodes;
   }
   
   public Node getNode(int index) {

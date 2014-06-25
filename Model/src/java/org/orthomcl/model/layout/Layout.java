@@ -1,7 +1,9 @@
 package org.orthomcl.model.layout;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.orthomcl.model.GenePair;
@@ -19,19 +21,19 @@ public class Layout {
     this.nodes = new HashMap<>();
     this.size = size;
   }
-  
+
   public int getSize() {
     return size;
   }
-  
+
   public String getGroupName() {
     return groupName;
   }
-  
+
   public Collection<Edge> getEdges() {
     return edges.values();
   }
-  
+
   public Map<String, List<Edge>> getEdgesByType() {
     Map<String, List<Edge>> edges = new HashMap<>();
     for (Edge edge : this.edges.values()) {
@@ -48,7 +50,7 @@ public class Layout {
   public void addEdge(Edge edge) {
     this.edges.put(edge, edge);
   }
-  
+
   public Collection<Node> getNodes() {
     return nodes.values();
   }
@@ -56,20 +58,20 @@ public class Layout {
   public Map<String, List<Node>> getNodesByTaxon() {
     Map<String, List<Node>> nodes = new HashMap<>();
     for (Node node : this.nodes.values()) {
-      List<Node> list = nodes.get(node.getTaxon().getAbbrev());
+      List<Node> list = nodes.get(node.getGene().getTaxon().getAbbrev());
       if (list == null) {
         list = new ArrayList<>();
-        nodes.put(node.getTaxon().getAbbrev());
+        nodes.put(node.getGene().getTaxon().getAbbrev(), list);
       }
       list.add(node);
     }
     return nodes;
   }
-  
+
   public Node getNode(int index) {
     return nodes.get(index);
   }
-  
+
   public void addNode(Node node) {
     this.nodes.put(node.getIndex(), node);
   }

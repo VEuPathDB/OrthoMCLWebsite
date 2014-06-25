@@ -11,11 +11,17 @@ public class Layout {
   private final String groupName;
   private final Map<Integer, Node> nodes;
   private final Map<GenePair, Edge> edges;
+  private final int size;
 
-  public Layout(String groupName) {
+  public Layout(String groupName, int size) {
     this.groupName = groupName;
     this.edges = new HashMap<>();
     this.nodes = new HashMap<>();
+    this.size = size;
+  }
+  
+  public int getSize() {
+    return size;
   }
   
   public String getGroupName() {

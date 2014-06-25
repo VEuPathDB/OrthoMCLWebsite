@@ -38,7 +38,7 @@ public class LayoutManager implements Manageable<LayoutManager> {
     GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
     Group group = groupManager.getGroup(groupRecord);
-    Layout layout = new Layout(name);
+    Layout layout = new Layout(name, getSize());
     // load layout content
     String layoutString = (String) groupRecord.getAttributeValue(LAYOUT_ATTRIBUTE).getValue();
     if (layoutString == null)

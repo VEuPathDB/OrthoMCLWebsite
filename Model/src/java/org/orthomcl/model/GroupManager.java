@@ -59,8 +59,8 @@ public class GroupManager implements Manageable<GroupManager> {
       gene.setLength(Long.valueOf(row.get("length").getValue().toString()));
 
       // get taxon
-      String taxonName = (String) row.get("taxon_name").getValue();
-      gene.setTaxon(taxons.get(taxonName));
+      String taxonAbbrev = (String) row.get("taxon_abbrev").getValue();
+      gene.setTaxon(taxons.get(taxonAbbrev));
       group.addGene(gene);
     }
 

@@ -28,7 +28,8 @@
     </div>
 
     <svg class="canvas" width="${layout.size}px" height="${layout.size}px" viewBox="0 0 ${layout.size} ${layout.size}">
-      <rect class="background" style="fill:red" />
+      <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
+
       <c:forEach items="${layout.edgesByType}" var="edgeGroup">
         <g class="edges ${edgeGroup.key}">
           <c:forEach items="${edgeGroup.value}" var="edge">
@@ -38,7 +39,7 @@
         </g>
       </c:forEach>
 	
-      <c:forEach items="${layout.nodes}" var="nodeGroup">
+      <c:forEach items="${layout.nodesByTaxon}" var="nodeGroup">
         <g class="nodes ${nodeGroup.key}">
           <c:forEach items="${nodeGroup.value}" var="node">
             <c:set var="gene" value="${node.gene}" />
@@ -46,6 +47,7 @@
           </c:forEach>
         </g>
       </c:forEach>
+
     </svg>
 
   </div>

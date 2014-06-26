@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
+import org.orthomcl.model.Taxon;
 
 public class Layout {
 
@@ -58,7 +60,10 @@ public class Layout {
   public Map<String, List<Node>> getNodesByTaxon() {
     Map<String, List<Node>> nodes = new HashMap<>();
     for (Node node : this.nodes.values()) {
-      List<Node> list = nodes.get(node.getGene().getTaxon().getAbbrev());
+      Gene gene = node.getGene();
+      Taxon taxon = gene.getTaxon();
+      String abbrev = taxon.getAbbrev();
+      List<Node> list = nodes.get(abbrev);
       if (list == null) {
         list = new ArrayList<>();
         nodes.put(node.getGene().getTaxon().getAbbrev(), list);

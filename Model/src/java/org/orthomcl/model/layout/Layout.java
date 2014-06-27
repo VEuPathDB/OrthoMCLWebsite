@@ -13,12 +13,15 @@ import org.orthomcl.model.Taxon;
 public class Layout {
 
   private final String groupName;
+  private final Map<String, Taxon> taxons;
   private final Map<Integer, Node> nodes;
   private final Map<GenePair, Edge> edges;
   private final int size;
 
+
   public Layout(String groupName, int size) {
     this.groupName = groupName;
+    this.taxons = new HashMap<>();
     this.edges = new HashMap<>();
     this.nodes = new HashMap<>();
     this.size = size;
@@ -30,6 +33,14 @@ public class Layout {
 
   public String getGroupName() {
     return groupName;
+  }
+
+  public void addTaxon(Taxon taxon) {
+    this.taxons.put(taxon.getAbbrev(), taxon);
+  }
+
+  public Collection<Taxon> getTaxons() {
+    return taxons.values();
   }
 
   public Collection<Edge> getEdges() {

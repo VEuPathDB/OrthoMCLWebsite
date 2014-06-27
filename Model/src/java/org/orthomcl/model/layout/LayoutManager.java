@@ -1,6 +1,7 @@
 package org.orthomcl.model.layout;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eupathdb.common.model.InstanceManager;
 import org.gusdb.wdk.model.Manageable;
@@ -13,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.orthomcl.model.Group;
 import org.orthomcl.model.GroupManager;
+import org.orthomcl.model.Taxon;
+import org.orthomcl.model.TaxonManager;
 
 public class LayoutManager implements Manageable<LayoutManager> {
 
@@ -40,11 +43,19 @@ public class LayoutManager implements Manageable<LayoutManager> {
     GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
     Group group = groupManager.getGroup(groupRecord);
-    Layout layout = new Layout(name, getSize());
+
     // load layout content
     String layoutString = (String) groupRecord.getAttributeValue(LAYOUT_ATTRIBUTE).getValue();
     if (layoutString == null)
       return null;
+
+    // load taxons into layout
+    Layout layout = new Layout(name, getSize());
+    TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, projectId);
+    Map<String, Taxon> taxons = taxonManager.getTaxons();
+    for (Taxon taxon : taxons.values()) {
+      layout.addTaxon(taxon);
+    }
 
     try {
       JSONObject jsLayout = new JSONObject(layoutString);

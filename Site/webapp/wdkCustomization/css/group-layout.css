@@ -1,10 +1,22 @@
-.group-layout .layout-data { display:none; }
+.group-layout .data { display:none; }
+
+
+
 .group-layout .canvas .background { fill:#EEEEEE; }
+.group-layout .canvas line.edge { stroke-width:2px; }
+.group-layout .canvas circle.node { stroke-width:3px; } 
 
-.group-layout .canvas .edges line { stroke-width:2px; }
-.group-layout .canvas .edges.Ortholog { stroke:red; }
-.group-layout .canvas .edges.Coortholog { stroke:yellow; }
-.group-layout .canvas .edges.Inparalog { stroke:#00CC00; }
-.group-layout .canvas .edges.Normal { stroke:gray; }
+.group-layout .controls { float:left; width:300px; }
+.group-layout .controls h3 {font-weight:bold; }
+.group-layout .controls .accordion { margin: 0px 10px 10px 0px; overflow:hidden; }
+.group-layout .controls .ui-accordion-content { overflow:hidden; }
+.group-layout .controls .control-section { 
+  border: 1px solid #666666; border-radius:4px; margin:4px 0px; padding:4px; background:#EEEEEE; 
+}
+.group-layout .controls .edge-control .score-control { display: none; }
 
-.group-layout .canvas circle { } 
+.group-layout .controls .legend { display:inline-block; height:2px; width:25px; margin:3px }
+.group-layout .controls .legend.Ortholog { background:red; }
+.group-layout .controls .legend.Coortholog { background:yellow; }
+.group-layout .controls .legend.Inparalog { background:#00CC00; }
+.group-layout .controls .legend.Normal { background:gray; }

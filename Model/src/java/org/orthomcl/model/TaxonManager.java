@@ -1,6 +1,5 @@
 package org.orthomcl.model;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -75,10 +74,12 @@ public class TaxonManager implements Manageable<TaxonManager> {
     // resolve parent/children
     for (Taxon taxon : taxons.values()) {
       int parentId = parents.get(taxon.getId());
-      if (abbreviations.containsKey(parentId)) {
+      if (taxon.getId() != parentId || abbreviations.containsKey(parentId)) {
         Taxon parent = taxons.get(abbreviations.get(parentId));
-        taxon.setParent(parent);
-        parent.addChildren(taxon);
+        if (taxon != parent) {
+          taxon.setParent(parent);
+          parent.addChildren(taxon);
+        }
       }
     }
 
@@ -128,7 +129,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
     // always use a fixed seeder, so that the same taxon will always get the same color;
     Random random = new Random(0);
     int step = 255 * 3 / species.size() + 1;
-    List<Color> colors = new ArrayList<>();
+    List<String> colors = new ArrayList<>();
     while (colors.size() < species.size()) {
       step--;
       if (step == 0)
@@ -136,9 +137,8 @@ public class TaxonManager implements Manageable<TaxonManager> {
       for (int r = 0; r < 256; r += step) {
         for (int g = 0; g < 256; g += step) {
           for (int b = 0; b < 256; b += step) {
-            if (r < MIN_COLOR_RANGE && g < MIN_COLOR_RANGE && b < MIN_COLOR_RANGE)
-              continue;
-            colors.add(new Color(r, g, b));
+            String color = "#" + toHex(r) + toHex(g) + toHex(b);
+            colors.add(color);
           }
         }
       }
@@ -147,8 +147,18 @@ public class TaxonManager implements Manageable<TaxonManager> {
     Collections.shuffle(colors, random);
     int i = 0;
     for (Taxon taxon : species) {
-      if (i < colors.size())
+      if (i < colors.size()) {
         taxon.setColor(colors.get(i));
+        i++;
+      }
     }
+  }
+
+  private String toHex(int c) {
+    c = c % 256;
+    String hex = Integer.toHexString(c);
+    if (hex.length() == 1)
+      hex = "0" + hex;
+    return hex;
   }
 }

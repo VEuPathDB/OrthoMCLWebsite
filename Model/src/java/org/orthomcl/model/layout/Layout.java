@@ -1,8 +1,10 @@
 package org.orthomcl.model.layout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,15 +18,21 @@ public class Layout {
   private final Map<String, Taxon> taxons;
   private final Map<Integer, Node> nodes;
   private final Map<GenePair, Edge> edges;
+  private final Map<String, Integer> taxonCounts;
   private final int size;
 
+  private int minEvalueExp;
+  private int maxEvalueExp;
 
   public Layout(String groupName, int size) {
     this.groupName = groupName;
     this.taxons = new HashMap<>();
     this.edges = new HashMap<>();
     this.nodes = new HashMap<>();
+    this.taxonCounts = new HashMap<>();
     this.size = size;
+    this.minEvalueExp = Integer.MAX_VALUE;
+    this.maxEvalueExp = Integer.MIN_VALUE;
   }
 
   public int getSize() {
@@ -62,6 +70,24 @@ public class Layout {
 
   public void addEdge(Edge edge) {
     this.edges.put(edge, edge);
+    // also calculate the evalue range
+    String evalueA = edge.getEvalueA(), evalueB = edge.getEvalueB();
+    int expA = Integer.valueOf(evalueA.split("[eE]")[1]);
+    if (evalueB == null || evalueA.equals(evalueB)) {
+      if (minEvalueExp > expA)
+        minEvalueExp = expA;
+      if (maxEvalueExp < expA)
+        maxEvalueExp = expA;
+    }
+    else {
+      int expB = Integer.valueOf(evalueB.split("[eE]")[1]);
+      int minExp = Math.min(expA, expB);
+      if (minEvalueExp > minExp)
+        minEvalueExp = minExp;
+      int maxExp = Math.max(expA, expB);
+      if (maxEvalueExp < maxExp)
+        maxEvalueExp = maxExp;
+    }
   }
 
   public Collection<Node> getNodes() {
@@ -90,5 +116,33 @@ public class Layout {
 
   public void addNode(Node node) {
     this.nodes.put(node.getIndex(), node);
+    // also calculate the gene counts by taxons
+    String abbrev = node.getGene().getTaxon().getAbbrev();
+    if (taxonCounts.containsKey(abbrev)) {
+      int count = taxonCounts.get(abbrev);
+      taxonCounts.put(abbrev, count + 1);
+    }
+    else {
+      taxonCounts.put(abbrev, 1);
+    }
+  }
+
+  public Map<String, Integer> getTaxonCounts() {
+    // sort the taxons
+    Map<String, Integer> map = new LinkedHashMap<>();
+    String[] array = taxonCounts.keySet().toArray(new String[0]);
+    Arrays.sort(array);
+    for (String abbrev : array) {
+      map.put(abbrev, taxonCounts.get(abbrev));
+    }
+    return map;
+  }
+
+  public int getMinEvalueExp() {
+    return minEvalueExp;
+  }
+
+  public int getMaxEvalueExp() {
+    return maxEvalueExp;
   }
 }

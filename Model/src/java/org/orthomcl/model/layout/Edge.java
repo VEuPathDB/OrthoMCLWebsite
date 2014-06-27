@@ -4,11 +4,16 @@ import org.orthomcl.model.GenePair;
 
 public class Edge extends GenePair {
 
+  public static final int MIN_EVALUE = -180;
+  public static final int MAX_EVALUE = -5;
+
   private String evalueA;
   private String evalueB;
+  private double score;
   private EdgeType type;
   private Node nodeA;
   private Node nodeB;
+  private String color;
 
   public Edge(String sourceIdA, String sourceIdB) {
     super(sourceIdA, sourceIdB);
@@ -94,5 +99,45 @@ public class Edge extends GenePair {
    */
   public void setNodeB(Node nodeB) {
     this.nodeB = nodeB;
+  }
+
+  /**
+   * @return the score
+   */
+  public double getScore() {
+    return score;
+  }
+
+  public String getScoreFormatted() {
+    return LayoutManager.FORMAT.format(score);
+  }
+
+  /**
+   * @param score
+   *          the score to set
+   */
+  public void setScore(double score) {
+    this.score = score;
+  }
+
+  /**
+   * @return the color
+   */
+  public String getColor() {
+    if (color == null) {
+      int value = (int) Math.round((score - MIN_EVALUE) * 256 / (MAX_EVALUE - MIN_EVALUE + 1));
+      if (value > 255)
+        value = 255;
+      else if (value < 0)
+        value = 0;
+      color = "#" + toHex(value) + "00" + toHex(255 - value);
+    }
+    return color;
+  }
+  
+  private String toHex(int value) {
+    String hex = Integer.toHexString(value);
+    if (hex.length() == 1) hex = "0" + hex;
+    return hex;
   }
 }

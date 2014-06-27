@@ -1,5 +1,6 @@
 package org.orthomcl.model.layout;
 
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,10 +19,12 @@ import org.orthomcl.model.Taxon;
 import org.orthomcl.model.TaxonManager;
 
 public class LayoutManager implements Manageable<LayoutManager> {
+  
+  public static final DecimalFormat FORMAT = new DecimalFormat("0.00");
 
   private static final String LAYOUT_ATTRIBUTE = "layout";
 
-  private static final int DEFAULT_SIZE = 800;
+  private static final int DEFAULT_SIZE = 700;
 
   private static final int MARGIN = 25;
 
@@ -89,8 +92,12 @@ public class LayoutManager implements Manageable<LayoutManager> {
         String evalue = jsEdge.getString("E");
         String[] evalues = evalue.split("/");
         edge.setEvalueA(evalues[0]);
-        if (evalues.length == 2)
+        edge.setScore(Math.log10(Double.valueOf(evalues[0])));
+        if (evalues.length == 2) {
           edge.setEvalueB(evalues[1]);
+          double scoreB = Math.log10(Double.valueOf(evalues[1]));
+          edge.setScore((edge.getScore() + scoreB) / 2);
+        }
 
         layout.addEdge(edge);
       }

@@ -41,7 +41,15 @@ public class Node {
     return x;
   }
   
+  public String getXFormatted() {
+    return LayoutManager.FORMAT.format(x);
+  }
+  
   public double getY() {
     return y;
+  }
+  
+  public String getYFormatted() {
+    return LayoutManager.FORMAT.format(y);
   }
 }

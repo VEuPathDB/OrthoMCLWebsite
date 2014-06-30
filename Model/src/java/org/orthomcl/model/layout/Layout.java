@@ -127,13 +127,13 @@ public class Layout {
     }
   }
 
-  public Map<String, Integer> getTaxonCounts() {
+  public Map<Taxon, Integer> getTaxonCounts() {
     // sort the taxons
-    Map<String, Integer> map = new LinkedHashMap<>();
+    Map<Taxon, Integer> map = new LinkedHashMap<>();
     String[] array = taxonCounts.keySet().toArray(new String[0]);
     Arrays.sort(array);
     for (String abbrev : array) {
-      map.put(abbrev, taxonCounts.get(abbrev));
+      map.put(taxons.get(abbrev), taxonCounts.get(abbrev));
     }
     return map;
   }

@@ -28,7 +28,7 @@
         <c:forEach items="${layout.nodes}" var="node">
           <c:set var="gene" value="${node.gene}" />
           <span class="node" id="${node.index}" data-source-id="${gene.sourceId}" 
-                data-taxon="${gene.taxon.abbrev}" data-length="${gene.length}">
+                data-taxon="${gene.taxon.abbrev}" data-length="${gene.length}" data-x="${node.x}" data-y="${node.y}">
             ${gene.description}
           </span>
         </c:forEach>
@@ -41,6 +41,22 @@
                 data-query="${edge.nodeA.index}" data-subject="${edge.nodeB.index}"
                 data-score="${edge.scoreFormatted}" data-color="${edge.color}" />
         </c:forEach>
+      </div>
+
+    </div>
+
+    <div class="template">
+
+      <div class="node-detail">
+        <div class="source-id"></div>
+      </div>
+
+      <div class="edge-detail">
+
+      </div>
+
+      <div class="taxon-detail">
+
       </div>
 
     </div>
@@ -68,8 +84,10 @@
           <div class="score-control control-section">
             E-Value cutoff: 
             <div class="evalue slider" 
-			     data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
-			1E<span class="evalue-exp"> </span>
+                 data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
+            <div class="evalue-exp-section">
+              1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/>
+            </div>
           </div>
         </div>
       </div>
@@ -78,36 +96,50 @@
         <h3>Node Options</h3>
         <div>
           <div>Taxons:</div>
-		  <div class="tips">(Mouseover taxons to highlight genes)</div>
-          <c:forEach items="${layout.taxonCounts}" var="entity">
-		    <c:set var="taxon" value="${taxons[entity.key]}" />
-            <div class="taxon" id="${taxon.abbrev}">
-              <div class="taxon-legend" style="background:${taxon.color};border-color:${taxon.groupColor}"> </div>
-              ${taxon.name} 
-			  <c:if test="${taxon.commonName != null}"> / ${taxon.commonName} </c:if>
-			  (${entity.value} genes)
-            </div>
-          </c:forEach>
+          <div class="tip">(Mouseover taxons to highlight genes)</div>
+          <div class="taxon-control control-section">
+            <c:forEach items="${layout.taxonCounts}" var="entity">
+              <c:set var="taxon" value="${entity.key}" />
+              <div class="taxon" id="${taxon.abbrev}">
+                <div class="taxon-legend" style="background:${taxon.color};border-color:${taxon.groupColor}"> </div>
+                  ${taxon.abbrev} (${entity.value})
+                </div>
+            </c:forEach>
+          </div>
         </div>
       </div>
 
     </div>
 
-    <svg class="canvas" width="${layout.size}px" height="${layout.size}px" 
+    <svg class="canvas" width="${layout.size + 100}px" height="${layout.size}px" 
 	     viewBox="0 0 ${layout.size} ${layout.size}">
       <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
 
-      <c:forEach items="${layout.edges}" var="edge">
-            <line class="edge ${edge.type}" id="${edge.nodeA.index}-${edge.nodeB.index}" 
-                  x1="${edge.nodeA.xFormatted}" y1="${edge.nodeA.yFormatted}" 
-				  x2="${edge.nodeB.xFormatted}" y2="${edge.nodeB.yFormatted}" />
-      </c:forEach>
+      <g class="edges">
+        <c:forEach items="${layout.edges}" var="edge">
+          <line id="e${edge.nodeA.index}-${edge.nodeB.index}" class="edge e${edge.nodeA.index}-${edge.nodeB.index}"
+                x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" 
+                x2="${edge.nodeB.x}" y2="${edge.nodeB.y}" />
+        </c:forEach>
+      </g>
 	
-      <c:forEach items="${layout.nodes}" var="node">
-            <c:set var="gene" value="${node.gene}" />
-            <circle id="${node.index}" class="node ${gene.taxon.abbrev}" 
-			        cx="${node.xFormatted}" cy="${node.yFormatted}" r="5" />
-      </c:forEach>
+      <g class="nodes">
+        <c:forEach items="${layout.nodes}" var="node">
+          <c:set var="gene" value="${node.gene}" />
+            <circle id="n${node.index}" class="node n${node.index} ${gene.taxon.abbrev}"
+                    cx="${node.x}" cy="${node.y}" r="4" />
+        </c:forEach>
+      </g>
+
+      <g class="ecnumbers">
+
+      </g>
+
+      <g class="domains">
+
+      </g>
+
+      <g class="labels"></g>
 
     </svg>
 

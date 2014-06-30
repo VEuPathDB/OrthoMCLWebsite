@@ -125,12 +125,12 @@ public class Edge extends GenePair {
    */
   public String getColor() {
     if (color == null) {
-      int value = (int) Math.round((score - MIN_EVALUE) * 256 / (MAX_EVALUE - MIN_EVALUE + 1));
+      int value = (int) Math.abs(Math.round((score - MIN_EVALUE) * 256 / (MAX_EVALUE - MIN_EVALUE + 1)));
       if (value > 255)
         value = 255;
       else if (value < 0)
         value = 0;
-      color = "#" + toHex(value) + "00" + toHex(255 - value);
+      color = "#" + toHex(255 - value) + "00" + toHex(value);
     }
     return color;
   }

@@ -1,8 +1,10 @@
 .group-layout .data { display:none; }
 
 .group-layout .canvas .background { fill:#EEEEEE; }
-.group-layout .canvas .edge { stroke-width:2px; }
-.group-layout .canvas .node { stroke-width:3px; } 
+.group-layout .canvas line.edge { stroke-width:2px; }
+.group-layout .canvas circle.node { stroke-width:3px; } 
+.group-layout .canvas text { font-weight:bold; }
+.group-layout .canvas text.shadow { stroke: white; stroke-width: 2.5px; opacity: 0.9; }
 
 .group-layout .controls { float:left; width:300px; }
 .group-layout .controls h3 {font-weight:bold; }
@@ -11,8 +13,10 @@
 .group-layout .controls .control-section { 
   border: 1px solid #666666; border-radius:4px; margin:4px 0px; padding:4px; background:#EEEEEE; 
 }
-.group-layout .controls .edge-control .score-control { display: none; }
-.group-layout .controls .edge-control .evalue { margin-right: 10px; }
+.group-layout .controls .edge-control .score-control { display: none; padding: 10px 5px }
+.group-layout .controls .edge-control .evalue { width:130px; margin:5px 0px; display:inline-block; }
+.group-layout .controls .edge-control .evalue-exp-section { text-align:right; margin:3px 10px; }
+.group-layout .controls .edge-control .evalue-exp { width:30px; }
 
 .group-layout .controls .edge-legend { display:inline-block; height:2px; width:25px; margin:3px }
 .group-layout .controls .edge-legend.Ortholog { background:red; }
@@ -20,6 +24,15 @@
 .group-layout .controls .edge-legend.Inparalog { background:#00CC00; }
 .group-layout .controls .edge-legend.Normal { background:gray; }
 
-.group-layout .controls .taxon-legend { display:inline-block; height:7px; width:7px; border:3px solid; margin:3px }
-.group-layout .controls  .highlight { background:yellow; }
+.group-layout .controls .taxon-legend { 
+  display:inline-block; height:7px; width:7px; border:3px solid; margin-top:2px; border-radius:4px; 
+}
+.group-layout .controls .highlight { background:yellow; }
+.group-layout .controls .tip { color:#555555; font-style:italic; }
+.group-layout .controls .node-control .taxon { 
+  display:inline-block; width:75px; border:1px dotted gray; padding:epx; margin:2px; white-space:nowrap; }
+}
+
+
+
 

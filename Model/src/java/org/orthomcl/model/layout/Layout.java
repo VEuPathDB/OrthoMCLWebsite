@@ -91,7 +91,14 @@ public class Layout {
   }
 
   public Collection<Node> getNodes() {
-    return nodes.values();
+    // sort the nodes, so that the client can bind it by array;
+    Integer[] keys = nodes.keySet().toArray(new Integer[0]);
+    Arrays.sort(keys);
+    List<Node> list = new ArrayList<>(nodes.size());
+    for (int key : keys) {
+      list.add(nodes.get(key));
+    }
+    return list;
   }
 
   public Map<String, List<Node>> getNodesByTaxon() {

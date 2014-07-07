@@ -1,3 +1,6 @@
+/* The selectors in this file is too general, and it interferes with other styling; 
+ * need to refactor them and use class-based selection instead of id selections.
+
 #basket-control {text-align:center; margin:5px;}
 
 #Record_Views th, #Record_Views td {
@@ -21,5 +24,6 @@
 #Record_Views .ui-tabs-panel ul {
   list-style: disc;
   margin-left: 2em;
-  padding: 0.4em 0.6em;
 }
+
+*/

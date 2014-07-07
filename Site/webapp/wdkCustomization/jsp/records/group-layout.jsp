@@ -45,73 +45,130 @@
 
     </div>
 
-    <div class="template">
+    <div class="controls accordion">
+      <h3>Legend &amp; Options</h3>
 
-      <div class="node-detail">
-        <div class="source-id"></div>
-      </div>
+      <div>
 
-      <div class="edge-detail">
-
-      </div>
-
-      <div class="taxon-detail">
-
-      </div>
-
-    </div>
-
-    <div class="controls">
-
-      <div class="edge-control accordion">
-        <h3>Edge Options</h3>
-        <div>
+        <fieldset class="edge-control">
+          <legend>Edges</legend>
           <div>
-             Display By: 
-             <input name="edge-display" class="edge-display" type="radio" value="type" checked="checked" /> Types
-             <input name="edge-display" class="edge-display" type="radio" value="score" /> Blast scores
+            Display edges By: 
+            <input name="edge-display" class="edge-display" type="radio" value="type" checked="checked" /> Types
+            <input name="edge-display" class="edge-display" type="radio" value="score" /> Blast scores
           </div>
           <div class="type-control control-section">
-            <input class="edge-type" type="checkbox" value="Ortholog" checked="checked" /> 
-            <div class="edge-legend Ortholog"> </div> Ortholog <br />
-            <input class="edge-type" type="checkbox" value="Coortholog" checked="checked" />
-            <div class="edge-legend Coortholog"> </div> Coortholog <br />
-            <input class="edge-type" type="checkbox" value="Inparalog" checked="checked" /> 
-            <div class="edge-legend Inparalog"> </div> Inparalog <br />
-            <input class="edge-type" type="checkbox" value="Normal" /> 
-            <div class="edge-legend Normal"> </div> Normal
-          </div>
-          <div class="score-control control-section">
-            E-Value cutoff: 
-            <div class="evalue slider" 
-                 data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
-            <div class="evalue-exp-section">
-              1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/>
+            <div class="edge-type">
+              <input type="checkbox" value="Ortholog" checked="checked" /> 
+              <div class="edge-legend Ortholog"> </div> Ortholog
+            </div>
+            <div class="edge-type">
+              <input type="checkbox" value="Coortholog" checked="checked" />
+              <div class="edge-legend Coortholog"> </div> Coortholog
+            </div>
+            <div class="edge-type">
+              <input type="checkbox" value="Inparalog" checked="checked" /> 
+              <div class="edge-legend Inparalog"> </div> Inparalog
+            </div>
+            <div class="edge-type">
+              <input type="checkbox" value="Normal" /> 
+              <div class="edge-legend Normal"> </div> Normal
             </div>
           </div>
-        </div>
-      </div>
+          <div class="score-control control-section">
+            E-Value cutoff: <b>1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/></b> 
+            <div class="evalue slider" 
+                 data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
+            <div class="tip">Edges are colored by evalue; red represents high scores, blue for low scores.</div>
+          </div>
+        </fieldset>
 
-      <div class="node-control accordion">
-        <h3>Node Options</h3>
-        <div>
-          <div>Taxons:</div>
-          <div class="tip">(Mouseover taxons to highlight genes)</div>
+        <fieldset class="node-control">
+          <legend>Nodes</legend>
+          <div>Display nodes by:
+            <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" /> Taxons
+          </div>
           <div class="taxon-control control-section">
+            <div class="tip">Mouse over a taxon legend to highlight sequences of that taxon.</div>
             <c:forEach items="${layout.taxonCounts}" var="entity">
               <c:set var="taxon" value="${entity.key}" />
-              <div class="taxon" id="${taxon.abbrev}">
+              <c:set var="taxonInfo" value="${taxon.name}" />
+              <c:if test="${taxon.commonName != null}">
+                <c:set var="taxonInfo" value="${taxonInfo} (${taxon.commonName})" />
+              </c:if>
+              <div class="taxon" id="${taxon.abbrev}" title="${taxonInfo}">
                 <div class="taxon-legend" style="background:${taxon.color};border-color:${taxon.groupColor}"> </div>
-                  ${taxon.abbrev} (${entity.value})
-                </div>
+                ${taxon.abbrev} (${entity.value})
+              </div>
             </c:forEach>
           </div>
-        </div>
+        </fieldset>
+
       </div>
 
-    </div>
+    </div> <!-- end of .controls div -->
 
-    <svg class="canvas" width="${layout.size + 100}px" height="${layout.size}px" 
+    <!-- need an id here in order for .highlight selector to override the defaults -->
+    <fieldset id="node-detail" class="node-detail">
+      <legend>Sequence Detail</legend>
+      <div class="non-content tip">Click a sequence node on the layout to see its details here.</div>
+
+      <div class="content">
+        <div class="source-id caption"></div>
+        <div class="gene-info accordion">
+          <h3>Sequence Information</h3>
+          <div>
+            <table>
+              <tr>
+                <th>Source ID:</th><td class="source-id"></td>
+                <th>Length:</th><td class="length"></td>
+              </tr>
+              <tr>
+                <th>Organism:</th><td class="taxon-name"></td>
+                <th>Code:</th><td class="taxon-id"></td>
+              </tr>
+              <tr>
+                <th>Description:</th><td class="description" colspan="3"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="edge-info accordion">
+          <h3>BLAST Scores</h3>
+          <div>
+            <table class="blast-scores data-table">
+              <thead>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Evalue</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div class="tip">Mouse over each row to highlight BLAST scores (edges).</div>
+          </div>
+        </div>
+
+        <div class="pfam-info accordion">
+          <h3>PFam Domains</h3>
+          <div>
+            Coming soon.
+          </div>
+        </div>
+
+        <div class="ecnumber-info accordion">
+          <h3>ECNumbers</h3>
+          <div>
+            Coming soon.
+          </div>
+        </div>
+
+      </div> <!-- end of .content -->
+    </fieldset> <!-- end of .node-detail -->
+
+
+    <svg class="canvas" width="${layout.size}px" height="${layout.size}px" 
 	     viewBox="0 0 ${layout.size} ${layout.size}">
       <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
 

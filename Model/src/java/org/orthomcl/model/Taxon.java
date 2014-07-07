@@ -51,6 +51,14 @@ public class Taxon implements Comparable<Taxon> {
     this.commonName = commonName;
   }
 
+  public String getFullName() {
+    String fullName = name;
+    if (commonName != null && !commonName.equals(name)) {
+      fullName += " (" + commonName + ")";
+    }
+    return fullName;
+  }
+
   public int getSortIndex() {
     return sortIndex;
   }

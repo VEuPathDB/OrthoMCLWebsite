@@ -10,6 +10,7 @@
   <c:set var="layout" value="${requestScope.layout}" />
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
+  <c:set var="ecNumbers" value="${group.ecNumbers}" />
 
   <div class="group-layout" data-controller="orthomcl.group.layout.init">
 
@@ -31,9 +32,9 @@
           <c:set var="gene" value="${node.gene}" />
           <div class="node" id="${node.index}" data-source-id="${gene.sourceId}" 
                 data-taxon="${gene.taxon.abbrev}" data-length="${gene.length}" data-x="${node.x}" data-y="${node.y}">
-            <span class="description">${gene.description}</description>
-            <c:forEach items="${gene.ecNumbers}" var="ecNumber">
-              <span class="ec-number" id="${ecNumber}" />
+            <span class="description">${gene.description}</span>
+            <c:forEach items="${gene.ecNumbers}" var="code">
+              <span class="ec-number" id="${ecNumbers[code].index}" />
             </c:forEach>
           </div>
         </c:forEach>
@@ -49,9 +50,9 @@
       </div>
       
       <div class="ec-numbers">
-        <c:forEach items="${group.ecNumbers}" var="item">
+        <c:forEach items="${ecNumbers}" var="item">
           <c:set var="ecNumber" value="${item.value}" />
-          <span class="ec-number" id="${ecNumber.code}" data-index="${ecNumber.index}" 
+          <span class="ec-number" id="${ecNumber.index}" data-code="${ecNumber.code}" 
                 data-color="${ecNumber.color}" data-count="${ecNumber.count}" />
         </c:forEach>
       </div>
@@ -103,10 +104,15 @@
           <legend>Nodes</legend>
           <div>Display nodes by:
             <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" /> Taxons
-            <c:set var="ecNumberDisabled"><c:if test="${(fn:length(group.ecNumbers) == 0}">disabled="disabled"</c:if></c:set>
-            <input name="node-display" class="node-display" type="radio" value="ec-number" ${ecNumberDisabled} /> EC Numbers
-            <c:set var="pfamDisabled">disabled="disabled"</c:set>
-            <input name="node-display" class="node-display" type="radio" value="pfam" ${pfamDisabled} /> EC Numbers
+            <c:choose>
+              <c:when test="${fn:length(group.ecNumbers) == 0}">
+                <input name="node-display" class="node-display" type="radio" value="ec-number" disabled="disabled" />
+              </c:when>
+              <c:otherwise>
+                <input name="node-display" class="node-display" type="radio" value="ec-number" /> 
+              </c:otherwise>
+            </c:choose> EC Numbers
+            <input name="node-display" class="node-display" type="radio" value="pfam" disabled="disabled" /> PFam Domains
           </div>
 
           <div class="taxon-control control-section">
@@ -125,10 +131,10 @@
           </div>
           
           <div class="ec-number-control control-section">
-            <div class="tip">Mouse over a EC Number legend to highlight sequences of that ec number.</div>
+            <div class="tip">The EC Numbers are rendered in a pie chart for each gene.</div>
             <c:forEach items="${group.ecNumbers}" var="item">
               <c:set var="ecNumber" value="${item.value}" />
-              <div class="ec-number" id="${ecNumber.code}">
+              <div class="ec-number" id="${ecNumber.index}">
                 <div class="ec-number-legend" style="background:${ecNumber.color};"> </div>
                 ${ecNumber.code} (${ecNumber.count})
               </div>
@@ -191,7 +197,7 @@
         </div>
 
         <div class="ec-number-info accordion">
-          <h3>ECNumbers</h3>
+          <h3>EC Numbers</h3>
           <div>
             <table class="ec-numbers data-table">
               <thead>

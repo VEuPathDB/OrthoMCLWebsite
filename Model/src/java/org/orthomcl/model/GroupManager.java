@@ -140,7 +140,7 @@ public class GroupManager implements Manageable<GroupManager> {
     for (int i = 0; i < codes.length; i++) {
       EcNumber ecNumber = new EcNumber(codes[i]);
       ecNumber.setIndex(i);
-      ecNumber.setCount(ecNumberCodes.get(ecNumber));
+      ecNumber.setCount(ecNumberCodes.get(codes[i]));
       group.addEcNumbers(ecNumber);
     }
 

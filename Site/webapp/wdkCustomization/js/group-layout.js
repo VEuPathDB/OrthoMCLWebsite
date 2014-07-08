@@ -115,9 +115,15 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
             .accordion({ collapsible: true,
 
                        });
-     content.find(".ecnumber-info")
+     content.find(".ec-number-info")
             .accordion({ collapsible: true,
-
+                         activate: function(event, ui) {
+                                     if (ui.newPanel.length == 0) return;
+                                     if ($(this).data("loaded") == "yes") return;
+                                     showEcNumberDetails(layout);
+                                     $(this).data("loaded", "yes")
+                                            .accordion("refresh");
+                                   },
                        });
   }
 
@@ -146,7 +152,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     content.find(".gene-info").accordion("refresh")
 
     // reset the content of lazy-loading sections
-    content.find(".edge-info, .pfam-info, .ecnumber-info")
+    content.find(".edge-info, .pfam-info, .ec-number-info")
            .accordion("option", "active", false)
            .data("loaded", "no")
            .find(".datatable").DataTable({ bDestroy : true, });
@@ -201,6 +207,28 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
            });
   }
 
+  function showEcNumberDetails(layout) {
+    var nodeId = layout.find(".node-detail .source-id").attr("id");
+    var node = nodes[nodeId];
+    var content = layout.find(".node-detail .content");
+
+    // fill in ec numbers
+    var data = [];
+    node.find(".ec-number").each(function() {
+      var ecNumber = layout.find(".data .ec-numbers #" + this.id);
+      data.push([ ecNumber.data("code") ]);
+    });
+
+    content.find(".ec-numbers")
+           .DataTable({ bDestroy: true,
+                        bJQueryUI: true,
+                        aaData: data,
+                        bPaginate: false,
+                        "sScrollY": "200",
+                        "bScrollCollapse": true,
+                      });
+  }
+
   function convertEdgeToArray(edge, subjectName) {
     var edgeId = edge.attr("id");
     var subjectId = edge.data(subjectName);
@@ -231,7 +259,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                     nodeControl.find(".ec-number-control").hide();
                     nodeControl.find(".pfam-control").hide();
                     renderNodesByTaxon(layout);
-                  } if (this.value == "ec-number") {
+                  } else if (this.value == "ec-number") {
                     nodeControl.find(".taxon-control").hide(); 
                     nodeControl.find(".ec-number-control").show();
                     nodeControl.find(".pfam-control").hide();
@@ -272,23 +300,40 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     
     var ecNumbers = layout.find(".data .ec-numbers .ec-number");
     var arcSize = Math.PI / ecNumbers.length;
-    var arc = d3.svg.arc().outerRadius(10);
-    var pie = d3.layout.pie().value(1);
-                    
+    var arc = d3.svg.arc()
+                     .innerRadius(0)
+                     .outerRadius(6)
+                     .startAngle(function(d, i) { return i * Math.PI * 2 / ecNumbers.length; })
+                     .endAngle(function(d, i) { return (i + 1) * Math.PI * 2 / ecNumbers.length; });
+
+
     var ecNodes = d3.select(canvas.get(0))
-                    .selectAll(".ec-numbers .ec-number")
+                    .select(".ec-numbers").selectAll(".ec-number")
                     .data(nodes)
                     .enter().append("svg:g")
                             .attr("class", "ec-number")
                             .attr("id", function(node) { return node.attr("id"); })
-                            .attr("transform", "translate(" + node.data("x") + "," + node.data("y") + ")");
+                            .attr("transform", function(node) { 
+                              return "translate(" + node.data("x") + "," + node.data("y") + ")"; 
+                            })
+                            .on("mouseover", function(node) {
+                              highlightNodes(layout, ".nodes .n" + this.id);
+                            })
+                            .on("mouseout", function(node) {
+                              resetNodes(layout, ".nodes .n" + this.id);
+                            })
+                            .on("click", function(node) {
+                              showNodeDetail(layout, node);
+                            });
+
     ecNodes.each(function(node) {
       d3.select(this).selectAll("path")
         .data(ecNumbers)
         .enter().append("svg:path")
+                .attr("class", function(ecNumber) { return "ec" + ecNumber.id; })
                 .attr("fill", function(ecNumber) {
-                  if (node.find("#" + ecNumber.attr(id) + ".ec-number").length > 0) {
-                    return ecNumber.data("color");
+                  if (node.find("#" + ecNumber.id + ".ec-number").length > 0) {
+                    return $(ecNumber).data("color");
                   } else {
                     return "white";
                   }                    

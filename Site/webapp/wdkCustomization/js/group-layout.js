@@ -17,7 +17,9 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     initializeCanvas(layout);
 
     // register handlers for the UI controls
-    initializeControls(layout);
+    layout.find(".controls").accordion({ collapsible: true, });
+    initializeNodeControls(layout);
+    initializeEdgeControls(layout);
 
     // initialize the display of node detail section
     initializeNodeDetail(layout);
@@ -55,12 +57,12 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     var canvas = d3.select(layout.find(".canvas").get(0));
     canvas.selectAll(".node").data(nodes);
     canvas.selectAll(".edge").data(edges);
-	
+  
     // initialize nodes
     canvas.selectAll("circle.node")
           .style("fill", function(node){
             var taxon = taxons[node.data("taxon")];
-	    return taxon.data("color"); 
+      return taxon.data("color"); 
           })
           .style("stroke", function(node){ 
             var taxon = taxons[node.data("taxon")];
@@ -75,8 +77,8 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
           .on("click", function(node) {
             showNodeDetail(layout, node);
           });
-			
-    // initialize edges			
+      
+    // initialize edges      
     renderEdgesByType(layout);
     layout.find(".canvas .edge")
           .hover(function() { highlightEdges(layout, ".edges ." + this.id); },
@@ -219,11 +221,92 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                            .find(".source-id").attr("id", "");
   }
 
-  function initializeControls(layout) {
-    var controls = layout.find(".controls").accordion({ collapsible: true, });
-
-	// edge controls
-    var edgeControl = controls.find(".edge-control");
+  function initializeNodeControls(layout) {
+    // handle switch between different node controls
+    var nodeControl = layout.find(".controls .node-control");
+    nodeControl.find(".node-display")
+               .change(function() {
+                  if (this.value == "taxon") {
+                    nodeControl.find(".taxon-control").show(); 
+                    nodeControl.find(".ec-number-control").hide();
+                    nodeControl.find(".pfam-control").hide();
+                    renderNodesByTaxon(layout);
+                  } if (this.value == "ec-number") {
+                    nodeControl.find(".taxon-control").hide(); 
+                    nodeControl.find(".ec-number-control").show();
+                    nodeControl.find(".pfam-control").hide();
+                    renderNodesByEcNumber(layout);
+                  } else {
+                    nodeControl.find(".taxon-control").hide(); 
+                    nodeControl.find(".ec-number-control").hide();
+                    nodeControl.find(".pfam-control").show();
+                    renderNodesByPfam(layout);
+                  }
+                });
+    nodeControl.find(".taxon")
+               .each(function() {
+                 var abbrev = this.id;
+                 $(this).hover(function() {
+                   $(this).addClass("highlight");
+                   highlightNodes(layout, "circle.node." + abbrev);
+                 },
+                 function() {
+                   $(this).removeClass("highlight");
+                   resetNodes(layout, "circle.node." + abbrev);
+                 });
+               });
+  }
+  
+  function renderNodesByTaxon(layout) {
+    var canvas = layout.find(".canvas");
+    canvas.find(".nodes").css("display", "block");
+    canvas.find(".ec-numbers").css("display", "none");
+    canvas.find(".pfams").css("display", "none");
+  }
+  
+  function renderNodesByEcNumber(layout) {
+    var canvas = layout.find(".canvas");
+    canvas.find(".nodes").css("display", "none");
+    canvas.find(".pfams").css("display", "none");
+    canvas.find(".ec-numbers").css("display", "block");
+    
+    var ecNumbers = layout.find(".data .ec-numbers .ec-number");
+    var arcSize = Math.PI / ecNumbers.length;
+    var arc = d3.svg.arc().outerRadius(10);
+    var pie = d3.layout.pie().value(1);
+                    
+    var ecNodes = d3.select(canvas.get(0))
+                    .selectAll(".ec-numbers .ec-number")
+                    .data(nodes)
+                    .enter().append("svg:g")
+                            .attr("class", "ec-number")
+                            .attr("id", function(node) { return node.attr("id"); })
+                            .attr("transform", "translate(" + node.data("x") + "," + node.data("y") + ")");
+    ecNodes.each(function(node) {
+      d3.select(this).selectAll("path")
+        .data(ecNumbers)
+        .enter().append("svg:path")
+                .attr("fill", function(ecNumber) {
+                  if (node.find("#" + ecNumber.attr(id) + ".ec-number").length > 0) {
+                    return ecNumber.data("color");
+                  } else {
+                    return "white";
+                  }                    
+                })
+                .attr("d", arc);
+    });
+  }
+  
+  function renderNodesByPfam(layout) {
+    var canvas = layout.find(".canvas");
+    canvas.find(".nodes").css("display", "none");
+    canvas.find(".ec-numbers").css("display", "none");
+    canvas.find(".pfams").css("display", "block");
+  }
+  
+  function initializeEdgeControls(layout) {
+    // handle switching between different edge controls
+    var edgeControl = layout.find(".controls .edge-control");
     edgeControl.find(".edge-display").change(function() {
         edgeControl.find(".type-control").toggle("slide", { "direction": "up" });
         edgeControl.find(".score-control").toggle("slide", { "direction": "down" });
@@ -233,10 +316,14 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
           renderEdgesByScore(layout);
         }
     });
+    
+    // handle edge by type control
     edgeControl.find(".type-control .edge-type input")
                .change(function() {
                  renderEdgesByType(layout);
                });
+    
+    // handle edge by score control
     var exp = edgeControl.find(".score-control .evalue-exp");
     var slider = edgeControl.find(".score-control .evalue")
     slider.slider({
@@ -252,21 +339,6 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
       slider.slider("value", this.value);
       renderEdgesByScore(layout);
     });
-	
-    // node controls
-    var nodeControl = controls.find(".node-control");
-    nodeControl.find(".taxon")
-               .each(function() {
-                 var abbrev = this.id;
-                 $(this).hover(function() {
-                   $(this).addClass("highlight");
-                   highlightNodes(layout, "circle.node." + abbrev);
-                 },
-                 function() {
-                   $(this).removeClass("highlight");
-                   resetNodes(layout, "circle.node." + abbrev);
-                 });
-               });
   }
 
   function renderEdgesByType(layout) {

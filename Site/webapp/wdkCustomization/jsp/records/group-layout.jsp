@@ -2,11 +2,13 @@
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp"
-	xmlns:svg="http://www.w3.org/2000/svg">
+	  xmlns:svg="http://www.w3.org/2000/svg">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <c:set var="layout" value="${requestScope.layout}" />
+  <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
 
   <div class="group-layout" data-controller="orthomcl.group.layout.init">
@@ -27,10 +29,13 @@
       <div class="nodes">
         <c:forEach items="${layout.nodes}" var="node">
           <c:set var="gene" value="${node.gene}" />
-          <span class="node" id="${node.index}" data-source-id="${gene.sourceId}" 
+          <div class="node" id="${node.index}" data-source-id="${gene.sourceId}" 
                 data-taxon="${gene.taxon.abbrev}" data-length="${gene.length}" data-x="${node.x}" data-y="${node.y}">
-            ${gene.description}
-          </span>
+            <span class="description">${gene.description}</description>
+            <c:forEach items="${gene.ecNumbers}" var="ecNumber">
+              <span class="ec-number" id="${ecNumber}" />
+            </c:forEach>
+          </div>
         </c:forEach>
       </div>
 
@@ -40,6 +45,14 @@
                 data-type="${edge.type.code}" data-evalue="${edge.evalue}" 
                 data-query="${edge.nodeA.index}" data-subject="${edge.nodeB.index}"
                 data-score="${edge.scoreFormatted}" data-color="${edge.color}" />
+        </c:forEach>
+      </div>
+      
+      <div class="ec-numbers">
+        <c:forEach items="${group.ecNumbers}" var="item">
+          <c:set var="ecNumber" value="${item.value}" />
+          <span class="ec-number" id="${ecNumber.code}" data-index="${ecNumber.index}" 
+                data-color="${ecNumber.color}" data-count="${ecNumber.count}" />
         </c:forEach>
       </div>
 
@@ -57,6 +70,7 @@
             <input name="edge-display" class="edge-display" type="radio" value="type" checked="checked" /> Types
             <input name="edge-display" class="edge-display" type="radio" value="score" /> Blast scores
           </div>
+          
           <div class="type-control control-section">
             <div class="edge-type">
               <input type="checkbox" value="Ortholog" checked="checked" /> 
@@ -75,19 +89,26 @@
               <div class="edge-legend Normal"> </div> Normal
             </div>
           </div>
+          
           <div class="score-control control-section">
             E-Value cutoff: <b>1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/></b> 
             <div class="evalue slider" 
                  data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
             <div class="tip">Edges are colored by evalue; red represents high scores, blue for low scores.</div>
           </div>
+          
         </fieldset>
 
         <fieldset class="node-control">
           <legend>Nodes</legend>
           <div>Display nodes by:
             <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" /> Taxons
+            <c:set var="ecNumberDisabled"><c:if test="${(fn:length(group.ecNumbers) == 0}">disabled="disabled"</c:if></c:set>
+            <input name="node-display" class="node-display" type="radio" value="ec-number" ${ecNumberDisabled} /> EC Numbers
+            <c:set var="pfamDisabled">disabled="disabled"</c:set>
+            <input name="node-display" class="node-display" type="radio" value="pfam" ${pfamDisabled} /> EC Numbers
           </div>
+
           <div class="taxon-control control-section">
             <div class="tip">Mouse over a taxon legend to highlight sequences of that taxon.</div>
             <c:forEach items="${layout.taxonCounts}" var="entity">
@@ -102,6 +123,18 @@
               </div>
             </c:forEach>
           </div>
+          
+          <div class="ec-number-control control-section">
+            <div class="tip">Mouse over a EC Number legend to highlight sequences of that ec number.</div>
+            <c:forEach items="${group.ecNumbers}" var="item">
+              <c:set var="ecNumber" value="${item.value}" />
+              <div class="ec-number" id="${ecNumber.code}">
+                <div class="ec-number-legend" style="background:${ecNumber.color};"> </div>
+                ${ecNumber.code} (${ecNumber.count})
+              </div>
+            </c:forEach>
+          </div>
+         
         </fieldset>
 
       </div>
@@ -157,10 +190,16 @@
           </div>
         </div>
 
-        <div class="ecnumber-info accordion">
+        <div class="ec-number-info accordion">
           <h3>ECNumbers</h3>
           <div>
-            Coming soon.
+            <table class="ec-numbers data-table">
+              <thead>
+                <th>EC Number</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -188,11 +227,11 @@
         </c:forEach>
       </g>
 
-      <g class="ecnumbers">
+      <g class="ec-numbers">
 
       </g>
 
-      <g class="domains">
+      <g class="pfams">
 
       </g>
 

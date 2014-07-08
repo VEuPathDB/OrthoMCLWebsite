@@ -53,7 +53,7 @@ public class LayoutManager implements Manageable<LayoutManager> {
       return null;
 
     // load taxons into layout
-    Layout layout = new Layout(name, getSize());
+    Layout layout = new Layout(group, getSize());
     TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, projectId);
     Map<String, Taxon> taxons = taxonManager.getTaxons();
     for (Taxon taxon : taxons.values()) {

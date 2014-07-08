@@ -16,7 +16,7 @@ import org.orthomcl.model.layout.LayoutManager;
 
 public class ShowLayoutAction extends WdkAction {
 
-  private static final Logger logger = Logger.getLogger(ShowLayoutAction.class.getName());
+  private static final Logger LOG = Logger.getLogger(ShowLayoutAction.class.getName());
 
   private static final String PARAM_GROUP_NAME = "group_name";
   
@@ -36,7 +36,7 @@ public class ShowLayoutAction extends WdkAction {
 
   @Override
   protected ActionResult handleRequest(ParamGroup params) throws Exception {
-    logger.debug("Entering ShowLayoutAction...");
+    LOG.debug("Entering ShowLayoutAction...");
     
     UserBean userBean = getCurrentUser();
 

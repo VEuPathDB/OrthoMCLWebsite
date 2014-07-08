@@ -1,12 +1,10 @@
 package org.orthomcl.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.eupathdb.common.model.InstanceManager;
 import org.gusdb.wdk.model.Manageable;
@@ -25,8 +23,6 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
   private static final String TABLE_TAXONS = "Taxons";
   private static final String TABLE_ROOTS = "RootTaxons";
-
-  private static final int MIN_COLOR_RANGE = 30;
 
   private WdkModel wdkModel;
   private Map<String, Taxon> taxons;
@@ -125,40 +121,6 @@ public class TaxonManager implements Manageable<TaxonManager> {
       if (taxon.isSpecies())
         species.add(taxon);
     }
-
-    // always use a fixed seeder, so that the same taxon will always get the same color;
-    Random random = new Random(0);
-    int step = 255 * 3 / species.size() + 1;
-    List<String> colors = new ArrayList<>();
-    while (colors.size() < species.size()) {
-      step--;
-      if (step == 0)
-        break;
-      for (int r = 0; r < 256; r += step) {
-        for (int g = 0; g < 256; g += step) {
-          for (int b = 0; b < 256; b += step) {
-            String color = "#" + toHex(r) + toHex(g) + toHex(b);
-            colors.add(color);
-          }
-        }
-      }
-    }
-
-    Collections.shuffle(colors, random);
-    int i = 0;
-    for (Taxon taxon : species) {
-      if (i < colors.size()) {
-        taxon.setColor(colors.get(i));
-        i++;
-      }
-    }
-  }
-
-  private String toHex(int c) {
-    c = c % 256;
-    String hex = Integer.toHexString(c);
-    if (hex.length() == 1)
-      hex = "0" + hex;
-    return hex;
+    RenderingHelper.assignColors(species);
   }
 }

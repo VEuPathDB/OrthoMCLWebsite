@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Taxon implements Comparable<Taxon> {
+public class Taxon implements Comparable<Taxon>, Renderable {
 
   private final int id;
   private String abbrev;
@@ -106,10 +106,12 @@ public class Taxon implements Comparable<Taxon> {
     this.root = root;
   }
 
+  @Override
   public String getColor() {
     return color;
   }
 
+  @Override
   public void setColor(String color) {
     this.color = color;
   }

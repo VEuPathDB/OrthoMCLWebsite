@@ -10,11 +10,12 @@ import java.util.Map;
 
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
+import org.orthomcl.model.Group;
 import org.orthomcl.model.Taxon;
 
 public class Layout {
 
-  private final String groupName;
+  private final Group group;
   private final Map<String, Taxon> taxons;
   private final Map<Integer, Node> nodes;
   private final Map<GenePair, Edge> edges;
@@ -24,8 +25,8 @@ public class Layout {
   private int minEvalueExp;
   private int maxEvalueExp;
 
-  public Layout(String groupName, int size) {
-    this.groupName = groupName;
+  public Layout(Group group, int size) {
+    this.group = group;
     this.taxons = new HashMap<>();
     this.edges = new HashMap<>();
     this.nodes = new HashMap<>();
@@ -39,8 +40,8 @@ public class Layout {
     return size;
   }
 
-  public String getGroupName() {
-    return groupName;
+  public Group getGroup() {
+    return group;
   }
 
   public void addTaxon(Taxon taxon) {

@@ -1,12 +1,15 @@
 package org.orthomcl.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class Gene {
 
   private final String sourceId;
   private Taxon taxon;
   private String description;
   private long length;
-  private String ecNumbers;
+  private final Set<String> ecNumbers = new LinkedHashSet<>();
 
   public Gene(String sourceId) {
     this.sourceId = sourceId;
@@ -64,7 +67,7 @@ public class Gene {
   /**
    * @return the ecNumbers
    */
-  public String getEcNumbers() {
+  public Set<String> getEcNumbers() {
     return ecNumbers;
   }
 
@@ -72,8 +75,7 @@ public class Gene {
    * @param ecNumbers
    *          the ecNumbers to set
    */
-  public void setEcNumbers(String ecNumbers) {
-    this.ecNumbers = ecNumbers;
+  public void addEcNumber(String ecNumber) {
+    this.ecNumbers.add(ecNumber);
   }
-
 }

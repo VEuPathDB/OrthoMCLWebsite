@@ -56,7 +56,7 @@
 													    </c:if>
 													    <br/><br/>${text}<br/>
 													    <c:if test="${image ne null and image ne ''}">
-													      <img src="${base}/wdk/${image}" alt=""/>
+													      <imp:image src="${image}" alt=""/>
 													    </c:if>
 													  </td>
 													</tr>

@@ -16,6 +16,8 @@
   <!-- JavaScript provided by WDK -->
   <imp:wdkJavascripts refer="${refer}" debug="${debug}"/>
 
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"><jsp:text/></script>
+
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>
   <script type="text/javascript" src="${base}/wdkCustomization/js/lib/supersubs.js"><jsp:text/></script>
@@ -40,6 +42,7 @@
 
   <c:if test="${refer eq 'record'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/pfamDomain.js"><jsp:text/></script>
+    <script type="text/javascript" src="${base}/wdkCustomization/js/group-layout.js"><jsp:text/></script>
   </c:if>
 
 </jsp:root>

@@ -54,6 +54,7 @@
   <c:if test="${refer eq 'record'}">
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/pfamDomain.css"/>
     <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/record.css"/>
+    <link rel="stylesheet" type="text/css" href="${base}/wdkCustomization/css/group-layout.css"/>
   </c:if>
 
 </jsp:root>

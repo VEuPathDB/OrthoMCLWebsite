@@ -510,8 +510,13 @@
 
 
     <!-- OrthoMCL-specific actions -->
-    <action path="/getBiolayout"
-        parameter="org.orthomcl.controller.action.GetBiolayoutImageAction"
+    <action path="/showLayout"
+        parameter="org.orthomcl.controller.action.ShowLayoutAction"
+        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
+      <forward name="layout" path="/wdkCustomization/jsp/records/group-layout.jsp"/>
+    </action>
+    <action path="/getGroupPfam"
+        parameter="org.orthomcl.controller.action.GetGroupPFamAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
     </action>
     <action path="/getDataSummary"
@@ -519,19 +524,6 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
       <forward name="data" path="/wdkCustomization/jsp/DataSummary.jsp"/>
       <forward name="release" path="/wdkCustomization/jsp/ReleaseSummary.jsp"/>
-    </action>
-    <action path="/getGroup"
-        parameter="org.orthomcl.controller.action.GetGroupAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-    </action>
-    <action path="/getOrganisms"
-        parameter="org.orthomcl.controller.action.GetOrganismAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-    </action>
-    <action path="/getSvgContent"
-        parameter="org.orthomcl.controller.action.GetSvgContentAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <forward name="success" path="/wdkCustomization/jsp/records/svgContent.jsp"/>
     </action>
     <action path="/proteomeUpload"
         parameter="org.orthomcl.controller.action.ProteomeUploadAction"

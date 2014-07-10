@@ -1,10 +1,10 @@
-package org.orthomcl.controller.action;
+package org.orthomcl.model;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Taxon implements Comparable<Taxon> {
+public class Taxon implements Comparable<Taxon>, Renderable {
 
   private final int id;
   private String abbrev;
@@ -14,6 +14,7 @@ public class Taxon implements Comparable<Taxon> {
   private boolean species;
   private Taxon parent;
   private Taxon root;
+  private String groupColor;
   private String color;
   private Map<Integer, Taxon> children;
 
@@ -48,6 +49,14 @@ public class Taxon implements Comparable<Taxon> {
 
   public void setCommonName(String commonName) {
     this.commonName = commonName;
+  }
+
+  public String getFullName() {
+    String fullName = name;
+    if (commonName != null && !commonName.equals(name)) {
+      fullName += " (" + commonName + ")";
+    }
+    return fullName;
   }
 
   public int getSortIndex() {
@@ -97,12 +106,31 @@ public class Taxon implements Comparable<Taxon> {
     this.root = root;
   }
 
+  @Override
   public String getColor() {
     return color;
   }
 
+  @Override
   public void setColor(String color) {
     this.color = color;
+  }
+
+  /**
+   * @return the groupColor
+   */
+  public String getGroupColor() {
+    if (groupColor == null && parent != null)
+      groupColor = parent.getGroupColor(); 
+    return groupColor;
+  }
+
+  /**
+   * @param groupColor
+   *          the groupColor to set
+   */
+  public void setGroupColor(String groupColor) {
+    this.groupColor = groupColor;
   }
 
   @Override

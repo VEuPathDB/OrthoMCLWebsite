@@ -97,7 +97,6 @@ public class TaxonManager implements Manageable<TaxonManager> {
       String groupColor = (String) row.get("color").getValue();
       roots.put(abbrev, groupColor);
       taxons.get(abbrev).setGroupColor(groupColor);
-      ;
     }
 
     for (Taxon taxon : taxons.values()) {

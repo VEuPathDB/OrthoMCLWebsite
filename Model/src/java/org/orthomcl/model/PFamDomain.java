@@ -1,5 +1,7 @@
 package org.orthomcl.model;
 
+import org.orthomcl.model.layout.Renderable;
+
 public class PFamDomain implements Renderable, Comparable<PFamDomain> {
 
   private final String accession;

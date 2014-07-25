@@ -1,4 +1,4 @@
-package org.orthomcl.model;
+package org.orthomcl.model.layout;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,19 +20,19 @@ public class RenderingHelper {
         colorCode = "#00" + toHex(subRange) + "FF";
       }
       else if (range == 1) { // on green, decreasing blue
-        colorCode = "#00FF" + toHex(256 - subRange);
+        colorCode = "#00FF" + toHex(255 - subRange);
       }
       else if (range == 2) { // on green, increasing red
         colorCode = "#" + toHex(subRange) + "FF00";
       }
       else if (range == 3) { // on red, decreasing green
-        colorCode = "#FF" + toHex(256 - subRange) + "00";
+        colorCode = "#FF" + toHex(255 - subRange) + "00";
       }
       else if (range == 4) { // on red, increasing blue
         colorCode = "#FF00" + toHex(subRange);
       }
       else { // on blue, decreasing red
-        colorCode = "#" + toHex(256 - subRange) + "00FF";
+        colorCode = "#" + toHex(255 - subRange) + "00FF";
       }
       renderables.get(i).setColor(colorCode);
     }

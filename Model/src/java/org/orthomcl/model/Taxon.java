@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.orthomcl.model.layout.Renderable;
+
 public class Taxon implements Comparable<Taxon>, Renderable {
 
   private final int id;

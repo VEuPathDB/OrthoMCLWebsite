@@ -1,4 +1,4 @@
-package org.orthomcl.model;
+package org.orthomcl.model.layout;
 
 public interface Renderable {
 

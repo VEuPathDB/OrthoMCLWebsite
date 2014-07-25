@@ -17,6 +17,7 @@ import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
 import org.gusdb.wdk.model.user.User;
+import org.orthomcl.model.layout.RenderingHelper;
 
 public class GroupManager implements Manageable<GroupManager> {
 
@@ -26,6 +27,13 @@ public class GroupManager implements Manageable<GroupManager> {
   private static final String GENES_TABLE = "Sequences";
   private static final String PFAMS_TABLE = "PFams";
   private static final String PROTEIN_PFAMS_TABLE = "ProteinPFams";
+  
+  public static void main(String[] args) throws WdkModelException, WdkUserException {
+    GroupManager manager = InstanceManager.getInstance(GroupManager.class, "OrthoMCL");
+    WdkModel wdkModel = InstanceManager.getInstance(WdkModel.class, "OrthoMCL");
+    User user = wdkModel.getSystemUser();
+    manager.getGroup(user, "OG5_133610");
+  }
 
   private WdkModel wdkModel;
 

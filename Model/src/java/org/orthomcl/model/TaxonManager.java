@@ -16,6 +16,7 @@ import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
+import org.orthomcl.model.layout.RenderingHelper;
 
 public class TaxonManager implements Manageable<TaxonManager> {
 

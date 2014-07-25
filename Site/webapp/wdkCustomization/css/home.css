@@ -11,6 +11,7 @@
    /*display: inline-table; floating list elements instead*/
    margin-top:10px;
    white-space:nowrap; 
+   list-style: none;
 }
 #contentcolumn > ul > li,#search-bubbles > ul > li { 
   	width: 30%; 

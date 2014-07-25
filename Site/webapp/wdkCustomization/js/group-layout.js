@@ -113,7 +113,13 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                        });
      content.find(".pfam-info")
             .accordion({ collapsible: true,
-
+                        activate: function(event, ui) {
+                                     if (ui.newPanel.length == 0) return;
+                                     if ($(this).data("loaded") == "yes") return;
+                                     showPFamDetails(layout);
+                                     $(this).data("loaded", "yes")
+                                            .accordion("refresh");
+                                   },
                        });
      content.find(".ec-number-info")
             .accordion({ collapsible: true,
@@ -229,6 +235,30 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                       });
   }
 
+  function showPFamDetails(layout) {
+    var nodeId = layout.find(".node-detail .source-id").attr("id");
+    var node = nodes[nodeId];
+    var content = layout.find(".node-detail .content");
+
+    // fill in pfams
+    var data = [];
+    node.find(".pfam").each(function() {
+      var proteinPFam = $(this);
+      var pfam = layout.find(".data .pfams #" + this.id);
+      data.push([ pfam.data("accession"), pfam.data("symbol"),
+                  proteinPFam.data("start"), proteinPFam.data("end"), proteinPFam.data("length") ]);
+    });
+
+    content.find(".pfams")
+           .DataTable({ bDestroy: true,
+                        bJQueryUI: true,
+                        aaData: data,
+                        bPaginate: false,
+                        "sScrollY": "200",
+                        "bScrollCollapse": true,
+                      });
+  }
+
   function convertEdgeToArray(edge, subjectName) {
     var edgeId = edge.attr("id");
     var subjectId = edge.data(subjectName);
@@ -298,20 +328,36 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     canvas.find(".pfams").css("display", "none");
     canvas.find(".ec-numbers").css("display", "block");
     
-    var ecNumbers = layout.find(".data .ec-numbers .ec-number");
-    var arcSize = Math.PI / ecNumbers.length;
+    renderNodesAsPies(layout, ".ec-numbers", ".ec-number", "ec");
+  }
+  
+  function renderNodesByPfam(layout) {
+    var canvas = layout.find(".canvas");
+    canvas.find(".nodes").css("display", "none");
+    canvas.find(".ec-numbers").css("display", "none");
+    canvas.find(".pfams").css("display", "block");
+    
+    renderNodesAsPies(layout, ".pfams", ".pfam", "pf");
+  }
+
+  
+  function renderNodesAsPies(layout, groupSelector, nodeSelector, prefix) {
+    var canvas = layout.find(".canvas");
+    
+    var items = layout.find(".data " + groupSelector + " " + nodeSelector);
+    var arcSize = Math.PI / items.length;
     var arc = d3.svg.arc()
                      .innerRadius(0)
                      .outerRadius(6)
-                     .startAngle(function(d, i) { return i * Math.PI * 2 / ecNumbers.length; })
-                     .endAngle(function(d, i) { return (i + 1) * Math.PI * 2 / ecNumbers.length; });
+                     .startAngle(function(d, i) { return i * Math.PI * 2 / items.length; })
+                     .endAngle(function(d, i) { return (i + 1) * Math.PI * 2 / items.length; });
 
 
-    var ecNodes = d3.select(canvas.get(0))
-                    .select(".ec-numbers").selectAll(".ec-number")
-                    .data(nodes)
+    var nodes = d3.select(canvas.get(0))
+                    .select(groupSelector).selectAll(nodeSelector)
+                    .data(items)
                     .enter().append("svg:g")
-                            .attr("class", "ec-number")
+                            .attr("class", nodeSelector.substring(1))
                             .attr("id", function(node) { return node.attr("id"); })
                             .attr("transform", function(node) { 
                               return "translate(" + node.data("x") + "," + node.data("y") + ")"; 
@@ -326,27 +372,20 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                               showNodeDetail(layout, node);
                             });
 
-    ecNodes.each(function(node) {
+    nodes.each(function(node) {
       d3.select(this).selectAll("path")
-        .data(ecNumbers)
+        .data(items)
         .enter().append("svg:path")
-                .attr("class", function(ecNumber) { return "ec" + ecNumber.id; })
-                .attr("fill", function(ecNumber) {
-                  if (node.find("#" + ecNumber.id + ".ec-number").length > 0) {
-                    return $(ecNumber).data("color");
+                .attr("class", function(item) { return prefix + item.id; })
+                .attr("fill", function(item) {
+                  if (node.find("#" + item.id + nodeSelector).length > 0) {
+                    return $(item).data("color");
                   } else {
                     return "white";
                   }                    
                 })
                 .attr("d", arc);
     });
-  }
-  
-  function renderNodesByPfam(layout) {
-    var canvas = layout.find(".canvas");
-    canvas.find(".nodes").css("display", "none");
-    canvas.find(".ec-numbers").css("display", "none");
-    canvas.find(".pfams").css("display", "block");
   }
   
   function initializeEdgeControls(layout) {

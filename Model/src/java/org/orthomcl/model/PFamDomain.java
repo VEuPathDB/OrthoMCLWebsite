@@ -1,6 +1,6 @@
 package org.orthomcl.model;
 
-public class PFamDomain implements Renderable {
+public class PFamDomain implements Renderable, Comparable<PFamDomain> {
 
   private final String accession;
   private String symbol;
@@ -95,6 +95,11 @@ public class PFamDomain implements Renderable {
   @Override
   public void setColor(String color) {
     this.color = color;
+  }
+
+  @Override
+  public int compareTo(PFamDomain pfamDomain) {
+    return pfamDomain.index - index;
   }
 
 }

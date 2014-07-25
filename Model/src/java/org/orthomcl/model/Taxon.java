@@ -1,7 +1,7 @@
 package org.orthomcl.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Taxon implements Comparable<Taxon>, Renderable {
@@ -16,11 +16,10 @@ public class Taxon implements Comparable<Taxon>, Renderable {
   private Taxon root;
   private String groupColor;
   private String color;
-  private Map<Integer, Taxon> children;
+  private final Map<Integer, Taxon> children = new LinkedHashMap<>();
 
   public Taxon(int id) {
     this.id = id;
-    this.children = new HashMap<Integer, Taxon>();
   }
 
   public int getId() {

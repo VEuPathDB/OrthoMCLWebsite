@@ -1,11 +1,11 @@
 package org.orthomcl.model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eupathdb.common.model.InstanceManager;
 import org.gusdb.wdk.model.Manageable;
@@ -24,7 +24,7 @@ public class GroupManager implements Manageable<GroupManager> {
   private static final String GROUP_NAME_KEY = "group_name";
 
   private static final String GENES_TABLE = "Sequences";
-  private static final String PFAMS_TABLE = "ProteinPFams";
+  private static final String PFAMS_TABLE = "PFams";
   private static final String PROTEIN_PFAMS_TABLE = "ProteinPFams";
 
   private WdkModel wdkModel;
@@ -87,17 +87,19 @@ public class GroupManager implements Manageable<GroupManager> {
       group.addGene(gene);
     }
 
+    // load pfam info
+    loadPFamDomains(group, groupRecord);
+
     // TODO - process ec numbers to form tree
     processEcNumbers(group, ecNumbers);
 
     return group;
   }
 
-  public Map<String, PFamDomain> getPFamDomains(User user, String groupName) throws WdkModelException,
+  private void loadPFamDomains(Group group, RecordInstance groupRecord) throws WdkModelException,
       WdkUserException {
     // load pfam domian information
-    Map<String, PFamDomain> pfams = new LinkedHashMap<>();
-    RecordInstance groupRecord = getGroupRecord(user, groupName);
+    List<PFamDomain> pfams = new ArrayList<>();
     TableValue pfamsTable = groupRecord.getTableValue(PFAMS_TABLE);
     for (Map<String, AttributeValue> row : pfamsTable) {
       PFamDomain pfam = new PFamDomain((String) row.get("accession").getValue());
@@ -105,72 +107,44 @@ public class GroupManager implements Manageable<GroupManager> {
       pfam.setDescription((String) row.get("description").getValue());
       pfam.setCount(Integer.valueOf(row.get("occurrences").getValue().toString()));
       pfam.setIndex(Integer.valueOf(row.get("domain_index").getValue().toString()));
+      group.addPFamDomain(pfam);
+      pfams.add(pfam);
     }
 
     // generate random color for the domains
-    RenderingHelper.assignColors(pfams.values());
+    Collections.sort(pfams);
+    RenderingHelper.assignSpectrumColors(pfams);
 
-    return pfams;
-  }
-
-  public Map<String, Set<String>> getProteinPFamDomains(User user, String groupName)
-      throws WdkModelException, WdkUserException {
-    // load protein pfam information
-    Map<String, Set<String>> proteinPfams = new HashMap<String, Set<String>>();
-    RecordInstance groupRecord = getGroupRecord(user, groupName);
+    // load protein pfam information to each gene
     TableValue proteinPFamsTable = groupRecord.getTableValue(PROTEIN_PFAMS_TABLE);
     for (Map<String, AttributeValue> row : proteinPFamsTable) {
       String sourceId = (String) row.get("full_id").getValue();
       String accession = (String) row.get("accession").getValue();
-      Set<String> pfams = proteinPfams.get(sourceId);
-      if (pfams == null) {
-        pfams = new HashSet<>();
-        proteinPfams.put(sourceId, pfams);
-      }
-      pfams.add(accession);
+      int[] location = new int[3];
+      location[0] = Integer.valueOf(row.get("start_min").getValue().toString());
+      location[1] = Integer.valueOf(row.get("end_max").getValue().toString());
+      location[2] = Integer.valueOf(row.get("length").getValue().toString());
+      Gene gene = group.getGene(sourceId);
+      gene.addPFamDomain(accession, location);
     }
-    return proteinPfams;
   }
 
   private void processEcNumbers(Group group, Map<String, Integer> ecNumberCodes) {
-    String[] codes = ecNumberCodes.keySet().toArray(new String[0]);
-    Arrays.sort(codes);
-
     // determine the index of each ecNumber
-    for (int i = 0; i < codes.length; i++) {
-      EcNumber ecNumber = new EcNumber(codes[i]);
-      ecNumber.setIndex(i);
-      ecNumber.setCount(ecNumberCodes.get(codes[i]));
+    List<EcNumber> ecNumbers = new ArrayList<>();
+    for (String code : ecNumberCodes.keySet()) {
+      EcNumber ecNumber = new EcNumber(code);
+      ecNumber.setCount(ecNumberCodes.get(code));
       group.addEcNumbers(ecNumber);
+      ecNumbers.add(ecNumber);
     }
 
-    // determine the color of each ecNumber; current it's a flat list, and color is scaled from 360 degree to
-    // 256 * 6 space.
-    for (String code : codes) {
-      EcNumber ecNumber = group.getEcNumber(code);
-      int color = Math.round(ecNumber.getIndex() * 256 * 6F / codes.length);
-      int range = color / 256;
-      int subRange = color % 256;
-      String colorCode;
-      if (range == 0 || range == 6) { // on blue, increasing green
-        colorCode = "#00" + RenderingHelper.toHex(subRange) + "FF";
-      }
-      else if (range == 1) { // on green, decreasing blue
-        colorCode = "#00FF" + RenderingHelper.toHex(256 - subRange);
-      }
-      else if (range == 2) { // on green, increasing red
-        colorCode = "#" + RenderingHelper.toHex(subRange) + "FF00";
-      }
-      else if (range == 3) { // on red, decreasing green
-        colorCode = "#FF" + RenderingHelper.toHex(256 - subRange) + "00";
-      }
-      else if (range == 4) { // on red, increasing blue
-        colorCode = "#FF00" + RenderingHelper.toHex(subRange);
-      }
-      else { // on blue, decreasing red
-        colorCode = "#" + RenderingHelper.toHex(256 - subRange) + "00FF";
-      }
-      ecNumber.setColor(colorCode);
+    Collections.sort(ecNumbers);
+    for (int i = 0; i < ecNumbers.size(); i++) {
+      ecNumbers.get(i).setIndex(i);
     }
+
+    // assign spectrum colors to the ec numbers
+    RenderingHelper.assignSpectrumColors(ecNumbers);
   }
 }

@@ -1,6 +1,8 @@
 package org.orthomcl.model;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Gene {
@@ -10,6 +12,7 @@ public class Gene {
   private String description;
   private long length;
   private final Set<String> ecNumbers = new LinkedHashSet<>();
+  private final Map<String, int[]> pfamDomains = new LinkedHashMap<>();
 
   public Gene(String sourceId) {
     this.sourceId = sourceId;
@@ -77,5 +80,13 @@ public class Gene {
    */
   public void addEcNumber(String ecNumber) {
     this.ecNumbers.add(ecNumber);
+  }
+
+  public Map<String, int[]> getPFamDomains() {
+    return pfamDomains;
+  }
+
+  public void addPFamDomain(String accession, int[] location) {
+    pfamDomains.put(accession, location);
   }
 }

@@ -6,15 +6,14 @@ import java.util.Map;
 
 public class Group {
 
-  private final Map<String, Gene> genes;
-  private final Map<String, EcNumber> ecNumbers;
+  private final Map<String, Gene> genes= new LinkedHashMap<>();
+  private final Map<String, EcNumber> ecNumbers = new LinkedHashMap<>();
+  private final Map<String, PFamDomain> pfamDomains = new LinkedHashMap<>();
 
   private final String name;
 
   public Group(String name) {
     this.name = name;
-    this.genes = new LinkedHashMap<>();
-    this.ecNumbers = new LinkedHashMap<>();
   }
 
   /**
@@ -46,5 +45,17 @@ public class Group {
 
   public void addEcNumbers(EcNumber ecNumber) {
     this.ecNumbers.put(ecNumber.getCode(), ecNumber);
+  }
+  
+  public Map<String, PFamDomain> getPFamDomains() {
+    return pfamDomains;
+  }
+  
+  public PFamDomain getPFamDomain(String accession) {
+    return pfamDomains.get(accession);
+  }
+  
+  public void addPFamDomain(PFamDomain pfamDomain) {
+    pfamDomains.put(pfamDomain.getAccession(), pfamDomain);
   }
 }

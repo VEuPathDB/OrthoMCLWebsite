@@ -1,6 +1,6 @@
 package org.orthomcl.model;
 
-public class EcNumber {
+public class EcNumber implements Renderable, Comparable<EcNumber> {
 
   private final String code;
   private int index;
@@ -58,5 +58,10 @@ public class EcNumber {
    */
   public void setCount(int count) {
     this.count = count;
+  }
+
+  @Override
+  public int compareTo(EcNumber ecNumber) {
+    return code.compareToIgnoreCase(ecNumber.code);
   }
 }

@@ -515,10 +515,6 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
       <forward name="layout" path="/wdkCustomization/jsp/records/group-layout.jsp"/>
     </action>
-    <action path="/getGroupPfam"
-        parameter="org.orthomcl.controller.action.GetGroupPFamAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-    </action>
     <action path="/getDataSummary"
         parameter="org.orthomcl.controller.action.GetDataSummaryAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">

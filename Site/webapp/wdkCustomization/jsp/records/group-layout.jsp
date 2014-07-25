@@ -11,6 +11,7 @@
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
   <c:set var="ecNumbers" value="${group.ecNumbers}" />
+  <c:set var="pfams" value="${group.pFamDomains}" />
 
   <div class="group-layout" data-controller="orthomcl.group.layout.init">
 
@@ -36,6 +37,12 @@
             <c:forEach items="${gene.ecNumbers}" var="code">
               <span class="ec-number" id="${ecNumbers[code].index}" />
             </c:forEach>
+            <c:forEach items="${gene.pFamDomains}" var="item">
+              <c:set var="accession" value="${item.key}" />
+              <c:set var="location" value="${item.value}" />
+              <span class="pfam" id="${pfams[accession].index}" 
+                    data-start="${location[0]}" data-end="${location[1]}" data-length="${location[2]}" />
+            </c:forEach>
           </div>
         </c:forEach>
       </div>
@@ -54,6 +61,16 @@
           <c:set var="ecNumber" value="${item.value}" />
           <span class="ec-number" id="${ecNumber.index}" data-code="${ecNumber.code}" 
                 data-color="${ecNumber.color}" data-count="${ecNumber.count}" />
+        </c:forEach>
+      </div>
+      
+      <div class="pfams">
+        <c:forEach items="${pfams}" var="item">
+          <c:set var="pfam" value="${item.value}" />
+          <span class="pfam" id="${pfam.index}" data-accession="${pfam.accession}" 
+                data-symbol="${pfam.symbol}"  data-color="${pfam.color}" data-count="${pfam.count}">
+            ${pfam.description}
+          <span>
         </c:forEach>
       </div>
 
@@ -105,14 +122,21 @@
           <div>Display nodes by:
             <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" /> Taxons
             <c:choose>
-              <c:when test="${fn:length(group.ecNumbers) == 0}">
+              <c:when test="${fn:length(ecNumbers) == 0}">
                 <input name="node-display" class="node-display" type="radio" value="ec-number" disabled="disabled" />
               </c:when>
               <c:otherwise>
                 <input name="node-display" class="node-display" type="radio" value="ec-number" /> 
               </c:otherwise>
             </c:choose> EC Numbers
-            <input name="node-display" class="node-display" type="radio" value="pfam" disabled="disabled" /> PFam Domains
+            <c:choose>
+              <c:when test="${fn:length(pfams) == 0}">
+                <input name="node-display" class="node-display" type="radio" value="pfam" disabled="disabled" />
+              </c:when>
+              <c:otherwise>
+                <input name="node-display" class="node-display" type="radio" value="pfam" /> 
+              </c:otherwise>
+            </c:choose> PFam Domains
           </div>
 
           <div class="taxon-control control-section">
@@ -132,11 +156,22 @@
           
           <div class="ec-number-control control-section">
             <div class="tip">The EC Numbers are rendered in a pie chart for each gene.</div>
-            <c:forEach items="${group.ecNumbers}" var="item">
+            <c:forEach items="${ecNumbers}" var="item">
               <c:set var="ecNumber" value="${item.value}" />
               <div class="ec-number" id="${ecNumber.index}">
                 <div class="ec-number-legend" style="background:${ecNumber.color};"> </div>
                 ${ecNumber.code} (${ecNumber.count})
+              </div>
+            </c:forEach>
+          </div>
+          
+          <div class="pfam-control control-section">
+            <div class="tip">The PFam Domains are rendered in a pie chart for each gene.</div>
+            <c:forEach items="${pfams}" var="item">
+              <c:set var="pfam" value="${item.value}" />
+              <div class="pfam" id="${pfam.index}" title="${pfam.description}">
+                <div class="pfam-legend" style="background:${pfam.color};"> </div>
+                ${pfam.accession} (${pfam.count})
               </div>
             </c:forEach>
           </div>
@@ -146,7 +181,8 @@
       </div>
 
     </div> <!-- end of .controls div -->
-
+    
+    
     <!-- need an id here in order for .highlight selector to override the defaults -->
     <fieldset id="node-detail" class="node-detail">
       <legend>Sequence Detail</legend>
@@ -192,7 +228,17 @@
         <div class="pfam-info accordion">
           <h3>PFam Domains</h3>
           <div>
-            Coming soon.
+            <table class="pfams data-table">
+              <thead>
+                <th>Accession</th>
+                <th>Symbol</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Length</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -215,6 +261,7 @@
 
     <svg class="canvas" width="${layout.size}px" height="${layout.size}px" 
 	     viewBox="0 0 ${layout.size} ${layout.size}">
+       
       <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
 
       <g class="edges">
@@ -233,13 +280,9 @@
         </c:forEach>
       </g>
 
-      <g class="ec-numbers">
+      <g class="ec-numbers"></g>
 
-      </g>
-
-      <g class="pfams">
-
-      </g>
+      <g class="pfams"></g>
 
       <g class="labels"></g>
 
@@ -247,4 +290,5 @@
 
   </div>
 
+  
 </jsp:root>

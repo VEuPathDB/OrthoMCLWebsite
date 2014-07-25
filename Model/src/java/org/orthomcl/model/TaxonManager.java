@@ -120,6 +120,6 @@ public class TaxonManager implements Manageable<TaxonManager> {
       if (taxon.isSpecies())
         species.add(taxon);
     }
-    RenderingHelper.assignColors(species);
+    RenderingHelper.assignRandomColors(species);
   }
 }

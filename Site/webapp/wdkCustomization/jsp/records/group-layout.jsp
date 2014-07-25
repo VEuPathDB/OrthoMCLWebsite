@@ -11,7 +11,7 @@
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
   <c:set var="ecNumbers" value="${group.ecNumbers}" />
-  <c:set var="pfams" value="${group.pFamDomains}" />
+  <c:set var="pfams" value="${group.PFamDomains}" />
 
   <div class="group-layout" data-controller="orthomcl.group.layout.init">
 
@@ -37,7 +37,7 @@
             <c:forEach items="${gene.ecNumbers}" var="code">
               <span class="ec-number" id="${ecNumbers[code].index}" />
             </c:forEach>
-            <c:forEach items="${gene.pFamDomains}" var="item">
+            <c:forEach items="${gene.PFamDomains}" var="item">
               <c:set var="accession" value="${item.key}" />
               <c:set var="location" value="${item.value}" />
               <span class="pfam" id="${pfams[accession].index}" 
@@ -70,7 +70,7 @@
           <span class="pfam" id="${pfam.index}" data-accession="${pfam.accession}" 
                 data-symbol="${pfam.symbol}"  data-color="${pfam.color}" data-count="${pfam.count}">
             ${pfam.description}
-          <span>
+          </span>
         </c:forEach>
       </div>
 

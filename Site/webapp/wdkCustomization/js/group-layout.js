@@ -196,8 +196,8 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                       });
 
     var nodeSelector = ".nodes .n" + node.attr("id");
-    content.hover(function() { highlightNodes(layout, nodeSelector); },
-                  function() { resetNodes(layout, nodeSelector); });
+//    content.hover(function() { highlightNodes(layout, nodeSelector); },
+//                  function() { resetNodes(layout, nodeSelector); });
     content.find(".blast-scores tr")
            .each(function() {
              var edgeId = $(this).find(".subject").attr("id");
@@ -353,9 +353,9 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                      .endAngle(function(d, i) { return (i + 1) * Math.PI * 2 / items.length; });
 
 
-    var nodes = d3.select(canvas.get(0))
+    var subNodes = d3.select(canvas.get(0))
                     .select(groupSelector).selectAll(nodeSelector)
-                    .data(items)
+                    .data(nodes)
                     .enter().append("svg:g")
                             .attr("class", nodeSelector.substring(1))
                             .attr("id", function(node) { return node.attr("id"); })
@@ -372,7 +372,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                               showNodeDetail(layout, node);
                             });
 
-    nodes.each(function(node) {
+    subNodes.each(function(node) {
       d3.select(this).selectAll("path")
         .data(items)
         .enter().append("svg:path")

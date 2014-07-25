@@ -120,12 +120,14 @@ public class GroupManager implements Manageable<GroupManager> {
     for (Map<String, AttributeValue> row : proteinPFamsTable) {
       String sourceId = (String) row.get("full_id").getValue();
       String accession = (String) row.get("accession").getValue();
-      int[] location = new int[3];
-      location[0] = Integer.valueOf(row.get("start_min").getValue().toString());
-      location[1] = Integer.valueOf(row.get("end_max").getValue().toString());
-      location[2] = Integer.valueOf(row.get("length").getValue().toString());
-      Gene gene = group.getGene(sourceId);
-      gene.addPFamDomain(accession, location);
+      if (accession != null) {
+        int[] location = new int[3];
+        location[0] = Integer.valueOf(row.get("start_min").getValue().toString());
+        location[1] = Integer.valueOf(row.get("end_max").getValue().toString());
+        location[2] = Integer.valueOf(row.get("length").getValue().toString());
+        Gene gene = group.getGene(sourceId);
+        gene.addPFamDomain(accession, location);
+      }
     }
   }
 

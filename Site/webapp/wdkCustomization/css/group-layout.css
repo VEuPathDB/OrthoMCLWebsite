@@ -18,7 +18,7 @@
 .group-layout .canvas text { font-weight:bold; }
 .group-layout .canvas text.shadow { stroke: white; stroke-width: 2.5px; opacity: 0.9; }
 .group-layout .canvas .ec-numbers, .group-layout .canvas .pfams { display:none; }
-.group-layout .canvas .ec-numbers path { stroke:#AAAAAA; stroke-width:0.8px; }
+.group-layout .canvas .ec-numbers path, .group-layout .canvas .pfams path { stroke:#AAAAAA; stroke-width:0.8px; }
 
 
 .group-layout .controls { max-width: 1095px; margin-bottom:3px; }
@@ -47,8 +47,8 @@
 }
 
 .group-layout .controls .ec-number-control, .group-layout .controls .pfam-control { display:none; }
-.group-layout .controls .ec-number-legend { width:12px; height:12px; border-radius:6px; display:inline-block; margin: 2px; }
-.group-layout .controls .ec-number { 
+.group-layout .controls .ec-number-legend, .group-layout .controls .pfam-legend { width:12px; height:12px; border-radius:6px; display:inline-block; margin: 2px; }
+.group-layout .controls .ec-number, .group-layout .controls .pfam { 
   border:1px dotted gray; display:inline-block; padding:1px; margin:2px; white-space:nowrap; text-align:left;
 }
 

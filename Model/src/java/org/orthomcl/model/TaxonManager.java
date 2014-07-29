@@ -115,12 +115,21 @@ public class TaxonManager implements Manageable<TaxonManager> {
   }
 
   private void assignColors(Map<String, Taxon> taxons) {
-    // only assign colors to species
-    List<Taxon> species = new ArrayList<>();
+    // only assign colors to species, and group species by roots
+    Map<String, List<Taxon>> species = new HashMap<>();
     for (Taxon taxon : taxons.values()) {
-      if (taxon.isSpecies())
-        species.add(taxon);
+      if (taxon.isSpecies()) {
+        String rootId = taxon.getRoot().getAbbrev();
+        List<Taxon> list = species.get(rootId);
+        if (list == null) {
+          list = new ArrayList<>();
+          species.put(rootId, list);
+        }
+        list.add(taxon);
+      }
     }
-    RenderingHelper.assignRandomColors(species);
+    for (List<Taxon> list : species.values()) {
+      RenderingHelper.assignRandomColors(list);
+    }
   }
 }

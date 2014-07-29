@@ -33,6 +33,7 @@ public class GroupManager implements Manageable<GroupManager> {
     WdkModel wdkModel = InstanceManager.getInstance(WdkModel.class, "OrthoMCL");
     User user = wdkModel.getSystemUser();
     manager.getGroup(user, "OG5_133610");
+    System.exit(0);
   }
 
   private WdkModel wdkModel;

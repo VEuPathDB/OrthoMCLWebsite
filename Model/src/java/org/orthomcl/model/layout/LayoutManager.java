@@ -1,7 +1,10 @@
 package org.orthomcl.model.layout;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.eupathdb.common.model.InstanceManager;
@@ -76,6 +79,7 @@ public class LayoutManager implements Manageable<LayoutManager> {
         layout.addNode(node);
       }
 
+      List<Edge> edges = new ArrayList<>();
       JSONArray jsEdges = jsLayout.getJSONArray("E");
       for (int i = 0; i < jsEdges.length(); i++) {
         JSONObject jsEdge = jsEdges.getJSONObject(i);
@@ -99,6 +103,11 @@ public class LayoutManager implements Manageable<LayoutManager> {
           edge.setScore((edge.getScore() + scoreB) / 2);
         }
 
+        edges.add(edge);
+      }
+      // sort edges by score
+      Collections.sort(edges);
+      for (Edge edge : edges) {
         layout.addEdge(edge);
       }
 

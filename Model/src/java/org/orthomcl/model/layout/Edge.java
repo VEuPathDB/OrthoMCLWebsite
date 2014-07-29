@@ -2,7 +2,7 @@ package org.orthomcl.model.layout;
 
 import org.orthomcl.model.GenePair;
 
-public class Edge extends GenePair {
+public class Edge extends GenePair implements Comparable<Edge> {
 
   public static final int MIN_EVALUE = -180;
   public static final int MAX_EVALUE = -5;
@@ -134,10 +134,27 @@ public class Edge extends GenePair {
     }
     return color;
   }
-  
+
   private String toHex(int value) {
     String hex = Integer.toHexString(value);
-    if (hex.length() == 1) hex = "0" + hex;
+    if (hex.length() == 1)
+      hex = "0" + hex;
     return hex;
+  }
+
+  /**
+   * Sort edge by score
+   * 
+   * @see java.lang.Comparable#compareTo(java.lang.Object)
+   */
+  @Override
+  public int compareTo(Edge edge) {
+    double diff = edge.score - score;
+    if (diff < 0)
+      return -1;
+    else if (diff > 0)
+      return 1;
+    else
+      return 0;
   }
 }

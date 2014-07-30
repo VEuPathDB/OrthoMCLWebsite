@@ -10,19 +10,20 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     loadData(layout);
 
     // set up tabs
-    layout.find(".control-tabs").tabs();
-    layout.find(".datatable").DataTable({ bJQueryUI: true });
+    layout.find(".data-table").DataTable({ bJQueryUI: true });
 
     // draw the layout on canvas
     initializeCanvas(layout);
 
     // register handlers for the UI controls
-    layout.find(".controls").accordion({ collapsible: true, });
     initializeNodeControls(layout);
     initializeEdgeControls(layout);
 
     // initialize the display of node detail section
     initializeNodeDetail(layout);
+
+    layout.find(".tabs").tabs();
+    layout.find(".accordion").accordion({ collapsible: true, })
   };
 
   function loadData(layout) {
@@ -79,7 +80,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
           });
       
     // initialize edges      
-    renderEdgesByType(layout);
+    renderEdges(layout);
     layout.find(".canvas .edge")
           .hover(function() { highlightEdges(layout, ".edges ." + this.id); },
                  function() { resetEdges(layout, ".edges ." + this.id); }
@@ -90,84 +91,49 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
   }
 
   function initializeNodeDetail(layout) {
-     var content = layout.find(".node-detail").find(".content");
-     content.find(".gene-info")
-            .accordion({ collapsible: true, })
-            .hover(function() { 
-                     var nodeId = layout.find(".node-detail .source-id").attr("id");
+     var detail = layout.find(".node-detail");
+     detail.find(".gene-info, .source-id")
+           .hover(function() { 
+                     var nodeId = detail.data("id");
                      highlightNodes(layout, ".nodes .n" + nodeId); 
                    },
                    function() {
-                     var nodeId = layout.find(".node-detail .source-id").attr("id");
+                     var nodeId = detail.data("id");
                      resetNodes(layout, ".nodes .n" + nodeId); 
                    });
-     content.find(".edge-info")
-            .accordion({ collapsible: true,
-                         activate: function(event, ui) {
-                                     if (ui.newPanel.length == 0) return;
-                                     if ($(this).data("loaded") == "yes") return;                                   
-                                     showEdgeDetails(layout);
-                                     $(this).data("loaded", "yes")
-                                            .accordion("refresh");
-                                   },
-                       });
-     content.find(".pfam-info")
-            .accordion({ collapsible: true,
-                        activate: function(event, ui) {
-                                     if (ui.newPanel.length == 0) return;
-                                     if ($(this).data("loaded") == "yes") return;
-                                     showPFamDetails(layout);
-                                     $(this).data("loaded", "yes")
-                                            .accordion("refresh");
-                                   },
-                       });
-     content.find(".ec-number-info")
-            .accordion({ collapsible: true,
-                         activate: function(event, ui) {
-                                     if (ui.newPanel.length == 0) return;
-                                     if ($(this).data("loaded") == "yes") return;
-                                     showEcNumberDetails(layout);
-                                     $(this).data("loaded", "yes")
-                                            .accordion("refresh");
-                                   },
-                       });
   }
 
   function showNodeDetail(layout, node) {
-    layout.find(".control-tabs").tabs({active: 1});
+    layout.find(".nodes-info").tabs({ active: 0 });
     var detail = layout.find(".node-detail");
-    var nonContent = detail.find(".non-content");
-    var content = detail.find(".content");
-
-    var nodeId = content.find(".source-id").attr("id");
+    var nodeId = detail.data("id");
     if (nodeId == node.attr("id")) return; // node detail already loaded
     nodeId = node.attr("id");
 
-    nonContent.hide();
-    content.show("highlight");
-
     // fill in the gene info
-    content.find(".source-id").attr("id", nodeId).html(node.data("source-id"));
-    content.find(".length").html(node.data("length"));
-    content.find(".description").html(node.html());
+    detail.data("id", nodeId);
+    detail.find(".source-id.caption").removeClass("empty");
+    detail.find(".source-id").html(node.data("source-id"));
+    detail.find(".length").html(node.data("length"));
+    detail.find(".description").html(node.html());
 
     var taxon = taxons[node.data("taxon")];
-    content.find(".taxon-name").html(taxon.text());
-    content.find(".taxon-id").html(taxon.attr("id"));
+    detail.find(".taxon-name").html(taxon.text());
+    detail.find(".taxon-id").html(taxon.attr("id"));
 
-    content.find(".gene-info").accordion("refresh")
-
-    // reset the content of lazy-loading sections
-    content.find(".edge-info, .pfam-info, .ec-number-info")
-           .accordion("option", "active", false)
-           .data("loaded", "no")
-           .find(".datatable").DataTable({ bDestroy : true, });
+    showEdgeDetails(layout);
+    showPFamDetails(layout);
+    showEcNumberDetails(layout);
+    
+    // recompute the accordions' sizes.
+    detail.find(".gene-info, .edge-info, .pfam-info, .ec-number-info")
+          .accordion("refresh");
   }
 
   function showEdgeDetails(layout) {
-    var nodeId = layout.find(".node-detail .source-id").attr("id");
+    var detail = layout.find(".node-detail");
+    var nodeId = detail.data("id");    
     var node = nodes[nodeId];
-    var content = layout.find(".node-detail .content");
 
     // fill in edge info
     var data = [];
@@ -180,26 +146,24 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
             data.push(convertEdgeToArray($(this), "query"));
           });
 // The 1.10 syntax is not supported yet
-//    content.find(".blast-scores")
-//           .DataTable().clear()
+//    detail.find(".blast-scores")
+//          .DataTable().clear()
 //                       .row.add(data)
 //                       .draw();
 
 // The 1.9 syntax is used now, but will be replace by 1.10 syntax after upgrading.
-    content.find(".blast-scores")
-           .DataTable({ bDestroy: true,
+    detail.find(".blast-scores")
+          .DataTable({ bDestroy: true,
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "200",
+                        "sScrollY": "160",
                         "bScrollCollapse": true,
                       });
 
     var nodeSelector = ".nodes .n" + node.attr("id");
-//    content.hover(function() { highlightNodes(layout, nodeSelector); },
-//                  function() { resetNodes(layout, nodeSelector); });
-    content.find(".blast-scores tr")
-           .each(function() {
+    detail.find(".blast-scores tr")
+          .each(function() {
              var edgeId = $(this).find(".subject").attr("id");
              $(this).hover(function() { 
                              $(this).addClass("highlight");
@@ -214,9 +178,9 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
   }
 
   function showEcNumberDetails(layout) {
-    var nodeId = layout.find(".node-detail .source-id").attr("id");
+    var detail = layout.find(".node-detail");
+    var nodeId = detail.data("id");
     var node = nodes[nodeId];
-    var content = layout.find(".node-detail .content");
 
     // fill in ec numbers
     var data = [];
@@ -225,20 +189,20 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
       data.push([ ecNumber.data("code") ]);
     });
 
-    content.find(".ec-numbers")
-           .DataTable({ bDestroy: true,
+    detail.find(".ec-numbers")
+          .DataTable({ bDestroy: true,
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "200",
+                        "sScrollY": "160",
                         "bScrollCollapse": true,
                       });
   }
 
   function showPFamDetails(layout) {
-    var nodeId = layout.find(".node-detail .source-id").attr("id");
+    var detail = layout.find(".node-detail");
+    var nodeId = detail.data("id");
     var node = nodes[nodeId];
-    var content = layout.find(".node-detail .content");
 
     // fill in pfams
     var data = [];
@@ -249,12 +213,12 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                   proteinPFam.data("start"), proteinPFam.data("end"), proteinPFam.data("length") ]);
     });
 
-    content.find(".pfams")
-           .DataTable({ bDestroy: true,
+    detail.find(".pfams")
+          .DataTable({ bDestroy: true,
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "200",
+                        "sScrollY": "160",
                         "bScrollCollapse": true,
                       });
   }
@@ -274,9 +238,12 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
 
   function resetNodeDetail(layout) {
     var detail = layout.find(".node-detail");
-    detail.find(".non-content").show();
-    detail.find(".content").hide()    
-                           .find(".source-id").attr("id", "");
+    detail.find(".source-id.caption")
+          .addClass("empty")
+          .html("Click a node to see details.");
+    detail.find(".data-table").DataTable({ bDestroy: true, aaData: [], });
+    detail.find(".gene-info td").html(" ");
+    detail.find(".accordion").accordion("refresh");
   }
 
   function initializeNodeControls(layout) {
@@ -391,41 +358,37 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
   function initializeEdgeControls(layout) {
     // handle switching between different edge controls
     var edgeControl = layout.find(".controls .edge-control");
-    edgeControl.find(".edge-display").change(function() {
-        edgeControl.find(".type-control").toggle("slide", { "direction": "up" });
-        edgeControl.find(".score-control").toggle("slide", { "direction": "down" });
-        if (this.value == "type") {
-          renderEdgesByType(layout);
-        } else {
-          renderEdgesByScore(layout);
-        }
-    });
     
     // handle edge by type control
     edgeControl.find(".type-control .edge-type input")
                .change(function() {
-                 renderEdgesByType(layout);
+                 renderEdges(layout);
                });
     
     // handle edge by score control
     var exp = edgeControl.find(".score-control .evalue-exp");
-    var slider = edgeControl.find(".score-control .evalue")
+    var slider = edgeControl.find(".score-control .evalue");
+    var min = slider.data("min-exp");
+    var max = slider.data("max-exp");
+    var value = max - Math.round((max - min) / 5.0);
     slider.slider({
-      min: slider.data("min-exp"),
-      max: slider.data("max-exp"),
-      value: slider.data("max-exp"),
+      min: min,
+      max: max,
+      value: value,
       slide: function(event, ui) {
                exp.val(ui.value);
-               renderEdgesByScore(layout);
+               renderEdges(layout);
              }
     });
+    exp.val(value);
     exp.change(function() {
       slider.slider("value", this.value);
-      renderEdgesByScore(layout);
+      renderEdges(layout);
     });
+    renderEdges(layout);
   }
 
-  function renderEdgesByType(layout) {
+  function renderEdges(layout) {
     // determine which type of edges will be displayed.
     var ortholog = false;
     var coortholog = false;
@@ -441,34 +404,33 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
             }
           });
 
-    var canvas = d3.select(layout.find(".canvas").get(0));
-    canvas.selectAll("line.edge")
-          .style("display", function(edge) {
-            var type = edge.data("type");
-            if (type == "O") return ortholog ? "block" : "none";
-            else if (type == "C") return coortholog ? "block" : "none";
-            else if (type == "P") return inparalog ? "block" : "none";
-            else return normal ? "block" : "none";
-          })
-          .style("stroke", function(edge) {
-            var type = edge.data("type");
-            if (type == "O") return "#FF6600";
-            else if (type == "C") return "yellow";
-            else if (type == "P") return "#00CC00";
-            else return "gray";
-          });
-  }
-
-  function renderEdgesByScore(layout) {
-    // get evalue cutoff
     var cutoff = parseInt(layout.find(".controls .edge-control .evalue-exp").val());
     var canvas = d3.select(layout.find(".canvas").get(0));
     canvas.selectAll("line.edge")
           .style("display", function(edge) {
+            // first check if the edge is above score threshold
             var score = parseFloat(edge.data("score"));
-            return (score <= cutoff) ? "block" : "none";
+            if (score <= cutoff) {
+              var type = edge.data("type");
+              if (type == "O") return ortholog ? "block" : "none";
+              else if (type == "C") return coortholog ? "block" : "none";
+              else if (type == "P") return inparalog ? "block" : "none";
+              else return normal ? "block" : "none";
+            } else { return "none"; }
           })
-          .style("stroke", function(edge) { return edge.data("color"); });
+          .style("stroke", function(edge) {
+            var score = parseFloat(edge.data("score"));
+            // Convert the score into color intensity
+            var color = Math.round((180 + score) * 180 / 180.0) + 50;
+            var type = edge.data("type");
+            return "rgb(" + color + "," + color + "," + color + ")";
+            /*
+            if (type == "O") return "rgb(" + color + "," + color + "," + color + ")";
+            else if (type == "C") return "rgb(" + color + "," + color + ",255)";
+            else if (type == "P") return "rgb(" + color + ",255," + color + ")";
+            else return "rgb(255," + color + "," + color + ")";
+            */
+          });
   }
 
   function highlightNodes(layout, selector) {
@@ -500,7 +462,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
         $(this).data("visible", "no");
       }
 
-      var line = d3.select(this).style("stroke-width", 6);
+      var line = d3.select(this).style("stroke-width", 5);
       var type = edge.data("type");
       var label = (type == "O") ? "Ortholog" : (type == "C") ? "Coortholog" : (type == "P") ? "Inparalog" : "Normal";
       label += ", evalue=" + edge.data("evalue");
@@ -522,7 +484,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
         $(this).data("visible", "");
       }
 
-      d3.select(this).style("stroke-width", 2);
+      d3.select(this).style("stroke-width", 1);
       var nodeSelector = ".nodes .n" + edge.data("query") + ", .nodes .n" + edge.data("subject");
       resetNodes(layout, nodeSelector);
     });

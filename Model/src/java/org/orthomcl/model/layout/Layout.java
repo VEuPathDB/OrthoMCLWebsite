@@ -27,9 +27,9 @@ public class Layout {
 
   public Layout(Group group, int size) {
     this.group = group;
-    this.taxons = new HashMap<>();
-    this.edges = new HashMap<>();
-    this.nodes = new HashMap<>();
+    this.taxons = new LinkedHashMap<>();
+    this.edges = new LinkedHashMap<>();
+    this.nodes = new LinkedHashMap<>();
     this.taxonCounts = new HashMap<>();
     this.size = size;
     this.minEvalueExp = Integer.MAX_VALUE;

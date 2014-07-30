@@ -76,20 +76,37 @@
 
     </div>
 
-    <div class="controls accordion">
-      <h3>Legend &amp; Options</h3>
 
-      <div>
+    <div class="notes accordion">
+     <h3>Notes</h3>
+     <div>
+      <p>The above graph represents the clustering results of the proteins in ortholog group ${group.name}. The interactive graph re
+quires SVG support of your browser.</p>
 
-        <fieldset class="edge-control">
-          <legend>Edges</legend>
-          <div>
-            Display edges By: 
-            <input name="edge-display" class="edge-display" type="radio" value="type" checked="checked" /> Types
-            <input name="edge-display" class="edge-display" type="radio" value="score" /> Blast scores
-          </div>
-          
-          <div class="type-control control-section">
+      <ul>
+        <li>Each dot represent a protein, and different proteins from the same organism share the same color. Mouse over the dot to
+view the detail information about the protein.</li>
+        <li>Each line between two dots represent a blast score (above a fixed threshold of 1e-5) between two protein sequences. Mous
+e over to view the detail information about the blast score.</li>
+        <li>Red line means the two proteins linked by the line form an ortholog pair.</li>
+        <li>Green line means the two proteins form an in-paralog pair.</li>
+        <li>Blue line means the two proteins form an co-ortholog pair.</li>
+        <li>Gray line means the two protein sequences have a blast score, but don't form ortholog, in-paralog, nor co-ortholog pairs
+.</li>
+        <li>Click on the legend of each line type to toggle on/off that type of lines on the graph.</li>
+      </ul>
+     </div>
+    </div>
+
+
+    <div class="controls">
+
+      <div class="edge-control accordion">
+        <h3>Edge Options</h3>
+        <div>
+           
+          <fieldset class="type-control control-section">
+            <legend>Edge Type</legend>
             <div class="edge-type">
               <input type="checkbox" value="Ortholog" checked="checked" /> 
               <div class="edge-legend Ortholog"> </div> Ortholog
@@ -104,23 +121,30 @@
             </div>
             <div class="edge-type">
               <input type="checkbox" value="Normal" /> 
-              <div class="edge-legend Normal"> </div> Normal
+              <div class="edge-legend Normal"> </div> Other Similarities
             </div>
-          </div>
+          </fieldset>
           
-          <div class="score-control control-section">
-            E-Value cutoff: <b>1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/></b> 
+          <fieldset class="score-control control-section">
+            <legend>E-Value Cutoff</legend>
+            <div>
+              Max E-Value:  
+              <b> 1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/></b>
+            </div>
             <div class="evalue slider" 
                  data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
-            <div class="tip">Edges are colored by evalue; red represents high scores, blue for low scores.</div>
-          </div>
-          
-        </fieldset>
+          </fieldset>
+        </div>
+      </div>
 
-        <fieldset class="node-control">
-          <legend>Nodes</legend>
-          <div>Display nodes by:
-            <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" /> Taxons
+      <div class="node-control accordion">
+        <h3>Node Options</h3>
+        <div>
+          <fieldset class="control-section">
+            <legend>Show Nodes By</legend>
+
+            <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" />
+             Taxons
             <c:choose>
               <c:when test="${fn:length(ecNumbers) == 0}">
                 <input name="node-display" class="node-display" type="radio" value="ec-number" disabled="disabled" />
@@ -128,7 +152,8 @@
               <c:otherwise>
                 <input name="node-display" class="node-display" type="radio" value="ec-number" /> 
               </c:otherwise>
-            </c:choose> EC Numbers
+            </c:choose> 
+            EC Numbers
             <c:choose>
               <c:when test="${fn:length(pfams) == 0}">
                 <input name="node-display" class="node-display" type="radio" value="pfam" disabled="disabled" />
@@ -136,8 +161,9 @@
               <c:otherwise>
                 <input name="node-display" class="node-display" type="radio" value="pfam" /> 
               </c:otherwise>
-            </c:choose> PFam Domains
-          </div>
+            </c:choose> 
+            PFam Domains
+          </fieldset>
 
           <div class="taxon-control control-section">
             <div class="tip">Mouse over a taxon legend to highlight sequences of that taxon.</div>
@@ -175,22 +201,52 @@
               </div>
             </c:forEach>
           </div>
-         
-        </fieldset>
-
+        </div>
       </div>
 
     </div> <!-- end of .controls div -->
     
+
+    <svg class="canvas" width="${layout.size}px" height="${layout.size}px" 
+             viewBox="0 0 ${layout.size} ${layout.size}">
+
+      <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
+
+      <g class="edges">
+        <c:forEach items="${layout.edges}" var="edge">
+          <line id="e${edge.nodeA.index}-${edge.nodeB.index}" class="edge e${edge.nodeA.index}-${edge.nodeB.index}"
+                x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" 
+                x2="${edge.nodeB.x}" y2="${edge.nodeB.y}" />
+        </c:forEach>
+      </g>
+
+      <g class="nodes">
+        <c:forEach items="${layout.nodes}" var="node">
+          <c:set var="gene" value="${node.gene}" />
+            <circle id="n${node.index}" class="node n${node.index} ${gene.taxon.abbrev}"
+                    cx="${node.x}" cy="${node.y}" r="4" />
+        </c:forEach>
+      </g>
+
+      <g class="ec-numbers"></g>
+
+      <g class="pfams"></g>
+
+      <g class="labels"></g>
+
+    </svg>
+
     
     <!-- need an id here in order for .highlight selector to override the defaults -->
-    <fieldset id="node-detail" class="node-detail">
-      <legend>Sequence Detail</legend>
-      <div class="non-content tip">Click a sequence node on the layout to see its details here.</div>
+    <div class="nodes-info tabs">
+      <ul>
+        <li><a href="#node-detail">Node Detail</a></li>
+        <li><a href="#selected-nodes">Selected Nodes</a></li>
+      </ul>
 
-      <div class="content">
-        <div class="source-id caption"></div>
-        <div class="gene-info accordion">
+      <div id="node-detail" class="node-detail">
+        <div class="source-id caption empty">Click a node to see details.</div>
+        <div class="gene-info info-section accordion">
           <h3>Sequence Information</h3>
           <div>
             <table>
@@ -209,7 +265,7 @@
           </div>
         </div>
 
-        <div class="edge-info accordion">
+        <div class="edge-info info-section accordion">
           <h3>BLAST Scores</h3>
           <div>
             <table class="blast-scores data-table">
@@ -225,7 +281,7 @@
           </div>
         </div>
 
-        <div class="pfam-info accordion">
+        <div class="pfam-info info-section accordion">
           <h3>PFam Domains</h3>
           <div>
             <table class="pfams data-table">
@@ -242,7 +298,7 @@
           </div>
         </div>
 
-        <div class="ec-number-info accordion">
+        <div class="ec-number-info info-section accordion">
           <h3>EC Numbers</h3>
           <div>
             <table class="ec-numbers data-table">
@@ -255,38 +311,14 @@
           </div>
         </div>
 
-      </div> <!-- end of .content -->
-    </fieldset> <!-- end of .node-detail -->
+      </div> <!-- end of .node-detail -->
+  
+      <div id="selected-nodes" class="selected-nodes">
+        <i>Coming soon.</i>
 
+      </div>
 
-    <svg class="canvas" width="${layout.size}px" height="${layout.size}px" 
-	     viewBox="0 0 ${layout.size} ${layout.size}">
-       
-      <rect class="background" x="0" y="0" width="${layout.size}" height="${layout.size}"/>
-
-      <g class="edges">
-        <c:forEach items="${layout.edges}" var="edge">
-          <line id="e${edge.nodeA.index}-${edge.nodeB.index}" class="edge e${edge.nodeA.index}-${edge.nodeB.index}"
-                x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" 
-                x2="${edge.nodeB.x}" y2="${edge.nodeB.y}" />
-        </c:forEach>
-      </g>
-	
-      <g class="nodes">
-        <c:forEach items="${layout.nodes}" var="node">
-          <c:set var="gene" value="${node.gene}" />
-            <circle id="n${node.index}" class="node n${node.index} ${gene.taxon.abbrev}"
-                    cx="${node.x}" cy="${node.y}" r="4" />
-        </c:forEach>
-      </g>
-
-      <g class="ec-numbers"></g>
-
-      <g class="pfams"></g>
-
-      <g class="labels"></g>
-
-    </svg>
+    </div> <!-- end of tabs -->
 
   </div>
 

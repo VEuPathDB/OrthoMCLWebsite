@@ -14,7 +14,7 @@
 .group-layout > * { display:inline-block; vertical-align:top; }
 
 .group-layout .canvas { overflow:visible; margin:2px; border:1px solid #AAA; }
-.group-layout .canvas .background { fill:#E0E0FF; }
+.group-layout .canvas .background { fill:#F0FFF0; }
 .group-layout .canvas line.edge { stroke-width:1px; }
 .group-layout .canvas circle.node { stroke-width:3px; } 
 .group-layout .canvas text { font-weight:bold; }

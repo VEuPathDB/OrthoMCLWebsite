@@ -157,7 +157,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "160",
+                        "sScrollY": "250",
                         "bScrollCollapse": true,
                       });
 
@@ -194,7 +194,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "160",
+                        "sScrollY": "250",
                         "bScrollCollapse": true,
                       });
   }
@@ -218,7 +218,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                         bJQueryUI: true,
                         aaData: data,
                         bPaginate: false,
-                        "sScrollY": "160",
+                        "sScrollY": "250",
                         "bScrollCollapse": true,
                       });
   }
@@ -421,7 +421,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
           .style("stroke", function(edge) {
             var score = parseFloat(edge.data("score"));
             // Convert the score into color intensity
-            var color = Math.round((180 + score) * 180 / 180.0) + 50;
+            var color = Math.round((180 + score) * 240 / 180.0);
             var type = edge.data("type");
             return "rgb(" + color + "," + color + "," + color + ")";
             /*

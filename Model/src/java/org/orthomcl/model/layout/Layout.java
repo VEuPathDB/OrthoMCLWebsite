@@ -3,6 +3,7 @@ package org.orthomcl.model.layout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -136,12 +137,17 @@ public class Layout {
   }
 
   public Map<Taxon, Integer> getTaxonCounts() {
-    // sort the taxons
-    Map<Taxon, Integer> map = new LinkedHashMap<>();
-    String[] array = taxonCounts.keySet().toArray(new String[0]);
-    Arrays.sort(array);
-    for (String abbrev : array) {
-      map.put(taxons.get(abbrev), taxonCounts.get(abbrev));
+    // get the taxons with genes
+    List<Taxon> list = new ArrayList<>(taxonCounts.size());
+    for (String abbrev : taxonCounts.keySet()) {
+      list.add(taxons.get(abbrev));
+    }
+    Collections.sort(list);
+    
+    // prepare the map, with the order of taxons preserved
+    Map<Taxon, Integer> map = new LinkedHashMap<>(taxonCounts.size());
+    for (Taxon taxon : list) {
+      map.put(taxon, taxonCounts.get(taxon.getAbbrev()));
     }
     return map;
   }

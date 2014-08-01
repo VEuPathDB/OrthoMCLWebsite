@@ -122,7 +122,7 @@ public class Taxon implements Comparable<Taxon>, Renderable {
    */
   public String getGroupColor() {
     if (groupColor == null && parent != null)
-      groupColor = parent.getGroupColor(); 
+      groupColor = parent.getGroupColor();
     return groupColor;
   }
 
@@ -136,10 +136,15 @@ public class Taxon implements Comparable<Taxon>, Renderable {
 
   @Override
   public int compareTo(Taxon taxon) {
-    int diff = this.sortIndex - taxon.sortIndex;
-    if (diff != 0)
+    // first compare the root
+    int diff = root.compareTo(taxon.root);
+    if (diff != 0) {
       return diff;
-    return this.abbrev.compareTo(taxon.abbrev);
+    }
+    else {
+      diff = this.sortIndex - taxon.sortIndex;
+      return (diff != 0) ? diff : this.abbrev.compareTo(taxon.abbrev);
+    }
   }
 
 }

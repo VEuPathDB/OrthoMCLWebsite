@@ -134,6 +134,15 @@ public class Taxon implements Comparable<Taxon>, Renderable {
     this.groupColor = groupColor;
   }
 
+  public String getPath() {
+    String parentPath = (parent == null) ? "" : parent.getPath();
+    if (parentPath.equals("ALL"))
+      parentPath = "";
+    if (!parentPath.equals(""))
+      parentPath += "-&gt;";
+    return parentPath + abbrev;
+  }
+
   @Override
   public int compareTo(Taxon taxon) {
     // first compare the root

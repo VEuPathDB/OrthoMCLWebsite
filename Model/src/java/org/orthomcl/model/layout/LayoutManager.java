@@ -45,15 +45,16 @@ public class LayoutManager implements Manageable<LayoutManager> {
   }
 
   public Layout getLayout(User user, String name) throws WdkModelException, WdkUserException {
-    // first load group
     GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
-    Group group = groupManager.getGroup(groupRecord);
 
     // load layout content
     String layoutString = (String) groupRecord.getAttributeValue(LAYOUT_ATTRIBUTE).getValue();
     if (layoutString == null)
       return null;
+
+    // load group
+    Group group = groupManager.getGroup(groupRecord);
 
     // load taxons into layout
     Layout layout = new Layout(group, getSize());

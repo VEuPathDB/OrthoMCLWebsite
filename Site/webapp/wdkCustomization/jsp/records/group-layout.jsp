@@ -8,6 +8,13 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <c:set var="layout" value="${requestScope.layout}" />
+
+<c:choose>
+  <c:when test="${layout == null}">
+    <div class="tip">Cluster graph is only available for groups with no more than 500 sequences.</div>
+  </c:when>
+  <c:otherwise> <!-- show layout -->
+
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
   <c:set var="ecNumbers" value="${group.ecNumbers}" />
@@ -22,7 +29,8 @@
           <span class="taxon" id="${taxon.abbrev}" 
                 data-color="${taxon.color}" data-group-color="${taxon.groupColor}"
                 data-common-name="${taxon.commonName}" data-species="${taxon.species}"
-                data-parent="${taxon.parent.abbrev}" data-sort-index="${taxon.sortIndex}" >
+                data-parent="${taxon.parent.abbrev}" data-sort-index="${taxon.sortIndex}"
+                data-path="${taxon.path}" >
             ${taxon.name}
           </span>
         </c:forEach>
@@ -169,11 +177,7 @@ e over to view the detail information about the blast score.</li>
             <div class="tip">Mouse over a taxon legend to highlight sequences of that taxon.</div>
             <c:forEach items="${layout.taxonCounts}" var="entity">
               <c:set var="taxon" value="${entity.key}" />
-              <c:set var="taxonInfo" value="${taxon.name}" />
-              <c:if test="${taxon.commonName != null}">
-                <c:set var="taxonInfo" value="${taxonInfo} (${taxon.commonName})" />
-              </c:if>
-              <div class="taxon" id="${taxon.abbrev}" title="${taxonInfo}">
+              <div class="taxon taxon-id" id="${taxon.abbrev}">
                 <div class="taxon-legend" style="background:${taxon.color};border-color:${taxon.groupColor}"> </div>
                 ${taxon.abbrev} (${entity.value})
               </div>
@@ -264,7 +268,8 @@ e over to view the detail information about the blast score.</li>
                          value="/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${gene.sourceId}" />
                   <a href="${geneUrl}">${gene.sourceId}</a>
                 </td>
-                <td>${gene.taxon.abbrev}</td>
+                <c:set var="taxon" value="${gene.taxon}" />
+                <td class="taxon-id" id="${taxon.abbrev}">${taxon.abbrev}</td>
                 <td>${gene.length}</td>
                 <td>${gene.description}</td>
               </tr>
@@ -348,5 +353,7 @@ e over to view the detail information about the blast score.</li>
 
   </div>
 
+  </c:otherwise> <!-- End of show layout -->
+</c:choose>
   
 </jsp:root>

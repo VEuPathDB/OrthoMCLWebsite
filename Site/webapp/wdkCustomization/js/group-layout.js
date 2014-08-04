@@ -35,6 +35,18 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     layout.find(".tabs").tabs({ active: 1 });
     layout.find(".accordion").accordion({ collapsible: true, });
     layout.find(".tabs").tabs({ active: 0 });
+
+    // register tooltips for the taxa
+    layout.find(".taxon-id").qtip({
+      content: {
+        text: function() {
+          var taxon = taxons[this.attr("id")];
+          if (taxon != undefined) {
+            return taxon.data("path") + "<br />" + taxon.html();
+          }
+        }
+      }
+    });
   };
 
   function loadData(layout) {
@@ -115,6 +127,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                    var index = row.data("index");
                    resetNodes(layout, ".nodes .n" + index);
                  });
+    
   }
 
   function initializeNodeDetail(layout) {
@@ -149,8 +162,9 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     detail.find(".description").html(node.html());
 
     var taxon = taxons[node.data("taxon")];
+    var taxonId = taxon.attr("id");
     detail.find(".taxon-name").html(taxon.text());
-    detail.find(".taxon-id").html(taxon.attr("id"));
+    detail.find(".taxon-id").attr("id", taxonId).html(taxonId);
 
     showEdgeDetails(layout);
     showPFamDetails(layout);
@@ -273,6 +287,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
           .addClass("empty")
           .html("Click a node to see details.");
     detail.find(".data-table").DataTable({ bDestroy: true, aaData: [], });
+    detail.find(".gene-info td.taxon-id").attr("id", "");
     detail.find(".gene-info td").html(" ");
     detail.find(".accordion").accordion("refresh");
     layout.find(".nodes-info").tabs({ active: 0 });

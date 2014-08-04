@@ -137,7 +137,17 @@ public class Taxon implements Comparable<Taxon>, Renderable {
   @Override
   public int compareTo(Taxon taxon) {
     // first compare the root
-    int diff = root.compareTo(taxon.root);
+    int diff = 0;
+    if (root != null && taxon.root == null) {
+      diff = 1;
+    }
+    else if (root == null && taxon.root != null) {
+      diff = -1;
+    }
+    else if (root != null && taxon.root != null) {
+      diff = root.compareTo(taxon.root);
+    }
+
     if (diff != 0) {
       return diff;
     }

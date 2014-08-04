@@ -144,7 +144,7 @@ e over to view the detail information about the blast score.</li>
             <legend>Show Nodes By</legend>
 
             <input name="node-display" class="node-display" type="radio" value="taxon" checked="checked" />
-             Taxons
+             Taxa
             <c:choose>
               <c:when test="${fn:length(ecNumbers) == 0}">
                 <input name="node-display" class="node-display" type="radio" value="ec-number" disabled="disabled" />
@@ -214,7 +214,8 @@ e over to view the detail information about the blast score.</li>
 
       <g class="edges">
         <c:forEach items="${layout.edges}" var="edge">
-          <line id="e${edge.nodeA.index}-${edge.nodeB.index}" class="edge e${edge.nodeA.index}-${edge.nodeB.index}"
+          <line id="e${edge.nodeA.index}-${edge.nodeB.index}" 
+                class="edge e${edge.nodeA.index}-${edge.nodeB.index} ${edge.type}"
                 x1="${edge.nodeA.x}" y1="${edge.nodeA.y}" 
                 x2="${edge.nodeB.x}" y2="${edge.nodeB.y}" />
         </c:forEach>
@@ -240,9 +241,37 @@ e over to view the detail information about the blast score.</li>
     <!-- need an id here in order for .highlight selector to override the defaults -->
     <div class="nodes-info tabs">
       <ul>
+        <li><a href="#node-list">Sequence List</a></li>
         <li><a href="#node-detail">Node Detail</a></li>
-        <li><a href="#selected-nodes">Selected Nodes</a></li>
       </ul>
+
+      <div id="node-list" class="node-list">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Accession</th>
+              <th>Taxon</th>
+              <th>Length</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:forEach items="${layout.nodes}" var="node">
+              <c:set var="gene" value="${node.gene}" />
+              <tr class="node" data-index="${node.index}">
+                <td>
+                  <c:url var="geneUrl" 
+                         value="/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${gene.sourceId}" />
+                  <a href="${geneUrl}">${gene.sourceId}</a>
+                </td>
+                <td>${gene.taxon.abbrev}</td>
+                <td>${gene.length}</td>
+                <td>${gene.description}</td>
+              </tr>
+            </c:forEach>
+          </tbody>
+        </table>
+      </div>
 
       <div id="node-detail" class="node-detail">
         <div class="source-id caption empty">Click a node to see details.</div>
@@ -251,12 +280,14 @@ e over to view the detail information about the blast score.</li>
           <div>
             <table>
               <tr>
-                <th>Source ID:</th><td class="source-id"></td>
+                <c:url var="geneUrlTemplate" 
+                       value="/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=" />
+                <th>Source ID:</th><td class="source-id" data-url="${geneUrlTemplate}"></td>
                 <th>Length:</th><td class="length"></td>
               </tr>
               <tr>
                 <th>Organism:</th><td class="taxon-name"></td>
-                <th>Code:</th><td class="taxon-id"></td>
+                <th>Taxon:</th><td class="taxon-id"></td>
               </tr>
               <tr>
                 <th>Description:</th><td class="description" colspan="3"></td>
@@ -313,11 +344,6 @@ e over to view the detail information about the blast score.</li>
 
       </div> <!-- end of .node-detail -->
   
-      <div id="selected-nodes" class="selected-nodes">
-        <i>Coming soon.</i>
-
-      </div>
-
     </div> <!-- end of tabs -->
 
   </div>

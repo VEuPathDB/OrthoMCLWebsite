@@ -9,8 +9,14 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     // load data
     loadData(layout);
 
-    // set up tabs
-    layout.find(".data-table").DataTable({ bJQueryUI: true });
+    // set up datatables
+    layout.find(".data-table")
+          .DataTable({ bJQueryUI: true,
+                       bPaginate: false,
+                       "scrollX": true,
+                       "bScrollCollapse": true,
+                       "sScrollY": "587",
+                     });
 
     // draw the layout on canvas
     initializeCanvas(layout);
@@ -19,11 +25,16 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     initializeNodeControls(layout);
     initializeEdgeControls(layout);
 
+    // initialize the display of node list
+    initializeNodeList(layout);
+
     // initialize the display of node detail section
     initializeNodeDetail(layout);
 
-    layout.find(".tabs").tabs();
-    layout.find(".accordion").accordion({ collapsible: true, })
+    // switch to detail first for the accordions to compute the size correctly
+    layout.find(".tabs").tabs({ active: 1 });
+    layout.find(".accordion").accordion({ collapsible: true, });
+    layout.find(".tabs").tabs({ active: 0 });
   };
 
   function loadData(layout) {
@@ -90,6 +101,22 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     layout.find(".canvas .background").click(function() { resetNodeDetail(layout); });
   }
 
+  function initializeNodeList(layout) {
+    layout.find(".nodes-info .node-list tr.node")
+          .hover(function() {
+                   var row = $(this);
+                   row.addClass("highlight");
+                   var index = row.data("index");
+                   highlightNodes(layout, ".nodes .n" + index);
+                 },
+                 function() {
+                   var row = $(this);
+                   row.removeClass("highlight");
+                   var index = row.data("index");
+                   resetNodes(layout, ".nodes .n" + index);
+                 });
+  }
+
   function initializeNodeDetail(layout) {
      var detail = layout.find(".node-detail");
      detail.find(".gene-info, .source-id")
@@ -104,7 +131,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
   }
 
   function showNodeDetail(layout, node) {
-    layout.find(".nodes-info").tabs({ active: 0 });
+    layout.find(".nodes-info").tabs({ active: 1 });
     var detail = layout.find(".node-detail");
     var nodeId = detail.data("id");
     if (nodeId == node.attr("id")) return; // node detail already loaded
@@ -113,7 +140,11 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     // fill in the gene info
     detail.data("id", nodeId);
     detail.find(".source-id.caption").removeClass("empty");
-    detail.find(".source-id").html(node.data("source-id"));
+    var idDiv = detail.find("td.source-id");
+    var sourceId = node.data("source-id");
+    var url = idDiv.data("url") + sourceId;
+    idDiv.html("<a href=\"" + url + "\">" + sourceId + "</a>");
+    detail.find(".source-id.caption").html(sourceId);
     detail.find(".length").html(node.data("length"));
     detail.find(".description").html(node.html());
 
@@ -154,11 +185,11 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
 // The 1.9 syntax is used now, but will be replace by 1.10 syntax after upgrading.
     detail.find(".blast-scores")
           .DataTable({ bDestroy: true,
-                        bJQueryUI: true,
-                        aaData: data,
-                        bPaginate: false,
-                        "sScrollY": "250",
-                        "bScrollCollapse": true,
+                       aaData: data,
+                       bPaginate: false,
+                       "scrollX": true,
+                       "bScrollCollapse": true,
+                       "sScrollY": "250",
                       });
 
     var nodeSelector = ".nodes .n" + node.attr("id");
@@ -191,11 +222,11 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
 
     detail.find(".ec-numbers")
           .DataTable({ bDestroy: true,
-                        bJQueryUI: true,
                         aaData: data,
-                        bPaginate: false,
+                       bPaginate: false,
+                       "scrollX": true,
+                       "bScrollCollapse": true,
                         "sScrollY": "250",
-                        "bScrollCollapse": true,
                       });
   }
 
@@ -215,11 +246,11 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
 
     detail.find(".pfams")
           .DataTable({ bDestroy: true,
-                        bJQueryUI: true,
                         aaData: data,
-                        bPaginate: false,
+                       bPaginate: false,
+                       "scrollX": true,
+                       "bScrollCollapse": true,
                         "sScrollY": "250",
-                        "bScrollCollapse": true,
                       });
   }
 
@@ -244,6 +275,7 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     detail.find(".data-table").DataTable({ bDestroy: true, aaData: [], });
     detail.find(".gene-info td").html(" ");
     detail.find(".accordion").accordion("refresh");
+    layout.find(".nodes-info").tabs({ active: 0 });
   }
 
   function initializeNodeControls(layout) {
@@ -359,11 +391,35 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
     // handle switching between different edge controls
     var edgeControl = layout.find(".controls .edge-control");
     
-    // handle edge by type control
-    edgeControl.find(".type-control .edge-type input")
-               .change(function() {
-                 renderEdges(layout);
-               });
+    edgeControl.find(".type-control .edge-type").each(function() {
+      var typeDiv = $(this);
+      var inputDiv = typeDiv.find("input");
+      var type = inputDiv.val();
+      inputDiv.change(function() { renderEdges(layout); });
+
+      typeDiv.hover(function() {
+                      typeDiv.addClass("highlight");
+                      d3.select(layout.find(".canvas").get(0))
+                        .selectAll(".edge." + type)
+                        .style("stroke", function(edge) {
+                          var score = parseFloat(edge.data("score"));
+                          // Convert the score into color intensity
+                          var color = Math.round((180 + score) * 240 / 180.0);
+                          return "rgb(255," + color + "," + color + ")";
+                        });
+                    },
+                    function() {
+                      typeDiv.removeClass("highlight");
+                      d3.select(layout.find(".canvas").get(0))
+                        .selectAll(".edge." + type)
+                        .style("stroke", function(edge) {
+                          var score = parseFloat(edge.data("score"));
+                          // Convert the score into color intensity
+                          var color = Math.round((180 + score) * 240 / 180.0);
+                          return "rgb(" + color + "," + color + "," + color + ")";
+                        });
+                   });
+    });
     
     // handle edge by score control
     var exp = edgeControl.find(".score-control .evalue-exp");

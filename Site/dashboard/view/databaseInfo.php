@@ -6,10 +6,12 @@
 
 require_once dirname(__FILE__) . "/../lib/modules/AppDatabase.php";
 require_once dirname(__FILE__) . "/../lib/modules/UserDatabase.php";
+require_once dirname(__FILE__) . "/../lib/modules/OpenConnections.php";
 require_once dirname(__FILE__) . "/../lib/LdapTnsNameResolver.php";
 
 $app_database = new AppDatabase();
 $user_database = new UserDatabase();
+$open_connections = new OpenConnections();
 $ldap_resolver = new LdapTnsNameResolver();
 
 if (isset($_GET['refresh']) && $_GET['refresh'] == 1) {
@@ -23,6 +25,7 @@ if (isset($_GET['refresh']) && $_GET['refresh'] == 1) {
 
 $adb = $app_database->attributes();
 $udb = $user_database->attributes();
+$oconn = $open_connections->attributes();
 $adb_aliases_ar = $ldap_resolver->resolve($adb{'service_name'});
 $udb_aliases_ar = $ldap_resolver->resolve($udb{'service_name'});
 
@@ -71,8 +74,9 @@ Related Links
         onmouseout = "return nd();"><sup>[?]</sup></a></td>
 </tr>
 </table>
+</p>
 
-<br>
+<p>
 
 <b>Aliases</b> (from LDAP): <?php print implode(", ", $adb_aliases_ar) ?>
 
@@ -82,8 +86,22 @@ Related Links
 <p>
 <b>Client login name</b>: <?php print strtolower($adb{'login'})?><br>
 <b>Client connecting from</b>: <?php print strtolower($adb{'client_host'})?><br>
-<b>Client OS user</b>: <?php print strtolower($adb{'os_user'})?><br>
+<b>Client OS user</b>: <?php print strtolower($adb{'os_user'})?>
 <p>
+<p class="clickable">Connection activity &#8593;&#8595;</p>
+<div class="expandable" >
+    <p>
+    Running count of connections take from pool on open and returned to pool on close. 
+    Persistent connections currently open might indicate a leak.
+    </p>
+    <p>
+    <span class='pre'><?php print $oconn{'OpenAppDBConnections'}?></span>
+    </p>
+</div> <!-- div expandable -->
+</p>
+
+<p>
+
 <b>Available DBLinks</b>:
 
 <table border="0" cellspacing="3" cellpadding="2" align="">
@@ -94,6 +112,7 @@ Related Links
 <th align="left"><font size="-2">username</font></th>
 <th align="left"><font size="-2">host</font></th>
 <th align="left"><font size="-2">created</font></th>
+<th align="left"><font size="-2">valid</font></th>
 </tr>
 <?php
 $dblink_map = $adb{'DblinkList'};
@@ -107,13 +126,14 @@ foreach ($dblink_map as $dblink) {
   <td><?php print strtolower($dblink{'username'})?></td>
   <td><?php print strtolower($dblink{'host'})?></td>
   <td><?php print strtolower($dblink{'created'})?></td>
+  <td align='center'><?php print ($dblink{'isValid'} == '1') ? "<span style='color:green''>&#10004;</span>" : "<span style='color:red'>&#10008;</span>"  ?></td>
 </tr>
 <?php
   $row++;
 }
 ?>
 </table>
-
+</p>
 
 <hr>
 <b>Information on this page was last updated</b>: <?php print $adb{'system_date'}?><br>
@@ -122,6 +142,9 @@ foreach ($dblink_map as $dblink) {
 <input type="submit" value="update now">
 </form>
 <p>
+
+
+
 <h2>WDK-Engine/Userlogin Database</h2>
 
 
@@ -158,7 +181,10 @@ foreach ($dblink_map as $dblink) {
         onmouseout = "return nd();"><sup>[?]</sup></a></td>
 </tr>
 </table>
-<br>
+
+</p>
+
+<p>
 
 <b>Aliases</b> (from LDAP): <?php print implode(", ", $udb_aliases_ar) ?>
 
@@ -168,7 +194,21 @@ foreach ($dblink_map as $dblink) {
 <p>
 <b>Client login name</b>: <?php print strtolower($udb{'login'}) ?></b><br>
 <b>Client connecting from</b>: <?php print strtolower($udb{'client_host'})?><br>
-<b>Client OS user</b>: <?php print strtolower($udb{'os_user'})?><br>
+<b>Client OS user</b>: <?php print strtolower($udb{'os_user'})?>
+<p>
+<p class="clickable">Connection activity &#8593;&#8595;</p>
+<div class="expandable" >
+    <p>
+    Running count of connections take from pool on open and returned to pool on close. 
+    Persistent connections currently open might indicate a leak.
+    </p>
+    <p>
+    <span class='pre'><?php print $oconn{'OpenUserDBConnections'}?></span>
+    </p>
+</div> <!-- div expandable -->
+</p>
+
+</p>
 
 <p>
 <b>Available DBLinks</b>:
@@ -181,6 +221,7 @@ foreach ($dblink_map as $dblink) {
 <th align="left"><font size="-2">username</font></th>
 <th align="left"><font size="-2">host</font></th>
 <th align="left"><font size="-2">created</font></th>
+<th align="left"><font size="-2">valid</font></th>
 </tr>
 <?php
 $dblink_map = $udb{'DblinkList'};
@@ -194,12 +235,14 @@ foreach ($dblink_map as $dblink) {
   <td><?php print strtolower($dblink{'username'})?></td>
   <td><?php print strtolower($dblink{'host'})?></td>
   <td><?php print strtolower($dblink{'created'})?></td>
+  <td align='center'><?php print ($dblink{'isValid'} == '1') ? "<span style='color:green''>&#10004;</span>" : "<span style='color:red'>&#10008;</span>"  ?></td>
 </tr>
 <?php
   $row++;
 }
 ?>
 </table>
+</p>
 
 <hr>
 <b>Information on this page was last updated</b>: <?php print $udb{'system_date'}?><br>
@@ -207,3 +250,4 @@ foreach ($dblink_map as $dblink) {
 <input name="refresh" type="hidden" value="1">
 <input type="submit" value="update now">
 </form>
+

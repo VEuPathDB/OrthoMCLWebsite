@@ -74,7 +74,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
         gene.setTaxon(taxons.get(resultSet.getString("abbreviation")));
 
         // load ec numbers
-        String ecNumbers = (String) resultSet.getString("ec_numbers");
+        String ecNumbers = resultSet.getString("ec_numbers");
         if (ecNumbers != null) {
           for (String code : ecNumbers.split(",")) {
             code = code.trim();

@@ -8,8 +8,7 @@ public class Node implements org.orthomcl.data.layout.Node{
   private final Gene gene;
   
   private int index;
-  private double x;
-  private double y;
+  private Vector point = new Vector();
   
   public Node(Gene gene) {
     this.gene = gene;
@@ -34,28 +33,27 @@ public class Node implements org.orthomcl.data.layout.Node{
   }
 
   public void setLocation(double x, double y) {
-    this.x = x;
-    this.y = y;
+    this.point.setLocation(x, y);
   }
   
   public double getX() {
-    return x;
+    return point.x;
   }
   
   public String getXFormatted() {
-    return GroupLayoutManager.FORMAT.format(x);
+    return LayoutManager.FORMAT.format(getX());
   }
   
   public double getY() {
-    return y;
+    return point.y;
   }
   
   public String getYFormatted() {
-    return GroupLayoutManager.FORMAT.format(y);
+    return LayoutManager.FORMAT.format(getY());
   }
 
   @Override
   public Vector getPoint() {
-    return new Vector(x, y);
+    return point;
   }
 }

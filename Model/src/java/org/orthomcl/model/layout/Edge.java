@@ -110,7 +110,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
   }
 
   public String getScoreFormatted() {
-    return GroupLayoutManager.FORMAT.format(score);
+    return LayoutManager.FORMAT.format(score);
   }
 
   /**

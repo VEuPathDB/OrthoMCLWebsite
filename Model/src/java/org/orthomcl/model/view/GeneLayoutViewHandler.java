@@ -32,6 +32,7 @@ public class GeneLayoutViewHandler implements SummaryViewHandler {
     Map<String, Object> result = new HashMap<>();
     result.put(ATTR_LAYOUT, layout);
 
+    LOG.debug("Leaving GeneLayoutViewHandler...");
     return result;
   }
 

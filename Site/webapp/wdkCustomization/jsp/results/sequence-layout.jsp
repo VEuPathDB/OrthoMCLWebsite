@@ -15,7 +15,7 @@
   </c:when>
   <c:otherwise> <!-- show layout -->
 
-    <imp:layout layout="${layout}" />
+    <imp:layout />
 
   </c:otherwise> <!-- End of show layout -->
 </c:choose>

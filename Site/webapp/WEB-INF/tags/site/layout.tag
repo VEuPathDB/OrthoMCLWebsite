@@ -6,11 +6,8 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp"
 	 xmlns:svg="http://www.w3.org/2000/svg">
     
-  <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
-  <jsp:directive.attribute name="layout" required="true" 
-              description="The layout object"/>
-
+  <c:set var="layout" value="${requestScope.layout}" />
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
   <c:set var="ecNumbers" value="${group.ecNumbers}" />

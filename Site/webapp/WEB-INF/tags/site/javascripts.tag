@@ -34,6 +34,7 @@
 
   <c:if test="${refer eq 'summary' or refer eq 'record'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/phyletic.js"><jsp:text/></script>
+    <script type="text/javascript" src="${base}/wdkCustomization/js/group-layout.js"><jsp:text/></script>
   </c:if>
 
   <c:if test="${refer eq 'summary' or refer eq 'question'}">
@@ -42,7 +43,8 @@
 
   <c:if test="${refer eq 'record'}">
     <script type="text/javascript" src="${base}/wdkCustomization/js/pfamDomain.js"><jsp:text/></script>
-    <script type="text/javascript" src="${base}/wdkCustomization/js/group-layout.js"><jsp:text/></script>
   </c:if>
+
+
 
 </jsp:root>

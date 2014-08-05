@@ -93,6 +93,7 @@ public class GeneSetLayoutManager extends LayoutManager implements Manageable<Ge
         String queryId = resultSet.getString("query_id");
         String subjectId = resultSet.getString("subject_id");
         float evalueMant = resultSet.getFloat("evalue_mant");
+        if (evalueMant < 0.1) evalueMant = 1;
         int evalueExp = resultSet.getInt("evalue_exp");
         String evalue = evalueMant + "E" + evalueExp;
 

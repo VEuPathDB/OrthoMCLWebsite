@@ -1,8 +1,9 @@
 package org.orthomcl.model.layout;
 
+import org.orthomcl.data.layout.Vector;
 import org.orthomcl.model.Gene;
 
-public class Node {
+public class Node implements org.orthomcl.data.layout.Node{
 
   private final Gene gene;
   
@@ -42,7 +43,7 @@ public class Node {
   }
   
   public String getXFormatted() {
-    return LayoutManager.FORMAT.format(x);
+    return GroupLayoutManager.FORMAT.format(x);
   }
   
   public double getY() {
@@ -50,6 +51,11 @@ public class Node {
   }
   
   public String getYFormatted() {
-    return LayoutManager.FORMAT.format(y);
+    return GroupLayoutManager.FORMAT.format(y);
+  }
+
+  @Override
+  public Vector getPoint() {
+    return new Vector(x, y);
   }
 }

@@ -1,8 +1,9 @@
 package org.orthomcl.model.layout;
 
+import org.orthomcl.data.core.Group;
 import org.orthomcl.model.GenePair;
 
-public class Edge extends GenePair implements Comparable<Edge> {
+public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.data.layout.Edge {
 
   public static final int MIN_EVALUE = -180;
   public static final int MAX_EVALUE = -5;
@@ -109,7 +110,7 @@ public class Edge extends GenePair implements Comparable<Edge> {
   }
 
   public String getScoreFormatted() {
-    return LayoutManager.FORMAT.format(score);
+    return GroupLayoutManager.FORMAT.format(score);
   }
 
   /**
@@ -156,5 +157,10 @@ public class Edge extends GenePair implements Comparable<Edge> {
       return 1;
     else
       return 0;
+  }
+
+  @Override
+  public double getPreferredLength() {
+    return Group.MAX_PREFERRED_LENGTH +score;
   }
 }

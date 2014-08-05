@@ -146,7 +146,7 @@ public class GroupManager implements Manageable<GroupManager> {
     for (String code : ecNumberCodes.keySet()) {
       EcNumber ecNumber = new EcNumber(code);
       ecNumber.setCount(ecNumberCodes.get(code));
-      group.addEcNumbers(ecNumber);
+      group.addEcNumber(ecNumber);
       ecNumbers.add(ecNumber);
     }
 

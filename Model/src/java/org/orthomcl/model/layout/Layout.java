@@ -9,12 +9,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.orthomcl.data.layout.Graph;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
 import org.orthomcl.model.Group;
 import org.orthomcl.model.Taxon;
 
-public class Layout {
+public class Layout implements Graph {
 
   private final Group group;
   private final Map<String, Taxon> taxons;
@@ -52,14 +53,21 @@ public class Layout {
   public Collection<Taxon> getTaxons() {
     return taxons.values();
   }
+  
+  public Edge getEdge(GenePair genePair) {
+    return edges.get(genePair);
+  }
 
   public Collection<Edge> getEdges() {
-    return edges.values();
+    // sort edges
+    List<Edge> list = new ArrayList<>(edges.values());
+    Collections.sort(list);
+    return list;
   }
 
   public Map<String, List<Edge>> getEdgesByType() {
     Map<String, List<Edge>> edges = new HashMap<>();
-    for (Edge edge : this.edges.values()) {
+    for (Edge edge : getEdges()) {
       List<Edge> list = edges.get(edge.getType().name());
       if (list == null) {
         list = new ArrayList<>();
@@ -158,5 +166,10 @@ public class Layout {
 
   public int getMaxEvalueExp() {
     return maxEvalueExp;
+  }
+
+  @Override
+  public double getMaxPreferredLength() {
+    return org.orthomcl.data.core.Group.MAX_PREFERRED_LENGTH;
   }
 }

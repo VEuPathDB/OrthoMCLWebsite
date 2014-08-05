@@ -8,7 +8,7 @@ public class PFamDomain implements Renderable, Comparable<PFamDomain> {
   private String symbol;
   private String description;
   private int index;
-  private int count;
+  private int count = 0;
   private String color;
 
   public PFamDomain(String accession) {

@@ -43,7 +43,7 @@ public class Group {
     return ecNumbers.get(code);
   }
 
-  public void addEcNumbers(EcNumber ecNumber) {
+  public void addEcNumber(EcNumber ecNumber) {
     this.ecNumbers.put(ecNumber.getCode(), ecNumber);
   }
   

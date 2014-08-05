@@ -37,7 +37,8 @@ public class GenePair {
   public boolean equals(Object obj) {
     if (obj instanceof GenePair) {
       GenePair pair = (GenePair) obj;
-      return (pair.queryId.equals(queryId) && pair.subjectId.equals(subjectId));
+      return (pair.queryId.equals(queryId) && pair.subjectId.equals(subjectId)) 
+             || (pair.queryId.equals(subjectId) && pair.subjectId.equals(queryId)) ;
     }
     else {
       return false;

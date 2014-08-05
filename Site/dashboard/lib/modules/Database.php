@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . "/JolModule.php";
 abstract class Database extends JolModule {
 
   private $mbean;
-  protected $type;
+  protected $role;
 
   public function __construct() {
     parent::__construct();
@@ -44,7 +44,7 @@ abstract class Database extends JolModule {
     $req = new JolRequest($this->jol_base_url);
     $exec = new JolExecOperation(array(
                 'mbean' => $this->get_mbean(),
-                'operation' => 'refresh',
+                'operation' => 'reload',
             ));
     $req->add_operation($exec);
     $response = $req->invoke();
@@ -52,8 +52,8 @@ abstract class Database extends JolModule {
   }
 
   private function get_mbean() {
-    return 'org.gusdb.wdk:group=Databases,type=' .
-            $this->type . ',path=' . $this->path_name;
+    return 'org.gusdb.wdk:type=Database,role=' .
+            $this->role . ',path=' . $this->path_name;
   }
 
 }

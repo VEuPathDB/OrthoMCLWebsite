@@ -6,12 +6,10 @@
 
 require_once dirname(__FILE__) . "/../lib/modules/AppDatabase.php";
 require_once dirname(__FILE__) . "/../lib/modules/UserDatabase.php";
-require_once dirname(__FILE__) . "/../lib/modules/OpenConnections.php";
 require_once dirname(__FILE__) . "/../lib/LdapTnsNameResolver.php";
 
 $app_database = new AppDatabase();
 $user_database = new UserDatabase();
-$open_connections = new OpenConnections();
 $ldap_resolver = new LdapTnsNameResolver();
 
 if (isset($_GET['refresh']) && $_GET['refresh'] == 1) {
@@ -25,7 +23,6 @@ if (isset($_GET['refresh']) && $_GET['refresh'] == 1) {
 
 $adb = $app_database->attributes();
 $udb = $user_database->attributes();
-$oconn = $open_connections->attributes();
 $adb_aliases_ar = $ldap_resolver->resolve($adb{'service_name'});
 $udb_aliases_ar = $ldap_resolver->resolve($udb{'service_name'});
 
@@ -88,16 +85,7 @@ Related Links
 <b>Client connecting from</b>: <?php print strtolower($adb{'client_host'})?><br>
 <b>Client OS user</b>: <?php print strtolower($adb{'os_user'})?>
 <p>
-<p class="clickable">Connection activity &#8593;&#8595;</p>
-<div class="expandable" >
-    <p>
-    Running count of connections take from pool on open and returned to pool on close. 
-    Persistent connections currently open might indicate a leak.
-    </p>
-    <p>
-    <span class='pre'><?php print $oconn{'OpenAppDBConnections'}?></span>
-    </p>
-</div> <!-- div expandable -->
+<b><a href="?p=Database%20Connection%20Pool">Connection pool activity</a></b>
 </p>
 
 <p>
@@ -195,19 +183,9 @@ foreach ($dblink_map as $dblink) {
 <b>Client login name</b>: <?php print strtolower($udb{'login'}) ?></b><br>
 <b>Client connecting from</b>: <?php print strtolower($udb{'client_host'})?><br>
 <b>Client OS user</b>: <?php print strtolower($udb{'os_user'})?>
-<p>
-<p class="clickable">Connection activity &#8593;&#8595;</p>
-<div class="expandable" >
-    <p>
-    Running count of connections take from pool on open and returned to pool on close. 
-    Persistent connections currently open might indicate a leak.
-    </p>
-    <p>
-    <span class='pre'><?php print $oconn{'OpenUserDBConnections'}?></span>
-    </p>
-</div> <!-- div expandable -->
-</p>
 
+<p>
+<b><a href="?p=Database%20Connection%20Pool">Connection pool activity</a></b>
 </p>
 
 <p>

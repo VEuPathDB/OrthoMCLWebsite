@@ -1,5 +1,7 @@
 package org.orthomcl.model.layout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.orthomcl.data.layout.Vector;
 import org.orthomcl.model.Gene;
 
@@ -56,4 +58,14 @@ public class Node implements org.orthomcl.data.layout.Node{
   public Vector getPoint() {
     return point;
   }
+  
+  public JSONObject toJSON() throws JSONException {
+    JSONObject json = new JSONObject();
+    json.put("id", gene.getSourceId());
+    json.put("x", LayoutManager.FORMAT.format(point.x));
+    json.put("y", LayoutManager.FORMAT.format(point.y));
+    json.put("i", index);
+    return json;
+  }
+
 }

@@ -18,7 +18,6 @@ import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.query.SqlQuery;
 import org.gusdb.wdk.model.record.RecordClass;
-import org.gusdb.wdk.model.user.Step;
 import org.orthomcl.model.layout.RenderingHelper;
 
 public class GeneSetManager implements Manageable<GeneSetManager> {
@@ -37,14 +36,13 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
     return manager;
   }
 
-  public GeneSet getGeneSet(Step step) throws WdkModelException, WdkUserException {
+  public GeneSet getGeneSet(AnswerValue answer) throws WdkModelException, WdkUserException {
     // check if the step is of the supported sequence type
-    RecordClass recordClass = step.getRecordClass();
+    RecordClass recordClass = answer.getQuestion().getRecordClass();
     if (!recordClass.getFullName().equals(RECORD_CLASS))
       throw new WdkModelException("Only steps of type " + RECORD_CLASS + " are supported.");
 
-    GeneSet geneSet = new GeneSet(step.getCustomName());
-    AnswerValue answer = step.getAnswerValue(false);
+    GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());
     loadGenes(answer, geneSet);
     loadPFamDomains(answer, geneSet);
     processPFamDomains(geneSet);
@@ -53,7 +51,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
     return geneSet;
   }
 
-  private void loadGenes(AnswerValue answer, GeneSet geneSet) throws WdkModelException, WdkUserException {
+  public void loadGenes(AnswerValue answer, GeneSet geneSet) throws WdkModelException, WdkUserException {
     TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, wdkModel.getProjectId());
     Map<String, Taxon> taxons = taxonManager.getTaxons();
 

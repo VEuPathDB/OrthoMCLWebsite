@@ -1,5 +1,7 @@
 package org.orthomcl.model.layout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.orthomcl.data.core.Group;
 import org.orthomcl.model.GenePair;
 
@@ -163,4 +165,14 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
   public double getPreferredLength() {
     return Group.MAX_PREFERRED_LENGTH +score;
   }
+  
+  public JSONObject toJSON() throws JSONException {
+    JSONObject json = new JSONObject();
+    json.put("Q", nodeA.getIndex());
+    json.put("S", nodeB.getIndex());
+    json.put("E", getEvalue());
+    json.put("T", type.getCode());
+    return json;
+  }
+
 }

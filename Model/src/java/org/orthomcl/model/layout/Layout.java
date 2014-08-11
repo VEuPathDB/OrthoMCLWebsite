@@ -9,6 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.orthomcl.data.layout.Graph;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
@@ -53,7 +56,7 @@ public class Layout implements Graph {
   public Collection<Taxon> getTaxons() {
     return taxons.values();
   }
-  
+
   public Edge getEdge(GenePair genePair) {
     return edges.get(genePair);
   }
@@ -151,7 +154,7 @@ public class Layout implements Graph {
       list.add(taxons.get(abbrev));
     }
     Collections.sort(list);
-    
+
     // prepare the map, with the order of taxons preserved
     Map<Taxon, Integer> map = new LinkedHashMap<>(taxonCounts.size());
     for (Taxon taxon : list) {
@@ -171,5 +174,31 @@ public class Layout implements Graph {
   @Override
   public double getMaxPreferredLength() {
     return org.orthomcl.data.core.Group.MAX_PREFERRED_LENGTH;
+  }
+
+  @Override
+  public String toString() {
+    JSONObject jsLayout = new JSONObject();
+
+    try {
+      // output genes
+      JSONArray jsNodes = new JSONArray();
+      for (Node node : nodes.values()) {
+        jsNodes.put(node.toJSON());
+      }
+      jsLayout.put("N", jsNodes);
+
+      // output scores
+      JSONArray jsEdges = new JSONArray();
+      for (Edge edge : edges.values()) {
+        jsEdges.put(edge.toJSON());
+      }
+      jsLayout.put("E", jsEdges);
+      return jsLayout.toString();
+    }
+    catch (JSONException ex) {
+      throw new RuntimeException(ex);
+    }
+
   }
 }

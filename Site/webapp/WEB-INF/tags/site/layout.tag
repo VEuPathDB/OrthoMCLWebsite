@@ -139,7 +139,7 @@ e over to view the detail information about the blast score.</li>
               <b> 1E<input type="text" class="evalue-exp" value="${layout.maxEvalueExp}"/></b>
             </div>
             <div class="evalue slider" 
-                 data-min-exp="${layout.minEvalueExp}" data-max-exp="${layout.maxEvalueExp}"> </div>
+                 data-min-exp="${layout.minEvalueExp - 1}" data-max-exp="${layout.maxEvalueExp + 1}"> </div>
           </fieldset>
         </div>
       </div>

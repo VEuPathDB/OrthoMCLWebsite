@@ -12,7 +12,6 @@ public class GeneSetLayoutManager extends LayoutManager implements Manageable<Ge
   
   @Override
   public GeneSetLayoutManager getInstance(String projectId, String gusHome) throws WdkModelException {
-    InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     GeneSetLayoutManager layoutManager = new GeneSetLayoutManager();
     layoutManager.projectId = projectId;
     return layoutManager;

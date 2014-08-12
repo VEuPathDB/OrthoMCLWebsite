@@ -24,9 +24,9 @@
             <c:otherwise>
               <div class="tip">
                 Cluster graph is only available for sequence search results 
-                with no more than 200 sequences.
+                with no more than ${viewModel.maxSize} sequences.
               </div>
-            </c:otherwise>
+            </c:ortherwise>
           </c:choose>
         </div>
       </div>

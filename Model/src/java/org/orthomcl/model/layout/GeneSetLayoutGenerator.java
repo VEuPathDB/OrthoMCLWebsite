@@ -21,12 +21,18 @@ import org.orthomcl.model.GeneSet;
 import org.orthomcl.model.Taxon;
 
 public class GeneSetLayoutGenerator {
-  
+
+  public static final int MAX_GENES = 500;
+
   private static final int DEFAULT_SIZE = LayoutManager.DEFAULT_SIZE;
   
   private final Random random = new Random();
 
   public Layout generateLayout(AnswerValue answer) throws WdkModelException, WdkUserException {
+    // only do layout for the step with genes of MAX_GENES or less
+    if (answer.getResultSize() > MAX_GENES)
+      return null;
+
     GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());
     Layout layout = new Layout(geneSet, DEFAULT_SIZE);
     Map<String, Node> nodes = loadNodes(layout, answer);

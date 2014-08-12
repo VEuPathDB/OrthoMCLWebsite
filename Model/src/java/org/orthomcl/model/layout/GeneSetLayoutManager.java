@@ -9,20 +9,16 @@ import org.orthomcl.model.GeneSet;
 import org.orthomcl.model.GeneSetManager;
 
 public class GeneSetLayoutManager extends LayoutManager implements Manageable<GeneSetLayoutManager> {
-
-  private static final int MAX_GENES = 200;
   
   @Override
   public GeneSetLayoutManager getInstance(String projectId, String gusHome) throws WdkModelException {
+    InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     GeneSetLayoutManager layoutManager = new GeneSetLayoutManager();
     layoutManager.projectId = projectId;
     return layoutManager;
   }
 
   public Layout getLayout(AnswerValue answer, String layoutString) throws WdkModelException, WdkUserException {
-    // only do layout for the step with genes of MAX_GENES or less
-    if (answer.getResultSize() > MAX_GENES)
-      return null;
 
     // load gene set
     GeneSetManager geneSetManager = InstanceManager.getInstance(GeneSetManager.class, projectId);

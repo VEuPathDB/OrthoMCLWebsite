@@ -41,6 +41,10 @@ public class Layout implements Graph {
     this.maxEvalueExp = Integer.MIN_VALUE;
   }
 
+  public int getMaxSize() {
+    return GeneSetLayoutGenerator.MAX_GENES;
+  }
+  
   public int getSize() {
     return size;
   }

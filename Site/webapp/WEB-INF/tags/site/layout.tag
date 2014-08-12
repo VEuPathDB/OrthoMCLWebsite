@@ -95,16 +95,16 @@
 quires SVG support of your browser.</p>
 
       <ul>
-        <li>Each dot represent a protein, and different proteins from the same organism share the same color. Mouse over the dot to
+        <li>Each node represent a protein, and different proteins from the same organism share the same color. Mouse over the node to
 view the detail information about the protein.</li>
         <li>Each line between two dots represent a blast score (above a fixed threshold of 1e-5) between two protein sequences. Mous
 e over to view the detail information about the blast score.</li>
-        <li>Red line means the two proteins linked by the line form an ortholog pair.</li>
-        <li>Green line means the two proteins form an in-paralog pair.</li>
-        <li>Blue line means the two proteins form an co-ortholog pair.</li>
-        <li>Gray line means the two protein sequences have a blast score, but don't form ortholog, in-paralog, nor co-ortholog pairs
-.</li>
-        <li>Click on the legend of each line type to toggle on/off that type of lines on the graph.</li>
+        <li>You can turn on/off the lines by their type and blast score;</li>
+        <li>The nodes can be rendered by the EC numbers, or PFam domains of the proteins, you can switch to that display from the
+            node controls to the left.</li>
+        <li>Mouse over a taxon in the node controls to highlight the proteins from that taxon.</li>
+        <li>Mouse over a protein to the right to highlight that protein only in the graph.</li>
+        <li>Mouse over a blast score in the sequence detail to the right, to highlight the edge that represents the blast score.</li>
       </ul>
      </div>
     </div>

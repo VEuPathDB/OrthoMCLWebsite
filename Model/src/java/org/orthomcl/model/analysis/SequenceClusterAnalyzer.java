@@ -20,8 +20,6 @@ import org.orthomcl.model.layout.Layout;
  */
 public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
 
-  private static final int MAX_SEQUENCE_COUNT = 200;
-
   public static class ClusterFormViewModel {
 
     private final int resultSize;
@@ -35,7 +33,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
     }
 
     public int getMaxSize() {
-      return MAX_SEQUENCE_COUNT;
+      return GeneSetLayoutGenerator.MAX_GENES;
     }
 
     public boolean isHasLayout() {

@@ -3,6 +3,7 @@
  */
 package org.orthomcl.model.analysis;
 
+import org.eupathdb.common.model.InstanceManager;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.analysis.AbstractStepAnalyzer;
@@ -55,7 +56,8 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
   @Override
   public Object getResultViewModel() throws WdkModelException {
     String layoutString = getPersistentCharData();
-    GeneSetLayoutManager manager = new GeneSetLayoutManager();
+    String projectId = getWdkModel().getProjectId();
+    GeneSetLayoutManager manager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     try {
       Layout layout = manager.getLayout(getAnswerValue(), layoutString);
       return layout;

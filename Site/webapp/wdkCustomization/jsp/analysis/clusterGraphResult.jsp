@@ -2,10 +2,11 @@
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-  <c:set var="layout" value="${requestScope.layout}" />
 
+  <c:set var="layout" value="${viewModel}" />
   <html>
     <body>
       <c:choose>
@@ -13,7 +14,7 @@
           <div class="tip">Cluster graph is only available for sequence search results with no more than 200 sequences.</div>
         </c:when>
         <c:otherwise> <!-- show layout -->
-          <imp:layout />
+          <imp:layout layout="${layout}" />
         </c:otherwise> <!-- End of show layout -->
       </c:choose>
     </body>

@@ -18,6 +18,7 @@ import org.orthomcl.data.layout.SpringLayout;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
 import org.orthomcl.model.GeneSet;
+import org.orthomcl.model.Taxon;
 
 public class GeneSetLayoutGenerator {
   
@@ -38,6 +39,11 @@ public class GeneSetLayoutGenerator {
   private Map<String, Node> loadNodes(Layout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
     Map<String, Node> nodes = new HashMap<>();
     int index = 0;
+
+    // create a dummy taxon
+    Taxon taxon = new Taxon(0);
+    taxon.setAbbrev("dummy");
+
     String idSql = answer.getIdSql();
     String sql = "SELECT full_id FROM (" + idSql + ")";
     WdkModel wdkModel = answer.getQuestion().getWdkModel();
@@ -48,7 +54,9 @@ public class GeneSetLayoutGenerator {
           1000);
       while (resultSet.next()) {
         String fullId = resultSet.getString("full_id");
-        Node node = new Node(new Gene(fullId));
+        Gene gene = new Gene(fullId);
+        gene.setTaxon(taxon);
+        Node node = new Node(gene);
         node.setIndex(index);
 
         // assign random location to the node; the actual locations will be computed later

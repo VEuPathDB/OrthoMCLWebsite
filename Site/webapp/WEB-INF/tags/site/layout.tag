@@ -6,8 +6,12 @@
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp"
 	 xmlns:svg="http://www.w3.org/2000/svg">
     
-
-  <c:set var="layout" value="${requestScope.layout}" />
+  <jsp:directive.attribute name="layout" required="false"
+                type="org.orthomcl.model.layout.Layout" 
+                description="The layout model"/>
+  <c:if test="${layout == null}">
+    <c:set var="layout" value="${requestScope.layout}" />
+  </c:if>
   <c:set var="group" value="${layout.group}" />
   <c:set var="taxons" value="${layout.taxons}" />
   <c:set var="ecNumbers" value="${group.ecNumbers}" />

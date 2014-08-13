@@ -64,6 +64,8 @@ public class Node implements org.orthomcl.data.layout.Node{
     json.put("id", gene.getSourceId());
     json.put("x", LayoutManager.FORMAT.format(point.x));
     json.put("y", LayoutManager.FORMAT.format(point.y));
+    //json.put("x", point.x);
+    //json.put("y", point.y);
     json.put("i", index);
     return json;
   }

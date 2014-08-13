@@ -7,6 +7,7 @@ import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.user.Step;
 import org.gusdb.wdk.model.user.User;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +27,13 @@ public class GeneSetLayoutTest {
     // this step has 6 sequences from 2 groups with the same PFam domain;
     Step step = user.getStep(100069240);
     GeneSetLayoutManager layoutManager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
-    Layout layout = layoutManager.getLayout(step);
+    Layout layout = layoutManager.getLayout(step.getAnswerValue(), getLayoutJson().toString());
     Assert.assertEquals(6, layout.getNodes().size());
+  }
+
+  // FIXME: configure layout to fix this test!!!
+  private JSONObject getLayoutJson() {
+    JSONObject json = new JSONObject();
+    return json;
   }
 }

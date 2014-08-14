@@ -27,14 +27,6 @@ EOF;
 <?php print $metrics_description ?>
 </p>
 
-<p class="clickable">Summary (with stack traces, if any) &#8593;&#8595;</p>
-<div class="expandable" >
-    <p>
-    <span class='pre'><?php print $a_pool{'UnclosedConnectionInfo'}?></span>
-    </p>
-</div> <!-- div expandable -->
-</p>
-
 <p>
 <b>Metrics</b>
 <table border="0" cellspacing="3" cellpadding="2" align="">
@@ -100,14 +92,6 @@ foreach ($fields as $param) {
 
 <p>
 <?php print $metrics_description ?>
-</p>
-
-<p class="clickable">Summary (with stack traces, if any) &#8593;&#8595;</p>
-<div class="expandable" >
-    <p>
-    <span class='pre'><?php print $u_pool{'UnclosedConnectionInfo'}?></span>
-    </p>
-</div> <!-- div expandable -->
 </p>
 
 <p>

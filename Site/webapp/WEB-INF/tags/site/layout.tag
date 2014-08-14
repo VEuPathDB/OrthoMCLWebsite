@@ -83,7 +83,7 @@
 
 
     <div class="notes accordion">
-     <h3>Notes</h3>
+     <h3>Description</h3>
      <div>
       <c:set var="layoutType">
         <c:choose>
@@ -91,21 +91,28 @@
           <c:otherwise>ortholog group</c:otherwise>
         </c:choose>
       </c:set>
-      <p>The above graph represents the clustering results of the proteins in ${layoutType} ${group.name}. The interactive graph re
-quires SVG support of your browser.</p>
+      <p>This graph shows the clustering of the proteins in  in ${layoutType} ${group.name}.</p>
 
       <ul>
-        <li>Each node represent a protein, and different proteins from the same organism share the same color. Mouse over the node to
-view the detail information about the protein.</li>
-        <li>Each line between two dots represent a blast score (above a fixed threshold of 1e-5) between two protein sequences. Mous
-e over to view the detail information about the blast score.</li>
-        <li>You can turn on/off the lines by their type and blast score;</li>
-        <li>The nodes can be rendered by the EC numbers, or PFam domains of the proteins, you can switch to that display from the
-            node controls to the left.</li>
-        <li>Mouse over a taxon in the node controls to highlight the proteins from that taxon.</li>
-        <li>Mouse over a protein to the right to highlight that protein only in the graph.</li>
-        <li>Mouse over a blast score in the sequence detail to the right, to highlight the edge that represents the blast score.</li>
+        <li>Each node is a protein.  Node color represents clade (outer) and organism (inner).</li>
+        <li>Each edge is a blast score between two protein sequences (above threshold 1e-5).</li>
+        <li>Click on a node to view detailed information about the protein in the right panel.</li>
+        <li>Mouse over an edge to view the blast score. </li>
       </ul>
+
+      <p>In the left panel:</p>
+      <ul>
+        <li>Choose an edge type or use the score slider to remove edges from the graph.</li>
+        <li>Change the node display from Taxa to EC number or PFam domain.</li>
+        <li>In the taxon legend, mouse over a taxon to highlight the proteins from that taxon.</li>
+      </ul>
+
+      <p>In the right panel:</p>
+      <ul>
+        <li>Mouse over a protein to highlight that protein in the graph.</li>
+        <li>Mouse over a blast score in the sequence detail to highlight the edge that represents the blast score.</li>
+      </ul>
+
      </div>
     </div>
 

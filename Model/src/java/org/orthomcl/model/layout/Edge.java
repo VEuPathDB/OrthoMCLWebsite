@@ -77,6 +77,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
   /**
    * @return the nodeA
    */
+  @Override
   public Node getNodeA() {
     return nodeA;
   }
@@ -92,6 +93,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
   /**
    * @return the nodeB
    */
+  @Override
   public Node getNodeB() {
     return nodeB;
   }

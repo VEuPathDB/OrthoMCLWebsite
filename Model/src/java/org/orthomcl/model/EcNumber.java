@@ -37,6 +37,7 @@ public class EcNumber implements Renderable, Comparable<EcNumber> {
   /**
    * @return the color
    */
+  @Override
   public String getColor() {
     return color;
   }
@@ -44,6 +45,7 @@ public class EcNumber implements Renderable, Comparable<EcNumber> {
   /**
    * @param color the color to set
    */
+  @Override
   public void setColor(String color) {
     this.color = color;
   }

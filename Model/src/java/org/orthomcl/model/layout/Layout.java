@@ -65,6 +65,7 @@ public class Layout implements Graph {
     return edges.get(genePair);
   }
 
+  @Override
   public Collection<Edge> getEdges() {
     // sort edges
     List<Edge> list = new ArrayList<>(edges.values());
@@ -107,6 +108,7 @@ public class Layout implements Graph {
     }
   }
 
+  @Override
   public Collection<Node> getNodes() {
     // sort the nodes, so that the client can bind it by array;
     Integer[] keys = nodes.keySet().toArray(new Integer[0]);

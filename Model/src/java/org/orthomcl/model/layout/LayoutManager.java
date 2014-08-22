@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eupathdb.common.model.InstanceManager;
+import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.json.JSONArray;

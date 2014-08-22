@@ -3,7 +3,7 @@ package org.orthomcl.controller.action;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.eupathdb.common.model.InstanceManager;
+import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;

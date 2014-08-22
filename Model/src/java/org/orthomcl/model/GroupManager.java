@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eupathdb.common.model.InstanceManager;
-import org.gusdb.wdk.model.Manageable;
+import org.gusdb.fgputil.runtime.InstanceManager;
+import org.gusdb.fgputil.runtime.Manageable;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;

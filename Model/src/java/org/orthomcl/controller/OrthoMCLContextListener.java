@@ -1,6 +1,6 @@
 package org.orthomcl.controller;
 
-import org.eupathdb.common.model.InstanceManager;
+import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.wdk.controller.ApplicationInitListener;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;

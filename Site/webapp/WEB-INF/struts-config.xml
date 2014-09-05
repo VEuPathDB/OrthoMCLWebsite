@@ -470,6 +470,12 @@
       name="questionForm" scope="request"
       validate="false">
     </action>
+    <action
+      path="/getMetadata"
+      type="org.gusdb.wdk.controller.action.GetMetadataAction"
+      scope="request"
+      validate="false">
+    </action>
     <action path="/wizard"
       type="org.gusdb.wdk.controller.action.WizardAction"
       name="wizardForm"

@@ -197,8 +197,9 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
 //                       .draw();
 
 // The 1.9 syntax is used now, but will be replace by 1.10 syntax after upgrading.
-    detail.find(".blast-scores")
-          .DataTable({ bDestroy: true,
+    detail.find(".blast-scores[id^='DataTables_']")
+          .DataTable({ bJQueryUI: true,
+                       bDestroy: true,
                        aaData: data,
                        bPaginate: false,
                        "scrollX": true,
@@ -234,13 +235,14 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
       data.push([ ecNumber.data("code") ]);
     });
 
-    detail.find(".ec-numbers")
-          .DataTable({ bDestroy: true,
-                        aaData: data,
+    detail.find(".ec-numbers[id^='DataTables_']")
+          .DataTable({ bJQueryUI: true,
+                       bDestroy: true,
+                       aaData: data,
                        bPaginate: false,
                        "scrollX": true,
                        "bScrollCollapse": true,
-                        "sScrollY": "250",
+                       "sScrollY": "250",
                       });
   }
 
@@ -258,13 +260,14 @@ wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
                   proteinPFam.data("start"), proteinPFam.data("end"), proteinPFam.data("length") ]);
     });
 
-    detail.find(".pfams")
-          .DataTable({ bDestroy: true,
-                        aaData: data,
+    detail.find(".pfams[id^='DataTables_']")
+          .DataTable({ bJQueryUI: true,
+                       bDestroy: true,
+                       aaData: data,
                        bPaginate: false,
                        "scrollX": true,
                        "bScrollCollapse": true,
-                        "sScrollY": "250",
+                       "sScrollY": "250",
                       });
   }
 

@@ -73,6 +73,10 @@ required:
 sections:
  - orthomcl
  - production
+
+custom:
+  googleAnalyticsId: @{[ $wmc->{'google_analytics_id'} || "''" ]}
+
 EOF
 
 $wmc->write_meta_config($content);

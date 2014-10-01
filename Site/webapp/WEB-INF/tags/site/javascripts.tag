@@ -17,31 +17,31 @@
 
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"><jsp:text/></script>
 
-  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/hoverIntent.js"><jsp:text/></script>
-  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/superfish.js"><jsp:text/></script>
-  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/supersubs.js"><jsp:text/></script>
+  <imp:script src="wdkCustomization/js/lib/hoverIntent.js"/>
+  <imp:script src="wdkCustomization/js/lib/superfish.js"/>
+  <imp:script src="wdkCustomization/js/lib/supersubs.js"/>
 
-  <script type="text/javascript" src="${base}/wdkCustomization/js/lib/jquery.timers-1.2.js"><jsp:text/></script>
-  <script type="text/javascript" src="${base}/wdkCustomization/js/common.js"><jsp:text/></script>
+  <imp:script src="wdkCustomization/js/lib/jquery.timers-1.2.js"/>
+  <imp:script src="wdkCustomization/js/common.js"/>
 
   <!-- Access twitter/facebook links, and configure menubar (superfish) -->
-  <script type="text/javascript" src="${base}/js/nav.js"><jsp:text/></script>
+  <imp:script src="js/nav.js"/>
 
   <c:if test="${refer eq 'summary'}">
-    <script type="text/javascript" src="${base}/wdkCustomization/js/customStrategy.js"><jsp:text/></script>
+    <imp:script src="wdkCustomization/js/customStrategy.js"/>
   </c:if>
 
   <c:if test="${refer eq 'summary' or refer eq 'record'}">
-    <script type="text/javascript" src="${base}/wdkCustomization/js/phyletic.js"><jsp:text/></script>
-    <script type="text/javascript" src="${base}/wdkCustomization/js/group-layout.js"><jsp:text/></script>
+    <imp:script src="wdkCustomization/js/phyletic.js"/>
+    <imp:script src="wdkCustomization/js/group-layout.js"/>
   </c:if>
 
   <c:if test="${refer eq 'summary' or refer eq 'question'}">
-    <script type="text/javascript" src="${base}/wdkCustomization/js/ppform.js"><jsp:text/></script>
+    <imp:script src="wdkCustomization/js/ppform.js"/>
   </c:if>
 
   <c:if test="${refer eq 'record'}">
-    <script type="text/javascript" src="${base}/wdkCustomization/js/pfamDomain.js"><jsp:text/></script>
+    <imp:script src="wdkCustomization/js/pfamDomain.js"/>
   </c:if>
 
 

@@ -129,6 +129,7 @@
       <property name="component" value="Site"/>
     </ant>
 
+    <antcall target="EuPathSiteCommon-post-webinstall"/>
 
     <available file="${targetDir}/config/log4j.xml.custom-web" property="custom.weblog4j.present"/>
     <antcall target="installCustomWebLog4j"/>

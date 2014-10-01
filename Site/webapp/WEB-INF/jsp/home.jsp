@@ -14,7 +14,7 @@
 	      <imp:searchCategoriesAll from="home"/>
 	      <li>
 	      	<!--   <a title="Tools">Tools</a>  -->
-					<img class="bubble-header" src="/assets/images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
+					<imp:image class="bubble-header" src="images/OrthoMCL/bubble_id_third_option2.png" alt="Tools" />
 	        <ul class="info">
 	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="${pageContext.request.contextPath}/showQuestion.do?questionFullName=SequenceQuestions.ByBlast">BLAST</a></li>
 	          <li style="list-style-type:disc;margin-left:1.5em;"><a href="${pageContext.request.contextPath}/proteomeUpload.do">Assign your proteins to groups</a></li>

@@ -19,13 +19,13 @@
   <div id="header2">
     <div id="header-control" class="ui-widget ui-widget-content ui-corner-all">      
       <div id="sub-logo">
-        <a href="http://eupathdb.org"><img src="${pageContext.request.contextPath}/wdkCustomization/images/partofeupath.png"/></a>
+        <a href="http://eupathdb.org"><imp:image src="wdkCustomization/images/partofeupath.png"/></a>
       </div>
       <imp:quickSearch/>
       <imp:smallMenu/>
     </div>
     <a href="${pageContext.request.contextPath}/home.do">
-      <img src="/assets/images/${project}/title_s.png" alt="Link to ${project} homepage" align="left" />
+      <imp:image src="images/${project}/title_s.png" alt="Link to ${project} homepage" align="left" />
     </a>
     Version ${version}<br/>
     ${formattedReleaseDate}

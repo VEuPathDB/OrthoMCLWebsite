@@ -56,7 +56,7 @@
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ DATA STATISTICS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-		  <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12"/>
+		  <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12"/>
 	    <a class="heading" id="stats" href="#">Data Summary</a>
 	  </h3>
 
@@ -73,7 +73,7 @@
 
 	 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ NEWS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-	    <img src="/assets/images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
+	    <imp:image src="images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
 	    <a class="heading" href="#">News and Tweets</a>
 	  </h3>
 
@@ -141,7 +141,7 @@
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ COMMUNITY, LINKS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
+      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a  class="heading" id='community' href="#">Community Resources</a>
     </h3>
 
@@ -194,7 +194,7 @@
 	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ TUTORIALS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
+      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a class="heading" id='tutorials' href="#">Education and Tutorials</a>
     </h3>
 
@@ -203,7 +203,7 @@
 				<li id='edu-05'>
 					<a target="_blank" href="${constants.youtubeUrl}">
 						YouTube Tutorials Channel
-						<img style="width:20px;display:inline;vertical-align:middle;" src="/assets/images/youtube_32x32.png"/>
+						<imp:image style="width:20px;display:inline;vertical-align:middle;" src="images/youtube_32x32.png"/>
 					</a>
 				</li>
 		    <li>
@@ -222,7 +222,7 @@
 	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ ABOUT ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <img src="/assets/images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
+      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a class="heading" id='informationAndHelp' href="#">About OrthoMCL</a>
     </h3>
 	  <div>

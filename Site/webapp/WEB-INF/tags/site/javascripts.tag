@@ -11,8 +11,7 @@
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
   <jsp:useBean id="websiteRelease" class="org.eupathdb.common.controller.WebsiteReleaseConstants"/>
-
-  <c:set var="debug" value="${requestScope.WEBSITE_RELEASE_STAGE ge websiteRelease.development}"/>
+  <c:set var="debug" value="${requestScope.WEBSITE_RELEASE_STAGE eq websiteRelease.development}"/>
   <!-- JavaScript provided by WDK -->
   <imp:wdkJavascripts refer="${refer}" debug="${debug}"/>
 

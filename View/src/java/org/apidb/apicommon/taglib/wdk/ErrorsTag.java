@@ -86,7 +86,6 @@ public class ErrorsTag extends WdkTagBase {
     
     private PageContext pageContext;
     private HttpServletRequest request;
-    protected int varScope;
     private String showStacktrace;
     private String logMarker;
     private Logger logger = Logger.getLogger(getClass().getName());

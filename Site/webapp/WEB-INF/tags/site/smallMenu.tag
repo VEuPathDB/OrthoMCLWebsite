@@ -6,7 +6,6 @@
 
   <!-- functions to be called when page loads -->
   <span class="onload-function" data-function="wdk.setUpNavDropDowns"><jsp:text/></span>
-  <span class="onload-function" data-function="eupath.setup.setUpContactUsLogic"><jsp:text/></span>
 
 <c:set var="base" value="${pageContext.request.contextPath}"/>
 

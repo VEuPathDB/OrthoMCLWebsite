@@ -174,7 +174,7 @@
            </c:otherwise>
         </c:choose>
 
-					<br/><br/><input type="submit" name="registerButton" value="Register"  onclick="return User.validateRegistrationForm();"/>
+					<br/><br/><input type="submit" name="registerButton" value="Register"/>
 
 				</div>
 		      </form>
@@ -232,6 +232,57 @@
 		</div> <!-- div align center -->
 
 
+    <![CDATA[
+      <script>
+        (function($) {
+          // spam prevention for register form
+          wdk.util.addSpamTimestamp(document.registerForm);
+
+          // enable submit button if form is rereshed after a submit
+          // some browsers will cache the form state
+          document.registerForm.registerButton.disabled = false;
+
+          $(document.registerForm).submit(validateFields);
+
+          function validateFields(e) {
+              var email = document.registerForm.email.value;
+              var pat = email.indexOf('@');
+              var pdot = email.lastIndexOf('.');
+              var len = email.length;
+
+              if (email == '') {
+                  alert('Please provide your email address.');
+                  document.registerForm.email.focus();
+                  return false;
+              } else if (pat<=0 || pdot<pat || pat==len-1 || pdot==len-1) {
+                  alert('The format of the email is invalid.');
+                  document.registerForm.email.focus();
+                  return false;
+              } else if (email != document.registerForm.confirmEmail.value) {
+                  alert('The emails do not match. Please enter it again.');
+                  document.registerForm.email.focus();
+                  return false;
+              } else if (document.registerForm.firstName.value == "") {
+                  alert('Please provide your first name.');
+                  document.registerForm.firstName.focus();
+                  return false;
+              } else if (document.registerForm.lastName.value == "") {
+                  alert('Please provide your last name.');
+                  document.registerForm.lastName.focus();
+                  return false;
+              } else if (document.registerForm.organization.value == "") {
+                  alert('Please provide the name of the organization you belong to.');
+                  document.registerForm.organization.focus();
+                  return false;
+              } else {
+                  document.registerForm.registerButton.disabled = true;
+                  document.registerForm.submit();
+                  return true;
+              }
+          }
+        }(jQuery));
+      </script>
+    ]]>
 
   </imp:pageFrame>
 </jsp:root>

@@ -118,7 +118,8 @@
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebService-WebInstallation,
+  <target name="OrthoMCLWebsite-WebInstallation" depends="EuPathSiteCommon-WebInstallation,
+                                                          OrthoMCLWebService-WebInstallation,
                                                           OrthoMCLWebsite-Installation,
                                                           OrthoMCLWebsite/Site-WebInstallation,
                                                           OrthoMCLWebsite/Site-DashboardInstallation">

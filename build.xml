@@ -34,9 +34,9 @@
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildCheckout">
-    <available file="../OrthoMCLWebService" type="dir"  property="OrthoMCLWebService.present" />
-    <available file="../OrthoMCLShared" type="dir"  property="OrthoMCLShared.present" />
-    <available file="../OrthoMCLData" type="dir"  property="OrthoMCLData.present" />
+    <available file="../OrthoMCLWebService" type="dir" property="OrthoMCLWebService.present" />
+    <available file="../OrthoMCLShared" type="dir" property="OrthoMCLShared.present" />
+    <available file="../OrthoMCLData" type="dir" property="OrthoMCLData.present" />
     <antcall target="OrthoMCLWebService-Checkout"/>
     <antcall target="OrthoMCLShared-Checkout"/>
     <antcall target="OrthoMCLData-Checkout"/>
@@ -47,12 +47,14 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <target name="OrthoMCLWebsite-ChildUpdate">
     <ant target="defaultProjectUpdate">
+      <property name="project" value="OrthoMCLData"/>
+    </ant>
+    <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLWebService"/>
     </ant>
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLShared"/>
     </ant>
-
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->

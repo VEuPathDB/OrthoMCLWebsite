@@ -72,9 +72,7 @@
   </target>
 
   <target name="OrthoDataCommonComponentInstall">
-    <ant target="OrthoMCLData/Common-Installation">
-      <property name="alreadyBuilt" value="false"/>
-    </ant>
+    <ant target="OrthoMCLData/Common-Installation"/>
   </target>
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->

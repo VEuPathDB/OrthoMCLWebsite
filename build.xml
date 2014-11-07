@@ -63,12 +63,19 @@
 
   <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebService-Installation,
                                                        OrthoMCLShared-Installation,
+                                                       OrthoDataCommonComponentInstall,
                                                        OrthoMCLData/Common-Installation,
                                                        OrthoMCLWebsite/Model-Installation,
                                                        OrthoMCLWebsite/View-Installation,
                                                        OrthoMCLWebsite/Site-Installation">
     <ant target="defaultProjectInstall"/>
-  </target>  
+  </target>
+
+  <target name="OrthoDataCommonComponentInstall">
+    <ant target="OrthoMCLData/Common-Installation">
+      <property name="alreadyBuilt" value="false"/>
+    </ant>
+  </target>
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
 

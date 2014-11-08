@@ -33,6 +33,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
   <target name="OrthoMCLWebsite-ChildCheckout">
     <available file="../OrthoMCLWebService" type="dir" property="OrthoMCLWebService.present" />
     <available file="../OrthoMCLShared" type="dir" property="OrthoMCLShared.present" />
@@ -45,6 +46,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Update    oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+
   <target name="OrthoMCLWebsite-ChildUpdate">
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLData"/>
@@ -72,7 +74,9 @@
   </target>
 
   <target name="OrthoDataCommonComponentInstall">
-    <ant target="OrthoMCLData/Common-Installation"/>
+    <ant target="OrthoMCLData/Common-Installation">
+      <property name="alreadyBuilt" value="false"/>
+    </ant>
   </target>
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->

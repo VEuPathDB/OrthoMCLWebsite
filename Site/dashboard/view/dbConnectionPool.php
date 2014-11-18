@@ -72,7 +72,7 @@ for explanation of parameters.
 $row = 0;
 $fields = array(
   'MinIdle', 'MaxIdle', 'MinEvictableIdleTimeMillis',
-  'SoftMinEvictableIdleTimeMillis', 'TimeBetweenEvictionRunsMillis',
+  'TimeBetweenEvictionRunsMillis',
   'TestOnBorrow', 'TestOnReturn', 'TestWhileIdle'
 );
 foreach ($fields as $param) {
@@ -139,7 +139,7 @@ for explanation of parameters.
 $row = 0;
 $fields = array(
   'MinIdle', 'MaxIdle', 'MinEvictableIdleTimeMillis',
-  'SoftMinEvictableIdleTimeMillis', 'TimeBetweenEvictionRunsMillis',
+  'TimeBetweenEvictionRunsMillis',
   'TestOnBorrow', 'TestOnReturn', 'TestWhileIdle'
 );
 foreach ($fields as $param) {

@@ -47,7 +47,7 @@ clusterQueue=@@CLUSTER_QUEUE@@
 clusterMaxGigsPerNode=8
 
 # temporary scratch space for DJob
-nodePath=@@EUPATHDB_BASE@@/orthomcl-mapping-service/scratch
+nodeWorkingDirsHome=@@EUPATHDB_BASE@@/orthomcl-mapping-service/scratch
 
 # parent directory on cluster for the NCBI blastall executable
 blastBinDir=@@EUPATHDB_BASE@@/workflow-software/software/ncbi_blast/2.2.25/bin

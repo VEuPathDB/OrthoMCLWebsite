@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.fgputil.runtime.Manageable;
@@ -21,7 +21,7 @@ public class GroupLayoutManager extends LayoutManager implements Manageable<Grou
     return layoutManager;
   }
 
-  public Layout getLayout(User user, String name) throws WdkModelException, WdkUserException {
+  public GroupLayout getLayout(User user, String name) throws WdkModelException, WdkUserException {
     GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
 
@@ -32,7 +32,7 @@ public class GroupLayoutManager extends LayoutManager implements Manageable<Grou
 
     // load group
     Group group = groupManager.getGroup(groupRecord);
-    Layout layout = new Layout(group, getSize());
+    GroupLayout layout = new GroupLayout(group, getSize());
 
     try {
       loadLayout(layout, layoutString);

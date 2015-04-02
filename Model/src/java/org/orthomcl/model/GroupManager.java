@@ -17,7 +17,7 @@ import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
 import org.gusdb.wdk.model.user.User;
-import org.orthomcl.model.layout.RenderingHelper;
+import org.orthomcl.web.model.layout.RenderingHelper;
 
 public class GroupManager implements Manageable<GroupManager> {
 

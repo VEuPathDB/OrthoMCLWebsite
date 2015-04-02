@@ -18,7 +18,7 @@ import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.query.SqlQuery;
 import org.gusdb.wdk.model.record.RecordClass;
-import org.orthomcl.model.layout.RenderingHelper;
+import org.orthomcl.web.model.layout.RenderingHelper;
 
 public class GeneSetManager implements Manageable<GeneSetManager> {
 

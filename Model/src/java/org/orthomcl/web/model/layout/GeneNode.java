@@ -1,18 +1,19 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.orthomcl.data.layout.Vector;
 import org.orthomcl.model.Gene;
+import org.orthomcl.shared.model.layout.Node;
+import org.orthomcl.shared.model.layout.Vector;
 
-public class Node implements org.orthomcl.data.layout.Node{
+public class GeneNode implements Node{
 
   private final Gene gene;
   
   private int index;
   private Vector point = new Vector();
   
-  public Node(Gene gene) {
+  public GeneNode(Gene gene) {
     this.gene = gene;
   }
   

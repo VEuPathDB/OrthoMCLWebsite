@@ -10,6 +10,8 @@ import org.gusdb.wdk.model.user.User;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.orthomcl.web.model.layout.GeneSetLayoutManager;
+import org.orthomcl.web.model.layout.GroupLayout;
 
 public class GeneSetLayoutTest {
 
@@ -27,7 +29,7 @@ public class GeneSetLayoutTest {
     // this step has 6 sequences from 2 groups with the same PFam domain;
     Step step = user.getStep(100069240);
     GeneSetLayoutManager layoutManager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
-    Layout layout = layoutManager.getLayout(step.getAnswerValue(), getLayoutJson().toString());
+    GroupLayout layout = layoutManager.getLayout(step.getAnswerValue(), getLayoutJson().toString());
     Assert.assertEquals(6, layout.getNodes().size());
   }
 

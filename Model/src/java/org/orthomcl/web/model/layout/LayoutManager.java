@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -27,7 +27,7 @@ public abstract class LayoutManager {
     return DEFAULT_SIZE;
   }
 
-  protected void loadLayout(Layout layout, String layoutString) throws WdkModelException, WdkUserException {
+  protected void loadLayout(GroupLayout layout, String layoutString) throws WdkModelException, WdkUserException {
     JSONObject jsLayout = new JSONObject(layoutString);
     JSONArray jsNodes = jsLayout.getJSONArray("N");
     Group group = layout.getGroup();
@@ -35,7 +35,7 @@ public abstract class LayoutManager {
       JSONObject jsNode = jsNodes.getJSONObject(i);
 
       String sourceId = jsNode.getString("id");
-      Node node = new Node(group.getGene(sourceId));
+      GeneNode node = new GeneNode(group.getGene(sourceId));
       node.setIndex(jsNode.getInt("i"));
 
       double x = Double.valueOf(jsNode.getString("x"));
@@ -47,9 +47,9 @@ public abstract class LayoutManager {
     JSONArray jsEdges = jsLayout.getJSONArray("E");
     for (int i = 0; i < jsEdges.length(); i++) {
       JSONObject jsEdge = jsEdges.getJSONObject(i);
-      Node queryNode = layout.getNode(jsEdge.getInt("Q"));
-      Node subjectNode = layout.getNode(jsEdge.getInt("S"));
-      Edge edge = new Edge(queryNode.getGene().getSourceId(), subjectNode.getGene().getSourceId());
+      GeneNode queryNode = layout.getNode(jsEdge.getInt("Q"));
+      GeneNode subjectNode = layout.getNode(jsEdge.getInt("S"));
+      BlastEdge edge = new BlastEdge(queryNode.getGene().getSourceId(), subjectNode.getGene().getSourceId());
       edge.setType(EdgeType.get(jsEdge.getString("T")));
 
       // set nodes
@@ -73,7 +73,7 @@ public abstract class LayoutManager {
     processLayout(layout);
   }
 
-  private void processLayout(Layout layout) throws WdkModelException, WdkUserException {
+  private void processLayout(GroupLayout layout) throws WdkModelException, WdkUserException {
     // load taxons into layout
     TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, projectId);
     Map<String, Taxon> taxons = taxonManager.getTaxons();
@@ -84,15 +84,15 @@ public abstract class LayoutManager {
     scaleLayout(layout, getSize());
   }
 
-  private void scaleLayout(Layout layout, int size) {
-    Collection<Node> nodes = layout.getNodes();
+  private void scaleLayout(GroupLayout layout, int size) {
+    Collection<GeneNode> nodes = layout.getNodes();
 
     size -= MARGIN * 2;
 
     // find min & max coordinates
     double minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE;
     double maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
-    for (Node node : nodes) {
+    for (GeneNode node : nodes) {
       if (minx > node.getX())
         minx = node.getX();
       if (maxx < node.getX())
@@ -109,7 +109,7 @@ public abstract class LayoutManager {
     double dy = (width > height) ? (width - height) / 2 : 0;
 
     // scale the coordinates to a range of [0...size];
-    for (Node node : nodes) {
+    for (GeneNode node : nodes) {
       double x = Math.round((node.getX() - minx + dx) * ratio) / 100D + MARGIN;
       double y = Math.round((node.getY() - miny + dy) * ratio) / 100D + MARGIN;
       node.setLocation(x, y);

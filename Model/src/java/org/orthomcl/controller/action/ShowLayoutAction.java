@@ -11,8 +11,8 @@ import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.jspwrap.UserBean;
-import org.orthomcl.model.layout.Layout;
-import org.orthomcl.model.layout.GroupLayoutManager;
+import org.orthomcl.web.model.layout.GroupLayoutManager;
+import org.orthomcl.web.model.layout.GroupLayout;
 
 public class ShowLayoutAction extends WdkAction {
 
@@ -43,7 +43,7 @@ public class ShowLayoutAction extends WdkAction {
     // get the layout data
     String groupName = params.getValue(PARAM_GROUP_NAME);
     GroupLayoutManager layoutManager = InstanceManager.getInstance(GroupLayoutManager.class, getWdkModel().getProjectId());
-    Layout layout = layoutManager.getLayout(userBean.getUser(), groupName);
+    GroupLayout layout = layoutManager.getLayout(userBean.getUser(), groupName);
     
     ActionResult result = new ActionResult().setViewName(MAP_LAYOUT);
     result.setRequestAttribute(ATTR_LAYOUT, layout);

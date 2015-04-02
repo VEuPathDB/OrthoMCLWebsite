@@ -1,6 +1,6 @@
 package org.orthomcl.model;
 
-import org.orthomcl.model.layout.Renderable;
+import org.orthomcl.web.model.layout.Renderable;
 
 public class EcNumber implements Renderable, Comparable<EcNumber> {
 

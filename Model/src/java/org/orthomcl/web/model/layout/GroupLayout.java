@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,25 +12,26 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.orthomcl.data.layout.Graph;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
 import org.orthomcl.model.Group;
 import org.orthomcl.model.Taxon;
+import org.orthomcl.shared.model.layout.Graph;
+import org.orthomcl.shared.model.layout.Layout;
 
-public class Layout implements Graph {
+public class GroupLayout implements Graph {
 
   private final Group group;
   private final Map<String, Taxon> taxons;
-  private final Map<Integer, Node> nodes;
-  private final Map<GenePair, Edge> edges;
+  private final Map<Integer, GeneNode> nodes;
+  private final Map<GenePair, BlastEdge> edges;
   private final Map<String, Integer> taxonCounts;
   private final int size;
 
   private int minEvalueExp;
   private int maxEvalueExp;
 
-  public Layout(Group group, int size) {
+  public GroupLayout(Group group, int size) {
     this.group = group;
     this.taxons = new LinkedHashMap<>();
     this.edges = new LinkedHashMap<>();
@@ -61,22 +62,22 @@ public class Layout implements Graph {
     return taxons.values();
   }
 
-  public Edge getEdge(GenePair genePair) {
+  public BlastEdge getEdge(GenePair genePair) {
     return edges.get(genePair);
   }
 
   @Override
-  public Collection<Edge> getEdges() {
+  public Collection<BlastEdge> getEdges() {
     // sort edges
-    List<Edge> list = new ArrayList<>(edges.values());
+    List<BlastEdge> list = new ArrayList<>(edges.values());
     Collections.sort(list);
     return list;
   }
 
-  public Map<String, List<Edge>> getEdgesByType() {
-    Map<String, List<Edge>> edges = new HashMap<>();
-    for (Edge edge : getEdges()) {
-      List<Edge> list = edges.get(edge.getType().name());
+  public Map<String, List<BlastEdge>> getEdgesByType() {
+    Map<String, List<BlastEdge>> edges = new HashMap<>();
+    for (BlastEdge edge : getEdges()) {
+      List<BlastEdge> list = edges.get(edge.getType().name());
       if (list == null) {
         list = new ArrayList<>();
         edges.put(edge.getType().name(), list);
@@ -86,7 +87,7 @@ public class Layout implements Graph {
     return edges;
   }
 
-  public void addEdge(Edge edge) {
+  public void addEdge(BlastEdge edge) {
     this.edges.put(edge, edge);
     // also calculate the evalue range
     String evalueA = edge.getEvalueA(), evalueB = edge.getEvalueB();
@@ -109,24 +110,24 @@ public class Layout implements Graph {
   }
 
   @Override
-  public Collection<Node> getNodes() {
+  public Collection<GeneNode> getNodes() {
     // sort the nodes, so that the client can bind it by array;
     Integer[] keys = nodes.keySet().toArray(new Integer[0]);
     Arrays.sort(keys);
-    List<Node> list = new ArrayList<>(nodes.size());
+    List<GeneNode> list = new ArrayList<>(nodes.size());
     for (int key : keys) {
       list.add(nodes.get(key));
     }
     return list;
   }
 
-  public Map<String, List<Node>> getNodesByTaxon() {
-    Map<String, List<Node>> nodes = new HashMap<>();
-    for (Node node : this.nodes.values()) {
+  public Map<String, List<GeneNode>> getNodesByTaxon() {
+    Map<String, List<GeneNode>> nodes = new HashMap<>();
+    for (GeneNode node : this.nodes.values()) {
       Gene gene = node.getGene();
       Taxon taxon = gene.getTaxon();
       String abbrev = taxon.getAbbrev();
-      List<Node> list = nodes.get(abbrev);
+      List<GeneNode> list = nodes.get(abbrev);
       if (list == null) {
         list = new ArrayList<>();
         nodes.put(node.getGene().getTaxon().getAbbrev(), list);
@@ -136,11 +137,11 @@ public class Layout implements Graph {
     return nodes;
   }
 
-  public Node getNode(int index) {
+  public GeneNode getNode(int index) {
     return nodes.get(index);
   }
 
-  public void addNode(Node node) {
+  public void addNode(GeneNode node) {
     this.nodes.put(node.getIndex(), node);
     // also calculate the gene counts by taxons
     String abbrev = node.getGene().getTaxon().getAbbrev();
@@ -179,7 +180,7 @@ public class Layout implements Graph {
 
   @Override
   public double getMaxPreferredLength() {
-    return org.orthomcl.data.core.Group.MAX_PREFERRED_LENGTH;
+    return Layout.MAX_PREFERRED_LENGTH;
   }
 
   @Override
@@ -189,14 +190,14 @@ public class Layout implements Graph {
     try {
       // output genes
       JSONArray jsNodes = new JSONArray();
-      for (Node node : nodes.values()) {
+      for (GeneNode node : nodes.values()) {
         jsNodes.put(node.toJSON());
       }
       jsLayout.put("N", jsNodes);
 
       // output scores
       JSONArray jsEdges = new JSONArray();
-      for (Edge edge : edges.values()) {
+      for (BlastEdge edge : edges.values()) {
         jsEdges.put(edge.toJSON());
       }
       jsLayout.put("E", jsEdges);

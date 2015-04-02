@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import java.util.ArrayList;
 import java.util.Collection;

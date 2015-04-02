@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.fgputil.runtime.Manageable;
@@ -17,12 +17,12 @@ public class GeneSetLayoutManager extends LayoutManager implements Manageable<Ge
     return layoutManager;
   }
 
-  public Layout getLayout(AnswerValue answer, String layoutString) throws WdkModelException, WdkUserException {
+  public GroupLayout getLayout(AnswerValue answer, String layoutString) throws WdkModelException, WdkUserException {
 
     // load gene set
     GeneSetManager geneSetManager = InstanceManager.getInstance(GeneSetManager.class, projectId);
     GeneSet geneSet = geneSetManager.getGeneSet(answer);
-    Layout layout = new Layout(geneSet, getSize());
+    GroupLayout layout = new GroupLayout(geneSet, getSize());
 
     loadLayout(layout, layoutString);
 

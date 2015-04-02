@@ -6,7 +6,6 @@
 
   <import file="${projectsDir}/OrthoMCLWebService/build.xml" />
   <import file="${projectsDir}/OrthoMCLShared/build.xml" />
-  <import file="${projectsDir}/OrthoMCLData/build.xml" />
 
   <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
     <ant target="defaultProjectCheckout" inheritAll="false">
@@ -22,13 +21,6 @@
       <property name="project" value="OrthoMCLShared"/>
     </ant>
   </target>
-
-  <target name="OrthoMCLData-Checkout" unless="OrthoMCLData.present">
-    <ant target="defaultProjectCheckout" inheritAll="false">
-      <property name="svnurl" value="https://www.cbil.upenn.edu/svn/apidb/OrthoMCLData"/>
-      <property name="project" value="OrthoMCLData"/>
-    </ant>
-  </target>
   
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo    Checkout    oooooooooooooooooooooooooo -->
@@ -37,10 +29,8 @@
   <target name="OrthoMCLWebsite-ChildCheckout">
     <available file="../OrthoMCLWebService" type="dir" property="OrthoMCLWebService.present" />
     <available file="../OrthoMCLShared" type="dir" property="OrthoMCLShared.present" />
-    <available file="../OrthoMCLData" type="dir" property="OrthoMCLData.present" />
     <antcall target="OrthoMCLWebService-Checkout"/>
     <antcall target="OrthoMCLShared-Checkout"/>
-    <antcall target="OrthoMCLData-Checkout"/>
   </target>
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
@@ -48,9 +38,6 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="OrthoMCLWebsite-ChildUpdate">
-    <ant target="defaultProjectUpdate">
-      <property name="project" value="OrthoMCLData"/>
-    </ant>
     <ant target="defaultProjectUpdate">
       <property name="project" value="OrthoMCLWebService"/>
     </ant>
@@ -65,18 +52,10 @@
 
   <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebService-Installation,
                                                        OrthoMCLShared-Installation,
-                                                       OrthoDataCommonComponentInstall,
-                                                       OrthoMCLData/Common-Installation,
                                                        OrthoMCLWebsite/Model-Installation,
                                                        OrthoMCLWebsite/View-Installation,
                                                        OrthoMCLWebsite/Site-Installation">
     <ant target="defaultProjectInstall"/>
-  </target>
-
-  <target name="OrthoDataCommonComponentInstall">
-    <ant target="OrthoMCLData/Common-Installation">
-      <property name="alreadyBuilt" value="false"/>
-    </ant>
   </target>
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->

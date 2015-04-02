@@ -10,9 +10,9 @@ import org.gusdb.wdk.model.analysis.AbstractStepAnalyzer;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.user.analysis.ExecutionStatus;
 import org.gusdb.wdk.model.user.analysis.StatusLogger;
-import org.orthomcl.model.layout.GeneSetLayoutGenerator;
-import org.orthomcl.model.layout.GeneSetLayoutManager;
-import org.orthomcl.model.layout.Layout;
+import org.orthomcl.web.model.layout.GeneSetLayoutGenerator;
+import org.orthomcl.web.model.layout.GeneSetLayoutManager;
+import org.orthomcl.web.model.layout.GroupLayout;
 
 /**
  * @author Jerric
@@ -57,7 +57,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
     String projectId = getWdkModel().getProjectId();
     GeneSetLayoutManager manager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     try {
-      Layout layout = manager.getLayout(getAnswerValue(), layoutString);
+      GroupLayout layout = manager.getLayout(getAnswerValue(), layoutString);
       return layout;
     }
     catch (WdkUserException ex) {
@@ -75,7 +75,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
   public ExecutionStatus runAnalysis(AnswerValue answerValue, StatusLogger log) throws WdkModelException,
       WdkUserException {
     GeneSetLayoutGenerator generator = new GeneSetLayoutGenerator();
-    Layout layout = generator.generateLayout(answerValue);
+    GroupLayout layout = generator.generateLayout(answerValue);
     this.setPersistentCharData(layout.toString());
     return ExecutionStatus.COMPLETE;
   }

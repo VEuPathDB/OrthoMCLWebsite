@@ -1,4 +1,4 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,12 +13,12 @@ import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
-import org.orthomcl.data.layout.GraphicsException;
-import org.orthomcl.data.layout.SpringLayout;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
 import org.orthomcl.model.GeneSet;
 import org.orthomcl.model.Taxon;
+import org.orthomcl.shared.model.layout.GraphicsException;
+import org.orthomcl.shared.model.layout.SpringLayout;
 
 public class GeneSetLayoutGenerator {
 
@@ -28,22 +28,22 @@ public class GeneSetLayoutGenerator {
   
   private final Random random = new Random();
 
-  public Layout generateLayout(AnswerValue answer) throws WdkModelException, WdkUserException {
+  public GroupLayout generateLayout(AnswerValue answer) throws WdkModelException, WdkUserException {
     // only do layout for the step with genes of MAX_GENES or less
     if (answer.getResultSize() > MAX_GENES)
       return null;
 
     GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());
-    Layout layout = new Layout(geneSet, DEFAULT_SIZE);
-    Map<String, Node> nodes = loadNodes(layout, answer);
+    GroupLayout layout = new GroupLayout(geneSet, DEFAULT_SIZE);
+    Map<String, GeneNode> nodes = loadNodes(layout, answer);
     loadEdges(layout, answer, nodes);
     loadEdgeTypes(layout, answer);
     computeLocations(layout);
     return layout;
   }
   
-  private Map<String, Node> loadNodes(Layout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
-    Map<String, Node> nodes = new HashMap<>();
+  private Map<String, GeneNode> loadNodes(GroupLayout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
+    Map<String, GeneNode> nodes = new HashMap<>();
     int index = 0;
 
     // create a dummy taxon
@@ -62,7 +62,7 @@ public class GeneSetLayoutGenerator {
         String fullId = resultSet.getString("full_id");
         Gene gene = new Gene(fullId);
         gene.setTaxon(taxon);
-        Node node = new Node(gene);
+        GeneNode node = new GeneNode(gene);
         node.setIndex(index);
 
         // assign random location to the node; the actual locations will be computed later
@@ -84,7 +84,7 @@ public class GeneSetLayoutGenerator {
     return nodes;
   }
 
-  private void loadEdges(Layout layout, AnswerValue answer, Map<String, Node> nodes) throws WdkModelException,
+  private void loadEdges(GroupLayout layout, AnswerValue answer, Map<String, GeneNode> nodes) throws WdkModelException,
       WdkUserException {
     // contruct an SQL to get blast scores
     String idSql = answer.getIdSql();
@@ -106,8 +106,8 @@ public class GeneSetLayoutGenerator {
         int evalueExp = resultSet.getInt("evalue_exp");
         String evalue = evalueMant + "E" + evalueExp;
 
-        Edge edge = new Edge(queryId, subjectId);
-        Edge oldEdge = layout.getEdge(edge);
+        BlastEdge edge = new BlastEdge(queryId, subjectId);
+        BlastEdge oldEdge = layout.getEdge(edge);
         if (oldEdge != null) { // old edge exists, combine the value
           if (!evalue.equals(oldEdge.getEvalueA())) {
             oldEdge.setEvalueB(evalue);
@@ -134,13 +134,13 @@ public class GeneSetLayoutGenerator {
     }
   }
 
-  private void loadEdgeTypes(Layout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
+  private void loadEdgeTypes(GroupLayout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
     loadEdgeTypes(layout, EdgeType.Ortholog, answer, "Ortholog");
     loadEdgeTypes(layout, EdgeType.Coortholog, answer, "Coortholog");
     loadEdgeTypes(layout, EdgeType.Inparalog, answer, "Inparalog");
   }
 
-  private void loadEdgeTypes(Layout layout, EdgeType type, AnswerValue answer, String tableName)
+  private void loadEdgeTypes(GroupLayout layout, EdgeType type, AnswerValue answer, String tableName)
       throws WdkModelException, WdkUserException {
     WdkModel wdkModel = answer.getQuestion().getWdkModel();
     String idSql = answer.getIdSql();
@@ -156,7 +156,7 @@ public class GeneSetLayoutGenerator {
       while (resultSet.next()) {
         String queryId = resultSet.getString("query_id");
         String subjectId = resultSet.getString("subject_id");
-        Edge edge = layout.getEdge(new GenePair(queryId, subjectId));
+        BlastEdge edge = layout.getEdge(new GenePair(queryId, subjectId));
         edge.setType(type);
       }
     }
@@ -168,7 +168,7 @@ public class GeneSetLayoutGenerator {
     }
   }
 
-  private void computeLocations(Layout layout) throws WdkModelException {
+  private void computeLocations(GroupLayout layout) throws WdkModelException {
     try {
       SpringLayout springLayout = new SpringLayout(layout);
       springLayout.process(null);

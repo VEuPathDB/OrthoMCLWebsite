@@ -9,6 +9,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/json/json/20140107/json-20140107.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/wdk-controller"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/orthomcl-data-common"/>
+	<classpathentry kind="var" path="M2_REPO/org/orthomcl/orthomcl-shared-model/1.0.0/orthomcl-shared-model-1.0.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

@@ -1,11 +1,12 @@
-package org.orthomcl.model.layout;
+package org.orthomcl.web.model.layout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.orthomcl.data.core.Group;
 import org.orthomcl.model.GenePair;
+import org.orthomcl.shared.model.layout.Edge;
+import org.orthomcl.shared.model.layout.Layout;
 
-public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.data.layout.Edge {
+public class BlastEdge extends GenePair implements Comparable<BlastEdge>, Edge {
 
   public static final int MIN_EVALUE = -180;
   public static final int MAX_EVALUE = -5;
@@ -14,11 +15,11 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
   private String evalueB;
   private double score;
   private EdgeType type;
-  private Node nodeA;
-  private Node nodeB;
+  private GeneNode nodeA;
+  private GeneNode nodeB;
   private String color;
 
-  public Edge(String sourceIdA, String sourceIdB) {
+  public BlastEdge(String sourceIdA, String sourceIdB) {
     super(sourceIdA, sourceIdB);
   }
 
@@ -78,7 +79,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
    * @return the nodeA
    */
   @Override
-  public Node getNodeA() {
+  public GeneNode getNodeA() {
     return nodeA;
   }
 
@@ -86,7 +87,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
    * @param nodeA
    *          the nodeA to set
    */
-  public void setNodeA(Node nodeA) {
+  public void setNodeA(GeneNode nodeA) {
     this.nodeA = nodeA;
   }
 
@@ -94,7 +95,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
    * @return the nodeB
    */
   @Override
-  public Node getNodeB() {
+  public GeneNode getNodeB() {
     return nodeB;
   }
 
@@ -102,7 +103,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
    * @param nodeB
    *          the nodeB to set
    */
-  public void setNodeB(Node nodeB) {
+  public void setNodeB(GeneNode nodeB) {
     this.nodeB = nodeB;
   }
 
@@ -153,7 +154,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
-  public int compareTo(Edge edge) {
+  public int compareTo(BlastEdge edge) {
     double diff = edge.score - score;
     if (diff < 0)
       return -1;
@@ -165,7 +166,7 @@ public class Edge extends GenePair implements Comparable<Edge>, org.orthomcl.dat
 
   @Override
   public double getPreferredLength() {
-    return Group.MAX_PREFERRED_LENGTH +score;
+    return Layout.MAX_PREFERRED_LENGTH +score;
   }
   
   public JSONObject toJSON() throws JSONException {

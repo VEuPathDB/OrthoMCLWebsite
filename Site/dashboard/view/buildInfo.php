@@ -204,7 +204,7 @@ function svninfo_from_build_data($prop, $data) {
         # so we don't split on the colons in the url or timestamps).
         $pairs = explode(':', $attr, 2);
         # That should create a two element array. Combine those
-        if (count($pairs) < 2) {
+        if (count($pairs) == 2) {
           $info[$pairs[0]] = trim($pairs[1]);
         } else {
           return NULL;

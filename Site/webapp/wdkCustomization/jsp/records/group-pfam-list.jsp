@@ -33,7 +33,7 @@
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${!odd}" />
           <tr id="${domain['accession']}" class="domain ${rowClass}" >
-            <td>${domain["accession"]}</td>
+            <td><a href="http://pfam.xfam.org/family/${domain['accession']}">${domain["accession"]}</a></td>
             <td>${domain["symbol"]}</td>
             <td>${domain["description"]}</td>
             <td>${domain["occurrences"]}</td>

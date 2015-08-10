@@ -28,7 +28,7 @@
         <c:out value="${title}" default="WDK ${project}"/>
       </title>
   
-      <link rel="shortcut icon" href="/assets/images/${project}/favicon.ico"/>
+      <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/images/${project}/favicon.ico"/>
       
       <imp:stylesheets refer="${refer}"/>
       <imp:javascripts refer="${refer}"/>

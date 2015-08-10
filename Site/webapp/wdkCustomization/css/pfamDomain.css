@@ -22,6 +22,3 @@
 
 #proteins .protein .domains .domain > div {min-width:5px;}
 
-#Record_Views table.dataTable tr.even, #Record_Views tr.rowMedium { background-color: rgb(240, 240, 240); }
-#Record_Views tr.rowMedium { background-color: whitesmoke; }
-#Record_Views th, #Record_Views td { vertical-align: middle; }

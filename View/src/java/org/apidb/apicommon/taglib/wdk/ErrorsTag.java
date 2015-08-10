@@ -86,7 +86,6 @@ public class ErrorsTag extends WdkTagBase {
     
     private PageContext pageContext;
     private HttpServletRequest request;
-    protected int varScope;
     private String showStacktrace;
     private String logMarker;
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -558,8 +557,7 @@ public class ErrorsTag extends WdkTagBase {
             "<not set; is 'JkEnvVar SERVER_ADDR' set in the Apache configuration?>";
         sb.append("Server Addr: " + serverAddr + "\n");
     }
-    
-    @SuppressWarnings("unchecked")
+
     private void appendRequestParameters(StringBuffer sb) {
         sb.append("Request Parameters (request to the server)\n\n");
         Map<String,String[]> parameters = request.getParameterMap(); 

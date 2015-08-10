@@ -8,7 +8,7 @@
 
 
 body {
-	background-image: url(/assets/images/OrthoMCL/background_s.jpg);
+	background-image: url(../images/OrthoMCL/background_s.jpg);
 }
 
 a:link, a:visited {
@@ -27,7 +27,7 @@ a:hover, a:active {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
 
 #header2 {
-	background-image: url(/assets/images/OrthoMCL/backgroundtop_s.jpg);
+	background-image: url(../images/OrthoMCL/backgroundtop_s.jpg);
 	min-width: 1032px; /* prevent logo from wrapping on smaller resolutions */
 }
 
@@ -62,9 +62,9 @@ a:hover, a:active {
 }
 
 #nav-top > li > ul { 
-	background-image: url(/assets/images/OrthoMCL/footer.png);
+	background-image: url(../images/OrthoMCL/footer.png);
 	border-color:#345ca1;
-	list-style-image: url(/assets/images/OrthoMCL/bullet_arrow.gif);
+	list-style-image: url(../images/OrthoMCL/bullet_arrow.gif);
 }
 
 #nav-top > li > ul a:link, #nav-top > li > ul a:visited {
@@ -100,37 +100,37 @@ table#quick-search a {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/	
  #search-bubbles {
-	background-image: url(/assets/images/OrthoMCL/footer.png);
+	background-image: url(../images/OrthoMCL/footer.png);
 	border: 1px solid #345ca1;
 }
 
 #contentcolumn {
-	background-image: url(/assets/images/OrthoMCL/footer.png);
+	background-image: url(../images/OrthoMCL/footer.png);
 	border: 1px solid #345ca1;
 }
 
 #contentcolumn2 {
-	background-image: url(/assets/images/OrthoMCL/footer.png);
+	background-image: url(../images/OrthoMCL/footer.png);
 	border: 1px solid #345ca1;
 }
 
 #mysearchhist {
-	background-image: url(/assets/images/OrthoMCL/bubble_my_searchbox.png);
+	background-image: url(../images/OrthoMCL/bubble_my_searchbox.png);
 	border: 1px solid #345ca1;
 }
 
 #main_tools {
-	background-image: url(/assets/images/OrthoMCL/tools_bckgnd.jpg);
+	background-image: url(../images/OrthoMCL/tools_bckgnd.jpg);
 }
 
 #about_us_left {
 	background-color: #bfccdf;
-	list-style-image: url(/assets/images/OrthoMCL/bullet_arrow.gif);
+	list-style-image: url(../images/OrthoMCL/bullet_arrow.gif);
 }
 
 #pink_title {
 	color: #5e0f28;
-	background-image: url(/assets/images/OrthoMCL/trheader.png);
+	background-image: url(../images/OrthoMCL/trheader.png);
 }
 
 
@@ -181,11 +181,11 @@ span#stratTitle, #strategy_tabs #selected a {
 }
 
 #menu_lefttop a.heading {
-	background-image: url(/assets/images/OrthoMCL/menu_lft2.png);
+	background-image: url(../images/OrthoMCL/menu_lft2.png);
 }
 
 #sidebar a.heading {
-	background-image: url(/assets/images/OrthoMCL/menu_lft2.png);
+	background-image: url(../images/OrthoMCL/menu_lft2.png);
 }
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -234,7 +234,7 @@ h2 {
 
 
 #footer{
-    background-image: url(/assets/images/OrthoMCL/footer.png);
+    background-image: url(../images/OrthoMCL/footer.png);
  }
 
 
@@ -247,7 +247,7 @@ h2 {
 
 td.headerrow {
 	color: #0c3f60;
-	background-image: url(/assets/images/OrthoMCL/trheader.png);
+	background-image: url(../images/OrthoMCL/trheader.png);
 }
 
 
@@ -256,19 +256,19 @@ tr.headerrow {
 }
 
 tr.headerrow th, .flexigrid tr.headerrow th#primary_key:hover {
-	background-image: url(/assets/images/OrthoMCL/trheader.png);
+	background-image: url(../images/OrthoMCL/trheader.png);
 }
 
 .flexigrid tr.headerrow th:hover {
-	background-image: url(/assets/images/OrthoMCL/trhover.png);
+	background-image: url(../images/OrthoMCL/trhover.png);
 }
 
 td.subheaderrow {
-	background-image: url(/assets/images/OrthoMCL/trsubhead.png);
+	background-image: url(../images/OrthoMCL/trsubhead.png);
 }
 
 tr.subheaderrow th {
-	background-image: url(/assets/images/OrthoMCL/trsubhead.png);
+	background-image: url(../images/OrthoMCL/trsubhead.png);
 }
 
 
@@ -281,11 +281,11 @@ tr.subheaderrow th {
 
 tr.headerrow2 td{
     color: #5e0f28;
-	background-image: url(/assets/images/OrthoMCL/trheader.png);
+	background-image: url(../images/OrthoMCL/trheader.png);
 }
 
 tr.subheaderrow2 td{
-	background-image: url(/assets/images/OrthoMCL/trsubhead.png);
+	background-image: url(../images/OrthoMCL/trsubhead.png);
 }
 
 a.queryGridInactive {
@@ -314,7 +314,7 @@ tr.headerrow th {
 
 
 .twoColHybLt #sidebar1 {
-	background-image: url(/assets/images/OrthoMCL/aboutus.jpg);
+	background-image: url(../images/OrthoMCL/aboutus.jpg);
 }
 
 
@@ -352,21 +352,21 @@ span.marker a:link, span.marker a:visited {
 
 
 .blockPage{
-	background-image: url(/assets/images/OrthoMCL/footer.png);
+	background-image: url(../images/OrthoMCL/footer.png);
 }
 
 
 .flexigrid div.hDiv{
-	background-image:url(/assets/images/OrthoMCL/trheader.png);
+	background-image:url(../images/OrthoMCL/trheader.png);
 }
 
 
 .flexigrid div.hDiv th.thMove{
-	background-image:url(/assets/images/OrthoMCL/trheader.png);
+	background-image:url(../images/OrthoMCL/trheader.png);
 }
 
 div.colCopy{
-	background-image:url(/assets/images/OrthoMCL/trheader.png);
+	background-image:url(../images/OrthoMCL/trheader.png);
 }
 
 
@@ -394,7 +394,7 @@ div.colCopy{
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 div#about .section-title {
 	color: white;
-  background-image: url(/assets/images/OrthoMCL/footer.png);
+  background-image: url(../images/OrthoMCL/footer.png);
 
 }
 

@@ -2,7 +2,7 @@
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:html="http://jakarta.apache.org/struts/tags-html"
+    xmlns:html="http://struts.apache.org/tags-html"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
@@ -56,7 +56,7 @@
 													    </c:if>
 													    <br/><br/>${text}<br/>
 													    <c:if test="${image ne null and image ne ''}">
-													      <img src="${base}/wdk/${image}" alt=""/>
+													      <imp:image src="${image}" alt=""/>
 													    </c:if>
 													  </td>
 													</tr>

@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: /ORTHOMCL/
-Disallow: /ORTHOMCL_DB/
-Disallow: /cgi-bin/
+Disallow: /

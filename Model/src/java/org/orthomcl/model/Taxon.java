@@ -1,10 +1,12 @@
-package org.orthomcl.controller.action;
+package org.orthomcl.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Taxon implements Comparable<Taxon> {
+import org.orthomcl.web.model.layout.Renderable;
+
+public class Taxon implements Comparable<Taxon>, Renderable {
 
   private final int id;
   private String abbrev;
@@ -14,12 +16,12 @@ public class Taxon implements Comparable<Taxon> {
   private boolean species;
   private Taxon parent;
   private Taxon root;
+  private String groupColor;
   private String color;
-  private Map<Integer, Taxon> children;
+  private final Map<Integer, Taxon> children = new LinkedHashMap<>();
 
   public Taxon(int id) {
     this.id = id;
-    this.children = new HashMap<Integer, Taxon>();
   }
 
   public int getId() {
@@ -48,6 +50,14 @@ public class Taxon implements Comparable<Taxon> {
 
   public void setCommonName(String commonName) {
     this.commonName = commonName;
+  }
+
+  public String getFullName() {
+    String fullName = name;
+    if (commonName != null && !commonName.equals(name)) {
+      fullName += " (" + commonName + ")";
+    }
+    return fullName;
   }
 
   public int getSortIndex() {
@@ -97,20 +107,63 @@ public class Taxon implements Comparable<Taxon> {
     this.root = root;
   }
 
+  @Override
   public String getColor() {
     return color;
   }
 
+  @Override
   public void setColor(String color) {
     this.color = color;
   }
 
+  /**
+   * @return the groupColor
+   */
+  public String getGroupColor() {
+    if (groupColor == null && parent != null)
+      groupColor = parent.getGroupColor();
+    return groupColor;
+  }
+
+  /**
+   * @param groupColor
+   *          the groupColor to set
+   */
+  public void setGroupColor(String groupColor) {
+    this.groupColor = groupColor;
+  }
+
+  public String getPath() {
+    String parentPath = (parent == null) ? "" : parent.getPath();
+    if (parentPath.equals("ALL"))
+      parentPath = "";
+    if (!parentPath.equals(""))
+      parentPath += "-&gt;";
+    return parentPath + abbrev;
+  }
+
   @Override
   public int compareTo(Taxon taxon) {
-    int diff = this.sortIndex - taxon.sortIndex;
-    if (diff != 0)
+    // first compare the root
+    int diff = 0;
+    if (root != null && taxon.root == null) {
+      diff = 1;
+    }
+    else if (root == null && taxon.root != null) {
+      diff = -1;
+    }
+    else if (root != null && taxon.root != null) {
+      diff = root.compareTo(taxon.root);
+    }
+
+    if (diff != 0) {
       return diff;
-    return this.abbrev.compareTo(taxon.abbrev);
+    }
+    else {
+      diff = this.sortIndex - taxon.sortIndex;
+      return (diff != 0) ? diff : this.abbrev.compareTo(taxon.abbrev);
+    }
   }
 
 }

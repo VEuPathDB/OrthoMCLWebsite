@@ -198,7 +198,7 @@
             <c:set var="odd" value="${!odd}" />
             <tr id="${domain['accession']}" class="domain ${rowClass}"
                 data-index="${domain['domain_index']}" data-max="${domain['max_index']}" >
-              <td>${domain["accession"]}</td>
+              <td><a href="http://pfam.xfam.org/family/${domain["accession"]}">${domain["accession"]}</a></td>
               <td>${domain["symbol"]}</td>
               <td>${domain["description"]}</td>
               <td>${domain["start_min"]}</td>

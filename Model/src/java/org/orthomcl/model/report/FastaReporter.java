@@ -23,7 +23,7 @@ public class FastaReporter extends Reporter {
 
   private static Logger logger = Logger.getLogger(FastaReporter.class);
 
-  public static final String FIELD_FORMAT = "format";
+  public static final String FIELD_DOWNLOAD_TYPE = "downloadType";
   public static final String FIELD_HAS_ORGANISM = "hasOrganism";
   public static final String FIELD_HAS_DESCRIPTION = "hasDescription";
 
@@ -36,7 +36,7 @@ public class FastaReporter extends Reporter {
 
   private boolean hasOrganism;
   private boolean hasDescription;
-  private String format;
+  private String downloadType;
 
   public FastaReporter(AnswerValue answerValue, int startIndex, int endIndex) {
     super(answerValue, startIndex, endIndex);
@@ -47,7 +47,7 @@ public class FastaReporter extends Reporter {
     super.configure(config);
 
     // get basic configurations
-    format = config.get(FIELD_FORMAT);
+    downloadType = config.get(FIELD_DOWNLOAD_TYPE);
 
     String strOrganism = config.get(FIELD_HAS_ORGANISM);
     hasOrganism = (strOrganism != null && (strOrganism.equals("yes") || strOrganism.equals("true")));
@@ -78,8 +78,8 @@ public class FastaReporter extends Reporter {
    */
   @Override
   public String getDownloadFileName() {
-    if (format.equalsIgnoreCase("text")) {
-      logger.info("Internal format: " + format);
+    if (downloadType.equalsIgnoreCase("text")) {
+      logger.info("Internal format: " + downloadType);
       String name = getQuestion().getName();
       return name + ".fasta";
     } else { // use the default content type defined in the parent class

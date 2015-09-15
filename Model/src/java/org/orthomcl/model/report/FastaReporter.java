@@ -23,6 +23,7 @@ public class FastaReporter extends Reporter {
 
   private static Logger logger = Logger.getLogger(FastaReporter.class);
 
+  public static final String FIELD_FORMAT = "format";
   public static final String FIELD_HAS_ORGANISM = "hasOrganism";
   public static final String FIELD_HAS_DESCRIPTION = "hasDescription";
 
@@ -35,19 +36,19 @@ public class FastaReporter extends Reporter {
 
   private boolean hasOrganism;
   private boolean hasDescription;
+  private String format;
 
   public FastaReporter(AnswerValue answerValue, int startIndex, int endIndex) {
     super(answerValue, startIndex, endIndex);
   }
 
-  /*
-     * 
-     */
   @Override
   public void configure(Map<String, String> config) {
     super.configure(config);
 
     // get basic configurations
+    format = config.get(FIELD_FORMAT);
+
     String strOrganism = config.get(FIELD_HAS_ORGANISM);
     hasOrganism = (strOrganism != null && (strOrganism.equals("yes") || strOrganism.equals("true")));
 
@@ -93,7 +94,7 @@ public class FastaReporter extends Reporter {
    * org.gusdb.wdk.model.report.IReporter#format(org.gusdb.wdk.model.Answer)
    */
   @Override
-  protected void write(OutputStream out) throws WdkModelException,
+  public void write(OutputStream out) throws WdkModelException,
       NoSuchAlgorithmException, SQLException, JSONException, WdkUserException {
     PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
 

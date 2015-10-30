@@ -57,6 +57,12 @@ required:
  commentDb.login: $wmc->{'userDb_login'}
  commentDb.password: $wmc->{'userDb_password'}
  gushome: $wmc->{'gus_home'}
+ 
+ # authentication method
+ authenticationMethod: $wmc->{'authenticationMethod'}
+ oauthUrl: $wmc->{'oauthUrl'}
+ oauthClientId: $wmc->{'oauthClientId'}
+ oauthClientSecret: $wmc->{'oauthClientSecret'}
 
  amebURL: http://$wmc->{'host_class_prefix'}amoebadb.org/amoeba/
  crypURL: http://$wmc->{'host_class_prefix'}cryptodb.org/cryptodb/

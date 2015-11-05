@@ -18,7 +18,7 @@ adminEmail=@@ADMIN_EMAIL@@
 uploadIsOffline=@@UPLOAD_OFFLINE@@
 
 # properties for downloading results
-purgeWindow=7
+purgeWindow=60
 
 ##############################################################################
 # these change with each OrthoMCL Release

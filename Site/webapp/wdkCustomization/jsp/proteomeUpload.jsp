@@ -23,11 +23,17 @@
             OrthoMCL Groups.  Upload your genome's proteins as a FASTA file.
           </p>
           <p>
-            The process usually takes between 6 to 24 hours, but up to 72, depending upon server load and job size.
-            You will receive mail when your results are ready, and can retrieve them for up to 48 hours from then.
+            <i>Once a job starts</i>, it typically takes between 6 to 24 hours to complete, depending on system load and the size of your proteome.
           </p>
-	  <p><b>Please Note:</b> This service has occasional delays and/or down time. We appreciate your patience when this happens.  The service is computationally expensive and runs on an external compute cluster which sometimes has wait times or disruptions that are out of our control.  If you have not gotten results after 24 hours please feel free to contact us.
-	    </p>
+          <p>
+           However, there is usually a queue, so <i>your job might not start for a few days</i>.  
+          </p>
+	  <p>Also, this service has occasional delays and/or down time that are beyond our control.
+          </p>
+          <p>
+          If you have not gotten results after 24 hours please feel free to contact us.  <b>We cannot answer any questions without your job ID.</b>
+	  </p>
+          <p>Please <b>do not resubmit your job</b> without first contacting us.  Doing so will slow everything down.</p>
 
           <div id="upload-form">
             <form id="proteome" action="/cgi-bin/orthomclProteomeSvcUpload.cgi" method="post" enctype="multipart/form-data">

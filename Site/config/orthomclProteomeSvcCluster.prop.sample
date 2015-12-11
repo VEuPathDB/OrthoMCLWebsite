@@ -62,7 +62,7 @@ rcfile=@@EUPATHDB_BASE@@/orthomcl-mapping-service/build-@@ORTHO_BUILD_NO@@/@@ORT
 # These are static across releases and SGE-based clusters.
 ##############################################################################
 
-numNodes=5
+numNodes=10
 slotsPerNode=1
 ppn=1
 nodeClass=DJob::DistribJob::SgeNode

@@ -101,7 +101,6 @@ foreach ($db_names as $db_name) {
       <th align="left"><font size="-2">username</font></th>
       <th align="left"><font size="-2">host</font></th>
       <th align="left"><font size="-2">created</font></th>
-      <th align="left"><font size="-2">valid</font></th>
     </tr>
 <?php
 $dblink_map = $adb{'DblinkList'};
@@ -115,7 +114,6 @@ foreach ($dblink_map as $dblink) {
       <td><?php print strtolower($dblink{'username'})?></td>
       <td><?php print strtolower($dblink{'host'})?></td>
       <td><?php print strtolower($dblink{'created'})?></td>
-      <td align='center'><?php print ($dblink{'isValid'} == '1') ? "<span style='color:green''>&#10004;</span>" : "<span style='color:red'>&#10008;</span>"  ?></td>
     </tr>
 <?php
   $row++;

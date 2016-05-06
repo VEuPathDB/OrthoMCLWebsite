@@ -7,7 +7,7 @@
 	 xmlns:svg="http://www.w3.org/2000/svg">
     
   <jsp:directive.attribute name="layout" required="false"
-                type="org.orthomcl.shared.model.layout.Layout" 
+                type="org.orthomcl.shared.model.layout.Graph" 
                 description="The layout model"/>
   <c:if test="${layout == null}">
     <c:set var="layout" value="${requestScope.layout}" />

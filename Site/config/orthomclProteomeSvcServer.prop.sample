@@ -38,5 +38,5 @@ groupsFile=/var/www/Common/apiSiteFilesMirror/downloadSite/OrthoMCL/release-@@OR
 formatdbBinDir=/opt/ncbi-blast2/bin
 
 # location of mcl command on webserver
-mclBin=$GUS_HOME/bin/mcl
+mclBin=@@MCL_BIN@@
 

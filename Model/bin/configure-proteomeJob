@@ -23,6 +23,7 @@
 #       --cluster_username=mheiges \
 #       --eupathdb_base=/scratch/jcklab/eupath
 #       --upload_offline=0
+#       --mcl_bin=/opt/mcl/bin/mcl
 
 #       configure-proteomeJob \
 #       --admin_email=mheiges@uga.edu   \
@@ -33,7 +34,7 @@
 #       --cluster_username=mheiges \
 #       --eupathdb_base=/genomics/eupath
 #       --upload_offline=1
-
+#       --mcl_bin=/opt/mcl/bin/mcl
 
 
 use strict;
@@ -66,6 +67,7 @@ print $this_script . ' $Revision: 52040 $' . "\n";
 # ORTHO_BUILD_NO
 # ORTHO_WEBSITE
 # UPLOAD_OFFLINE
+# MCL_BIN
 
 my (
     $admin_email,
@@ -77,6 +79,7 @@ my (
     $cluster_username,
     $eupathdb_base,
     $upload_offline,
+    $mcl_bin,
 );
 
 {
@@ -94,6 +97,7 @@ my (
       "cluster_username=s"        => \$cluster_username,
       "eupathdb_base=s"           => \$eupathdb_base,
       "upload_offline=s"          => \$upload_offline,
+      "mcl_bin=s"                 => \$mcl_bin,
       );
 
 }
@@ -174,6 +178,7 @@ for my $cf (keys %config_files) {
         s/\@\@ORTHO_BUILD_NO\@\@/$ortho_build_no/g;
         s/\@\@ORTHO_WEBSITE\@\@/$ortho_website/g;
         s/\@\@UPLOAD_OFFLINE\@\@/$upload_offline/g;
+        s/\@\@MCL_BIN\@\@/$mcl_bin/g;
 
         print;       
     }

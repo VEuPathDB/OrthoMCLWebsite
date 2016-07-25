@@ -77,7 +77,7 @@ public class ExpressionParamHandler extends StringParamHandler {
             throw new WdkModelException(ex);
         }
         finally {
-            SqlUtils.closeResultSetAndStatement(resultSet);
+            SqlUtils.closeResultSetAndStatement(resultSet, null);
         }
         return terms;
     }

@@ -94,7 +94,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
       throw new WdkModelException(ex);
     }
     finally {
-      SqlUtils.closeResultSetAndStatement(resultSet);
+      SqlUtils.closeResultSetAndStatement(resultSet, null);
     }
   }
 
@@ -142,7 +142,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
       throw new WdkModelException(ex);
     }
     finally {
-      SqlUtils.closeResultSetAndStatement(resultSet);
+      SqlUtils.closeResultSetAndStatement(resultSet, null);
     }
 
     // get pfams for each gene
@@ -163,7 +163,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
       throw new WdkModelException(ex);
     }
     finally {
-      SqlUtils.closeResultSetAndStatement(resultSet);
+      SqlUtils.closeResultSetAndStatement(resultSet, null);
     }
   }
 

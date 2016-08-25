@@ -109,11 +109,6 @@
       <forward name="success" path="/showApplication.do" redirect="true"/>
       <forward name="input" path="/WEB-INF/jsp/login.jsp"/>
     </action>
-    <action path="/openIdLogin"
-        parameter="org.gusdb.wdk.controller.action.user.ProcessOpenIdAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <forward name="success" path="/showApplication.do" redirect="true"/>
-    </action>
     <action path="/processLogout"
         parameter="org.gusdb.wdk.controller.action.user.ProcessLogoutAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">

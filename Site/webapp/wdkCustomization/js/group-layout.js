@@ -1,4 +1,4 @@
-wdk.util.namespace("orthomcl.group.layout", function(ns, $) {
+wdk.namespace("orthomcl.group.layout", function(ns, $) {
   "use strict";
 
   var taxons = {};

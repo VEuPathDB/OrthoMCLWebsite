@@ -1,4 +1,4 @@
-wdk.util.namespace("eupathdb.pfamDomain", function(ns, $) {
+wdk.namespace("eupathdb.pfamDomain", function(ns, $) {
   // change this to have more/less bands
   var BAND_COUNT = 4;
   // 13 colors used for 4-band domain coloring

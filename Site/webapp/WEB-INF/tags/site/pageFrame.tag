@@ -50,7 +50,8 @@
 	</c:set>
   <imp:siteAnnounce refer="${refer}" showBanner="${showBanner}"/>
 
-      <div id="main-content" class="${mainContentClass}">
+<!--      <div id="main-content" class="${mainContentClass}">  -->
+      <div id="main-content" >
         <jsp:doBody/>
       </div>
 

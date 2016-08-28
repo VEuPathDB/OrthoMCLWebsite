@@ -55,10 +55,10 @@
   <div id="sidebar">
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ DATA STATISTICS ~~~~~~~~~~~~~~~~~~~~~~~  -->
-	  <h3>
-		  <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12"/>
+
+<h3>
 	    <a class="heading" id="stats" href="#">Data Summary</a>
-	  </h3>
+</h3>
 
 	  <div>
 	    <ul>
@@ -73,7 +73,6 @@
 
 	 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ NEWS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-	    <imp:image src="images/${project}/menu_lft1.png" alt=""  width="${sidebarWidth}" height="12"/>
 	    <a class="heading" href="#">News and Tweets</a>
 	  </h3>
 
@@ -141,7 +140,6 @@
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ COMMUNITY, LINKS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a  class="heading" id='community' href="#">Community Resources</a>
     </h3>
 
@@ -194,7 +192,6 @@
 	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ TUTORIALS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a class="heading" id='tutorials' href="#">Education and Tutorials</a>
     </h3>
 
@@ -222,7 +219,6 @@
 	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ ABOUT ~~~~~~~~~~~~~~~~~~~~~~~  -->
 	  <h3>
-      <imp:image src="images/${project}/menu_lft1.png" alt="" width="${sidebarWidth}" height="12" />
       <a class="heading" id='informationAndHelp' href="#">About OrthoMCL</a>
     </h3>
 	  <div>

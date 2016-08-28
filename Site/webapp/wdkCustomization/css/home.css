@@ -2,18 +2,18 @@
       =Search bubbles  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#contentcolumn,#search-bubbles { 
+#contentcolumn { 
   text-align: center; 
 	margin-top:5px; 
 	margin-bottom:12px;
 }
-#contentcolumn > ul,#search-bubbles > ul {
+#contentcolumn > ul {
    /*display: inline-table; floating list elements instead*/
    margin-top:10px;
    white-space:nowrap; 
    list-style: none;
 }
-#contentcolumn > ul > li,#search-bubbles > ul > li { 
+#contentcolumn > ul > li { 
   	width: 30%; 
 	margin: 10px; 
 	padding: 2px;
@@ -25,32 +25,22 @@
       =SIDEBAR
    =from AllSites.css (menu_leftop), modified
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*#sidebar { 
-  clear: both;
-	float: left; 
-	width: 211px;
-	margin: 5px 5px 5px 5px; 
-	font-size:12px;	
-}
-*/
 
 #sidebar {
-	width: 211px;
-	margin-top: 8px;
-	position: absolute;
-	left: 6px;
-	top: 129px;
-  z-index: 10;
+        width: 220px;
+        margin-top: 8px;
+        position: absolute;
+        left: 6px;
+        top: 129px;
+        z-index: 10;
 }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    =SIDEBAR: section headers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 #sidebar a.heading:link, #sidebar a.heading:visited {
 	color: #FFFFFF;
 	display: block;
-  padding:0 0 0 8px;
+/*  padding:0 0 0 8px; */
 }
 	
 #sidebar a.heading:hover {
@@ -59,12 +49,11 @@
 }
 
 #sidebar a.heading {
-/* font-weight:normal; */
+ font-weight:normal; 
 	height: 24px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 17px;
 	text-decoration: none;
-/*	background-repeat: no-repeat;*/
 	padding-right: 10px;
 	padding-left:  7px;
 	margin-bottom: 5px;
@@ -74,7 +63,6 @@
   display: block;
 }	
 
-/* cancelling jquery style */
 
 div#sidebar h3 {
   padding: 0;
@@ -89,17 +77,12 @@ div#sidebar h3.ui-state-default {
 }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      =SIDEBAR: sections content
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #sidebar div {
-/*   height:auto; */
    font-family: Arial, Helvetica, sans-serif;
    font-size: 12px;
    font-weight: normal;
    padding: 6px;
    line-height: 15px;
- /*  border: 1px solid grey; */
    background-color: #FFFFFF;
    margin: -5px 0px 5px;
 }
@@ -135,4 +118,16 @@ div#sidebar h3.ui-state-default {
 
 
 
-
+#sidebar a.heading {
+   text-align: center;
+  height: 26px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  padding-right: 10px;
+  padding-left:  7px;
+  padding-top: 12px;
+  margin-bottom: 5px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}

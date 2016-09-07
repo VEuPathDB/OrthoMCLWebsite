@@ -34,7 +34,7 @@
       <imp:javascripts refer="${refer}"/>
     </head>
   
-    <body>
+    <body class="${refer}">
       <!-- helper divs with generic information used by javascript -->
       <imp:siteInfo/>
 

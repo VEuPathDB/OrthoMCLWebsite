@@ -22,7 +22,7 @@
   <imp:script src="wdkCustomization/js/lib/supersubs.js"/>
 
   <imp:script src="wdkCustomization/js/lib/jquery.timers-1.2.js"/>
-  <imp:script src="wdkCustomization/js/common.js"/>
+  <imp:script src="wdkCustomization/js/common.build.js"/>
 
   <!-- Access twitter/facebook links, and configure menubar (superfish) -->
   <imp:script src="js/nav.js"/>

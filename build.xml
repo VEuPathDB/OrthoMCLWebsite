@@ -120,6 +120,17 @@
       <property name="component" value="Site"/>
     </ant>
 
+    <echo message="Building OrthoMCLWebsite/Site assets"/>
+    <exec dir="${projectsDir}/OrthoMCLWebsite/Site"
+      executable="make"
+      failonerror="true"
+      failifexecutionfails="true"/>
+
+    <echo message="Copying OrthoMCLWebsite/Site assets to webapp"/>
+    <copy todir="${webappTargetDir}">
+      <fileset dir="${projectsDir}/OrthoMCLWebsite/Site/dist"/>
+    </copy>
+
     <antcall target="EuPathSiteCommon-post-webinstall"/>
 
     <available file="${targetDir}/config/log4j.xml.custom-web" property="custom.weblog4j.present"/>

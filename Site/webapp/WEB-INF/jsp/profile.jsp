@@ -38,25 +38,25 @@
               <tr>
                 <td colspan="2" align="center">
                    <a href="${pageContext.request.contextPath}/showPassword.do">
-                     <img class="button" border="0" src="${pageContext.request.contextPath}/images/change_pwd.gif"/>
+                     <img border="0" src="${pageContext.request.contextPath}/images/change_pwd.gif"/>
                    </a>
                 </td>
               </tr>
               
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Email: </td>
-                <td align="left"><input type="text" name="email" value="${wdkUser.email}" size="20"/></td>
+                <td align="left"><input type="email" required="true" name="email" value="${wdkUser.email}" size="20"/></td>
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Re-type email: </td>
-                <td align="left"><input type="text" name="confirmEmail" value="${wdkUser.email}" size="20"/></td>
+                <td align="left"><input type="email" required="true" name="confirmEmail" value="${wdkUser.email}" size="20"/></td>
               </tr>
               <tr>
                 <td colspan="2" align="left"><hr/><b>User Information:</b></td>
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> First Name: </td>
-                <td align="left"><input type="text" name="firstName" value="${wdkUser.firstName}" size="20"/></td>
+                <td align="left"><input type="text" required="true" name="firstName" value="${wdkUser.firstName}" size="20"/></td>
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap">Middle Name: </td>
@@ -64,11 +64,11 @@
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Last Name:</td>
-                <td align="left"><input type="text" name="lastName" value="${wdkUser.lastName}" size="20"/></td>
+                <td align="left"><input type="text" required="true" name="lastName" value="${wdkUser.lastName}" size="20"/></td>
               </tr>
               <tr>
                 <td align="right" width="50%" nowrap="nowrap"><font color="red">*</font> Institution:</td>
-                <td align="left"><input type="text" name="organization" value="${wdkUser.organization}" size="50"/></td>
+                <td align="left"><input type="text" required="true" name="organization" value="${wdkUser.organization}" size="50"/></td>
               </tr>
               <tr>
                 <td colspan="2" align="left"><hr/><b>Preferences:</b></td>
@@ -92,9 +92,7 @@
               </tr>
               <tr>
                 <td colspan="2" align="center">
-                  <a href="#" onclick="return wdk.user.validateProfileForm();">
-                    <img class="button" border="0" src="${pageContext.request.contextPath}/images/update_profile.gif"/>
-                  </a>
+                  <input type="image" src="${pageContext.request.contextPath}/images/update_profile.gif"/>
                 </td>
               </tr>
             </c:otherwise>
@@ -102,5 +100,23 @@
         </table>
       </form>
     </div>
+    <script>
+      void function init() {
+        var form = document.forms.profileForm;
+        var email = form.email;
+        var confirmEmail = form.confirmEmail;
+        email.addEventListener('change', validateEmail);
+        confirmEmail.addEventListener('change', validateEmail);
+
+        function validateEmail() {
+          if (email.value != confirmEmail.value) {
+            confirmEmail.setCustomValidity('Email addresses do not match.');
+          }
+          else {
+            confirmEmail.setCustomValidity('');
+          }
+        }
+      }();
+    </script>
   </imp:pageFrame>
 </jsp:root>

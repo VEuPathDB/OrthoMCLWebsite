@@ -17,6 +17,7 @@ import org.gusdb.wdk.controller.actionutil.WdkAction;
 import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
 import org.gusdb.wdk.model.jspwrap.RecordBean;
+import org.gusdb.wdk.model.jspwrap.RecordClassBean;
 import org.gusdb.wdk.model.jspwrap.WdkModelBean;
 import org.gusdb.wdk.model.record.TableValue;
 import org.orthomcl.model.Taxon;
@@ -35,6 +36,7 @@ public class GetDataSummaryAction extends WdkAction {
   private static final String ATTR_HELPER_RECORD = CConstants.WDK_RECORD_KEY;
   private static final String ATTR_TAXONS = "taxons";
   private static final String ATTR_SUMMARY = "summaryTable";
+  private static final String ATTR_RECORD_CLASS = "recordClass";
 
   //private static final String MAP_DATA = SUMMARY_DATA;
   private static final String MAP_RELEASE = SUMMARY_RELEASE;
@@ -60,9 +62,12 @@ public class GetDataSummaryAction extends WdkAction {
     // load helper record into request
     WdkModelBean wdKModel = getWdkModel();
     QuestionBean question = wdKModel.getQuestion(TaxonManager.HELPER_QUESTION);
+    RecordClassBean recordClass = question.getRecordClass();
     AnswerValueBean answerValue = question.makeAnswerValue(getCurrentUser(),
         new LinkedHashMap<String, String>(), true, 0);
     RecordBean record = answerValue.getRecords().next();
+
+    result.setRequestAttribute(ATTR_RECORD_CLASS, recordClass);
 
     Map<String, TableValue> tables = record.getTables();
     TableValue summaryTable = tables.get(summary.equalsIgnoreCase(SUMMARY_RELEASE) ? "ReleaseSummary" : "DataSummary");

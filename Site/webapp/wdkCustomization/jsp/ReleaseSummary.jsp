@@ -11,6 +11,7 @@
   <c:set var="wdkRecord" value="${requestScope.wdkRecord}" />
   <c:set var="summary" value="${requestScope.summaryTable}" />
   <c:set var="taxons" value="${requestScope.taxons}" />
+  <c:set var="recordClass" value="${requestScope.recordClass}" />
 
 
   <table class="recordTable wdk-data-table">
@@ -51,7 +52,7 @@
                  </td>
               </c:when>
               <c:otherwise>
-                <imp:wdkAttribute attributeValue="${attributeValue}" truncate="false" />
+                <imp:wdkAttribute attributeValue="${attributeValue}" truncate="false" recordClass="${recordClass}" />
               </c:otherwise>
             </c:choose>
           </c:if>

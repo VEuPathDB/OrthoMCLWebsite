@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 
 import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.fgputil.db.pool.DatabaseInstance;
+import org.json.JSONArray;
 
 public class SiteMessagesTag extends WdkTagBase {
 
@@ -37,7 +38,7 @@ public class SiteMessagesTag extends WdkTagBase {
         super.doTag();
 
         fetchMessages(projectName, messageCategory);
-        this.getRequest().setAttribute(var, messages);
+        this.getRequest().setAttribute(var, new JSONArray(messages).toString());
     }
 
     private void fetchMessages(String projectName, String messageCategory) throws JspException {

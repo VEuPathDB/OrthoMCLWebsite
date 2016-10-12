@@ -12,6 +12,7 @@ import org.gusdb.fgputil.runtime.Manageable;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
+import org.gusdb.wdk.model.record.DynamicRecordInstance;
 import org.gusdb.wdk.model.record.RecordClass;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
@@ -49,7 +50,7 @@ public class GroupManager implements Manageable<GroupManager> {
     RecordClass recordClass = wdkModel.getRecordClass(RECORD_CLASS);
     Map<String, Object> pkValues = new LinkedHashMap<>();
     pkValues.put(GROUP_NAME_KEY, name);
-    RecordInstance instance = new RecordInstance(user, recordClass, pkValues);
+    RecordInstance instance = new DynamicRecordInstance(user, recordClass, pkValues);
     return instance;
   }
 

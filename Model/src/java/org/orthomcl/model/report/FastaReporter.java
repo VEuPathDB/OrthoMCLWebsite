@@ -12,6 +12,7 @@ import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.answer.stream.RecordStream;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.report.PagedReporter;
+import org.json.JSONObject;
 
 /**
  * @author xingao
@@ -42,7 +43,6 @@ public class FastaReporter extends PagedReporter {
 
   @Override
   public void configure(Map<String, String> config) throws WdkUserException {
-    super.configure(config);
 
     // get basic configurations
     downloadType = config.get(FIELD_DOWNLOAD_TYPE);
@@ -52,6 +52,11 @@ public class FastaReporter extends PagedReporter {
 
     String strDescription = config.get(FIELD_HAS_DESCRIPTION);
     hasDescription = (strDescription != null && (strDescription.equals("yes") || strDescription.equals("true")));
+  }
+
+  @Override
+  public void configure(JSONObject config) throws WdkUserException {
+    // FIXME: this reporter must be updated to comply with answer service
   }
 
   @Override

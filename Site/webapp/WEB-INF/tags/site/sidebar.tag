@@ -8,6 +8,7 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
 
+  <c:set var="props" value="${applicationScope.wdkModel.properties}" />
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
 <!-- JSP constants -->
@@ -198,7 +199,7 @@
 	  <div>
 		  <ul id="education">
 				<li id='edu-05'>
-					<a target="_blank" href="${constants.youtubeUrl}">
+					<a target="_blank" href="${props.youtube}">
 						YouTube Tutorials Channel
 						<imp:image style="width:20px;display:inline;vertical-align:middle;" src="images/youtube_32x32.png"/>
 					</a>

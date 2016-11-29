@@ -38,7 +38,7 @@
 
   <c:if test="${refer eq 'summary' or refer eq 'question'}">
     <imp:script src="wdkCustomization/js/ppform.js"/>
-    <imp:script src="wdkCustomization/js/question/radio-params.js"/>
+    <imp:script src="wdkCustomization/js/questions/radio-params.js"/>
   </c:if>
 
   <c:if test="${refer eq 'record'}">

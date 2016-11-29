@@ -52,6 +52,7 @@
   <c:if test="${refer eq 'summary' or refer eq 'question'}">
     <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/question.css"/>
     <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/ppform.css"/>
+    <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/radio-params.css"/>
   </c:if>
 
   <c:if test="${refer eq 'record'}">

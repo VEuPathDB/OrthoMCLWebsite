@@ -51,7 +51,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
     Map<String, Taxon> taxons = new LinkedHashMap<>();
     Map<Integer, Integer> parents = new HashMap<>();
     Map<Integer, String> abbreviations = new HashMap<>();
-    Map<String, TableValue> tables = record.getTables();
+    Map<String, TableValue> tables = record.getTableValueMap();
 
     TableValue taxonTable = tables.get(TABLE_TAXONS);
     for (Map<String, AttributeValue> row : taxonTable) {

@@ -43,7 +43,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
 
   @Override
   public Object getFormViewModel() throws WdkModelException, WdkUserException {
-    return new ClusterFormViewModel(getAnswerValue().getResultSize());
+    return new ClusterFormViewModel(getAnswerValue().getResultSizeFactory().getResultSize());
   }
 
   /*

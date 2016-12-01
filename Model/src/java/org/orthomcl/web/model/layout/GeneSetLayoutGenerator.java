@@ -30,7 +30,7 @@ public class GeneSetLayoutGenerator {
 
   public GroupLayout generateLayout(AnswerValue answer) throws WdkModelException, WdkUserException {
     // only do layout for the step with genes of MAX_GENES or less
-    if (answer.getResultSize() > MAX_GENES)
+    if (answer.getResultSizeFactory().getResultSize() > MAX_GENES)
       return null;
 
     GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());

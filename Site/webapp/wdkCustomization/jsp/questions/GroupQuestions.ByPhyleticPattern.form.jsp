@@ -19,7 +19,7 @@
   <c:set var="taxons" value="${helperRecord.tables['Taxons']}"/>
 
   <div id="taxons" style="display:none">
-    <c:forEach items="${taxons}" var="row">
+    <c:forEach items="${taxons.iterator}" var="row">
       <div class="taxon" taxon-id="${row['taxon_id']}"
            parent="${row['parent_id']}" abbrev="${row['abbreviation']}" 
            leaf="${row['is_species']}" index="${row['sort_index']}"
@@ -81,7 +81,7 @@
   
       var taxons = { };
       
-      <c:forEach items="${taxons}" var="row">
+      <c:forEach items="${taxons.iterator}" var="row">
         <c:set var="taxonId" value="${row['taxon_id']}"/>
         <c:set var="name" value="${row['name']}"/>
         <c:set var="commonName" value="${row['common_name']}"/>

@@ -125,7 +125,8 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper"
         name="registerForm">
       <forward name="input" path="/WEB-INF/jsp/register.jsp" redirect="false"/>
-      <forward name="success" path="/showLogin.do" redirect="true"/>
+     <!-- <forward name="success" path="/showLogin.do" redirect="true"/>-->
+     <forward name="success" path="/WEB-INF/jsp/register.jsp" redirect="false"/>
     </action>
     <action path="/showProfile"
         parameter="org.gusdb.wdk.controller.action.standard.PrivatePageAction"

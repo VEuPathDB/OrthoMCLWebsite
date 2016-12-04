@@ -7,13 +7,26 @@
   <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Registration" refer="register">
  
 
-   <div class="user-form-frame">
+  <style type="text/css">
+    .blockUI {   min-width: 750px; }
+
+    p#regConf {
+      font-weight: bold;
+      font-size: 120%;
+      color: green;
+      margin: 10px 0 30px;
+    }
+  </style>
+
+  <div class="user-form-frame">
+
 		  <!-- display the success information if the user registered successfully -->
 		  <c:choose>
 		    <c:when test="${requestScope.registerSucceed ne null}">
 		      <h1>You have registered successfully.</h1>
-		      <p>We have sent you an email with a temporary password.</p>
-		      <p>Please <a href="${pageContext.request.contextPath}/login.do">log in</a> and change your password to one that you'll remember.</p>
+		      <p id="regConf">We have sent you an email with a temporary password.<br></br>
+		         Please log in within the next week (to avoid having this registration purged).
+          </p>
 		    </c:when>
 		    <c:otherwise>
 
@@ -170,7 +183,7 @@
            </c:otherwise>
         </c:choose>
 
-					<br/><br/><input type="submit" name="registerButton" value="Register"/>
+					<br/><br/><input type="submit" name="registerButton" value="Register"   onclick="return validateFields();"/>
 
 				</div>
 		      </form>

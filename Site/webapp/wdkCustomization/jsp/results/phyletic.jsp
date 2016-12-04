@@ -28,7 +28,7 @@
   <c:set var="taxons" value="${helperRecord.tables['Taxons']}"/>
 
   <div id="taxons" style="display:none">
-    <c:forEach items="${taxons}" var="row">
+    <c:forEach items="${taxons.iterator}" var="row">
       <div class="taxon" taxon-id="${row['taxon_id']}"
            parent="${row['parent_id']}" abbrev="${row['abbreviation']}" 
            leaf="${row['is_species']}" index="${row['sort_index']}"
@@ -114,11 +114,10 @@
 								  </td>
 								
 								  <!-- load the taxon count -->
-								  <c:set var="taxonCounts" value="${record.tables['TaxonCounts']}"/>
 								  <td id="${primaryKey}" class="group">
                     <div class="attr-keyword-freq">
                        <label>Keywords:</label>
-                       <c:forEach items="${tables['KeywordFrequency']}" var="row" varStatus="loop">
+                       <c:forEach items="${tables['KeywordFrequency'].iterator}" var="row" varStatus="loop">
                          <span class="keyword" title="frequency: ${row['frequency']}" 
                            data-frequency="${row['frequency']}">${row['keyword']}<c:if test="${not loop.last}">; </c:if>
                          </span>
@@ -129,7 +128,7 @@
                     </div>
                       <div class="attr-descriptions">
                        <label>Pfam Domains:</label>
-                       <c:forEach items="${tables['DomainFrequency']}" var="row" varStatus="loop">
+                       <c:forEach items="${tables['DomainFrequency'].iterator}" var="row" varStatus="loop">
                          <span class="keyword" title="frequency: ${row['frequency']}" 
                            data-frequency="${row['frequency']}">${row['keyword']}<c:if test="${not loop.last}">; </c:if>
                          </span>
@@ -139,7 +138,7 @@
                       </c:if>
                     </div>
 								    <div class="count-data">
-								      <c:forEach items="${taxonCounts}" var="row">
+								      <c:forEach items="${tables['TaxonCounts'].iterator}" var="row">
 								        <div class="count" taxon-id="${row['taxon_id']}">${row['count']}</div>
 								      </c:forEach>
 								    </div>

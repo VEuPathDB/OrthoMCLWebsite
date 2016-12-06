@@ -22,7 +22,7 @@
     <imp:toggle name="phyletic-pattern" displayName="Phyletic Distribution" isOpen="true">
       <jsp:attribute name="content">
         <div id="taxons" style="display:none">
-          <c:forEach items="${taxons}" var="row">
+          <c:forEach items="${taxons.iterator}" var="row">
             <div class="taxon" taxon-id="${row['taxon_id']}"
                  parent="${row['parent_id']}" abbrev="${row['abbreviation']}" 
                  leaf="${row['is_species']}" index="${row['sort_index']}"
@@ -56,7 +56,7 @@
 
           <div id="${primaryKey}" class="group">
             <div class="count-data">
-              <c:forEach items="${taxonCounts}" var="row">
+              <c:forEach items="${taxonCounts.iterator}" var="row">
                 <div class="count" taxon-id="${row['taxon_id']}">${row['count']}</div>
               </c:forEach>
             </div>

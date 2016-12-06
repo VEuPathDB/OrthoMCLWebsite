@@ -13,7 +13,7 @@
   <c:set var="domains" value="${wdkRecord.tables['PFams']}"/>
 
   <!-- generate domain colors -->
-  <c:set var="domainCount" value="${fn:length(domains)}"/>
+  <c:set var="domainCount" value="${domains.numRows}"/>
   <c:set var="maxLength" value="${wdkRecord.attributes['max_length']}"/>
 
   <!-- <span class="onload-function" data-function="eupathdb.pfamDomain.init"><jsp:text/></span> -->
@@ -29,7 +29,7 @@
           <th>Count</th>
         </tr>
         <c:set var="odd" value="${true}" />
-        <c:forEach items="${domains}" var="domain">
+        <c:forEach items="${domains.iterator}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${!odd}" />
           <tr id="${domain['accession']}" class="domain ${rowClass}" >
@@ -60,7 +60,7 @@
         <tbody>
           <c:set var="odd" value="${true}" />
           <c:set var="previous_id" value="${''}" />
-          <c:forEach items="${proteins}" var="row">
+          <c:forEach items="${proteins.iterator}" var="row">
             <c:set var="source_id" value="${row['full_id'].value}" />
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}" />

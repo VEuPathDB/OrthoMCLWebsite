@@ -15,7 +15,7 @@
   <c:set var="proteinGroups" value="${wdkfn:groupAttributeRecordsBySource(proteins, 'full_id')}"/>
 
   <!-- generate domain colors -->
-  <c:set var="domainCount" value="${fn:length(domains)}"/>
+  <c:set var="domainCount" value="${domains.numRows}"/>
   <c:set var="maxLength" value="${wdkRecord.attributes['max_length']}"/>
 
   <span class="onload-function" data-function="eupathdb.pfamDomain.init"><jsp:text/></span>
@@ -33,7 +33,7 @@
           <th>Legend</th>
         </tr>
         <c:set var="odd" value="${true}"/>
-        <c:forEach items="${domains}" var="domain">
+        <c:forEach items="${domains.iterator}" var="domain">
           <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
           <c:set var="odd" value="${not odd}" />
           <tr id="${domain['accession']}" class="domain ${rowClass}" 

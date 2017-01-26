@@ -30,7 +30,7 @@
 
   <tbody>
     <c:set var="i" value="0"/>
-    <c:forEach var="row" items="${summary}">
+    <c:forEach var="row" items="${summary.iterator}">
         <c:set var="rowClass">
         <c:choose>
             <c:when test="${i % 2 == 0}">rowLight</c:when>

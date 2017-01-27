@@ -122,9 +122,11 @@
 
     <echo message="Building OrthoMCLWebsite/Site assets"/>
     <exec dir="${projectsDir}/OrthoMCLWebsite/Site"
-      executable="make"
+      executable="${projectsDir}/WDK/View/node_modules/.bin/webpack"
       failonerror="true"
-      failifexecutionfails="true"/>
+      failifexecutionfails="true">
+      <arg line="--output-path ${webappTargetDir}"/>
+    </exec>
 
     <echo message="Copying OrthoMCLWebsite/Site assets to webapp"/>
     <copy todir="${webappTargetDir}">

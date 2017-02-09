@@ -53,7 +53,6 @@
   <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLWebService-Installation,
                                                        OrthoMCLShared-Installation,
                                                        OrthoMCLWebsite/Model-Installation,
-                                                       OrthoMCLWebsite/View-Installation,
                                                        OrthoMCLWebsite/Site-Installation">
     <ant target="defaultProjectInstall"/>
   </target>
@@ -92,13 +91,6 @@
     <ant target="defaultComponentInstall">
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
-    </ant>
-  </target>  
-
- <target name="OrthoMCLWebsite/View-Installation">
-    <ant target="defaultComponentInstall">
-      <property name="project" value="OrthoMCLWebsite"/>
-      <property name="component" value="View"/>
     </ant>
   </target>  
 

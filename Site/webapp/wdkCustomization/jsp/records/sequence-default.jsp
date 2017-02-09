@@ -39,7 +39,7 @@
   <c:choose>
     <c:when test="${wdkTable.name == 'PFamDomains'}">
 
-      <c:set var="domainCount" value="${fn:length(wdkTable)}" />
+      <c:set var="domainCount" value="${wdkTable.numRows}" />
       <c:set var="maxLength" value="${wdkRecord.attributes['length']}" />
   <imp:toggle name="pfam-domains" displayName="PFam Domains" isOpen="true">
     <jsp:attribute name="content">
@@ -54,7 +54,7 @@
           <td>
             <div class="domains">
               <div class="protein-graph"> </div>
-              <c:forEach items="${wdkTable}" var="row">
+              <c:forEach items="${wdkTable.iterator}" var="row">
                 <c:set var="name" value="${row['accession'].value}" />
                 <c:set var="start" value="${row['start_min']}" />
                 <c:set var="end" value="${row['end_max']}" />
@@ -84,7 +84,7 @@
         </thead>
         <tbody>
           <c:set var="odd" value="${true}" />
-          <c:forEach items="${wdkTable}" var="domain">
+          <c:forEach items="${wdkTable.iterator}" var="domain">
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}" />
             <tr id="${domain['accession']}" class="domain ${rowClass}"

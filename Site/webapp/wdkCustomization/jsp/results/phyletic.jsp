@@ -107,8 +107,8 @@
 								  <c:forEach items="${pkValues}" var="pkValue">
 								    <c:set var="recordLinkKeys" value="${recordLinkKeys}&amp;${pkValue.key}=${pkValue.value}"/>
 								  </c:forEach>
-                  <c:set var="keywords" value="${record.summaryAttributes['keywords']}"/>
-                  <c:set var="descriptions" value="${record.summaryAttributes['descriptions']}"/>
+                  <c:set var="keywords" value="${record.attributes['keywords']}"/>
+                  <c:set var="descriptions" value="${record.attributes['descriptions']}"/>
 								  <td width="100">
 								    <a href="${pageContext.request.contextPath}/showRecord.do?name=${rcName}${recordLinkKeys}">${primaryKey}</a>
 								  </td>

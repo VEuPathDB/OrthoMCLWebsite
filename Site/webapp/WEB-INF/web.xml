@@ -32,7 +32,7 @@
   </context-param>
   
   <listener>
-    <listener-class>org.gusdb.wdk.controller.ApplicationInitListener</listener-class>
+    <listener-class>org.orthomcl.controller.ApplicationInitListener</listener-class>
   </listener>
 
   <listener>

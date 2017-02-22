@@ -52,7 +52,7 @@
   <!-- <h3>List of Protein Domain Architectures</h3> -->
   <imp:toggle name="pfam-domain-architectures" displayName="Protein Domain Architectures" isOpen="true">
     <jsp:attribute name="content">
-      <table id="proteins" class="wdk-data-table" data-sorting='[true, "numeric", false]' maxLength="${maxLength}" width="100%">
+      <table id="proteins" class="wdk-data-table" maxLength="${maxLength}" width="100%">
         <thead>
           <tr>
             <th>Accession</th>

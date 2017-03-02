@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jsp:root version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
-    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
-	
+  xmlns:jsp="http://java.sun.com/JSP/Page"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+  xmlns:common="urn:jsptagdir:/WEB-INF/tags/site-common"
+  xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
+
   <jsp:directive.attribute name="refer" required="false" 
-              description="Page calling this tag"/>
+    description="Page calling this tag"/>
 
-  <c:set var="project" value="${applicationScope.wdkModel.properties['PROJECT_ID']}" />
-  <c:set var="version" value="${applicationScope.wdkModel.version}" />
+  <jsp:directive.attribute name="title" required="false" 
+    description="Title of page"/>
 
-  <!-- required for date parsing when client browser (e.g. curl) does not send locale -->
-  <fmt:setLocale value="en-US"/>
-  <fmt:parseDate var="releaseDate" value="${applicationScope.wdkModel.releaseDate}" pattern="dd MMMM yyyy HH:mm"/> 
-  <fmt:formatDate var="formattedReleaseDate" value="${releaseDate}" pattern="d MMM yy"/>
+  <c:set var="props" value="${applicationScope.wdkModel.properties}"/>
+  <c:set var="project" value="${props['PROJECT_ID']}"/>
 
-  <div id="header2">
-    <div id="header-control" class="ui-widget ui-widget-content ui-corner-all">      
-      <div id="sub-logo">
-        <a href="http://eupathdb.org"><imp:image src="wdkCustomization/images/partofeupath.png"/></a>
-      </div>
-      <imp:quickSearch/>
-      <imp:smallMenu/>
-    </div>
-    <a href="${pageContext.request.contextPath}/home.do">
-      <imp:image src="images/${project}/title_s.png" alt="Link to ${project} homepage" align="left" />
-    </a>
-    Version ${version}<br/>
-    ${formattedReleaseDate}
+  <div id="toplink">
+    <a href="http://eupathdb.org"><imp:image src="wdkCustomization/images/partofeupath.png" alt="Link to EuPathDB homepage"/></a>
   </div>
+  <common:header refer="${refer}" title="${title}"/>
 </jsp:root>

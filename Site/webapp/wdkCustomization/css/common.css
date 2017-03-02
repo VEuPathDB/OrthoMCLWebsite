@@ -37,9 +37,12 @@ div#header2 .ui-widget-content {
 #header2 #quick-search input.search-box { width: 100px; }
 #header2 #site-logo a {font:bold 50pt Georgia,serif; color:#3333FF; text-decoration:none;}
 
+#header_rt {
+  margin-top: 32px;
+}
 
-table#quick-search a {
-  font-size:120%;
+#toplink {
+  top: 6px;
 }
 
 #nav-top .socmedia-link {

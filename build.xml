@@ -107,21 +107,10 @@
 
   <target name="OrthoMCLWebsite/Site-WebInstallation">
  
-   <ant target="defaultWebComponentInstall">
+    <ant target="eupathWebComponentInstall">
       <property name="project" value="OrthoMCLWebsite"/>
       <property name="component" value="Site"/>
     </ant>
-
-    <echo message="Building OrthoMCLWebsite/Site assets"/>
-    <exec dir="${projectsDir}/OrthoMCLWebsite/Site"
-      executable="${projectsDir}/WDK/View/node_modules/.bin/webpack"
-      failonerror="true"
-      failifexecutionfails="true">
-      <env key="NODE_PATH" value="${projectsDir}/WDK/View/node_modules"/>
-      <arg line="--output-path ${webappTargetDir}"/>
-    </exec>
-
-    <antcall target="EuPathSiteCommon-post-webinstall"/>
 
     <available file="${targetDir}/config/log4j.xml.custom-web" property="custom.weblog4j.present"/>
     <antcall target="installCustomWebLog4j"/>

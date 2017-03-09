@@ -20,10 +20,10 @@
   <!--<imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
 
   <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/superfish/css/superfish.css"/>
-  <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/common.css"/>
 
   <!-- adding some css for backgorund in contentcolumn2, used in strategy workspace -->
   <imp:stylesheet rel="stylesheet" type="text/css" href="css/AllSites.css"/>
+  <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/common.css"/>
   <imp:stylesheet rel="stylesheet" type="text/css" href="css/OrthoMCL.css"/>
 
   <c:if test="${refer eq 'home'}">

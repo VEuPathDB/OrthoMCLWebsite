@@ -1,63 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jsp:root version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
+  xmlns:jsp="http://java.sun.com/JSP/Page"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp"
+  xmlns:common="urn:jsptagdir:/WEB-INF/tags/site-common">
 
   <jsp:directive.attribute name="title" required="true"
-              description="Value to appear in page's title"/>
+    description="Value to appear in page's title"/>
   <jsp:directive.attribute name="refer" required="false" 
-              description="Page calling this tag"/>
-  <jsp:directive.attribute name="headElement" required="false"
-              description="additional head elements"/>
-  <jsp:directive.attribute name="bufferContent" required="false"
-              type="java.lang.Boolean"
-              description="whether to create margin, border, padding around main div"/>
+    description="Page calling this tag"/>
+  <jsp:directive.attribute name="bufferContent" required="false" 
+    description="Page calling this tag"/>
 
   <c:set var="project" value="${applicationScope.wdkModel.displayName}"/>
-  <c:set var="mainContentClass" value="${empty bufferContent or bufferContent ? 'buffered-content' : '' }"/>
 
-  <!-- jsp:output tag for doctype no longer supports simple HTML5 declaration -->
-  <jsp:text>&lt;!DOCTYPE html&gt;</jsp:text>
-  <html>
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      ${headElement}
-      
-      <title>
-        <c:out value="${title}" default="WDK ${project}"/>
-      </title>
-  
-      <link rel="shortcut icon" href="${pageContext.servletContext.contextPath}/images/${project}/favicon.ico"/>
-      
-      <imp:stylesheets refer="${refer}"/>
-      <imp:javascripts refer="${refer}"/>
-    </head>
-  
-    <body class="${refer}">
-      <!-- helper divs with generic information used by javascript -->
-      <imp:siteInfo/>
+  <common:pageFrame title="${title}" refer="${refer}" banner="OrthoMCL">
 
-      <imp:header refer="${refer}"/>
-      <imp:menubar refer="${refer}"/>
+    <c:if test="${refer == 'home' or refer == 'home2' }">
+      <imp:sidebar/>
+    </c:if>
 
-			<c:if test="${refer == 'home' or refer == 'home2' }">
-				<imp:sidebar/>
-			</c:if>
-		
-	<c:set var="showBanner">
-		<imp:extraBanner refer="${refer}" title="${title}"/>
-	</c:set>
-  <imp:siteAnnounce refer="${refer}" showBanner="${showBanner}"/>
+    <c:set var="showBanner">
+      <imp:extraBanner refer="${refer}" title="${title}"/>
+    </c:set>
 
-<!--      <div id="main-content" class="${mainContentClass}">  -->
-      <div id="main-content" >
-        <jsp:doBody/>
-      </div>
+    <imp:siteAnnounce refer="${refer}" showBanner="${showBanner}"/>
 
-      <imp:dialogs/>
-      <imp:footer refer="${refer}"/>
+    <div id="main-content">
+      <jsp:doBody/>
+    </div>
 
-    </body>
-  </html>
+  </common:pageFrame>
 </jsp:root>

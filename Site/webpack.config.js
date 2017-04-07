@@ -1,8 +1,8 @@
-var configure = require('../../EuPathSiteCommon/Site/site.webpack.config');
+var configure = require('../../EbrcWebsiteCommon/Site/site.webpack.config');
 
 module.exports = configure({
   entry: {
-    orthomcl: require.resolve('../../EuPathSiteCommon/Site/webapp/wdkCustomization/js/common.js'),
+    orthomcl: require.resolve('../../EbrcWebsiteCommon/Site/webapp/wdkCustomization/js/common.js'),
     'site-client': './webapp/wdkCustomization/js/client.js'
   },
   output: {

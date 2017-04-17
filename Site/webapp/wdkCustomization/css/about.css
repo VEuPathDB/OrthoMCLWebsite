@@ -5,8 +5,10 @@
 
 div#about {
   width: 100%;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 14px;
   text-align: center;
+  color: #333;
 }
 
 div#about div {
@@ -14,9 +16,8 @@ div#about div {
   margin-right: auto;
 }
 
-div#about h1 { font-size: 28px; }
-div#about h2 { font-size: 16px; }
-div#about p { margin: 15px; }
+div#about h1 { font-size: 2em; font-weight: 400; }
+div#about h2 { font-size: 1.6em; font-weight: 400; }
 div#about .question { font-weight:bold; }
 
 div#about .about-nav {
@@ -31,32 +32,23 @@ div#about .about-title {
 
 div#about .section-title {
   width: 70%;
-  padding: 6px;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  border-radius: 20px;
-}
-
-div#about .section-title a {
-  float: right;
+  padding-top: 30px;
+  border-bottom: 1px solid #ccc;
 }
 
 div#about .section-content {
-  width: 65%;
-  padding: 15px;
-  font-size: 14px;
+  width: 70%;
   text-align: left;
 }
 
+div#about ul,
 div#about ol {
   margin-left: 40px;
-  list-style-position: outside;
-  list-style-type: decimal;
+  padding: 0;
 }
 
 div#about li {
-  padding-top: 5px;
+  padding: .5em 0;
 }
 
 

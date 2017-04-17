@@ -6,8 +6,7 @@
   <imp:pageFrame title="${wdkModel.displayName} :: About" refer="about" bufferContent="false">
     <div id="about">
       <!-- Provides section-selection drop-down
-      <div class="about-nav">
-        <a name="top">
+      <div id="top" class="about-nav">
           <form>
             <select id="navSel" onchange="window.location='#'+$(this).find(':selected').attr('name');">
               <option name="">Jump to...</option>
@@ -27,8 +26,7 @@
         <h1>About OrthoMCL</h1>
       </div>
       <div class="about-body">
-        <div class="section-title">
-          <a name="release" href="#top">Top</a>
+        <div id="release" class="section-title">
           <h2>Current Release</h2>
         </div>
         <div class="section-content">
@@ -44,8 +42,7 @@
             used in this release and the ortholog groups.
           </p>
         </div>
-        <div class="section-title">
-          <a name="methods" href="#top">Top</a>
+        <div id="methods" class="section-title">
           <h2>Methods</h2>
         </div>
         <div class="section-content">
@@ -68,8 +65,7 @@
            <li>Use the <a href="http://micans.org/mcl/">MCL</a> program to cluster the pairs into groups</li>
            </ul>
         </div>
-        <div class="section-title">
-          <a name="background" href="#top">Top</a>
+        <div id="background" class="section-title">
           <h2>Background</h2>
         </div>
         <div class="section-content">
@@ -107,8 +103,7 @@
             (FP) and False Negative (FN) error rates lower than 20%.
           </p>
         </div>
-        <div class="section-title">
-          <a name="faq" href="#top">Top</a>
+        <div id="faq" class="section-title">
           <h2>Frequently Asked Questions</h2>
         </div>
         <div class="section-content">
@@ -160,8 +155,7 @@
             </li>
           </ol>
         </div>
-        <div class="section-title">
-          <a name="software" href="#top">Top</a>
+        <div id="software" class="section-title">
           <h2>Software</h2>
         </div>
         <div class="section-content">
@@ -175,8 +169,7 @@
             <a href="/common/downloads/software">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau
           </p>
         </div>
-        <div class="section-title">
-          <a name="pubs" href="#top">Top</a>
+        <div id="pubs" class="section-title">
           <h2>Publications</h2>
         </div>
         <div class="section-content">
@@ -210,8 +203,7 @@
             </li>
           </ol>
         </div>
-        <div class="section-title">
-          <a name="acknowledge" href="#top">Top</a>
+        <div id="acknowledge" class="section-title">
           <h2>Acknowledgements</h2>
         </div>
         <div class="section-content">
@@ -229,8 +221,7 @@
             valuable suggestions, specifically Lucia Peixoto, Omar Harb and Dhanasekaran Shanmugam.
           </p>
         </div>
-        <div class="section-title">
-          <a name="contact" href="#top">Top</a>
+        <div id="contact" class="section-title">
           <h2>Contact</h2>
         </div>
         <div class="section-content">

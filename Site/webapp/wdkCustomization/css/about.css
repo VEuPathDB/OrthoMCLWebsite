@@ -4,11 +4,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 div#about {
-  width: 100%;
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
   font-size: 14px;
-  text-align: center;
   color: #333;
+  width: 70%;
+  margin: auto;
 }
 
 div#about div {
@@ -21,24 +20,12 @@ div#about h2 { font-size: 1.6em; font-weight: 400; }
 div#about .question { font-weight:bold; }
 
 div#about .about-nav {
-  width: 70%;
   text-align: right;
 }
 
-div#about .about-title {
-  width: 70%;
-  text-align: center;
-}
-
 div#about .section-title {
-  width: 70%;
   padding-top: 30px;
   border-bottom: 1px solid #ccc;
-}
-
-div#about .section-content {
-  width: 70%;
-  text-align: left;
 }
 
 div#about ul,

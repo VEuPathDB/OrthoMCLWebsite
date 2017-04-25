@@ -47,7 +47,7 @@ use XML::Simple;
 use File::Copy;
 use FindBin;
 use lib "$FindBin::Bin/../lib/perl";
-use EuPathSiteCommon::Model::ModelXML;
+use EbrcWebsiteCommon::Model::ModelXML;
 
 my ($this_script) = basename $0;
 print $this_script . ' $Revision: 52040 $' . "\n";
@@ -125,7 +125,7 @@ my $wdk_config_dir = "$gus_home/config";
 my $wdk_model_xml = "$gus_home/lib/wdk/OrthoMCL.xml";
 
 $ENV{'GUS_HOME'} = $gus_home;
-my $model = EuPathSiteCommon::Model::ModelXML->new('OrthoMCL.xml');
+my $model = EbrcWebsiteCommon::Model::ModelXML->new('OrthoMCL.xml');
 my $ortho_build_no = $model->getBuildNumberByProjectId('OrthoMCL');
 
 ####################################################################

@@ -5,7 +5,7 @@ use strict;
 use lib '@targetDir@/lib/perl';
 $ENV{GUS_HOME} = '@targetDir@';
 
-use OrthoMCLShared::Ppe::MatrixColumnManager;
+use OrthoMCLModel::Ppe::MatrixColumnManager;
 use ApiCommonWebsite::Model::ModelConfig;
 use DBI;
 
@@ -15,7 +15,7 @@ my $speciesFile = "$ENV{GUS_HOME}/config/orthomclSpecies.txt";
 
 my $dbh = &getDbHandle();
 
-my $colMgr = OrthoMCLShared::Ppe::MatrixColumnManager->new($dbh);
+my $colMgr = OrthoMCLModel::Ppe::MatrixColumnManager->new($dbh);
 
 my $sql = "
 select m.*

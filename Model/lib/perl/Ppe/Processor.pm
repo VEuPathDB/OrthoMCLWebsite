@@ -4,7 +4,7 @@ package OrthoMCLWebsite::Model::Ppe::Processor;
 
 use strict;
 use ApiCommonWebsite::View::CgiApp;
-use OrthoMCLShared::Ppe::MatrixColumnManager;
+use OrthoMCLModel::Ppe::MatrixColumnManager;
 use OrthoMCLWebsite::Model::Ppe::Parser;
 
 sub run {
@@ -25,7 +25,7 @@ sub run {
 sub processPpe {
   my ($self, $dbh, $ppeExpression, $fromCmdLine) = @_;
 
-  my $columnMgr = OrthoMCLShared::Ppe::MatrixColumnManager->new($dbh);
+  my $columnMgr = OrthoMCLModel::Ppe::MatrixColumnManager->new($dbh);
   my $boolean = &parsePpeExpression($ppeExpression);
   $boolean->setOtherTaxa();
   my $whereClause = $boolean->toSqlString($columnMgr);

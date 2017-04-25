@@ -90,7 +90,7 @@
     <java failonerror="true" classname="org.eupathdb.common.model.ontology.OwlClassGenerator">
       <arg line="-path ${targetDir}/lib/wdk/ontology/ -inputFilename individuals.txt -outputFilename individuals.owl -ontoIRIstr 'http://purl.obolibrary.org/obo/eupath/category/individuals.owl'"/>
       <classpath>
-        <pathelement location="${targetDir}/lib/java/eupath-site-common-model-1.0.0.jar"/>
+        <pathelement location="${targetDir}/lib/java/ebrc-website-common-model-1.0.0.jar"/>
         <pathelement location="${targetDir}/lib/java/args4j-2.0.23.jar"/>
         <pathelement location="${targetDir}/lib/java/owlapi-distribution-3.5.0.jar"/>
         <pathelement location="${targetDir}/lib/java/log4j-1.2.17.jar"/>
@@ -101,7 +101,7 @@
     <java failonerror="true" classname="org.eupathdb.common.model.ontology.EuPathAnnotPropAdder">
       <arg line="-path ${targetDir}/lib/wdk/ontology/ -inputFilename annotation.txt -outputFilename annotation.owl  -ontoIRIstr 'http://purl.obolibrary.org/obo/eupath/category/annotation.owl'"/>
       <classpath>
-        <pathelement location="${targetDir}/lib/java/eupath-site-common-model-1.0.0.jar"/>
+        <pathelement location="${targetDir}/lib/java/ebrc-website-common-model-1.0.0.jar"/>
         <pathelement location="${targetDir}/lib/java/args4j-2.0.23.jar"/>
         <pathelement location="${targetDir}/lib/java/owlapi-distribution-3.5.0.jar"/>
         <pathelement location="${targetDir}/lib/java/log4j-1.2.17.jar"/>
@@ -112,7 +112,7 @@
     <java failonerror="true" classname="org.eupathdb.common.model.ontology.OntologyMerger">
       <arg line="-path ${targetDir}/lib/wdk/ontology/ -inputFilename categories_full.owl -outputFilename categories_merged.owl"/>
       <classpath>
-        <pathelement location="${targetDir}/lib/java/eupath-site-common-model-1.0.0.jar"/>
+        <pathelement location="${targetDir}/lib/java/ebrc-website-common-model-1.0.0.jar"/>
         <pathelement location="${targetDir}/lib/java/args4j-2.0.23.jar"/>
         <pathelement location="${targetDir}/lib/java/owlapi-distribution-3.5.0.jar"/>
         <pathelement location="${targetDir}/lib/java/log4j-1.2.17.jar"/>

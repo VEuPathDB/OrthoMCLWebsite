@@ -3,9 +3,6 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
-  <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>  
-  <imp:pageFrame bufferContent="false" title="${wdkModel.displayName} :: Registration" refer="register">
- 
 
   <style type="text/css">
     .blockUI {   min-width: 750px; }
@@ -96,90 +93,90 @@
 
         <c:choose>
            <c:when test="${requestScope.preference_global_email_amoebadb != null}">
-              <input type="checkbox" name="preference_global_email_amoebadb" checked="yes">AmoebaDB</input>
+              <input type="checkbox" name="preference_global_email_amoebadb" checked="yes"> AmoebaDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_amoebadb">AmoebaDB</input>
+              <input type="checkbox" name="preference_global_email_amoebadb"> AmoebaDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_apidb != null}">
-              <input type="checkbox" name="preference_global_email_apidb" checked="yes">EuPathDB</input>
+              <input type="checkbox" name="preference_global_email_apidb" checked="yes"> EuPathDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_apidb">EuPathDB</input>
+              <input type="checkbox" name="preference_global_email_apidb"> EuPathDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_cryptodb != null}">
-              <input type="checkbox" name="preference_global_email_cryptodb" checked="yes">CryptoDB</input>
+              <input type="checkbox" name="preference_global_email_cryptodb" checked="yes"> CryptoDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_cryptodb">CryptoDB</input>
+              <input type="checkbox" name="preference_global_email_cryptodb"> CryptoDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_giardiadb != null}">
-              <input type="checkbox" name="preference_global_email_giardiadb" checked="yes">GiardiaDB</input>
+              <input type="checkbox" name="preference_global_email_giardiadb" checked="yes"> GiardiaDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_giardiadb">GiardiaDB</input>
+              <input type="checkbox" name="preference_global_email_giardiadb"> GiardiaDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_microsporidiadb != null}">
-              <input type="checkbox" name="preference_global_email_microsporidiadb" checked="yes">MicrosporidiaDB</input>
+              <input type="checkbox" name="preference_global_email_microsporidiadb" checked="yes"> MicrosporidiaDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_microsporidiadb">MicrosporidiaDB</input>
+              <input type="checkbox" name="preference_global_email_microsporidiadb"> MicrosporidiaDB </input>
            </c:otherwise>
 				</c:choose>
 				<c:choose>
 					 <c:when test="${requestScope.preference_global_email_piroplasmadb != null}">
-              <input type="checkbox" name="preference_global_email_ortho" checked="yes">OrthoMCL</input>
+              <input type="checkbox" name="preference_global_email_ortho" checked="yes"> OrthoMCL </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_ortho">OrthoMCL</input>
+              <input type="checkbox" name="preference_global_email_ortho"> OrthoMCL </input>
            </c:otherwise>
         </c:choose>
 				<c:choose>
 					 <c:when test="${requestScope.preference_global_email_piroplasmadb != null}">
-              <input type="checkbox" name="preference_global_email_piroplasmadb" checked="yes">PiroplasmaDB</input>
+              <input type="checkbox" name="preference_global_email_piroplasmadb" checked="yes"> PiroplasmaDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_piroplasmadb">PiroplasmaDB</input>
+              <input type="checkbox" name="preference_global_email_piroplasmadb"> PiroplasmaDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_plasmodb != null}">
-              <input type="checkbox" name="preference_global_email_plasmodb" checked="yes">PlasmoDB</input>
+              <input type="checkbox" name="preference_global_email_plasmodb" checked="yes"> PlasmoDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_plasmodb">PlasmoDB</input>
+              <input type="checkbox" name="preference_global_email_plasmodb"> PlasmoDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_toxodb != null}">
-              <input type="checkbox" name="preference_global_email_toxodb" checked="yes">ToxoDB</input>
+              <input type="checkbox" name="preference_global_email_toxodb" checked="yes"> ToxoDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_toxodb">ToxoDB</input>
+              <input type="checkbox" name="preference_global_email_toxodb"> ToxoDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_trichdb != null}">
-              <input type="checkbox" name="preference_global_email_trichdb" checked="yes">TrichDB</input>
+              <input type="checkbox" name="preference_global_email_trichdb" checked="yes"> TrichDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_trichdb">TrichDB</input>
+              <input type="checkbox" name="preference_global_email_trichdb"> TrichDB </input>
            </c:otherwise>
         </c:choose>
         <c:choose>
            <c:when test="${requestScope.preference_global_email_tritrypdb != null}">
-              <input type="checkbox" name="preference_global_email_tritrypdb" checked="yes">TriTrypDB</input>
+              <input type="checkbox" name="preference_global_email_tritrypdb" checked="yes"> TriTrypDB </input>
            </c:when>
            <c:otherwise>
-              <input type="checkbox" name="preference_global_email_tritrypdb">TriTrypDB</input>
+              <input type="checkbox" name="preference_global_email_tritrypdb"> TriTrypDB </input>
            </c:otherwise>
         </c:choose>
 
@@ -293,5 +290,4 @@
       </script>
     ]]>
 
-  </imp:pageFrame>
 </jsp:root>

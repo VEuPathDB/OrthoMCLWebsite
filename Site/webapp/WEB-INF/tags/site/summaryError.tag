@@ -3,7 +3,6 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
-  <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <!-- 
    there are four attributes set by the showSummary action:
@@ -39,15 +38,15 @@
   <!-- display question and param values and result size for wdkAnswer -->
   <table>
     <tr>
-      <td align="right" nowrap><b>Query:</b></td>
+      <td align="right" nowrap="nowrap"><b>Query:</b></td>
       <td>${questionDisplayName}</td>
     </tr>
     <tr>
-      <td align="right" valign="top" nowrap><b>Custom Name:</b></td>
+      <td align="right" valign="top" nowrap="nowrap"><b>Custom Name:</b></td>
       <td>${customName}</td>
     </tr>
     <tr>
-      <td align="right" valign="top" nowrap><b>Parameters:</b></td>
+      <td align="right" valign="top" nowrap="nowrap"><b>Parameters:</b></td>
       <td>
         <table border="0" cellspacing="0" cellpadding="0">
           <c:forEach items="${params}" var="item">
@@ -55,7 +54,7 @@
             <c:set var="pValue" value="${item.value}"/>
             <c:set var="pDisplay" value="${paramNames[pName]}"/>
             <tr>
-              <td align="right" valign="top" nowrap class="medium"><b><i>${pDisplay}</i><b></td>
+              <td align="right" valign="top" nowrap="nowrap" class="medium"><b><i>${pDisplay}</i></b></td>
               <td valign="top" class="medium">&#160;:&#160;</td>
               <td class="medium">${pValue}</td>
             </tr>

@@ -11,14 +11,11 @@
 <c:set var="dateStringPattern" value="dd MMMM yyyy HH:mm"/>
 <fmt:setLocale value="en-US"/><%-- req. for date parsing when client browser (e.g. curl) doesn't send locale --%>
 <c:set var="rssUrl" value="showXmlDataContent.do?name=XmlQuestions.NewsRss"/>
-<c:set var="headElement">
+
+<imp:pageFrame title="${wdkModel.displayName} : News">
   <link rel="alternate" type="application/rss+xml" 
     title="RSS Feed for ${wdkModel.displayName}" 
     href="${rssUrl}" />
-</c:set>
-
-<imp:pageFrame title="${wdkModel.displayName} : News"
-               headElement="${headElement}" >
 
 <!-- 
   Validate that the date string in the xml is parsable to a date object.

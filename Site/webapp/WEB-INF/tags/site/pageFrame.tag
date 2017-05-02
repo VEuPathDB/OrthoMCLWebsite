@@ -20,12 +20,6 @@
       <imp:sidebar/>
     </c:if>
 
-    <c:set var="showBanner">
-      <imp:extraBanner refer="${refer}" title="${title}"/>
-    </c:set>
-
-    <imp:siteAnnounce refer="${refer}" showBanner="${showBanner}"/>
-
     <div id="main-content">
       <jsp:doBody/>
     </div>

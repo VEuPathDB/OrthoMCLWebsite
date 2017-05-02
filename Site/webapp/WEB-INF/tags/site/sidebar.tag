@@ -50,10 +50,7 @@
 	<c:set var="group_count" value="${helperRecord.attributes['group_count'].value}"/>
 
   <!-- jquery accordion configuration -->
-  <span class="onload-function" data-function="eupath.setup.configureSidebar"><jsp:text/></span>
-
-
-  <div id="sidebar">
+  <div id="sidebar" data-controller="eupath.setup.configureSidebar">
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~ DATA STATISTICS ~~~~~~~~~~~~~~~~~~~~~~~  -->
 

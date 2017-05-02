@@ -2,7 +2,7 @@
 <jsp:root version="2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:wdk="urn:jsptagdir:/WEB-INF/tags/wdk"
+    xmlns:common="urn:jsptagdir:/WEB-INF/tags/site-common"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
 
   <jsp:directive.attribute name="refer" required="false" 
@@ -13,16 +13,8 @@
   <jsp:useBean id="websiteRelease" class="org.eupathdb.common.controller.WebsiteReleaseConstants"/>
   <c:set var="debug" value="${requestScope.WEBSITE_RELEASE_STAGE eq websiteRelease.development}"/>
   <!-- includes the original wdk includes -->
-  <wdk:wdkStylesheets refer="${refer}" debug="${debug}"/>
+  <common:stylesheets refer="${refer}"/>
 
-  <!-- comment out to use WDK's style -->
-  <!-- include third party CSS first, so that we can easily override rules -->
-  <!--<imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/jquery-ui/jquery-ui-1.8.16.custom.css"/>-->
-
-  <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/superfish/css/superfish.css"/>
-
-  <!-- adding some css for backgorund in contentcolumn2, used in strategy workspace -->
-  <imp:stylesheet rel="stylesheet" type="text/css" href="css/AllSites.css"/>
   <imp:stylesheet rel="stylesheet" type="text/css" href="wdkCustomization/css/common.css"/>
   <imp:stylesheet rel="stylesheet" type="text/css" href="css/OrthoMCL.css"/>
 

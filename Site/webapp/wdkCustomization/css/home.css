@@ -25,17 +25,9 @@
       =SIDEBAR
    =from AllSites.css (menu_leftop), modified
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 #sidebar {
-        width: 220px;
-        margin-top: 8px;
-        position: absolute;
-        left: 6px;
-        top: 129px;
-        z-index: 10;
+  margin: 8px;
 }
-
-
 
 #sidebar a.heading:link, #sidebar a.heading:visited {
 	color: #FFFFFF;

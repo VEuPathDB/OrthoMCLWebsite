@@ -3,46 +3,36 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:wdk="urn:jsptagdir:/WEB-INF/tags/wdk"
+    xmlns:common="urn:jsptagdir:/WEB-INF/tags/site-common"
     xmlns:imp="urn:jsptagdir:/WEB-INF/tags/imp">
 
   <jsp:directive.attribute name="refer" required="false" 
               description="Page calling this tag"/>
 
+  <common:javascripts refer="${refer}"/>
+
   <c:set var="base" value="${pageContext.request.contextPath}"/>
 
-  <jsp:useBean id="websiteRelease" class="org.eupathdb.common.controller.WebsiteReleaseConstants"/>
-  <c:set var="debug" value="${requestScope.WEBSITE_RELEASE_STAGE eq websiteRelease.development}"/>
-  <!-- JavaScript provided by WDK -->
-  <imp:wdkJavascripts refer="${refer}" debug="${debug}"/>
+  <script src="//d3js.org/d3.v3.min.js" charset="utf-8"><jsp:text/></script>
 
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"><jsp:text/></script>
-
-  <imp:script src="wdkCustomization/js/lib/hoverIntent.js"/>
-  <imp:script src="wdkCustomization/js/lib/superfish.js"/>
-  <imp:script src="wdkCustomization/js/lib/supersubs.js"/>
-
-  <imp:script src="wdkCustomization/js/lib/jquery.timers-1.2.js"/>
-  <imp:script src="orthomcl.bundle.js"/>
-
-  <!-- Access twitter/facebook links, and configure menubar (superfish) -->
-  <imp:script src="js/nav.js"/>
+  <imp:script src="wdkCustomization/js/lib/jquery.timers-1.2.js" charset="utf-8"/>
 
   <c:if test="${refer eq 'summary'}">
-    <imp:script src="wdkCustomization/js/customStrategy.js"/>
+    <imp:script src="wdkCustomization/js/customStrategy.js" charset="utf-8"/>
   </c:if>
 
   <c:if test="${refer eq 'summary' or refer eq 'record'}">
-    <imp:script src="wdkCustomization/js/phyletic.js"/>
-    <imp:script src="wdkCustomization/js/group-layout.js"/>
+    <imp:script src="wdkCustomization/js/phyletic.js" charset="utf-8"/>
+    <imp:script src="wdkCustomization/js/group-layout.js" charset="utf-8"/>
   </c:if>
 
   <c:if test="${refer eq 'summary' or refer eq 'question'}">
-    <imp:script src="wdkCustomization/js/ppform.js"/>
-    <imp:script src="wdkCustomization/js/questions/radio-params.js"/>
+    <imp:script src="wdkCustomization/js/ppform.js" charset="utf-8"/>
+    <imp:script src="wdkCustomization/js/questions/radio-params.js" charset="utf-8"/>
   </c:if>
 
   <c:if test="${refer eq 'record'}">
-    <imp:script src="wdkCustomization/js/pfamDomain.js"/>
+    <imp:script src="wdkCustomization/js/pfamDomain.js" charset="utf-8"/>
   </c:if>
 
 

@@ -38,7 +38,7 @@ div#header2 .ui-widget-content {
 #header2 #site-logo a {font:bold 50pt Georgia,serif; color:#3333FF; text-decoration:none;}
 
 #header_rt {
-  margin-top: 32px;
+  margin-top: 22px;
 }
 
 #toplink {
@@ -54,6 +54,19 @@ div#header2 .ui-widget-content {
   position: relative;
   bottom: 2px;
   left:2px;
+}
+
+.eupathdb-SmallMenuItem {
+  vertical-align: middle;
+}
+
+.eupathdb-SmallMenu .eupathdb-SmallMenu,
+.eupathdb-SmallMenu .eupathdb-SmallMenu * {
+  color: #2a3469;
+}
+
+.eupathdb-LogoRelease {
+  text-shadow: 1px 1px 4px #fff;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

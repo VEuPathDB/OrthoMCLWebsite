@@ -18,6 +18,8 @@ import org.gusdb.wdk.model.user.User;
 
 public class ExpressionParamHandler extends StringParamHandler {
 
+    private static final Logger LOG = Logger.getLogger(ExpressionParamHandler.class);
+
     private static final String TAXON_SQL = "SELECT three_letter_abbrev "
             + " FROM apidb.orthomcltaxon ORDER BY three_letter_abbrev";
     private static final String GROUP_SQL = "SELECT ortholog_group_id "
@@ -25,12 +27,8 @@ public class ExpressionParamHandler extends StringParamHandler {
 
     private static final String COLUMN_PREFIX = "column";
 
-    private static final Logger logger = Logger.getLogger(ExpressionParamHandler.class);
-
-    private final ExpressionParser parser = new ExpressionParser();
-    private Map<String, Integer> terms;
-
-    // private Param param;
+    private final ExpressionParser _parser = new ExpressionParser();
+    private Map<String, Integer> _terms;
 
     public ExpressionParamHandler() { }
 
@@ -39,19 +37,19 @@ public class ExpressionParamHandler extends StringParamHandler {
     }
 
     @Override
-    public ParamHandler clone(Param param) {
-      return new ExpressionParamHandler(this, param);
+    public ParamHandler clone(Param paramToClone) {
+        return new ExpressionParamHandler(this, paramToClone);
     }
 
     @Override
     public String toInternalValue(User user, String stableValue, Map<String, String> contextValues)
             throws WdkModelException {
-        logger.debug("transforming phyletic param: " + stableValue);
+        LOG.debug("transforming phyletic param: " + stableValue);
 
-        this.terms = getTerms();
+        _terms = getTerms();
 
         // parse the expression and get the tree structure
-        ExpressionNode root = parser.parse(stableValue);
+        ExpressionNode root = _parser.parse(stableValue);
 
         StringBuilder sql = new StringBuilder(GROUP_SQL);
         sql.append(" WHERE " + composeSql(root));
@@ -89,7 +87,8 @@ public class ExpressionParamHandler extends StringParamHandler {
             sql.append(composeSql(booleanNode.getLeft()));
             sql.append(" " + booleanNode.getOperator() + " ");
             sql.append(composeSql(booleanNode.getRight()));
-        } else {
+        }
+        else {
             LeafNode leaf = (LeafNode) node;
             List<String> terms = leaf.getTerms();
             if (terms.size() > 0) sql.append("(");
@@ -109,10 +108,9 @@ public class ExpressionParamHandler extends StringParamHandler {
 
     private String getColumn(String term, boolean onSpecies)
             throws WdkModelException {
-        if (!terms.containsKey(term))
-            throw new WdkModelException("Invalid expression. Unknown term: "
-                    + term);
-        int columnIndex = terms.get(term) * 2 + 1;
+        if (!_terms.containsKey(term))
+            throw new WdkModelException("Invalid expression. Unknown term: " + term);
+        int columnIndex = _terms.get(term) * 2 + 1;
         if (onSpecies) columnIndex++;
         return COLUMN_PREFIX + columnIndex;
     }

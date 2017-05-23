@@ -19,6 +19,7 @@ const quickSearches = [
 ]
 
 initialize({
+  includeQueryGrid: false,
   mainMenuItems,
   smallMenuItems,
   quickSearches

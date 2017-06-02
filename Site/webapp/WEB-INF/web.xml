@@ -145,7 +145,6 @@
   <!-- End Struts servlet and mapping -->
 
   <!-- WDK RESTful client filter -->
-  <!--
   <servlet>
     <servlet-name>WDKClient</servlet-name>
     <jsp-file>/WEB-INF/includes/client/index.jsp</jsp-file>
@@ -154,7 +153,6 @@
     <servlet-name>WDKClient</servlet-name>
     <url-pattern>/app/*</url-pattern>
   </servlet-mapping>
-  -->
   <!-- End of WDK Restful client filter -->
 
   <!-- WSF RESTful service filter -->

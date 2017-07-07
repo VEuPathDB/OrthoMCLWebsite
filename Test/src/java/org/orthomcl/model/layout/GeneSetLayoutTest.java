@@ -27,7 +27,7 @@ public class GeneSetLayoutTest {
   @Test
   public void testLoadLayout() throws WdkModelException, WdkUserException {
     // this step has 6 sequences from 2 groups with the same PFam domain;
-    Step step = user.getStep(100069240);
+    Step step = user.getWdkModel().getStepFactory().getStepById(100069240);
     GeneSetLayoutManager layoutManager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     GroupLayout layout = layoutManager.getLayout(step.getAnswerValue(), getLayoutJson().toString());
     Assert.assertEquals(6, layout.getNodes().size());

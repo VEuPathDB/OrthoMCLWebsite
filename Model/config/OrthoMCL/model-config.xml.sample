@@ -4,7 +4,6 @@
              webServiceUrl="http://localhost:9580/orthomcl/services/WsfService"
              smtpServer="127.0.0.1"
              supportEmail="help@orthomcl.org"
-             defaultRole="wdk_user"
              secretKeyFile="/usr/local/tomcat_instances/shared/.apidb_wdk_key"
              >
 

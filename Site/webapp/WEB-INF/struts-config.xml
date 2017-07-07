@@ -171,13 +171,6 @@
       <forward name="success" path="/WEB-INF/jsp/resetpwd.jsp"/>
       <forward name="show_password" path="/showPassword.do" redirect="true"/>    
     </action>
-    
-    <!-- Web Service Actions -->
-    
-    <action path="/goRemote"
-        parameter="org.gusdb.wdk.controller.action.services.RemoteLoginAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-    </action>
 
     <!-- Other, "unconverted" actions -->
 

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.gusdb.fgputil.json.JsonUtil;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
@@ -32,9 +33,9 @@ public class FastaReporter extends PagedAnswerReporter {
 
   private static final int FASTA_LINE_LENGTH = 60;
 
-  private boolean hasOrganism;
-  private boolean hasDescription;
-  private String downloadType;
+  private boolean _includeOrganism;
+  private boolean _includeDescription;
+  private String _downloadType;
 
   public FastaReporter(AnswerValue answerValue) {
     super(answerValue);
@@ -44,27 +45,48 @@ public class FastaReporter extends PagedAnswerReporter {
   public FastaReporter configure(Map<String, String> config) throws WdkUserException {
 
     // get basic configurations
-    downloadType = config.get(FIELD_DOWNLOAD_TYPE);
+    _downloadType = getValidDownloadTypeString(config.get(FIELD_DOWNLOAD_TYPE));
 
     String strOrganism = config.get(FIELD_HAS_ORGANISM);
-    hasOrganism = (strOrganism != null && (strOrganism.equals("yes") || strOrganism.equals("true")));
+    _includeOrganism = (strOrganism != null && (strOrganism.equals("yes") || strOrganism.equals("true")));
 
     String strDescription = config.get(FIELD_HAS_DESCRIPTION);
-    hasDescription = (strDescription != null && (strDescription.equals("yes") || strDescription.equals("true")));
+    _includeDescription = (strDescription != null && (strDescription.equals("yes") || strDescription.equals("true")));
 
     return this;
   }
 
+  /**
+   * Expected input:
+   * {
+   *   includeOrganism: bool,
+   *   includeDescription: bool,
+   *   attachmentType: string
+   * }
+   * where:
+   *   text = download
+   *   plain = show in browser
+   */
   @Override
   public FastaReporter configure(JSONObject config) throws WdkUserException {
-    // FIXME: this reporter must be updated to comply with answer service
+    _downloadType = getValidDownloadTypeString(config.getString("attachmentType"));
+    _includeOrganism = JsonUtil.getBooleanOrDefault(config, "includeOrganism", true);
+    _includeDescription = JsonUtil.getBooleanOrDefault(config, "includeDescription", true);
     return this;
+  }
+
+  private static String getValidDownloadTypeString(String downloadType) throws WdkUserException {
+    if (downloadType == null ||
+        (!downloadType.equals("text") && !downloadType.equals("plain"))) {
+      throw new WdkUserException("Property 'downloadType' is required.  Value must be 'text' or 'plain'.");
+    }
+    return downloadType;
   }
 
   @Override
   public String getDownloadFileName() {
-    if (downloadType.equalsIgnoreCase("text")) {
-      logger.info("Internal format: " + downloadType);
+    if (_downloadType.equals("text")) {
+      logger.info("Internal format: " + _downloadType);
       String name = getQuestion().getName();
       return name + ".fasta";
     }
@@ -85,13 +107,13 @@ public class FastaReporter extends PagedAnswerReporter {
         writer.print(">" + fullId);
 
         // output organism if selected
-        if (hasOrganism) {
+        if (_includeOrganism) {
           String organism = record.getAttributeValue(ATTR_ORGANISM).getValue().toString().trim();
           writer.print(" | organism=" + organism);
         }
 
         // output description if selected
-        if (hasDescription) {
+        if (_includeDescription) {
           Object value = record.getAttributeValue(ATTR_DESCRIPTION).getValue();
           String description = (value == null) ? "" : value.toString().trim();
           writer.print(" | " + description);

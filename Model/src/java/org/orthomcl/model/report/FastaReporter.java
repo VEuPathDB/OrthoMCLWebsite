@@ -3,22 +3,28 @@ package org.orthomcl.model.report;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.gusdb.fgputil.functional.Functions;
 import org.gusdb.fgputil.json.JsonUtil;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
-import org.gusdb.wdk.model.answer.stream.RecordStream;
+import org.gusdb.wdk.model.answer.stream.FileBasedRecordStream;
+import org.gusdb.wdk.model.record.RecordClass;
 import org.gusdb.wdk.model.record.RecordInstance;
-import org.gusdb.wdk.model.report.PagedAnswerReporter;
+import org.gusdb.wdk.model.record.attribute.AttributeField;
+import org.gusdb.wdk.model.report.AbstractReporter;
 import org.json.JSONObject;
 
 /**
  * @author xingao
  */
-public class FastaReporter extends PagedAnswerReporter {
+public class FastaReporter extends AbstractReporter {
 
   private static Logger logger = Logger.getLogger(FastaReporter.class);
 
@@ -30,6 +36,10 @@ public class FastaReporter extends PagedAnswerReporter {
   private static final String ATTR_ORGANISM = "taxon_name";
   private static final String ATTR_DESCRIPTION = "product";
   private static final String ATTR_SEQUENCE = "sequence";
+
+  private static final String[] NEEDED_ATTRIBUTES = {
+      ATTR_FULL_ID, ATTR_ORGANISM, ATTR_DESCRIPTION, ATTR_SEQUENCE
+  };
 
   private static final int FASTA_LINE_LENGTH = 60;
 
@@ -98,7 +108,11 @@ public class FastaReporter extends PagedAnswerReporter {
 
   @Override
   public void write(OutputStream out) throws WdkModelException {
-    try (RecordStream records = getRecords()) {
+    RecordClass sequenceRecordClass = _baseAnswer.getQuestion().getRecordClass(); // it better be!
+    List<AttributeField> neededAttrs = Functions.mapToList(Arrays.asList(NEEDED_ATTRIBUTES),
+        attrName -> sequenceRecordClass.getAttributeFieldMap().get(attrName));
+    try (FileBasedRecordStream records = new FileBasedRecordStream(_baseAnswer, neededAttrs, Collections.EMPTY_LIST)) {
+      records.populateFiles();
       PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
   
       for (RecordInstance record : records) {

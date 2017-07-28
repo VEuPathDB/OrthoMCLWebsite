@@ -38,11 +38,11 @@
         </c:choose>
         </c:set>
         <tr class="${rowClass}">
-        <c:forEach var="rColEntry" items="${row}">
-          <c:set var="attributeValue" value="${rColEntry.value}"/>
+        <c:forEach var="col" items="${summary.tableField.attributeFields}">
+          <c:set var="attributeValue" value="${row[col.name]}"/>
           <c:if test="${attributeValue.attributeField.internal == false}">
             <c:choose>
-              <c:when test="${rColEntry.key == 'root_taxon'}">
+              <c:when test="${col.name == 'root_taxon'}">
                  <c:set var="taxonKey" value="${row['three_letter_abbrev'].value}" />
                  <c:set var="taxon" value="${taxons[taxonKey]}" />
                  <c:set var="root" value="${taxon.root}" />

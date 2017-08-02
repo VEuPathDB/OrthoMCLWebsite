@@ -1,0 +1,24 @@
+---
+modelconfig_modelName: OrthoMCL
+modelconfig_authenticationMethod: oauth2
+modelconfig_oauthClientId: apiComponentSite
+modelconfig_oauthClientSecret: "{{ lookup('csvfile',
+    'apicomponentsite
+    file=/usr/local/tomcat_instances/shared/.apidb_oauth_creds
+    col=1
+    delimiter=:') | trim
+  }}"
+
+modelprop:
+  BLASTDB_PATH: /var/www/Common/apiSiteFilesMirror/webServices/OrthoMCL
+  FACEBOOK_URL: https://facebook.com/pages/EuPathDB/133123003429972
+  GOOGLE_ANALYTICS_ID: none
+  LEGACY_WEBAPP_BASE_URL: '{{ modelconfig_webAppUrl }}'
+  PROJECT_ID: '{{ project }}'
+  STEP_ANALYSIS_JOB_DIR: '{{ _wdkStepAnalysisJobsDir }}/{{ modelconfig_userDb_connectionUrl|jdbc2shortName|lower }}'
+  TWITTER_URL: https://twitter.com/EuPathDB
+  TWITTER_WIDGET_ID: 344817818073714691
+  USE_LEGACY_RECORD_PAGE: 'true'
+  WEBAPP_BASE_URL: '{{ modelconfig_webAppUrl }}/app'
+  WEBSERVICEMIRROR: /var/www/Common/apiSiteFilesMirror/webServices/OrthoMCL
+  YOUTUBE_URL: https://youtube.com/user/EuPathDB/videos?sort=dd&flow=list&view=1

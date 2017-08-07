@@ -1,4 +1,6 @@
+# $SourceFileURL$
 ---
+
 modelconfig_modelName: OrthoMCL
 modelconfig_authenticationMethod: oauth2
 modelconfig_oauthClientId: apiComponentSite

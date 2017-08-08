@@ -9,4 +9,9 @@ OrthoMCL:
   model.prop:
     src: 'FgpUtil/model.prop.j2'
     dest: '{{ gus_home }}/config/{{ project }}/model.prop'
-
+  orthomclProteomeSvcServer.prop:
+    src: 'OrthoMCLWebsite/orthomclProteomeSvcServer.prop.j2'
+    dest: '{{ gus_home }}/config/orthomclProteomeSvcServer.prop'
+  orthomclProteomeSvcCluster.prop:
+    src: 'OrthoMCLWebsite/orthomclProteomeSvcCluster.prop.j2'
+    dest: '{{ gus_home }}/config/orthomclProteomeSvcCluster.prop'

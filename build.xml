@@ -53,10 +53,18 @@
   <target name="OrthoMCLWebsite-Installation" depends="EbrcWebsiteCommon-Installation,
                                                        OrthoMCLWebService-Installation,
                                                        OrthoMCLModel-Installation,
+  	                                                   OrthoMCLWebsite-MavenInstallation,
                                                        OrthoMCLWebsite/Model-Installation,
                                                        OrthoMCLWebsite/Site-Installation">
     <ant target="defaultProjectInstall"/>
   </target>
+	
+	<target name="OrthoMCLWebsite-MavenInstallation">
+	  <ant target="mavenBuildProject">
+	    <property name="project" value="OrthoMCLWebsite"/>
+	  </ant>
+	  <property name="alreadyBuilt" value="true"/>
+	</target>
 
   <!-- ooooooooooooooooo  Installation Postprocess  ooooooooooooooooooooo -->
 

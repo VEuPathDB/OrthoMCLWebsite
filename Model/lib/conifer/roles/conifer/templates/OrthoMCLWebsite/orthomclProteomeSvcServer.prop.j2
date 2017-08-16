@@ -1,0 +1,41 @@
+######################################################################################################
+# Properties for the local web server.   For cluster properties see orthomclProtomeServiceCluster.prop
+######################################################################################################
+
+# Full URL for orthmclresult action.
+# Used by service to include a link for results in user's email.
+# resultBaseUrl= http://sfischer.orthomcl.org/orthomcl.sfischer/proteomeDownload.do?jobId=
+resultBaseUrl={{ orthomclproteomesvcserverprop_resultBaseUrl }}
+
+# Directory for final zipped results available for user download.
+# This directory is the same for all service queues and builds.
+resultsDir={{ orthomclproteomesvcserverprop_resultsDir }}
+
+# email to receive "server error" and other notifications requiring attention
+adminEmail={{ orthomclproteomesvcserverprop_adminEmail|b64decode }}
+
+# read by upload form. set to 1 to prevent users from starting new jobs (web app will put up notice)
+uploadIsOffline={{ orthomclproteomesvcserverprop_uploadIsOffline }}
+
+# properties for downloading results
+purgeWindow={{ orthomclproteomesvcserverprop_purgeWindow }}
+
+##############################################################################
+# these change with each OrthoMCL Release
+##############################################################################
+
+# OrthoMCL groups file on webserver. This is the same file that is made available for download
+# so can just use that. The OrthoMCLModel/MapProteomeService/bin/orthomclMapProteomeToGroups 
+# script uses this.
+groupsFile={{ orthomclproteomesvcserverprop_groupsFile }}
+
+
+##############################################################################
+# Webserver directories. These are static across releases.
+##############################################################################
+
+# location of NCBI's formatdb command on webserver
+formatdbBinDir={{ orthomclproteomesvcserverprop_formatdbBinDir }}
+
+# location of mcl command on webserver
+mclBin={{ orthomclproteomesvcserverprop_mclBin }}

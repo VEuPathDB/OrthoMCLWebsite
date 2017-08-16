@@ -1,0 +1,71 @@
+
+################################################################################################################
+# Cluster specific properties for the proteome service.   For local properties see orthomclProtomeServiceServer.prop
+################################################################################################################
+
+
+# dir that controls the service on the web server
+# (e.g. new jobs go into ./newJobs).
+# this is in the cluster prop file because it's value 
+# changes when we swap clusters.
+# See also 'resultsDir' in the orthomclProteomeSvcServer.prop
+# to set the location for depositing final results for user download.
+serverControlDir={{ orthomclproteomesvcclusterprop_serverControlDir }}
+
+
+# changes with each OrthoMCL Release
+# path on cluster to the FASTA file of OrthoMCL protein sequences
+blastDbFilePath={{ orthomclproteomesvcclusterprop_blastDbFilePath }}
+
+# maximum jobs allowed to run at one time, including both phase 1 and phase 2.
+maxJobs={{ orthomclproteomesvcclusterprop_maxJobs }}
+
+# Parent directory for cluster working directories {phase1,phase2}/{failedJobs,runningJobs}
+clusterServerDir={{ orthomclproteomesvcclusterprop_clusterServerDir }}
+
+# clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
+#          Host orthomclProteomeJob-cluster
+#              Hostname rcluster.rcc.uga.edu
+#              IdentityFile ~/.ssh/orthomclProteomeJob
+#              IdentitiesOnly yes
+#              User mheiges
+#              ForwardX11 no
+#              ForwardAgent no
+# clusterUserName=orthomclProteomeJob-cluster
+clusterServer={{ orthomclproteomesvcclusterprop_clusterServer }}
+
+# Cluster login username. This cluster user should have the public key installed for the
+# IdentityFile specified in ~/.ssh/config .
+# clusterUserName=sfischer
+clusterUserName={{ orthomclproteomesvcclusterprop_clusterUserName }}
+
+# Cluster queue name where BLAST tasks will be run.
+#clusterQueue=all.q
+clusterQueue={{ orthomclproteomesvcclusterprop_clusterQueue }}
+
+# Max memory (G) per node
+clusterMaxGigsPerNode={{ orthomclproteomesvcclusterprop_clusterMaxGigsPerNode }}
+
+# temporary scratch space for DJob
+nodePath={{ orthomclproteomesvcclusterprop_nodePath }}
+
+# parent directory on cluster for the NCBI blastall executable
+blastBinDir={{ orthomclproteomesvcclusterprop_blastBinDir }}
+
+# A file on the cluster for prepping the bash environment (setting GUS_HOME, etc). This is used 
+# instead of the user's .bashrc to ensure a stable running environment.
+# Use full path or path relative to $HOME
+rcfile={{ orthomclproteomesvcclusterprop_rcfile }}
+
+##############################################################################
+# DJob blast task settings.
+# These are static across releases and SGE-based clusters.
+##############################################################################
+
+numNodes={{ orthomclproteomesvcclusterprop_numNodes }}
+slotsPerNode={{ orthomclproteomesvcclusterprop_slotsPerNode }}
+ppn={{ orthomclproteomesvcclusterprop_ppn }}
+nodeClass={{ orthomclproteomesvcclusterprop_nodeClass }}
+taskSize={{ orthomclproteomesvcclusterprop_taskSize }}
+taskClass={{ orthomclproteomesvcclusterprop_taskClass }}
+blastArgs={{ orthomclproteomesvcclusterprop_blastArgs }}

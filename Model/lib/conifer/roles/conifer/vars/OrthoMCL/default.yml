@@ -20,7 +20,7 @@ modelprop:
   GOOGLE_ANALYTICS_ID: none
   LEGACY_WEBAPP_BASE_URL: '{{ modelconfig_webAppUrl }}'
   PROJECT_ID: '{{ project }}'
-  STEP_ANALYSIS_JOB_DIR: '{{ _wdkStepAnalysisJobsDir }}/{{ modelconfig_userDb_connectionUrl|jdbc2shortName|lower }}'
+  STEP_ANALYSIS_JOB_DIR: '{{ _wdkStepAnalysisJobsDir }}'
   TWITTER_URL: https://twitter.com/EuPathDB
   TWITTER_WIDGET_ID: 344817818073714691
   USE_LEGACY_RECORD_PAGE: 'true'

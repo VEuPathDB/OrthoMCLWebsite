@@ -15,7 +15,7 @@ public class ExpressionParamHandlerTest {
     private final User user;
     private final ExpressionParamHandler handler;
 
-    public ExpressionTester(WdkModel wdkModel) throws WdkModelException {
+    public ExpressionTester(WdkModel wdkModel) {
       user = wdkModel.getSystemUser();
       handler = new ExpressionParamHandler();
       handler.setWdkModel(wdkModel);

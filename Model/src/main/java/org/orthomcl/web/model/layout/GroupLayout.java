@@ -75,16 +75,16 @@ public class GroupLayout implements Graph {
   }
 
   public Map<String, List<BlastEdge>> getEdgesByType() {
-    Map<String, List<BlastEdge>> edges = new HashMap<>();
+    Map<String, List<BlastEdge>> edgeMap = new HashMap<>();
     for (BlastEdge edge : getEdges()) {
-      List<BlastEdge> list = edges.get(edge.getType().name());
+      List<BlastEdge> list = edgeMap.get(edge.getType().name());
       if (list == null) {
         list = new ArrayList<>();
-        edges.put(edge.getType().name(), list);
+        edgeMap.put(edge.getType().name(), list);
       }
       list.add(edge);
     }
-    return edges;
+    return edgeMap;
   }
 
   public void addEdge(BlastEdge edge) {
@@ -122,19 +122,19 @@ public class GroupLayout implements Graph {
   }
 
   public Map<String, List<GeneNode>> getNodesByTaxon() {
-    Map<String, List<GeneNode>> nodes = new HashMap<>();
-    for (GeneNode node : this.nodes.values()) {
+    Map<String, List<GeneNode>> nodeMap = new HashMap<>();
+    for (GeneNode node : nodes.values()) {
       Gene gene = node.getGene();
       Taxon taxon = gene.getTaxon();
       String abbrev = taxon.getAbbrev();
-      List<GeneNode> list = nodes.get(abbrev);
+      List<GeneNode> list = nodeMap.get(abbrev);
       if (list == null) {
         list = new ArrayList<>();
-        nodes.put(node.getGene().getTaxon().getAbbrev(), list);
+        nodeMap.put(node.getGene().getTaxon().getAbbrev(), list);
       }
       list.add(node);
     }
-    return nodes;
+    return nodeMap;
   }
 
   public GeneNode getNode(int index) {

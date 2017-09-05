@@ -13,14 +13,14 @@ public class GeneSetLayoutManager extends LayoutManager implements Manageable<Ge
   @Override
   public GeneSetLayoutManager getInstance(String projectId, String gusHome) throws WdkModelException {
     GeneSetLayoutManager layoutManager = new GeneSetLayoutManager();
-    layoutManager.projectId = projectId;
+    layoutManager._projectId = projectId;
     return layoutManager;
   }
 
   public GroupLayout getLayout(AnswerValue answer, String layoutString) throws WdkModelException, WdkUserException {
 
     // load gene set
-    GeneSetManager geneSetManager = InstanceManager.getInstance(GeneSetManager.class, projectId);
+    GeneSetManager geneSetManager = InstanceManager.getInstance(GeneSetManager.class, _projectId);
     GeneSet geneSet = geneSetManager.getGeneSet(answer);
     GroupLayout layout = new GroupLayout(geneSet, getSize());
 

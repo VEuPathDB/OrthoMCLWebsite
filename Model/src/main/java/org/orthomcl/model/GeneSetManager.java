@@ -56,7 +56,6 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
     Map<String, Taxon> taxons = taxonManager.getTaxons();
 
     String idSql = answer.getIdSql();
-    WdkModel wdkModel = answer.getQuestion().getWdkModel();
     SqlQuery attrQuery = (SqlQuery) wdkModel.resolveReference(ATTRIBUTE_QUERY);
     String sql = "SELECT aq.full_id, aq.product, aq.length, aq.abbreviation, aq.ec_numbers      " +
         " FROM (" + attrQuery.getSql() + ") aq, (SELECT * FROM (" + idSql + ")) idq " +
@@ -115,7 +114,6 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
   private void loadPFamDomains(AnswerValue answer, GeneSet geneSet) throws WdkModelException,
       WdkUserException {
     String idSql = answer.getIdSql();
-    WdkModel wdkModel = answer.getQuestion().getWdkModel();
     DataSource dataSource = wdkModel.getAppDb().getDataSource();
     SqlQuery pfamQuery = (SqlQuery) wdkModel.resolveReference(PFAM_QUERY);
 

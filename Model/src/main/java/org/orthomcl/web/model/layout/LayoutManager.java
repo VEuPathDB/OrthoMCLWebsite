@@ -21,7 +21,7 @@ public abstract class LayoutManager {
 
   protected static final int MARGIN = 25;
 
-  protected String projectId;
+  protected String _projectId;
 
   public int getSize() {
     return DEFAULT_SIZE;
@@ -75,7 +75,7 @@ public abstract class LayoutManager {
 
   private void processLayout(GroupLayout layout) throws WdkModelException, WdkUserException {
     // load taxons into layout
-    TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, projectId);
+    TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, _projectId);
     Map<String, Taxon> taxons = taxonManager.getTaxons();
     for (Taxon taxon : taxons.values()) {
       layout.addTaxon(taxon);

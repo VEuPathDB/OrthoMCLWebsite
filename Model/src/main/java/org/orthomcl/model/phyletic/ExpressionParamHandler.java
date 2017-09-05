@@ -59,7 +59,7 @@ public class ExpressionParamHandler extends StringParamHandler {
 
     private Map<String, Integer> getTerms() throws WdkModelException {
         Map<String, Integer> terms = new LinkedHashMap<String, Integer>();
-        DataSource dataSource = wdkModel.getAppDb().getDataSource();
+        DataSource dataSource = _wdkModel.getAppDb().getDataSource();
         ResultSet resultSet = null;
         try {
             resultSet =

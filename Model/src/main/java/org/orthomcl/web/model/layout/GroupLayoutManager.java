@@ -17,12 +17,12 @@ public class GroupLayoutManager extends LayoutManager implements Manageable<Grou
   @Override
   public GroupLayoutManager getInstance(String projectId, String gusHome) throws WdkModelException {
     GroupLayoutManager layoutManager = new GroupLayoutManager();
-    layoutManager.projectId = projectId;
+    layoutManager._projectId = projectId;
     return layoutManager;
   }
 
   public GroupLayout getLayout(User user, String name) throws WdkModelException, WdkUserException {
-    GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, projectId);
+    GroupManager groupManager = InstanceManager.getInstance(GroupManager.class, _projectId);
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
 
     // load layout content

@@ -37,18 +37,18 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
   public synchronized Map<String, Taxon> getTaxons() throws WdkModelException, WdkUserException {
     if (taxons == null)
-      taxons = loadTaxons(wdkModel);
+      taxons = loadTaxons();
     return taxons;
   }
 
-  private Map<String, Taxon> loadTaxons(WdkModel wdkModel) throws WdkModelException, WdkUserException {
+  private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
     Question question = wdkModel.getQuestion(HELPER_QUESTION);
     AnswerValue answerValue = question.makeAnswerValue(wdkModel.getSystemUser(),
         new LinkedHashMap<String, String>(), true, 0);
     RecordInstance record = answerValue.getRecordInstances()[0];
 
-    Map<String, Taxon> taxons = new LinkedHashMap<>();
+    Map<String, Taxon> newTaxons = new LinkedHashMap<>();
     Map<Integer, Integer> parents = new HashMap<>();
     Map<Integer, String> abbreviations = new HashMap<>();
     Map<String, TableValue> tables = record.getTableValueMap();
@@ -61,7 +61,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
       taxon.setName((String) row.get("name").getValue());
       taxon.setCommonName((String) row.get("name").getValue());
       taxon.setSortIndex(Integer.valueOf((String) row.get("sort_index").getValue()));
-      taxons.put(taxon.getAbbrev(), taxon);
+      newTaxons.put(taxon.getAbbrev(), taxon);
       abbreviations.put(taxon.getId(), taxon.getAbbrev());
 
       int parentId = Integer.valueOf((String) row.get("parent_id").getValue());
@@ -69,10 +69,10 @@ public class TaxonManager implements Manageable<TaxonManager> {
     }
 
     // resolve parent/children
-    for (Taxon taxon : taxons.values()) {
+    for (Taxon taxon : newTaxons.values()) {
       int parentId = parents.get(taxon.getId());
       if (taxon.getId() != parentId || abbreviations.containsKey(parentId)) {
-        Taxon parent = taxons.get(abbreviations.get(parentId));
+        Taxon parent = newTaxons.get(abbreviations.get(parentId));
         if (taxon != parent) {
           taxon.setParent(parent);
           parent.addChildren(taxon);
@@ -82,15 +82,15 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
     // assign root to each taxon
     TableValue rootTable = tables.get(TABLE_ROOTS);
-    assignRoots(taxons, rootTable);
+    assignRoots(newTaxons, rootTable);
 
     // assign colors
-    assignColors(taxons);
+    assignColors(newTaxons);
 
-    return taxons;
+    return newTaxons;
   }
 
-  private void assignRoots(Map<String, Taxon> taxons, TableValue rootTable) throws WdkModelException,
+  private static void assignRoots(Map<String, Taxon> taxons, TableValue rootTable) throws WdkModelException,
       WdkUserException {
     Map<String, String> roots = new HashMap<>();
     for (Map<String, AttributeValue> row : rootTable) {
@@ -114,7 +114,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
     }
   }
 
-  private void assignColors(Map<String, Taxon> taxons) {
+  private static void assignColors(Map<String, Taxon> taxons) {
     // only assign colors to species, and group species by roots
     Map<String, List<Taxon>> species = new HashMap<>();
     for (Taxon taxon : taxons.values()) {

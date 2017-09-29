@@ -103,7 +103,7 @@ orthomclResults/
         <c:otherwise>
           <h2>Service Not Available</h2>
           <p>
-            The proteome upload service is not currently available.  Please try again later.
+           The proteome upload service is not currently available. We apologize for the inconvenience and hope to resume service by October 6, 2017.
           </p>
         </c:otherwise>
       </c:choose>

@@ -5,6 +5,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <import file="${projectsDir}/OrthoMCLWebService/build.xml" />
+  <import file="${projectsDir}/DJob/build.xml" />
   <import file="${projectsDir}/OrthoMCLModel/build.xml" />
 
   <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">

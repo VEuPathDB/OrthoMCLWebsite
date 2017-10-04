@@ -52,7 +52,7 @@ orthomclproteomesvcclusterprop_numNodes: 10
 orthomclproteomesvcclusterprop_slotsPerNode: 1
 orthomclproteomesvcclusterprop_transferServer: orthomclProteomeJob-SAPELO-transfer
 orthomclproteomesvcclusterprop_ppn: 1
-orthomclproteomesvcclusterprop_nodeClass: 'DJob::DistribJob::SgeNode'
+orthomclproteomesvcclusterprop_nodeClass: 'DJob::DistribJob::TorqueNode'
 orthomclproteomesvcclusterprop_taskSize: 100
 orthomclproteomesvcclusterprop_taskClass: DJob::DistribJobTasks::BlastSimilarityTask
 orthomclproteomesvcclusterprop_blastArgs: "-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5"

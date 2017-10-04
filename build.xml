@@ -54,9 +54,10 @@
   <target name="OrthoMCLWebsite-Installation" depends="EbrcWebsiteCommon-Installation,
                                                        OrthoMCLWebService-Installation,
                                                        OrthoMCLModel-Installation,
-  	                                                   OrthoMCLWebsite-MavenInstallation,
+                                                       OrthoMCLWebsite-MavenInstallation,
                                                        OrthoMCLWebsite/Model-Installation,
-                                                       OrthoMCLWebsite/Site-Installation">
+                                                       OrthoMCLWebsite/Site-Installation,
+                                                       DJob-Installation">
     <ant target="defaultProjectInstall"/>
   </target>
 	

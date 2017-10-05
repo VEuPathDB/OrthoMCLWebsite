@@ -1,8 +1,8 @@
 # $SourceFileURL$
 ---
 _build_number: 5
-_clusterhostname: zlogin2.rcc.uga.edu
-_clusterbasedir: /panfs/pstor.storage/jckscratch/eupath
+_clusterhostname: eupathdb.gacrc.uga.edu
+_clusterbasedir: /lustre1/eupathdb
 
 modelconfig_modelName: OrthoMCL
 modelconfig_authenticationMethod: oauth2
@@ -41,17 +41,18 @@ orthomclproteomesvcclusterprop_serverControlDir: '/var/www/Common/orthomcl-mappi
 orthomclproteomesvcclusterprop_blastDbFilePath: '{{ _clusterbasedir }}/orthomcl-mapping-service/build-{{ _build_number }}/db/proteinSeqs'
 orthomclproteomesvcclusterprop_maxJobs: 10
 orthomclproteomesvcclusterprop_clusterServerDir: '{{ _clusterbasedir }}/orthomcl-mapping-service/build-{{ _build_number }}/{{ hostname }}/queues/{{ _clusterhostname }}'
-orthomclproteomesvcclusterprop_clusterServer: orthomclProteomeJob-ZLOGIN2
+orthomclproteomesvcclusterprop_clusterServer: orthomclProteomeJob-SAPELO
 orthomclproteomesvcclusterprop_clusterUserName: mheiges
-orthomclproteomesvcclusterprop_clusterQueue: rcc-30d
+orthomclproteomesvcclusterprop_clusterQueue: eupathnode
 orthomclproteomesvcclusterprop_clusterMaxGigsPerNode: 8
 orthomclproteomesvcclusterprop_nodePath: '{{ _clusterbasedir }}/orthomcl-mapping-service/scratch'
 orthomclproteomesvcclusterprop_blastBinDir: '{{ _clusterbasedir }}/workflow-software/software/ncbi_blast/2.2.25/bin'
-orthomclproteomesvcclusterprop_rcfile: '{{ _clusterbasedir }}/orthomcl-mapping-service/build-{{ _build_number }}/{{ hostname }}/setenv'
+orthomclproteomesvcclusterprop_rcfile: '/home/{{ orthomclproteomesvcclusterprop_clusterUserName }}/orthomcl-job-envs/{{ hostname }}.env'
 orthomclproteomesvcclusterprop_numNodes: 10
 orthomclproteomesvcclusterprop_slotsPerNode: 1
+orthomclproteomesvcclusterprop_transferServer: orthomclProteomeJob-SAPELO-transfer
 orthomclproteomesvcclusterprop_ppn: 1
-orthomclproteomesvcclusterprop_nodeClass: 'DJob::DistribJob::SgeNode'
+orthomclproteomesvcclusterprop_nodeClass: 'DJob::DistribJob::TorqueNode'
 orthomclproteomesvcclusterprop_taskSize: 100
 orthomclproteomesvcclusterprop_taskClass: DJob::DistribJobTasks::BlastSimilarityTask
 orthomclproteomesvcclusterprop_blastArgs: "-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5"

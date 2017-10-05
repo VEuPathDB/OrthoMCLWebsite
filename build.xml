@@ -5,6 +5,7 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <import file="${projectsDir}/OrthoMCLWebService/build.xml" />
+  <import file="${projectsDir}/DJob/build.xml" />
   <import file="${projectsDir}/OrthoMCLModel/build.xml" />
 
   <target name="OrthoMCLWebService-Checkout" unless="OrthoMCLWebService.present">
@@ -53,9 +54,10 @@
   <target name="OrthoMCLWebsite-Installation" depends="EbrcWebsiteCommon-Installation,
                                                        OrthoMCLWebService-Installation,
                                                        OrthoMCLModel-Installation,
-  	                                                   OrthoMCLWebsite-MavenInstallation,
+                                                       OrthoMCLWebsite-MavenInstallation,
                                                        OrthoMCLWebsite/Model-Installation,
-                                                       OrthoMCLWebsite/Site-Installation">
+                                                       OrthoMCLWebsite/Site-Installation,
+                                                       DJob-Installation">
     <ant target="defaultProjectInstall"/>
   </target>
 	

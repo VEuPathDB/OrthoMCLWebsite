@@ -32,7 +32,7 @@ clusterServerDir={{ orthomclproteomesvcclusterprop_clusterServerDir }}
 
 # clusterServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
 #          Host orthomclProteomeJob-cluster
-#              Hostname rcluster.rcc.uga.edu
+#              Hostname eupathdb.gacrc.uga.edu
 #              IdentityFile ~/.ssh/orthomclProteomeJob
 #              IdentitiesOnly yes
 #              User mheiges
@@ -40,6 +40,17 @@ clusterServerDir={{ orthomclproteomesvcclusterprop_clusterServerDir }}
 #              ForwardAgent no
 # clusterUserName=orthomclProteomeJob-cluster
 clusterServer={{ orthomclproteomesvcclusterprop_clusterServer }}
+
+# transferServer corresponds to a Hostname in executor's ~/.ssh/config, e.g.
+#          Host orthomclProteomeJob-transfer
+#              Hostname xfer.gacrc.uga.edu
+#              IdentityFile ~/.ssh/orthomclProteomeJob
+#              IdentitiesOnly yes
+#              User mheiges
+#              ForwardX11 no
+#              ForwardAgent no
+# clusterUserName=orthomclProteomeJob-cluster
+transferServer={{ orthomclproteomesvcclusterprop_transferServer }}
 
 # Cluster login username. This cluster user should have the public key installed for the
 # IdentityFile specified in ~/.ssh/config .

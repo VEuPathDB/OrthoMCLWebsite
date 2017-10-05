@@ -109,11 +109,6 @@
       <forward name="success" path="/home.do" redirect="true"/>
     </action>
    
-    <action path="/savePreference"
-        parameter="org.gusdb.wdk.controller.action.user.ProcessSavePreferenceAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-    </action>
-   
     <!-- Other, "unconverted" actions -->
 
     <action

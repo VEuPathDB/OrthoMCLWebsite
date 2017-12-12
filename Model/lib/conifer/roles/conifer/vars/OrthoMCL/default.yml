@@ -43,7 +43,7 @@ orthomclproteomesvcclusterprop_maxJobs: 10
 orthomclproteomesvcclusterprop_clusterServerDir: '{{ _clusterbasedir }}/orthomcl-mapping-service/build-{{ _build_number }}/{{ hostname }}/queues/{{ _clusterhostname }}'
 orthomclproteomesvcclusterprop_clusterServer: orthomclProteomeJob-SAPELO
 orthomclproteomesvcclusterprop_clusterUserName: mheiges
-orthomclproteomesvcclusterprop_clusterQueue: AMD
+orthomclproteomesvcclusterprop_clusterQueue: eupathnode
 orthomclproteomesvcclusterprop_clusterMaxGigsPerNode: 8
 orthomclproteomesvcclusterprop_nodePath: '{{ _clusterbasedir }}/orthomcl-mapping-service/scratch'
 orthomclproteomesvcclusterprop_blastBinDir: '{{ _clusterbasedir }}/workflow-software/software/ncbi_blast/2.2.25/bin'

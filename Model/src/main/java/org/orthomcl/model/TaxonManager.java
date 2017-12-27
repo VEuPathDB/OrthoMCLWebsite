@@ -1,5 +1,7 @@
 package org.orthomcl.model;
 
+import static org.gusdb.wdk.model.query.param.values.ValidStableValuesFactory.createDefault;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,10 +14,12 @@ import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
+import org.gusdb.wdk.model.query.param.values.ValidStableValuesFactory.CompleteValidStableValues;
 import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
+import org.gusdb.wdk.model.user.User;
 import org.orthomcl.web.model.layout.RenderingHelper;
 
 public class TaxonManager implements Manageable<TaxonManager> {
@@ -44,8 +48,9 @@ public class TaxonManager implements Manageable<TaxonManager> {
   private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
     Question question = wdkModel.getQuestion(HELPER_QUESTION);
-    AnswerValue answerValue = question.makeAnswerValue(wdkModel.getSystemUser(),
-        new LinkedHashMap<String, String>(), true, 0);
+    User user = wdkModel.getSystemUser();
+    CompleteValidStableValues validParams = createDefault(user, question.getQuery());
+    AnswerValue answerValue = question.makeAnswerValue(user,validParams, 0);
     RecordInstance record = answerValue.getRecordInstances()[0];
 
     Map<String, Taxon> newTaxons = new LinkedHashMap<>();

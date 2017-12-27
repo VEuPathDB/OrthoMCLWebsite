@@ -1,9 +1,7 @@
-/**
- * 
- */
 package org.orthomcl.controller.action;
 
-import java.util.LinkedHashMap;
+import static org.gusdb.wdk.model.query.param.values.ValidStableValuesFactory.createDefault;
+
 import java.util.Map;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
@@ -18,7 +16,9 @@ import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
 import org.gusdb.wdk.model.jspwrap.RecordBean;
 import org.gusdb.wdk.model.jspwrap.RecordClassBean;
+import org.gusdb.wdk.model.jspwrap.UserBean;
 import org.gusdb.wdk.model.jspwrap.WdkModelBean;
+import org.gusdb.wdk.model.query.param.values.ValidStableValuesFactory.CompleteValidStableValues;
 import org.gusdb.wdk.model.record.TableValue;
 import org.orthomcl.model.Taxon;
 import org.orthomcl.model.TaxonManager;
@@ -63,8 +63,9 @@ public class GetDataSummaryAction extends WdkAction {
     WdkModelBean wdKModel = getWdkModel();
     QuestionBean question = wdKModel.getQuestion(TaxonManager.HELPER_QUESTION);
     RecordClassBean recordClass = question.getRecordClass();
-    AnswerValueBean answerValue = question.makeAnswerValue(getCurrentUser(),
-        new LinkedHashMap<String, String>(), true, 0);
+    UserBean user = getCurrentUser();
+    CompleteValidStableValues validParams = createDefault(user.getUser(), question.getQuestion().getQuery());
+    AnswerValueBean answerValue = question.makeAnswerValue(user, validParams, 0);
     RecordBean record = answerValue.getRecords().next();
 
     result.setRequestAttribute(ATTR_RECORD_CLASS, recordClass);

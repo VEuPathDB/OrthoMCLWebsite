@@ -14,6 +14,7 @@ import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.query.param.Param;
 import org.gusdb.wdk.model.query.param.ParamHandler;
 import org.gusdb.wdk.model.query.param.StringParamHandler;
+import org.gusdb.wdk.model.query.param.values.ValidStableValuesFactory.CompleteValidStableValues;
 import org.gusdb.wdk.model.user.User;
 
 public class ExpressionParamHandler extends StringParamHandler {
@@ -42,19 +43,23 @@ public class ExpressionParamHandler extends StringParamHandler {
     }
 
     @Override
-    public String toInternalValue(User user, String stableValue, Map<String, String> contextValues)
+    public String toInternalValue(User user, CompleteValidStableValues contextValues)
             throws WdkModelException {
-        LOG.debug("transforming phyletic param: " + stableValue);
+      return getSql(contextValues.get(_param.getName()));
+    }
 
-        _terms = getTerms();
+    public String getSql(String stableValue) throws WdkModelException {
+      LOG.debug("transforming phyletic param: " + stableValue);
 
-        // parse the expression and get the tree structure
-        ExpressionNode root = _parser.parse(stableValue);
+      _terms = getTerms();
 
-        StringBuilder sql = new StringBuilder(GROUP_SQL);
-        sql.append(" WHERE " + composeSql(root));
+      // parse the expression and get the tree structure
+      ExpressionNode root = _parser.parse(stableValue);
 
-        return sql.toString();
+      StringBuilder sql = new StringBuilder(GROUP_SQL);
+      sql.append(" WHERE " + composeSql(root));
+
+      return sql.toString();
     }
 
     private Map<String, Integer> getTerms() throws WdkModelException {

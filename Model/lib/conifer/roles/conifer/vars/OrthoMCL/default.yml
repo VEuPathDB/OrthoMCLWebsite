@@ -3,6 +3,7 @@
 _build_number: 5
 _clusterhostname: eupathdb.gacrc.uga.edu
 _clusterbasedir: /lustre1/eupathdb
+_self_url_scheme: http
 
 modelconfig_modelName: OrthoMCL
 modelconfig_authenticationMethod: oauth2
@@ -28,7 +29,7 @@ modelprop:
   WEBSERVICEMIRROR: /var/www/Common/apiSiteFilesMirror/webServices/OrthoMCL
   YOUTUBE_URL: https://youtube.com/user/EuPathDB/videos?sort=dd&flow=list&view=1
 
-orthomclproteomesvcserverprop_resultBaseUrl: 'http://{{ hostname|swap_hostname(_host_frontends) }}/orthomcl/proteomeDownload.do?jobId='
+orthomclproteomesvcserverprop_resultBaseUrl: '{{ _self_url_scheme }}://{{ hostname|swap_hostname(_host_frontends) }}/orthomcl/proteomeDownload.do?jobId='
 orthomclproteomesvcserverprop_resultsDir: /var/www/Common/orthomcl-mapping-service/results
 orthomclproteomesvcserverprop_adminEmail: b3J0aG9tY2xfYWxlcnRAbGlzdHMudXBlbm4uZWR1
 orthomclproteomesvcserverprop_uploadIsOffline: 1

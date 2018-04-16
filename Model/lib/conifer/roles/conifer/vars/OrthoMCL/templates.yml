@@ -14,3 +14,9 @@ orthomclProteomeSvcServer.prop:
 orthomclProteomeSvcCluster.prop:
   src: 'OrthoMCLWebsite/orthomclProteomeSvcCluster.prop.j2'
   dest: '{{ gus_home }}/config/orthomclProteomeSvcCluster.prop'
+tomcat_context.xml:
+  src: 'WDK/tomcat_context.xml.j2'
+  dest: '{{ gus_home }}/config/{{ webapp_ctx }}.xml'
+rebuilder.conf:
+  src: 'EbrcWebsiteCommon/rebuilder.conf.j2'
+  dest: '{{ gus_home }}/config/rebuilder.conf'

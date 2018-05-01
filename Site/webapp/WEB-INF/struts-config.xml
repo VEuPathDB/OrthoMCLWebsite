@@ -80,7 +80,6 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper"
         scope="request">
     </action>
-
     <action
       path="/showFavorite"
       type="org.gusdb.wdk.controller.action.ShowFavoriteAction"

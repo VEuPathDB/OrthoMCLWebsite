@@ -7,13 +7,9 @@
 <struts-config>
 
   <form-beans>
-    <!-- Forms for user-management actions -->
-    <form-bean name="loginForm" type="org.gusdb.wdk.controller.form.LoginForm"/>
-    <form-bean name="logoutForm" type="org.gusdb.wdk.controller.form.LogoutForm"/>
     
     <!-- Forms for site-specific functionality -->
     <form-bean name="questionForm" type="org.gusdb.wdk.controller.form.QuestionForm"/>
-    <form-bean name="downloadConfigForm" type="org.gusdb.wdk.controller.form.DownloadConfigForm"/>
     <form-bean name="booleanExpressionForm" type="org.gusdb.wdk.controller.form.BooleanExpressionForm"/>
     <form-bean name="renameStepForm" type="org.gusdb.wdk.controller.form.RenameStepForm"/>
     <form-bean name="renameStrategyForm" type="org.gusdb.wdk.controller.form.RenameStrategyForm"/>
@@ -51,7 +47,6 @@
 
   <global-forwards type="org.apache.struts.action.ActionForward">
     <forward name="home" path="/WEB-INF/jsp/home.jsp"/>
-    <forward name="needs_login" path="/showLogin.do"/>
     <!--<forward name="application_error" path="/WEB-INF/jsp/error.jsp"/>-->
     <forward name="application_error" path="/wdkCustomization/jsp/Error.jsp"/>
   </global-forwards>
@@ -85,31 +80,6 @@
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper"
         scope="request">
     </action>
-
-
-
-    <!-- User Account Maintenance Actions -->
-    
-    <action path="/showLogin"
-        parameter="org.gusdb.wdk.controller.action.user.ShowLoginAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <forward name="success" path="/WEB-INF/jsp/login.jsp"/>
-      <forward name="show_profile" path="/app/user/profile" redirect="true"/>
-    </action>
-    <action path="/processLogin"
-        parameter="org.gusdb.wdk.controller.action.user.ProcessLoginAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <!-- In most success cases, action will forward directly to original referring page -->
-      <forward name="success" path="/showApplication.do" redirect="true"/>
-      <forward name="input" path="/WEB-INF/jsp/login.jsp"/>
-    </action>
-    <action path="/processLogout"
-        parameter="org.gusdb.wdk.controller.action.user.ProcessLogoutAction"
-        type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
-      <forward name="success" path="/home.do" redirect="true"/>
-    </action>
-   
-    <!-- Other, "unconverted" actions -->
 
     <action
       path="/showFavorite"
@@ -237,9 +207,7 @@
        type="org.gusdb.wdk.controller.action.services.ProcessRESTAction"
        scope="request"
        validate="false"
-       parameter="{1}.all::wadl">
-       <forward name="show_result" path="downloadResult.jsp"/>
-    </action>
+       parameter="{1}.all::wadl"/>
     <!--
        {1} question set name
        {2} question name; if the name is "all" & {3} is wadl, it's equivalent to the action above.
@@ -250,9 +218,7 @@
        type="org.gusdb.wdk.controller.action.services.ProcessRESTAction"
        scope="request"
        validate="false"
-       parameter="{1}.{2}::{3}">
-       <forward name="show_result" path="/downloadResult.jsp"/>
-    </action>
+       parameter="{1}.{2}::{3}"/>
 
     <action
       path="/showSummary"
@@ -261,7 +227,6 @@
       input="/showQuestion.do">
       <forward name="show_application" path="/showApplication.do"/>
       <forward name="skip_to_record" path="/showRecord.do"/>
-      <forward name="skip_to_download" path="/downloadStep.do"/>
     </action>
     <action
       path="/showApplication"
@@ -281,23 +246,8 @@
       <forward name="show_record" path="/record.jsp"/>
     </action>
     <action
-      path="/configDownload"
-      type="org.gusdb.wdk.controller.action.ConfigDownloadAction"
-      name="downloadConfigForm">
-      <forward name="config_download" path="/getDownloadResult.do"/>
-    </action>
-    <action
-      path="/getDownloadResult"
-      type="org.gusdb.wdk.controller.action.GetDownloadResultAction"
-      name="downloadConfigForm">
-    </action>
-    <action
       path="/showQueryHistory"
       type="org.gusdb.wdk.controller.action.ShowQueryHistoryAction">
-    </action>
-    <action
-      path="/downloadStep"
-      type="org.gusdb.wdk.controller.action.DownloadStepRedirectAction">
     </action>
     <action path="/showPublicStrats"
         parameter="org.gusdb.wdk.controller.action.ShowPublicStratsAction"

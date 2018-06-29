@@ -43,7 +43,7 @@ orthomclproteomesvcclusterprop_blastDbFilePath: '{{ _clusterbasedir }}/orthomcl-
 orthomclproteomesvcclusterprop_maxJobs: 10
 orthomclproteomesvcclusterprop_clusterServerDir: '{{ _clusterbasedir }}/orthomcl-mapping-service/build-{{ _build_number }}/{{ hostname }}/queues/{{ _clusterhostname }}'
 orthomclproteomesvcclusterprop_clusterServer: orthomclProteomeJob-SAPELO
-orthomclproteomesvcclusterprop_clusterUserName: mheiges
+orthomclproteomesvcclusterprop_clusterUserName: sfischer1
 orthomclproteomesvcclusterprop_clusterQueue: HIGHMEM
 orthomclproteomesvcclusterprop_clusterMaxGigsPerNode: 8
 orthomclproteomesvcclusterprop_nodePath: '{{ _clusterbasedir }}/orthomcl-mapping-service/scratch'

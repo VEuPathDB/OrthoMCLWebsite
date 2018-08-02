@@ -8,10 +8,14 @@ import java.util.Map;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.fgputil.runtime.Manageable;
+import org.gusdb.fgputil.validation.ValidObjectFactory;
+import org.gusdb.fgputil.validation.ValidationLevel;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
-import org.gusdb.wdk.model.answer.AnswerValue;
+import org.gusdb.wdk.model.answer.factory.AnswerValue;
+import org.gusdb.wdk.model.answer.factory.AnswerValueFactory;
+import org.gusdb.wdk.model.answer.spec.AnswerSpec;
 import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
@@ -44,8 +48,10 @@ public class TaxonManager implements Manageable<TaxonManager> {
   private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
     Question question = wdkModel.getQuestion(HELPER_QUESTION);
-    AnswerValue answerValue = question.makeAnswerValue(wdkModel.getSystemUser(),
-        new LinkedHashMap<String, String>(), true, 0);
+    AnswerValue answerValue = AnswerValueFactory.makeAnswer(wdkModel.getSystemUser(),
+        ValidObjectFactory.getSemanticallyValid(AnswerSpec.builder(wdkModel)
+            .setQuestionName(question.getFullName())
+            .build(ValidationLevel.SEMANTIC)));
     RecordInstance record = answerValue.getRecordInstances()[0];
 
     Map<String, Taxon> newTaxons = new LinkedHashMap<>();

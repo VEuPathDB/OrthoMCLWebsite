@@ -9,6 +9,7 @@ import java.util.Map;
 import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.wdk.controller.CConstants;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
+import org.gusdb.wdk.controller.actionutil.ActionUtility;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
 import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
 import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
@@ -63,8 +64,7 @@ public class GetDataSummaryAction extends WdkAction {
     WdkModelBean wdKModel = getWdkModel();
     QuestionBean question = wdKModel.getQuestion(TaxonManager.HELPER_QUESTION);
     RecordClassBean recordClass = question.getRecordClass();
-    AnswerValueBean answerValue = question.makeAnswerValue(getCurrentUser(),
-        new LinkedHashMap<String, String>(), true, 0);
+    AnswerValueBean answerValue = ActionUtility.makeAnswerValue(getCurrentUser(), question, new LinkedHashMap<String, String>());
     RecordBean record = answerValue.getRecords().next();
 
     result.setRequestAttribute(ATTR_RECORD_CLASS, recordClass);

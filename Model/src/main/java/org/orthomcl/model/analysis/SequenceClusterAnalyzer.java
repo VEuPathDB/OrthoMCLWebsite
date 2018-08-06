@@ -10,6 +10,7 @@ import org.gusdb.wdk.model.analysis.AbstractStepAnalyzer;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.user.analysis.ExecutionStatus;
 import org.gusdb.wdk.model.user.analysis.StatusLogger;
+import org.json.JSONObject;
 import org.orthomcl.web.model.layout.GeneSetLayoutGenerator;
 import org.orthomcl.web.model.layout.GeneSetLayoutManager;
 import org.orthomcl.web.model.layout.GroupLayout;
@@ -39,10 +40,29 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
     public boolean isHasLayout() {
       return (resultSize <= getMaxSize());
     }
+    
+    public JSONObject toJson() {
+      JSONObject json = new JSONObject();
+      json.put("resultSize", resultSize);
+      return json;
+    }
   }
 
   @Override
+  public JSONObject getFormViewModelJson() throws WdkModelException {
+    try {
+      return createFormViewModel().toJson();
+    } catch(WdkUserException e) {
+      throw new WdkModelException(e);
+    }
+  }
+  
+  @Override
   public Object getFormViewModel() throws WdkModelException, WdkUserException {
+    return createFormViewModel();
+  }
+  
+  private ClusterFormViewModel createFormViewModel() throws WdkModelException, WdkUserException {
     return new ClusterFormViewModel(getAnswerValue().getResultSizeFactory().getResultSize());
   }
 
@@ -53,6 +73,15 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
    */
   @Override
   public Object getResultViewModel() throws WdkModelException {
+    return createResultViewModel();
+  }
+  
+  @Override 
+  public JSONObject getResultViewModelJson() throws WdkModelException {
+    return createResultViewModel().toJson();
+  }
+  
+  private GroupLayout createResultViewModel() throws WdkModelException {
     String layoutString = getPersistentCharData();
     String projectId = getWdkModel().getProjectId();
     GeneSetLayoutManager manager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);

@@ -208,4 +208,10 @@ public class GroupLayout implements Graph {
     }
 
   }
+  
+  // TODO: implement 
+  public JSONObject toJson() {
+    return null;
+}
+
 }

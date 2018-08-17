@@ -28,10 +28,10 @@
           <p>
            However, there is usually a queue, so <i>your job might not start for a few days</i>.  
           </p>
-	  <p>Also, this service has occasional delays and/or down time that are beyond our control.
+	  <p>Also, this service has occasional delays and/or down time that are beyond our control. <b>Currently these delays are extreme and jobs are taking weeks to complete.</b>  We are working to replace the current system with a more robust, user controllable system which will likely come online in October.  Until then, please wait at least a week before contacting us.  We apologize for this inconvenience.
           </p>
           <p>
-          If you have not gotten results after 24 hours please feel free to contact us.  <b>We cannot answer any questions without your job ID.</b>
+          If you have not gotten results after a week, please feel free to contact us.  <b>We cannot answer any questions without your job ID.</b>
 	  </p>
           <p>Please <b>do not resubmit your job</b> without first contacting us.  Doing so will slow everything down.</p>
 

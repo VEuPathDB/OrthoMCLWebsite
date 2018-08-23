@@ -103,8 +103,11 @@ orthomclResults/
         <c:otherwise>
           <h2>Service Not Available</h2>
           <p>
-            The proteome upload service is not currently available.  Please try again later.
+            The proteome upload service is not currently available.  A new and improved service will be released in the coming weeks.  Any jobs already submitted will be processed as normal, and you will recieve email when they complete.  Currently submitted jobs are delayed, and taking weeks to complete.  We apologize for this inconvenience.
           </p>
+          <p>
+          If you have not gotten results after a week, please feel free to contact us.  <b>We cannot answer any questions without your job ID.</b>
+	  </p>
         </c:otherwise>
       </c:choose>
     </div>

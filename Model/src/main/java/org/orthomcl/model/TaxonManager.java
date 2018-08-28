@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
 import org.gusdb.fgputil.runtime.Manageable;
-import org.gusdb.fgputil.validation.ValidObjectFactory;
-import org.gusdb.fgputil.validation.ValidationLevel;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
@@ -49,9 +47,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
     // load helper record into request
     Question question = wdkModel.getQuestion(HELPER_QUESTION);
     AnswerValue answerValue = AnswerValueFactory.makeAnswer(wdkModel.getSystemUser(),
-        ValidObjectFactory.getSemanticallyValid(AnswerSpec.builder(wdkModel)
-            .setQuestionName(question.getFullName())
-            .build(ValidationLevel.SEMANTIC)));
+        AnswerSpec.builder(wdkModel).setQuestionName(question.getFullName()).buildRunnable());
     RecordInstance record = answerValue.getRecordInstances()[0];
 
     Map<String, Taxon> newTaxons = new LinkedHashMap<>();

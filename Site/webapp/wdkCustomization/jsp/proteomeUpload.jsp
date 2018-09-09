@@ -6,6 +6,10 @@
   <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 
   <imp:pageFrame refer="proteome" title="Upload your own Proteome" bufferContent="true">
+
+
+<!--
+
     <div class="prot-upload">
       <c:choose>
         <c:when test="${requestScope.isServiceAvailable}">
@@ -13,7 +17,7 @@
           <script type="text/javascript" src="${pageContext.request.contextPath}/wdk/js/lib/jquery.form.js"><jsp:text /></script>
           <script type="text/javascript" src="${pageContext.request.contextPath}/wdkCustomization/js/proteome.js"><jsp:text /></script>
       
-          <!-- BEGIN CONTENT -->
+
       
           <div id="proteome-result" style="display:none;"><jsp:text/></div>
       
@@ -97,7 +101,7 @@ orthomclResults/
             </ul>
           </p>
       
-          <!-- END CONTENT -->
+
         
         </c:when>
         <c:otherwise>
@@ -111,5 +115,58 @@ orthomclResults/
         </c:otherwise>
       </c:choose>
     </div>
+
+-->
+<style>
+
+div.prot-upload {
+  width:80%;
+  line-height: 2;
+ 
+}
+div.prot-upload h2 {
+ font-size: 300%;
+}
+
+div.prot-upload p, div.prot-upload ol li {
+  font-size: 140%
+}
+
+div.prot-upload ol {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+</style>
+ 
+<div class="prot-upload">
+<h2>Map your proteins to OrthoMCL groups</h2>
+
+<p>
+If you have a .fasta file with a set of proteins, you can map the proteins to OrthoMCL Groups.
+</p>
+
+<p>
+If your .fasta file contains the proteins from a single proteome, you can additionally find paralog groups for proteins that do not map to OrthoMCL Groups.  
+</p>
+
+<p>
+<i>First please log in as a EuPathDB user.</i>
+</p>
+
+<p>
+Once logged in, go to the <a href="http://eupathdb.globusgenomics.org">EuPathDB Galaxy server</a>:
+</p>
+<ol style="width:85%">
+<li>Use the <b>Get Data</b> tool (in the left panel at the top) to upload your .fasta file</li>
+<li>On the Galaxy home page, click <b>Map a proteome to OrthoMCL groups</b>, under "Get started with pre-configured workflows:"</li>
+<li>Then provide your .fasta file, and run the workflow!</li>
+</ol>
+
+ 
+</div>
+
+
   </imp:pageFrame>
 </jsp:root>

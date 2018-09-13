@@ -164,7 +164,10 @@ Once logged in, go to the <a href="http://eupathdb.globusgenomics.org">EuPathDB 
 <li>Then provide your .fasta file, and run the workflow!</li>
 </ol>
 
- 
+<p>
+<b>Note:</b> The Galaxy workflow run may take 24 hours or more to complete, depending on the size of the job queue
+</p>
+
 </div>
 
 

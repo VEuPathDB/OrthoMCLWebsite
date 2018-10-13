@@ -82,9 +82,8 @@ export default function smallMenuItems(props, defaultMenuItems) {
           url: 'http://www.genome.gov/Glossary/'
         },
         {
-          id: 'contact-us',
           text: 'Contact Us',
-          webAppUrl: '/contact.do',
+          url: '/a/app/contact-us',
           target: '_blank'
         }
       ]

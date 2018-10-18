@@ -209,7 +209,7 @@
 		      <a href="http://www.genome.gov/Glossary/">NCBI's Glossary of Terms</a>
 		    </li>
 		    <li>
-		      <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
+		      <a href="${pageContext.request.contextPath}/app/contact-us" class="open-window-contact-us">Contact Us</a>
 		    </li>
 		  </ul>
 	  </div>

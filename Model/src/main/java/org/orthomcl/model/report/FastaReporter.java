@@ -19,6 +19,7 @@ import org.gusdb.wdk.model.record.RecordClass;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.attribute.AttributeField;
 import org.gusdb.wdk.model.report.AbstractReporter;
+import org.gusdb.wdk.model.report.ReporterConfigException;
 import org.json.JSONObject;
 
 /**
@@ -52,7 +53,7 @@ public class FastaReporter extends AbstractReporter {
   }
 
   @Override
-  public FastaReporter configure(Map<String, String> config) throws WdkUserException {
+  public FastaReporter configure(Map<String, String> config) throws ReporterConfigException {
 
     // get basic configurations
     _downloadType = getValidDownloadTypeString(config.get(FIELD_DOWNLOAD_TYPE));
@@ -78,17 +79,17 @@ public class FastaReporter extends AbstractReporter {
    *   plain = show in browser
    */
   @Override
-  public FastaReporter configure(JSONObject config) throws WdkUserException {
+  public FastaReporter configure(JSONObject config) throws ReporterConfigException {
     _downloadType = getValidDownloadTypeString(config.getString("attachmentType"));
     _includeOrganism = JsonUtil.getBooleanOrDefault(config, "includeOrganism", true);
     _includeDescription = JsonUtil.getBooleanOrDefault(config, "includeDescription", true);
     return this;
   }
 
-  private static String getValidDownloadTypeString(String downloadType) throws WdkUserException {
+  private static String getValidDownloadTypeString(String downloadType) throws ReporterConfigException {
     if (downloadType == null ||
         (!downloadType.equals("text") && !downloadType.equals("plain"))) {
-      throw new WdkUserException("Property 'downloadType' is required.  Value must be 'text' or 'plain'.");
+      throw new ReporterConfigException("Property 'downloadType' is required.  Value must be 'text' or 'plain'.");
     }
     return downloadType;
   }

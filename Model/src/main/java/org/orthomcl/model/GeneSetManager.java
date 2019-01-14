@@ -17,6 +17,7 @@ import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.gusdb.wdk.model.query.SqlQuery;
+import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordClass;
 import org.orthomcl.web.model.layout.RenderingHelper;
 
@@ -38,11 +39,12 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
 
   public GeneSet getGeneSet(AnswerValue answer) throws WdkModelException, WdkUserException {
     // check if the step is of the supported sequence type
-    RecordClass recordClass = answer.getQuestion().getRecordClass();
+    Question question = answer.getAnswerSpec().getQuestion();
+    RecordClass recordClass = question.getRecordClass();
     if (!recordClass.getFullName().equals(RECORD_CLASS))
       throw new WdkModelException("Only steps of type " + RECORD_CLASS + " are supported.");
 
-    GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());
+    GeneSet geneSet = new GeneSet(question.getDisplayName());
     loadGenes(answer, geneSet);
     loadPFamDomains(answer, geneSet);
     processPFamDomains(geneSet);
@@ -111,8 +113,7 @@ public class GeneSetManager implements Manageable<GeneSetManager> {
 
   }
 
-  private void loadPFamDomains(AnswerValue answer, GeneSet geneSet) throws WdkModelException,
-      WdkUserException {
+  private void loadPFamDomains(AnswerValue answer, GeneSet geneSet) throws WdkModelException {
     String idSql = answer.getIdSql();
     DataSource dataSource = wdkModel.getAppDb().getDataSource();
     SqlQuery pfamQuery = (SqlQuery) wdkModel.resolveReference(PFAM_QUERY);

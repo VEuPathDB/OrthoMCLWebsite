@@ -18,6 +18,8 @@ import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
+import org.gusdb.wdk.model.user.StepContainer;
+import org.gusdb.wdk.model.user.User;
 import org.orthomcl.web.model.layout.RenderingHelper;
 
 public class TaxonManager implements Manageable<TaxonManager> {
@@ -45,9 +47,14 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
   private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
-    Question question = wdkModel.getQuestion(HELPER_QUESTION);
-    AnswerValue answerValue = AnswerValueFactory.makeAnswer(wdkModel.getSystemUser(),
-        AnswerSpec.builder(wdkModel).setQuestionName(question.getFullName()).buildRunnable());
+    Question question = wdkModel.getQuestion(HELPER_QUESTION)
+        .orElseThrow(() -> new WdkModelException(HELPER_QUESTION + " does not exist in this model."));
+    User user = wdkModel.getSystemUser();
+    AnswerValue answerValue = AnswerValueFactory
+        .makeAnswer(user, AnswerSpec
+            .builder(wdkModel)
+            .setQuestionName(question.getFullName())
+            .buildRunnable(user, StepContainer.emptyContainer()));
     RecordInstance record = answerValue.getRecordInstances()[0];
 
     Map<String, Taxon> newTaxons = new LinkedHashMap<>();

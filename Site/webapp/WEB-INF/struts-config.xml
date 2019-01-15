@@ -373,12 +373,6 @@
       type="org.gusdb.wdk.controller.action.ShowRecordViewAction"
       validate="true">
     </action>
-    <action
-      path="/invokeAttributePlugin"
-      type="org.gusdb.wdk.controller.action.InvokeAttributePluginAction"
-      validate="false">
-      <forward name="display" redirect="false" path="/wdk/jsp/results/attributePlugin.jsp"/>
-    </action>
 
 
     <!-- Step Analysis Actions -->

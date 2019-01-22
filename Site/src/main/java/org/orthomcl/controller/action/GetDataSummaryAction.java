@@ -3,11 +3,10 @@
  */
 package org.orthomcl.controller.action;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
-import org.gusdb.fgputil.validation.ValidObjectFactory.RunnableObj;
-import org.gusdb.fgputil.validation.ValidationLevel;
 import org.gusdb.wdk.controller.CConstants;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
@@ -15,16 +14,12 @@ import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
 import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
-import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.answer.factory.AnswerValueFactory;
-import org.gusdb.wdk.model.answer.spec.AnswerSpec;
 import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
 import org.gusdb.wdk.model.jspwrap.QuestionBean;
 import org.gusdb.wdk.model.jspwrap.RecordBean;
 import org.gusdb.wdk.model.jspwrap.RecordClassBean;
 import org.gusdb.wdk.model.jspwrap.WdkModelBean;
 import org.gusdb.wdk.model.record.TableValue;
-import org.gusdb.wdk.model.user.StepContainer;
 import org.orthomcl.model.Taxon;
 import org.orthomcl.model.TaxonManager;
 
@@ -68,15 +63,8 @@ public class GetDataSummaryAction extends WdkAction {
     WdkModelBean wdKModel = getWdkModel();
     QuestionBean question = wdKModel.getQuestion(TaxonManager.HELPER_QUESTION);
     RecordClassBean recordClass = question.getRecordClass();
-    RunnableObj<AnswerSpec> answerSpec = AnswerSpec
-        .builder(getWdkModel().getModel())
-        .setQuestionName(TaxonManager.HELPER_QUESTION)
-        .build(getCurrentUser().getUser(), StepContainer.emptyContainer(), ValidationLevel.RUNNABLE)
-        .getRunnable()
-        .getOrThrow(spec -> new WdkModelException(TaxonManager.HELPER_QUESTION + " is no longer in question or requires params."));
-    AnswerValueBean answerValue = new AnswerValueBean(
-        AnswerValueFactory.makeAnswer(getCurrentUser().getUser(), answerSpec));
-
+    AnswerValueBean answerValue = question.makeAnswerValue(getCurrentUser(),
+        new LinkedHashMap<String, String>(), true, 0);
     RecordBean record = answerValue.getRecords().next();
 
     result.setRequestAttribute(ATTR_RECORD_CLASS, recordClass);

@@ -1,12 +1,9 @@
-/**
- * 
- */
 package org.orthomcl.controller.action;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
+import org.gusdb.fgputil.validation.ValidationLevel;
 import org.gusdb.wdk.controller.CConstants;
 import org.gusdb.wdk.controller.actionutil.ActionResult;
 import org.gusdb.wdk.controller.actionutil.ParamDef;
@@ -14,12 +11,16 @@ import org.gusdb.wdk.controller.actionutil.ParamDef.Required;
 import org.gusdb.wdk.controller.actionutil.ParamDefMapBuilder;
 import org.gusdb.wdk.controller.actionutil.ParamGroup;
 import org.gusdb.wdk.controller.actionutil.WdkAction;
-import org.gusdb.wdk.model.jspwrap.AnswerValueBean;
-import org.gusdb.wdk.model.jspwrap.QuestionBean;
-import org.gusdb.wdk.model.jspwrap.RecordBean;
-import org.gusdb.wdk.model.jspwrap.RecordClassBean;
-import org.gusdb.wdk.model.jspwrap.WdkModelBean;
+import org.gusdb.wdk.model.WdkModel;
+import org.gusdb.wdk.model.WdkModelException;
+import org.gusdb.wdk.model.answer.AnswerValue;
+import org.gusdb.wdk.model.answer.factory.AnswerValueFactory;
+import org.gusdb.wdk.model.answer.spec.AnswerSpec;
+import org.gusdb.wdk.model.question.Question;
+import org.gusdb.wdk.model.record.RecordClass;
+import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
+import org.gusdb.wdk.model.user.StepContainer;
 import org.orthomcl.model.Taxon;
 import org.orthomcl.model.TaxonManager;
 
@@ -60,20 +61,26 @@ public class GetDataSummaryAction extends WdkAction {
     ActionResult result = new ActionResult().setViewName(MAP_RELEASE);
 
     // load helper record into request
-    WdkModelBean wdKModel = getWdkModel();
-    QuestionBean question = wdKModel.getQuestion(TaxonManager.HELPER_QUESTION);
-    RecordClassBean recordClass = question.getRecordClass();
-    AnswerValueBean answerValue = question.makeAnswerValue(getCurrentUser(),
-        new LinkedHashMap<String, String>(), true, 0);
-    RecordBean record = answerValue.getRecords().next();
+    WdkModel wdkModel = getWdkModel().getModel();
+    Question question = wdkModel.getQuestion(TaxonManager.HELPER_QUESTION)
+        .orElseThrow(() -> new WdkModelException(TaxonManager.HELPER_QUESTION + " can not be found in this WDK model."));
+    RecordClass recordClass = question.getRecordClass();
+    AnswerValue answerValue = AnswerValueFactory
+        .makeAnswer(getCurrentUser(), AnswerSpec.builder(wdkModel)
+        .setQuestionName(TaxonManager.HELPER_QUESTION)
+        .build(getCurrentUser(), StepContainer.emptyContainer(), ValidationLevel.RUNNABLE)
+        .getRunnable()
+        .getOrThrow(answerSpec -> new WdkModelException(TaxonManager.HELPER_QUESTION + " did not produce a runnable answer spec.")));
+    RecordInstance record = answerValue.getRecordInstances()[0];
 
+    // FIXME: this was previously setting a RecordClassBean; the RecordClass API may not match perfectly
     result.setRequestAttribute(ATTR_RECORD_CLASS, recordClass);
 
-    Map<String, TableValue> tables = record.getTables();
+    Map<String, TableValue> tables = record.getTableValueMap();
     TableValue summaryTable = tables.get(summary.equalsIgnoreCase(SUMMARY_RELEASE) ? "ReleaseSummary" : "DataSummary");
     result.setRequestAttribute(ATTR_SUMMARY, summaryTable);
 
-    TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, wdKModel.getProjectId());
+    TaxonManager taxonManager = InstanceManager.getInstance(TaxonManager.class, wdkModel.getProjectId());
     Map<String, Taxon> taxons = taxonManager.getTaxons();
     result.setRequestAttribute(ATTR_TAXONS, taxons);
     return result.setRequestAttribute(ATTR_HELPER_RECORD, record);

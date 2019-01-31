@@ -10,7 +10,22 @@ public class ExpressionTest {
     public ExpressionTest() {
         parser = new ExpressionParser();
     }
-    
+
+    @Test
+    public void testsFromParamHandlerTest() throws WdkModelException {
+        testExpression("pviv = 2");
+        testExpression("pfal >3T");
+        testExpression("pber<= 5");
+        testExpression("pyoe+pkno>=4T");
+        testExpression("(pcha+PIRO)= 6");
+        testExpression("(BASI+ tann+bbov <7T)");
+        testExpression("COCC = 2 AND cmur>3T");
+        testExpression("tgon<= 2T or ncan= 4");
+        testExpression("cpar = 2 AND chom+ FUNG +ASCO>3T OR aory =4T");
+        testExpression("(ylip +spom = 2 and psti>3T) OR ncra =4T");
+        testExpression("((egos = 2 AND (cimm + cpos)>3T) Or (calb =4T And mgri>=5))");
+    }
+
     @Test
     public void testSingleExpression() throws WdkModelException {
         testExpression("abcd = 2");

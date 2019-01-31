@@ -10,11 +10,12 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.gusdb.fgputil.db.SqlUtils;
+import org.gusdb.fgputil.validation.ValidObjectFactory.RunnableObj;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.query.param.Param;
 import org.gusdb.wdk.model.query.param.ParamHandler;
 import org.gusdb.wdk.model.query.param.StringParamHandler;
-import org.gusdb.wdk.model.user.User;
+import org.gusdb.wdk.model.query.spec.QueryInstanceSpec;
 
 public class ExpressionParamHandler extends StringParamHandler {
 
@@ -42,8 +43,10 @@ public class ExpressionParamHandler extends StringParamHandler {
     }
 
     @Override
-    public String toInternalValue(User user, String stableValue, Map<String, String> contextValues)
-            throws WdkModelException {
+    public String toInternalValue(RunnableObj<QueryInstanceSpec> contextParamValues) throws WdkModelException {
+
+        String stableValue = contextParamValues.getObject().get(_param.getName());
+
         LOG.debug("transforming phyletic param: " + stableValue);
 
         _terms = getTerms();

@@ -47,7 +47,7 @@ public class GroupManager implements Manageable<GroupManager> {
   }
 
   public RecordInstance getGroupRecord(User user, String name) throws WdkModelException, WdkUserException {
-    RecordClass recordClass = wdkModel.getRecordClass(RECORD_CLASS);
+    RecordClass recordClass = wdkModel.getRecordClass(RECORD_CLASS).get();
     Map<String, Object> pkValues = new LinkedHashMap<>();
     pkValues.put(GROUP_NAME_KEY, name);
     RecordInstance instance = new DynamicRecordInstance(user, recordClass, pkValues);

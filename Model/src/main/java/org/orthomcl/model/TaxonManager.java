@@ -47,7 +47,7 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
   private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
-    Question question = wdkModel.getQuestion(HELPER_QUESTION)
+    Question question = wdkModel.getQuestionByName(HELPER_QUESTION)
         .orElseThrow(() -> new WdkModelException(HELPER_QUESTION + " does not exist in this model."));
     User user = wdkModel.getSystemUser();
     AnswerValue answerValue = AnswerValueFactory

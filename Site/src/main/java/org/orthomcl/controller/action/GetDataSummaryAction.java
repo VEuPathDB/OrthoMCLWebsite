@@ -62,7 +62,7 @@ public class GetDataSummaryAction extends WdkAction {
 
     // load helper record into request
     WdkModel wdkModel = getWdkModel().getModel();
-    Question question = wdkModel.getQuestion(TaxonManager.HELPER_QUESTION)
+    Question question = wdkModel.getQuestionByName(TaxonManager.HELPER_QUESTION)
         .orElseThrow(() -> new WdkModelException(TaxonManager.HELPER_QUESTION + " can not be found in this WDK model."));
     RecordClass recordClass = question.getRecordClass();
     AnswerValue answerValue = AnswerValueFactory

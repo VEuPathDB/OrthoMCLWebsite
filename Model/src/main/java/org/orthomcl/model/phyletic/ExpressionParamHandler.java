@@ -45,7 +45,7 @@ public class ExpressionParamHandler extends StringParamHandler {
     @Override
     public String toInternalValue(RunnableObj<QueryInstanceSpec> contextParamValues) throws WdkModelException {
 
-        String stableValue = contextParamValues.getObject().get(_param.getName());
+        String stableValue = contextParamValues.get().get(_param.getName());
 
         LOG.debug("transforming phyletic param: " + stableValue);
 

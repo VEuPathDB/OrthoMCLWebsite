@@ -32,9 +32,7 @@ public class GeneSetLayoutTest {
     // this step has 6 sequences from 2 groups with the same PFam domain;
     long stepId = 100069240;
     RunnableObj<Step> runnableStep = user.getWdkModel().getStepFactory()
-        .getStepById(stepId, ValidationLevel.RUNNABLE)
-        .orElseThrow(() -> new WdkModelException(
-            "No step with ID " + stepId + " exists."))
+        .getStepByValidId(stepId, ValidationLevel.RUNNABLE)
         .getRunnable()
         .getOrThrow(step -> new WdkModelException(
             "Step with ID " + stepId + " is not runnable. " + step.getValidationBundle().toString()));

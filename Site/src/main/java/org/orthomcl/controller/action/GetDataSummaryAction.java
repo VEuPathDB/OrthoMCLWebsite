@@ -62,12 +62,12 @@ public class GetDataSummaryAction extends WdkAction {
 
     // load helper record into request
     WdkModel wdkModel = getWdkModel().getModel();
-    Question question = wdkModel.getQuestionByName(TaxonManager.HELPER_QUESTION)
+    Question question = wdkModel.getQuestionByFullName(TaxonManager.HELPER_QUESTION)
         .orElseThrow(() -> new WdkModelException(TaxonManager.HELPER_QUESTION + " can not be found in this WDK model."));
     RecordClass recordClass = question.getRecordClass();
     AnswerValue answerValue = AnswerValueFactory
         .makeAnswer(getCurrentUser(), AnswerSpec.builder(wdkModel)
-        .setQuestionName(TaxonManager.HELPER_QUESTION)
+        .setQuestionFullName(TaxonManager.HELPER_QUESTION)
         .build(getCurrentUser(), StepContainer.emptyContainer(), ValidationLevel.RUNNABLE)
         .getRunnable()
         .getOrThrow(answerSpec -> new WdkModelException(TaxonManager.HELPER_QUESTION + " did not produce a runnable answer spec.")));

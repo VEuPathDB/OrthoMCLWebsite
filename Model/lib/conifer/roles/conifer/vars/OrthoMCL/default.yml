@@ -3,7 +3,7 @@
 _build_number: 5
 _clusterhostname: eupathdb.gacrc.uga.edu
 _clusterbasedir: /lustre1/eupathdb
-_self_url_scheme: http
+_self_url_scheme: https
 
 modelconfig_modelName: OrthoMCL
 modelconfig_authenticationMethod: oauth2

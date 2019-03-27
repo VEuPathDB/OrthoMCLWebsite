@@ -7,25 +7,18 @@
 <struts-config>
 
   <form-beans>
-    
+
     <!-- Forms for site-specific functionality -->
     <form-bean name="questionForm" type="org.gusdb.wdk.controller.form.QuestionForm"/>
     <form-bean name="booleanExpressionForm" type="org.gusdb.wdk.controller.form.BooleanExpressionForm"/>
     <form-bean name="renameStepForm" type="org.gusdb.wdk.controller.form.RenameStepForm"/>
     <form-bean name="renameStrategyForm" type="org.gusdb.wdk.controller.form.RenameStrategyForm"/>
     <form-bean name="wizardForm" type="org.gusdb.wdk.controller.form.WizardForm"/>
-    
+
     <!-- Forms for apicomm site-specific functionality (do we need these?) -->
-    <form-bean name="phenotypeForm" type="org.apidb.apicommon.controller.PhenotypeForm"/>
     <form-bean name="userFileUploadForm" type="org.apidb.apicommon.controller.UserFileUploadForm"/>
-    
-    <!-- Forms for apicomm comment actions (do we need these?) -->
-    <form-bean name="commentForm" type="org.apidb.apicommon.controller.NewCommentForm"/>
-    <form-bean name="showCommentForm" type="org.apidb.apicommon.controller.ShowCommentForm"/>
-    <form-bean name="editCommentForm" type="org.apidb.apicommon.controller.EditCommentForm"/> 
-    <form-bean name="deleteCommentForm" type="org.apidb.apicommon.controller.DeleteCommentForm"/>
   </form-beans>
-  
+
   <global-exceptions>
     <exception key="global.error.user" path="/showErrorPage.do?type=user" scope="request"
                type="org.gusdb.wdk.model.WdkUserException"/>
@@ -52,9 +45,9 @@
   </global-forwards>
 
   <action-mappings>
-  
+
     <!-- Front-page Actions -->
-    
+
     <action path="/home"
         parameter="org.gusdb.wdk.controller.action.standard.GenericPageAction"
         type="org.gusdb.wdk.controller.actionutil.WdkActionWrapper">
@@ -228,7 +221,7 @@
       input="/showSummaryView.do">
       <forward name="show-summary-view" path="/showSummaryView.do"/>
       <forward name="pq-show-basket" path="/showBasket.do"/>
-    </action>  
+    </action>
     <action
       path="/showRecord"
       type="org.gusdb.wdk.controller.action.ShowRecordAction">
@@ -275,38 +268,6 @@
     <action
       path="/showXmlDataContent"
       type="org.gusdb.wdk.controller.action.ShowXmlDataContentAction">
-    </action>  
-   <action
-      path="/addComment"
-      type="org.apidb.apicommon.controller.NewCommentAction"
-      input="/addCommentsNew.jsp"
-      name="commentForm">
-      <forward name="add_comment" path="/addComment.do"/>
-   </action> 
-   <action
-      path="/editComment"
-      type="org.apidb.apicommon.controller.EditCommentAction"
-      input="/showComments.jsp"
-      name="editCommentForm">
-      <forward name="add_comment" path="/addComment.do"/>
-   </action> 
-   <action
-      path="/addPhenotype"
-      type="org.apidb.apicommon.controller.PhenotypeAction"
-      input="/addPhenotype.jsp"
-      name="phenotypeForm">
-      <forward name="add_phenotype" path="/addPhenotype.do"/>
-   </action> 
-   <action
-      path="/showComment"
-      type="org.apidb.apicommon.controller.ShowCommentAction"
-      name="showCommentForm">
-      <forward name="show_comment" path="/showComment.jsp"/>
-    </action>
-   <action
-      path="/deleteComment"
-      type="org.apidb.apicommon.controller.DeleteCommentAction"
-      name="deleteCommentForm">
     </action>
     <action
       path="/communityUpload"

@@ -90,15 +90,8 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.gusdb.wdk.model.analysis.StepAnalyzer#runAnalysis(org.gusdb.wdk.model.answer.AnswerValue,
-   * org.gusdb.wdk.model.user.analysis.StatusLogger)
-   */
   @Override
-  public ExecutionStatus runAnalysis(AnswerValue answerValue, StatusLogger log) throws WdkModelException,
-      WdkUserException {
+  public ExecutionStatus runAnalysis(AnswerValue answerValue, StatusLogger log) throws WdkModelException {
     GeneSetLayoutGenerator generator = new GeneSetLayoutGenerator();
     GroupLayout layout = generator.generateLayout(answerValue);
     this.setPersistentCharData(layout.toString());

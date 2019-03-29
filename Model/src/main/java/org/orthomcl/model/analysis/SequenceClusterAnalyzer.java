@@ -50,11 +50,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
 
   @Override
   public JSONObject getFormViewModelJson() throws WdkModelException {
-    try {
-      return createFormViewModel().toJson();
-    } catch(WdkUserException e) {
-      throw new WdkModelException(e);
-    }
+    return createFormViewModel().toJson();
   }
   
   @Override
@@ -62,7 +58,7 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
     return createFormViewModel();
   }
   
-  private ClusterFormViewModel createFormViewModel() throws WdkModelException, WdkUserException {
+  private ClusterFormViewModel createFormViewModel() throws WdkModelException {
     return new ClusterFormViewModel(getAnswerValue().getResultSizeFactory().getResultSize());
   }
 

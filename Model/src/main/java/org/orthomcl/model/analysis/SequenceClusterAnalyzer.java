@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.orthomcl.model.analysis;
 
 import org.gusdb.fgputil.runtime.InstanceManager;
@@ -56,26 +53,11 @@ public class SequenceClusterAnalyzer extends AbstractStepAnalyzer {
       throw new WdkModelException(e);
     }
   }
-  
-  @Override
-  public Object getFormViewModel() throws WdkModelException, WdkUserException {
-    return createFormViewModel();
-  }
-  
+
   private ClusterFormViewModel createFormViewModel() throws WdkModelException, WdkUserException {
     return new ClusterFormViewModel(getAnswerValue().getResultSizeFactory().getResultSize());
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.gusdb.wdk.model.analysis.StepAnalyzer#getResultViewModel()
-   */
-  @Override
-  public Object getResultViewModel() throws WdkModelException {
-    return createResultViewModel();
-  }
-  
   @Override 
   public JSONObject getResultViewModelJson() throws WdkModelException {
     return createResultViewModel().toJson();

@@ -4,6 +4,9 @@ import ClassicSiteHeader from 'ebrc-client/components/ClassicSiteHeader';
 import makeMainMenuItems from '../mainMenuItems';
 import makeSmallMenuItems from '../smallMenuItems';
 
+// FIXME: 'name' references below rightly use a full name; however they
+//   illustrate that the OrthoMCL Model is no longer with new code- the
+//   name/urlSegment must be unique but ByTextSearch is duplicated
 const quickSearchReferences = [
   {
     name: 'GroupQuestions.ByTextSearch',

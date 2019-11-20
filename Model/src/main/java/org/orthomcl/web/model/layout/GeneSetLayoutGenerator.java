@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import org.gusdb.fgputil.db.SqlUtils;
 import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
-import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
 import org.orthomcl.model.Gene;
 import org.orthomcl.model.GenePair;
@@ -28,12 +27,12 @@ public class GeneSetLayoutGenerator {
   
   private final Random random = new Random();
 
-  public GroupLayout generateLayout(AnswerValue answer) throws WdkModelException, WdkUserException {
+  public GroupLayout generateLayout(AnswerValue answer) throws WdkModelException {
     // only do layout for the step with genes of MAX_GENES or less
     if (answer.getResultSizeFactory().getResultSize() > MAX_GENES)
       return null;
 
-    GeneSet geneSet = new GeneSet(answer.getQuestion().getDisplayName());
+    GeneSet geneSet = new GeneSet(answer.getAnswerSpec().getQuestion().getDisplayName());
     GroupLayout layout = new GroupLayout(geneSet, DEFAULT_SIZE);
     Map<String, GeneNode> nodes = loadNodes(layout, answer);
     loadEdges(layout, answer, nodes);
@@ -42,7 +41,7 @@ public class GeneSetLayoutGenerator {
     return layout;
   }
   
-  private Map<String, GeneNode> loadNodes(GroupLayout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
+  private Map<String, GeneNode> loadNodes(GroupLayout layout, AnswerValue answer) throws WdkModelException {
     Map<String, GeneNode> nodes = new HashMap<>();
     int index = 0;
 
@@ -52,11 +51,12 @@ public class GeneSetLayoutGenerator {
 
     String idSql = answer.getIdSql();
     String sql = "SELECT full_id FROM (" + idSql + ")";
-    WdkModel wdkModel = answer.getQuestion().getWdkModel();
+    WdkModel wdkModel = answer.getWdkModel();
     DataSource dataSource = wdkModel.getAppDb().getDataSource();
     ResultSet resultSet = null;
     try {
-      resultSet = SqlUtils.executeQuery(dataSource, sql, answer.getQuestion().getFullName() + "__ortho-gene-ids",
+      resultSet = SqlUtils.executeQuery(dataSource, sql,
+          answer.getAnswerSpec().getQuestion().getFullName() + "__ortho-gene-ids",
           1000);
       while (resultSet.next()) {
         String fullId = resultSet.getString("full_id");
@@ -84,19 +84,18 @@ public class GeneSetLayoutGenerator {
     return nodes;
   }
 
-  private void loadEdges(GroupLayout layout, AnswerValue answer, Map<String, GeneNode> nodes) throws WdkModelException,
-      WdkUserException {
+  private void loadEdges(GroupLayout layout, AnswerValue answer, Map<String, GeneNode> nodes) throws WdkModelException {
     // contruct an SQL to get blast scores
     String idSql = answer.getIdSql();
     String sql = "WITH sequences AS (SELECT * FROM (" + idSql + ")) " +
         " SELECT query_id, subject_id, evalue_mant, evalue_exp FROM apidb.SimilarSequences " +
         " WHERE query_id IN (SELECT full_id FROM sequences) " +
         "  AND subject_id IN (SELECT full_id FROM sequences) ";
-    WdkModel wdkModel = answer.getQuestion().getWdkModel();
+    WdkModel wdkModel = answer.getWdkModel();
     DataSource dataSource = wdkModel.getAppDb().getDataSource();
     ResultSet resultSet = null;
     try {
-      resultSet = SqlUtils.executeQuery(dataSource, sql, answer.getQuestion().getFullName() + "__ortho-blast-scores",
+      resultSet = SqlUtils.executeQuery(dataSource, sql, answer.getAnswerSpec().getQuestion().getFullName() + "__ortho-blast-scores",
           1000);
       while (resultSet.next()) {
         String queryId = resultSet.getString("query_id");
@@ -134,15 +133,15 @@ public class GeneSetLayoutGenerator {
     }
   }
 
-  private void loadEdgeTypes(GroupLayout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
+  private void loadEdgeTypes(GroupLayout layout, AnswerValue answer) throws WdkModelException {
     loadEdgeTypes(layout, EdgeType.Ortholog, answer, "Ortholog");
     loadEdgeTypes(layout, EdgeType.Coortholog, answer, "Coortholog");
     loadEdgeTypes(layout, EdgeType.Inparalog, answer, "Inparalog");
   }
 
   private void loadEdgeTypes(GroupLayout layout, EdgeType type, AnswerValue answer, String tableName)
-      throws WdkModelException, WdkUserException {
-    WdkModel wdkModel = answer.getQuestion().getWdkModel();
+      throws WdkModelException {
+    WdkModel wdkModel = answer.getWdkModel();
     String idSql = answer.getIdSql();
     String sql = "WITH sequences AS (SELECT * FROM (" + idSql + ")) " +
         " SELECT sequence_id_a AS query_id, sequence_id_b AS subject_id FROM apidb." + tableName +
@@ -151,7 +150,7 @@ public class GeneSetLayoutGenerator {
     DataSource dataSource = wdkModel.getAppDb().getDataSource();
     ResultSet resultSet = null;
     try {
-      resultSet = SqlUtils.executeQuery(dataSource, sql, answer.getQuestion().getFullName()+ "__orthomcl-get-" +
+      resultSet = SqlUtils.executeQuery(dataSource, sql, answer.getAnswerSpec().getQuestion().getFullName()+ "__orthomcl-get-" +
           tableName, 1000);
       while (resultSet.next()) {
         String queryId = resultSet.getString("query_id");

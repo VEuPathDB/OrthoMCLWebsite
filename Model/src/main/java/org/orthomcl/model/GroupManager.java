@@ -47,7 +47,7 @@ public class GroupManager implements Manageable<GroupManager> {
   }
 
   public RecordInstance getGroupRecord(User user, String name) throws WdkModelException, WdkUserException {
-    RecordClass recordClass = wdkModel.getRecordClass(RECORD_CLASS);
+    RecordClass recordClass = wdkModel.getRecordClassByName(RECORD_CLASS).get();
     Map<String, Object> pkValues = new LinkedHashMap<>();
     pkValues.put(GROUP_NAME_KEY, name);
     RecordInstance instance = new DynamicRecordInstance(user, recordClass, pkValues);
@@ -71,15 +71,15 @@ public class GroupManager implements Manageable<GroupManager> {
     Map<String, Integer> ecNumbers = new HashMap<>();
     TableValue genesTable = groupRecord.getTableValue(GENES_TABLE);
     for (Map<String, AttributeValue> row : genesTable) {
-      Gene gene = new Gene((String) row.get("full_id").getValue());
-      gene.setDescription((String) row.get("description").getValue());
+      Gene gene = new Gene(row.get("full_id").getValue());
+      gene.setDescription(row.get("description").getValue());
       gene.setLength(Long.valueOf(row.get("length").getValue().toString()));
 
       // get taxon
-      String taxonAbbrev = (String) row.get("taxon_abbrev").getValue();
+      String taxonAbbrev = row.get("taxon_abbrev").getValue();
       gene.setTaxon(taxons.get(taxonAbbrev));
 
-      String ecNumberString = (String) row.get("ec_numbers").getValue();
+      String ecNumberString = row.get("ec_numbers").getValue();
       if (ecNumberString != null) {
         for (String ecNumber : ecNumberString.split(",")) {
           ecNumber = ecNumber.trim();
@@ -112,9 +112,9 @@ public class GroupManager implements Manageable<GroupManager> {
     List<PFamDomain> pfams = new ArrayList<>();
     TableValue pfamsTable = groupRecord.getTableValue(PFAMS_TABLE);
     for (Map<String, AttributeValue> row : pfamsTable) {
-      PFamDomain pfam = new PFamDomain((String) row.get("accession").getValue());
-      pfam.setSymbol((String) row.get("symbol").getValue());
-      pfam.setDescription((String) row.get("description").getValue());
+      PFamDomain pfam = new PFamDomain(row.get("accession").getValue());
+      pfam.setSymbol(row.get("symbol").getValue());
+      pfam.setDescription(row.get("description").getValue());
       pfam.setCount(Integer.valueOf(row.get("occurrences").getValue().toString()));
       pfam.setIndex(Integer.valueOf(row.get("domain_index").getValue().toString()));
       group.addPFamDomain(pfam);
@@ -128,8 +128,8 @@ public class GroupManager implements Manageable<GroupManager> {
     // load protein pfam information to each gene
     TableValue proteinPFamsTable = groupRecord.getTableValue(PROTEIN_PFAMS_TABLE);
     for (Map<String, AttributeValue> row : proteinPFamsTable) {
-      String sourceId = (String) row.get("full_id").getValue();
-      String accession = (String) row.get("accession").getValue();
+      String sourceId = row.get("full_id").getValue();
+      String accession = row.get("accession").getValue();
       if (accession != null) {
         int[] location = new int[3];
         location[0] = Integer.valueOf(row.get("start_min").getValue().toString());

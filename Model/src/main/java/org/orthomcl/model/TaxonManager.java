@@ -12,10 +12,14 @@ import org.gusdb.wdk.model.WdkModel;
 import org.gusdb.wdk.model.WdkModelException;
 import org.gusdb.wdk.model.WdkUserException;
 import org.gusdb.wdk.model.answer.AnswerValue;
+import org.gusdb.wdk.model.answer.factory.AnswerValueFactory;
+import org.gusdb.wdk.model.answer.spec.AnswerSpec;
 import org.gusdb.wdk.model.question.Question;
 import org.gusdb.wdk.model.record.RecordInstance;
 import org.gusdb.wdk.model.record.TableValue;
 import org.gusdb.wdk.model.record.attribute.AttributeValue;
+import org.gusdb.wdk.model.user.StepContainer;
+import org.gusdb.wdk.model.user.User;
 import org.orthomcl.web.model.layout.RenderingHelper;
 
 public class TaxonManager implements Manageable<TaxonManager> {
@@ -43,9 +47,14 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
   private Map<String, Taxon> loadTaxons() throws WdkModelException, WdkUserException {
     // load helper record into request
-    Question question = wdkModel.getQuestion(HELPER_QUESTION);
-    AnswerValue answerValue = question.makeAnswerValue(wdkModel.getSystemUser(),
-        new LinkedHashMap<String, String>(), true, 0);
+    Question question = wdkModel.getQuestionByFullName(HELPER_QUESTION)
+        .orElseThrow(() -> new WdkModelException(HELPER_QUESTION + " does not exist in this model."));
+    User user = wdkModel.getSystemUser();
+    AnswerValue answerValue = AnswerValueFactory
+        .makeAnswer(user, AnswerSpec
+            .builder(wdkModel)
+            .setQuestionFullName(question.getFullName())
+            .buildRunnable(user, StepContainer.emptyContainer()));
     RecordInstance record = answerValue.getRecordInstances()[0];
 
     Map<String, Taxon> newTaxons = new LinkedHashMap<>();
@@ -55,16 +64,16 @@ public class TaxonManager implements Manageable<TaxonManager> {
 
     TableValue taxonTable = tables.get(TABLE_TAXONS);
     for (Map<String, AttributeValue> row : taxonTable) {
-      Taxon taxon = new Taxon(Integer.valueOf((String) row.get("taxon_id").getValue()));
-      taxon.setAbbrev((String) row.get("abbreviation").getValue());
+      Taxon taxon = new Taxon(Integer.valueOf(row.get("taxon_id").getValue()));
+      taxon.setAbbrev(row.get("abbreviation").getValue());
       taxon.setSpecies(row.get("is_species").getValue().toString().equals("1"));
-      taxon.setName((String) row.get("name").getValue());
-      taxon.setCommonName((String) row.get("name").getValue());
-      taxon.setSortIndex(Integer.valueOf((String) row.get("sort_index").getValue()));
+      taxon.setName(row.get("name").getValue());
+      taxon.setCommonName(row.get("name").getValue());
+      taxon.setSortIndex(Integer.valueOf(row.get("sort_index").getValue()));
       newTaxons.put(taxon.getAbbrev(), taxon);
       abbreviations.put(taxon.getId(), taxon.getAbbrev());
 
-      int parentId = Integer.valueOf((String) row.get("parent_id").getValue());
+      int parentId = Integer.valueOf(row.get("parent_id").getValue());
       parents.put(taxon.getId(), parentId);
     }
 
@@ -94,8 +103,8 @@ public class TaxonManager implements Manageable<TaxonManager> {
       WdkUserException {
     Map<String, String> roots = new HashMap<>();
     for (Map<String, AttributeValue> row : rootTable) {
-      String abbrev = (String) row.get("taxon_abbrev").getValue();
-      String groupColor = (String) row.get("color").getValue();
+      String abbrev = row.get("taxon_abbrev").getValue();
+      String groupColor = row.get("color").getValue();
       roots.put(abbrev, groupColor);
       taxons.get(abbrev).setGroupColor(groupColor);
     }

@@ -26,7 +26,7 @@ public class GroupLayoutManager extends LayoutManager implements Manageable<Grou
     RecordInstance groupRecord = groupManager.getGroupRecord(user, name);
 
     // load layout content
-    String layoutString = (String) groupRecord.getAttributeValue(LAYOUT_ATTRIBUTE).getValue();
+    String layoutString = groupRecord.getAttributeValue(LAYOUT_ATTRIBUTE).getValue();
     if (layoutString == null)
       return null;
 

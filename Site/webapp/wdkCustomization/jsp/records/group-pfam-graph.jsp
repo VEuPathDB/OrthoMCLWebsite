@@ -56,6 +56,7 @@
         <thead>
           <tr>
             <th>Accession</th>
+            <th>Core/Peripheral</th>
             <th>Length</th>
             <th id="ruler" width="100%"></th>
           </tr>
@@ -64,13 +65,15 @@
           <c:set var="odd" value="${true}"/>
           <c:forEach items="${proteinGroups}" var="proteinGroup">
             <c:set var="sourceId" value="${proteinGroup[0]['full_id'].value}"/>
+            <c:set var="protein_length" value="${proteinGroup[0]['protein_length'].value}"/>
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}"/>
             <tr class="protein ${rowClass}">
               <td class="source-id">
                 <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${sourceId}">${sourceId}</a>
               </td>
-              <td class="length">${proteinGroup[0]['length']}</td>
+              <td class="core_peripheral">${proteinGroup[0]['core_peripheral'].value}</td>
+              <td class="protein_length">${protein_length}</td>
               <td>
                 <div class="domains">
                   <div class="protein-graph"><jsp:text/></div>

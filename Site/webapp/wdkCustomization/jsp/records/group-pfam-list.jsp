@@ -50,6 +50,7 @@
         <thead>
           <tr>
             <th>Accession</th>
+            <th>Core/Peripheral</th>
             <th>Protein Length</th>
             <th>Pfam Domain</th>
             <th>Domain Start</th>
@@ -62,13 +63,15 @@
           <c:set var="previous_id" value="${''}" />
           <c:forEach items="${proteins.iterator}" var="row">
             <c:set var="source_id" value="${row['full_id'].value}" />
+            <c:set var="protein_length" value="${row['protein_length'].value}" />
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}" />
             <tr class="protein ${rowClass}">
               <td class="source-id">
                 <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${source_id}">${source_id}</a>
               </td>
-              <td class="length">${row['length']}</td>
+              <td>${row['core_peripheral']}</td>
+              <td>${protein_length}</td>
               <td>${row['accession'].value}</td>
               <td>${row['start_min']}</td>
               <td>${row['end_max']}</td>

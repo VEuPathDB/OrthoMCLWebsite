@@ -57,7 +57,7 @@
           <tr>
             <th>Accession</th>
             <th>Core/Peripheral</th>
-            <th>Length</th>
+            <th>Protein Length</th>
             <th id="ruler" width="100%"></th>
           </tr>
         </thead>

@@ -68,34 +68,9 @@
   </div>
   <!-- end of .phyletic-pattern -->
 
-  <div class="group-info">
-    <c:set var="attributes" value="${record.summaryAttributes}" />
-    <imp:toggle name="group-info" displayName="Group Statistics" isOpen="true">
-      <jsp:attribute name="content">
-        <table>
-          <tr>
-            <c:forEach items="${attributes}" var="entry">
-              <th>${entry.value.attributeField.displayName}</th>
-            </c:forEach>
-          </tr>
-          <tr>
-            <c:forEach items="${attributes}" var="entry">
-              <c:set var="attribute" value="${entry.value}" />
-              <td>
-                <c:choose>
-                  <c:when test="${attribute.class.name eq 'org.gusdb.wdk.model.LinkAttributeValue'}">
-                    <a href="${attribute.url}">${attribute.displayText}</a>
-                  </c:when>
-                  <c:otherwise>
-                    <font class="fixed">${attribute.value}</font>
-                  </c:otherwise>
-                </c:choose>
-              </td>
-            </c:forEach>
-          </tr>
-        </table>  
-      </jsp:attribute>
-    </imp:toggle>
+  <div class="Statistics">
+    <c:set var="statistics" value="${wdkRecord.tables['Statistics']}"/>
+    <imp:wdkTable tblName="${statistics.name}" isOpen="true" dataTable="true"/>
   </div>
 	
 	<div class="EcNumbers">

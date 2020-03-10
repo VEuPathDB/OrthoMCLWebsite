@@ -20,7 +20,7 @@ public class ExpressionParamHandler extends StringParamHandler {
 
     private static final Logger LOG = Logger.getLogger(ExpressionParamHandler.class);
 
-    private static final String GROUP_SQL = "SELECT ortholog_group_id FROM ( "
+    private static final String GROUP_SQL = "(SELECT ortholog_group_id FROM ( "
             + "SELECT ortholog_group_id, sum(number_of_taxa) as number_of_taxa, sum(number_of_proteins) as number_of_proteins "
 	    + "FROM apidb.orthologgrouptaxon WHERE lower(three_letter_abbrev) IN (";
 
@@ -62,7 +62,6 @@ public class ExpressionParamHandler extends StringParamHandler {
             sql.append(composeSql(coreSql,booleanNode.getRight()));
         }
         else {
-	    sql.append(coreSql);
             LeafNode leaf = (LeafNode) node;
             List<String> terms = leaf.getTerms();
             StringBuilder sqlTerms = new StringBuilder();
@@ -71,11 +70,21 @@ public class ExpressionParamHandler extends StringParamHandler {
                 if (sqlTerms.length() > 1) sqlTerms.append(",");
                 sqlTerms.append(species);
             }
+	    if (leaf.getCount()==0 && leaf.getCondition().equals("=")) {
+		sql.append("((SELECT DISTINCT ortholog_group_id FROM apidb.orthologgrouptaxon) MINUS ");
+	    }
+	    sql.append(coreSql);
             sql.append(sqlTerms + ")");
-	    sql.append(" GROUP BY ortholog_group_id) WHERE "); 
+	    sql.append(" GROUP BY ortholog_group_id) WHERE ");
+
 	    if (leaf.isOnSpecies()) { sql.append("number_of_taxa"); }
 	    else { sql.append("number_of_proteins"); }
-	    sql.append(leaf.getCondition() + leaf.getCount());
+
+	    if (leaf.getCount()==0 && leaf.getCondition().equals("=")) {
+		sql.append(">=1))");
+	    } else {
+		sql.append(leaf.getCondition() + leaf.getCount() + ")");
+	    }
         }
         return sql.toString();
     }

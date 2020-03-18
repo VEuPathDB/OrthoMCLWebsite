@@ -138,6 +138,14 @@
               <div class="edge-legend Inparalog"> </div> Inparalog
             </div>
             <div class="edge-type">
+              <input type="checkbox" value="PeripheralCore" checked="checked" /> 
+              <div class="edge-legend PeripheralCore"> </div> PeripheralCore
+            </div>
+            <div class="edge-type">
+              <input type="checkbox" value="PeripheralPeripheral" checked="checked" /> 
+              <div class="edge-legend PeripheralPeripheral"> </div> PeripheralPeripheral
+            </div>
+            <div class="edge-type">
               <input type="checkbox" value="Normal" /> 
               <div class="edge-legend Normal"> </div> Other Similarities
             </div>

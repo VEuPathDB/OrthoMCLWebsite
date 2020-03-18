@@ -278,7 +278,7 @@ wdk.namespace("orthomcl.group.layout", function(ns, $) {
     var subject = "<span id=\"" + edgeId + "\" class=\"subject\">" + sourceId + "</span>";
 
     var type = edge.data("type");    
-    type = (type == "O") ? "Ortholog" : (type == "C") ? "Coortholog" : (type == "P") ? "Inparalog" : "Normal";
+    type = (type == "O") ? "Ortholog" : (type == "C") ? "Coortholog" : (type == "P") ? "Inparalog" : (type == "M") ? "PeripheralPeripheral" : (type == "L") ? "PeripheralCore" : "Normal";
 
     return [ subject, type, edge.data("evalue") ];
 
@@ -467,6 +467,8 @@ wdk.namespace("orthomcl.group.layout", function(ns, $) {
     var ortholog = false;
     var coortholog = false;
     var inparalog = false;
+    var peripheralperipheral = false;
+    var peripheralcore = false;
     var normal = false;
     layout.find(".controls .edge-control .edge-type input")
           .each(function() {
@@ -474,6 +476,8 @@ wdk.namespace("orthomcl.group.layout", function(ns, $) {
               if (this.value == "Ortholog") ortholog = true;
               else if (this.value == "Coortholog") coortholog = true;
               else if (this.value == "Inparalog") inparalog = true;
+              else if (this.value == "PeripheralPeripheral") peripheralperipheral = true;
+              else if (this.value == "PeripheralCore") peripheralcore = true;
               else if (this.value == "Normal") normal = true;
             }
           });
@@ -489,6 +493,8 @@ wdk.namespace("orthomcl.group.layout", function(ns, $) {
               if (type == "O") return ortholog ? "block" : "none";
               else if (type == "C") return coortholog ? "block" : "none";
               else if (type == "P") return inparalog ? "block" : "none";
+              else if (type == "L") return peripheralcore ? "block" : "none";
+              else if (type == "M") return peripheralperipheral ? "block" : "none";
               else return normal ? "block" : "none";
             } else { return "none"; }
           })
@@ -538,7 +544,7 @@ wdk.namespace("orthomcl.group.layout", function(ns, $) {
 
       var line = d3.select(this).style("stroke-width", 5);
       var type = edge.data("type");
-      var label = (type == "O") ? "Ortholog" : (type == "C") ? "Coortholog" : (type == "P") ? "Inparalog" : "Normal";
+      var label = (type == "O") ? "Ortholog" : (type == "C") ? "Coortholog" : (type == "P") ? "Inparalog" : (type == "L") ? "PeripheralCore" : (type == "M") ? "PeripheralPeripheral" : "Normal";
       label += ", evalue=" + edge.data("evalue");
       var x = (parseFloat(line.attr("x1")) + parseFloat(line.attr("x2"))) / 2 + 13;
       var y = (parseFloat(line.attr("y1")) + parseFloat(line.attr("y2"))) / 2 + 2;

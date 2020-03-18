@@ -134,7 +134,7 @@ public class GroupManager implements Manageable<GroupManager> {
         int[] location = new int[3];
         location[0] = Integer.valueOf(row.get("start_min").getValue().toString());
         location[1] = Integer.valueOf(row.get("end_max").getValue().toString());
-        location[2] = Integer.valueOf(row.get("length").getValue().toString());
+        location[2] = Integer.valueOf(row.get("protein_length").getValue().toString());
         Gene gene = group.getGene(sourceId);
         gene.addPFamDomain(accession, location);
       }

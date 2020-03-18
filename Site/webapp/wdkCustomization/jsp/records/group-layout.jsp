@@ -11,7 +11,7 @@
 
 <c:choose>
   <c:when test="${layout == null}">
-    <div class="tip">Cluster graph is only available for groups with no more than 500 sequences.</div>
+    <div class="tip">Cluster graph is available for groups of 2 to 499 sequences.</div>
   </c:when>
   <c:otherwise> <!-- show layout -->
 

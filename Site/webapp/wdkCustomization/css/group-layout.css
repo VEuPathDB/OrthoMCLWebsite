@@ -35,6 +35,8 @@
 .group-layout .controls .edge-legend.Ortholog { background:gray; }
 .group-layout .controls .edge-legend.Coortholog { background:#0000FF; }
 .group-layout .controls .edge-legend.Inparalog { background:#00FF00; }
+.group-layout .controls .edge-legend.PeripheralCore { background:gray; }
+.group-layout .controls .edge-legend.PeripheralPeripheral { background:gray; }
 .group-layout .controls .edge-legend.Normal { background:#FF0000; }
 
 .group-layout .node-control .control-section { max-height:440px; overflow-y:auto; }

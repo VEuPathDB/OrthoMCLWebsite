@@ -119,7 +119,7 @@
 <br/>
 
 <!-- TWITTER WIDGET, code generated in twitter.com, EuPathDB account settings -->
- 		 <a class="twitter-timeline" data-chrome="nofooter" height="50"  href="https://twitter.com/eupathdb" data-widget-id="344817818073714691">Tweets by @eupathdb</a>
+ 		 <a class="twitter-timeline" data-chrome="nofooter" height="50"  href="https://twitter.com/veupathdb" data-widget-id="344817818073714691">Tweets by @veupathdb</a>
 		 <script>
 		 !function(d,s,id){
 				var js,fjs=d.getElementsByTagName(s)[0],

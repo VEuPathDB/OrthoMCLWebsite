@@ -152,11 +152,11 @@ If your .fasta file contains the proteins from a single proteome, you can additi
 </p>
 
 <p>
-<i>First please log in as a EuPathDB user.</i>
+<i>First please log in as a VEuPathDB user.</i>
 </p>
 
 <p>
-Once logged in, go to the <a href="http://eupathdb.globusgenomics.org">EuPathDB Galaxy server</a>:
+Once logged in, go to the <a href="http://veupathdb.globusgenomics.org">VEuPathDB Galaxy server</a>:
 </p>
 <ol style="width:85%">
 <li>Use the <b>Get Data</b> tool (in the left panel at the top) to upload your .fasta file</li>

@@ -1,6 +1,6 @@
 # $SourceFileURL$
 ---
-_build_number: 5
+_build_number: 6
 _clusterhostname: eupathdb.gacrc.uga.edu
 _clusterbasedir: /lustre1/eupathdb
 _self_url_scheme: https
@@ -26,7 +26,7 @@ modelprop:
   TWITTER_WIDGET_ID: 344817818073714691
   USE_LEGACY_RECORD_PAGE: 'true'
   WEBAPP_BASE_URL: "{{ modelconfig_webAppUrl|regex_replace('/+$', '') }}/app"
-  WEBSERVICEMIRROR: /var/www/Common/apiSiteFilesMirror/webServices/OrthoMCL
+  WEBSERVICEMIRROR: /eupath/data/apiSiteFiles/webServices/OrthoMCL
   YOUTUBE_URL: https://youtube.com/user/EuPathDB/videos?sort=dd&flow=list&view=1
 
 orthomclproteomesvcserverprop_resultBaseUrl: '{{ _self_url_scheme }}://{{ hostname|swap_hostname(_host_frontends) }}/orthomcl/proteomeDownload.do?jobId='
@@ -57,3 +57,7 @@ orthomclproteomesvcclusterprop_nodeClass: 'DJob::DistribJob::TorqueNode'
 orthomclproteomesvcclusterprop_taskSize: 100
 orthomclproteomesvcclusterprop_taskClass: DJob::DistribJobTasks::BlastSimilarityTask
 orthomclproteomesvcclusterprop_blastArgs: "-a 1 -F 'm S' -v 1000 -b 1000  -e 1e-5"
+
+blastconfig_blastPath: '/opt/ncbi-blast+/bin/'
+blastconfig_idBlastRegex: '<![CDATA[^*(?:>)*(?:\s)*(?:[^\|]*\|)?(\S+)]]>'
+blastconfig_tempBlastPath: /var/www/Common/tmp/blast

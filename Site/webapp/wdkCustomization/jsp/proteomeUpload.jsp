@@ -144,11 +144,11 @@ div.prot-upload ol {
 <h2>Map your proteins to OrthoMCL groups</h2>
 
 <p>
-If you have a .fasta file with a set of proteins, you can map the proteins to OrthoMCL Groups.
+If you have a .fasta file with a set of proteins, you can map the proteins to OG5 or OG6r1 Groups.
 </p>
 
 <p>
-If your .fasta file contains the proteins from a single proteome, you can additionally find paralog groups for proteins that do not map to OrthoMCL Groups.  
+If your .fasta file contains the proteins from a single proteome, you can additionally find paralog groups for proteins that do not map to OrthoMCL Core or Residual Groups.
 </p>
 
 <p>
@@ -160,8 +160,9 @@ Once logged in, go to the <a href="http://veupathdb.globusgenomics.org">VEuPathD
 </p>
 <ol style="width:85%">
 <li>Use the <b>Get Data</b> tool (in the left panel at the top) to upload your .fasta file</li>
-<li>On the Galaxy home page, click <b>Map a proteome to OrthoMCL groups</b>, under "Get started with pre-configured workflows:"</li>
-<li>Then provide your .fasta file, and run the workflow!</li>
+<li>On the Galaxy home page, click <b>Workflow to map your proteins to OrthoMCL groups</b>.</li>
+<li>In the workflow settings, indicate (1) your .fasta file, (2) the OG5 or OG6r1 Blast database, and (3) OG5 or OG6r1 groups.</li>
+<li>Run the workflow!</li>
 </ol>
 
 <p>

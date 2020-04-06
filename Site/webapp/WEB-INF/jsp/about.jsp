@@ -27,20 +27,32 @@
       </div>
       <div class="about-body">
         <div id="release" class="section-title">
-          <h2>Current Release</h2>
+          <h2>Current Release 6.1</h2>
         </div>
         <div class="section-content">
           <p>
-            The genome data for this release was acquired from these
+	    This release contains two substantial changes:
+	  </p>
+	  <p>
+	    First, the OrthoMCL algorithm is employed on proteins from a new set of 150 <b>Core</b> species to form <b>Core</b> ortholog groups. The species were carefully chosen based on proteome quality and representation across the tree of life. Core group names have the format OG6_xxxxxx (e.g., OG6_101327).
+	  </p>
+	  <p>
+	    Second, the website has been engineered to assign proteins from hundreds of additional organisms, termed <b>Peripheral</b> organisms, into these Core groups. All <b>Peripheral</b> proteins that fail to map to a Core group are collected and subjected to independent OrthoMCL analysis, forming <b>Residual</b> groups. This design will allow us to map new proteomes at every release (every 3 months). For each release, all Residual groups will be disassembled, the individual proteins will be combined with any new proteins that did not map to Core groups, and new Residual groups will be formed. Residual group names have the format OG6r1_xxxxxx (e.g., OG6r1_101327), where OG6 refers to version 6 (which is defined by the current set of Core species and groups) and r1 refers to release 1 (which is defined by the current set of Residual groups).
+	  </p>
+<p>
+The genome data for this release was acquired from these
             <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genome Sources</a>.
             The number of sequences and groups in each genome is shown in the
             <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Genome Statistics</a>.
           </p>
+
           <p>
             <strong>Downloads:</strong>
             Go to the <a href="/common/downloads">download site</a> to get the protein sequences
             used in this release and the ortholog groups.
           </p>
+
+
         </div>
         <div id="methods" class="section-title">
           <h2>Methods</h2>
@@ -215,10 +227,11 @@
           </p>
           <p>
             The OrthoMCL-DB project was initiated by Feng Chen in April 2005, and people from
-            PCBI/Penn Center for Bioinformatics who have contributed to the project include: Aaron
-            Mackey, Brian Brunk, Praveen Chakravarthula, Jerric Gao, Steve Fischer, Ryan Doherty, and
-            Charles Treatman.  We'd also like to thank students and postdocs from the Roos lab for
-            valuable suggestions, specifically Lucia Peixoto, Omar Harb and Dhanasekaran Shanmugam.
+            VEuPathDB, PCBI, and the Penn Center for Bioinformatics who have contributed to the
+	    project include: Mark Hickman, Steve Fischer, Brian Brunk, Omar Harb, Ryan Doherty,
+	    Aaron Mackey, Praveen Chakravarthula, Jerric Gao, and Charles Treatman. We'd also
+	    like to thank students and postdocs from the Roos lab for valuable suggestions,
+	    specifically Lucia Peixoto, and Dhanasekaran Shanmugam.
           </p>
         </div>
         <div id="contact" class="section-title">

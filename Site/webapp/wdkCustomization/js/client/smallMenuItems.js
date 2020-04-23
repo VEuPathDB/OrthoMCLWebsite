@@ -6,18 +6,23 @@ export default function smallMenuItems(props, defaultMenuItems) {
       webAppUrl: '/about.do',
       children: [
         {
-          id: 'current-release',
-          text: 'Current Release',
+          id: 'release',
+          text: 'Current Release 6.1',
           webAppUrl: '/about.do#release'
         },
         {
-          id: 'methods',
-          text: 'Methods',
-          webAppUrl: '/about.do#methods'
+          id: 'forming_groups',
+          text: 'Method for Forming and Expanding Ortholog Groups',
+          webAppUrl: '/about.do#forming_groups'
+        },
+        {
+          id: 'orthomcl_algorithm',
+          text: 'The OrthoMCL Algorithm',
+          webAppUrl: '/about.do#orthomcl_algorithm'
         },
         {
           id: 'background',
-          text: 'Background',
+          text: 'Background on Orthology and Prediction',
           webAppUrl: '/about.do#background'
         },
         {

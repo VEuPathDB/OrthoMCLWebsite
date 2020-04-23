@@ -10,9 +10,10 @@
           <form>
             <select id="navSel" onchange="window.location='#'+$(this).find(':selected').attr('name');">
               <option name="">Jump to...</option>
-              <option name="release">Current Release</option>
-              <option name="methods">Methods</option>
-              <option name="background">Background</option>
+              <option name="release">Current Release 6.1</option>
+              <option name="forming_groups">Method for Forming and Expanding Ortholog Groups</option>
+              <option name="orthomcl_algorithm">The OrthoMCL Algorithm</option>
+              <option name="background">Background on Orthology and Prediction</option>
               <option name="faq">Frequently Asked Questions</option>
               <option name="software">Software</option>
               <option name="pubs">Publications</option>
@@ -25,37 +26,55 @@
       <div class="about-title">
         <h1>About OrthoMCL</h1>
       </div>
+
       <div class="about-body">
+
         <div id="release" class="section-title">
           <h2>Current Release 6.1</h2>
         </div>
         <div class="section-content">
           <p>
 	    This release contains two substantial changes:
+	    <ol>
+	      <li>All proteins from a new set of 150 <b>Core</b> species were used to form <b>Core</b> ortholog groups.</li>
+	      <li>All proteins from 394 additional species, termed <b>Peripheral</b> species, are mapped into the Core ortholog groups. Any proteins that fails to map is used to create a <b>Residual</b> group. This design will allow us to map new proteomes at each new release (~3 months).</li>
+	    </ol>
 	  </p>
 	  <p>
-	    First, the OrthoMCL algorithm is employed on proteins from a new set of 150 <b>Core</b> species to form <b>Core</b> ortholog groups. The species were carefully chosen based on proteome quality and representation across the tree of life. Core group names have the format OG6_xxxxxx (e.g., OG6_101327).
-	  </p>
-	  <p>
-	    Second, the website has been engineered to assign proteins from hundreds of additional organisms, termed <b>Peripheral</b> organisms, into these Core groups. All <b>Peripheral</b> proteins that fail to map to a Core group are collected and subjected to independent OrthoMCL analysis, forming <b>Residual</b> groups. This design will allow us to map new proteomes at every release (every 3 months). For each release, all Residual groups will be disassembled, the individual proteins will be combined with any new proteins that did not map to Core groups, and new Residual groups will be formed. Residual group names have the format OG6r1_xxxxxx (e.g., OG6r1_101327), where OG6 refers to version 6 (which is defined by the current set of Core species and groups) and r1 refers to release 1 (which is defined by the current set of Residual groups).
-	  </p>
-<p>
-The genome data for this release was acquired from these
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Genome Sources</a>.
-            The number of sequences and groups in each genome is shown in the
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Genome Statistics</a>.
+	    The proteome data for this release was acquired from these
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Proteome Sources</a>.
+            The number of sequences and ortholog groups in each proteome is shown in the
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Proteome Statistics</a>.
           </p>
-
           <p>
             <strong>Downloads:</strong>
-            Go to the <a href="/common/downloads">download site</a> to get the protein sequences
-            used in this release and the ortholog groups.
+            Go to the <a href="/common/downloads">download site</a> to obtain the protein sequences
+            and ortholog groups used in this release.
           </p>
+        </div>
 
+        <div id="forming_groups" class="section-title">
+          <h2>Method for Forming and Expanding Ortholog Groups</h2>
+        </div>
+        <div class="section-content">
+          <p>
+	    Proteins are placed into Ortholog Groups by the following steps:
+	  <ol>
+	    <li>The OrthoMCL algorithm (see below) is employed on proteins from a set of 150 <b>Core</b> species to form <b>Core</b> ortholog groups. The species were carefully chosen based on proteome quality and widespread placement across the tree of life. Each Core protein is placed by the algorithm into a <b>Core</b> ortholog group consisting of one or more proteins. Core group names have the format OG6_xxxxxx (e.g., OG6_101327). OG6 refers to OrthoMCL version 6; for each version (lasting ~2 years), the Core species and the Core ortholog group names will remain constant.</li>
+	    <li>The proteins from hundreds of additional organisms, termed <b>Peripheral</b> organisms, are BLASTed against all proteins in the Core groups. For each <b>Peripheral</b> protein, the best BLAST score is used to assign the protein to a Core group, but only if the E-Value &lt; 1e-5 and the percent match length &gt;= 50%.</li>
+	    <li>All Peripheral proteins that fail to map to a Core group are collected and subjected to independent OrthoMCL analysis, forming <b>Residual</b> groups consisting of one or more proteins. Residual group names have the format OG6r1_xxxxxx (e.g., OG6r1_101327), where r1 refers to release 1.</li>
+	    <li>For each subsequent release, proteomes from additional <b>Peripheral</b> organisms will be processed as in steps 2 and 3 above. However, step 3 will differ slightly because the previous set of Residual groups will be disassembled, leaving the previous unmapped Peripheral proteins to be combined with the new unmapped Peripheral proteins. All of these proteins will be used to form new Residual groups (e.g., OG6r2_xxxxxx).</li>
+	    <li>For each subsequent version, a new set of Core species will be defined, leading to the formation of new Core groups (e.g., OG7_xxxxxx) and Residual groups (e.g., OG7r1_xxxxxx).</li>
+	  </ol>
+	  </p>
+	  <p>
+	    This design allows for the addition of proteomes at every release (~3 months). Note that <b>Core</b> groups (e.g., OG6_101327) will remain between releases, though these groups will expand as Peripheral proteins are mapped in. In contrast, <b>Residual</b> groups will exist only for that release (~3 months); thus, Residual groups are useful in allowing the user to find proteins related to their protein(s) of interest, but are not stable groups.
+	  </p>
 
         </div>
-        <div id="methods" class="section-title">
-          <h2>Methods</h2>
+
+        <div id="orthomcl_algorithm" class="section-title">
+          <h2>The OrthoMCL Algorithm</h2>
         </div>
         <div class="section-content">
           <p>
@@ -77,8 +96,9 @@ The genome data for this release was acquired from these
            <li>Use the <a href="http://micans.org/mcl/">MCL</a> program to cluster the pairs into groups</li>
            </ul>
         </div>
+
         <div id="background" class="section-title">
-          <h2>Background</h2>
+          <h2>Background on Orthology and Prediction</h2>
         </div>
         <div class="section-content">
           <p>

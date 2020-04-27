@@ -37,18 +37,19 @@
 	    This release contains two substantial changes:
 	    <ol>
 	      <li>All proteins from a new set of 150 <b>Core</b> species were used to form <b>Core</b> ortholog groups.</li>
-	      <li>All proteins from 394 additional species, termed <b>Peripheral</b> species, are mapped into the Core ortholog groups. Any proteins that fails to map is used to create a <b>Residual</b> group. This design will allow us to map new proteomes at each new release (~3 months).</li>
+	      <li>All proteins from 394 additional species, termed <b>Peripheral</b> species, are mapped into the Core ortholog groups. Proteins that fail to map are used to create <b>Residual</b> groups. This design will allow us to map new proteomes at each new release (~3 months).</li>
 	    </ol>
 	  </p>
 	  <p>
-	    The proteome data for this release was acquired from these
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data">Proteome Sources</a>.
-            The number of sequences and ortholog groups in each proteome is shown in the
-            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release">Proteome Statistics</a>.
+	    To see the current set of organisms, their taxonomic category, their Core/Peripheral status, their abbreviation
+	    for this site, and the source of their protein sequences, go to 
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=data" target="_blank">Proteome Sources</a>.
+            To see the number of sequences and ortholog groups for each organism, go to 
+            <a href="${pageContext.request.contextPath}/getDataSummary.do?summary=release" target="_blank">Proteome Statistics</a>.
           </p>
           <p>
             <strong>Downloads:</strong>
-            Go to the <a href="/common/downloads">download site</a> to obtain the protein sequences
+            Go to the <a href="/common/downloads" target="_blank">download site</a> to obtain the protein sequences
             and ortholog groups used in this release.
           </p>
         </div>
@@ -60,15 +61,15 @@
           <p>
 	    Proteins are placed into Ortholog Groups by the following steps:
 	  <ol>
-	    <li>The OrthoMCL algorithm (see below) is employed on proteins from a set of 150 <b>Core</b> species to form <b>Core</b> ortholog groups. The species were carefully chosen based on proteome quality and widespread placement across the tree of life. Each Core protein is placed by the algorithm into a <b>Core</b> ortholog group consisting of one or more proteins. Core group names have the format OG6_xxxxxx (e.g., OG6_101327). OG6 refers to OrthoMCL version 6; for each version (lasting ~2 years), the Core species and the Core ortholog group names will remain constant.</li>
-	    <li>The proteins from hundreds of additional organisms, termed <b>Peripheral</b> organisms, are BLASTed against all proteins in the Core groups. For each <b>Peripheral</b> protein, the best BLAST score is used to assign the protein to a Core group, but only if the E-Value &lt; 1e-5 and the percent match length &gt;= 50%.</li>
-	    <li>All Peripheral proteins that fail to map to a Core group are collected and subjected to independent OrthoMCL analysis, forming <b>Residual</b> groups consisting of one or more proteins. Residual group names have the format OG6r1_xxxxxx (e.g., OG6r1_101327), where r1 refers to release 1.</li>
-	    <li>For each subsequent release, proteomes from additional <b>Peripheral</b> organisms will be processed as in steps 2 and 3 above. However, step 3 will differ slightly because the previous set of Residual groups will be disassembled, leaving the previous unmapped Peripheral proteins to be combined with the new unmapped Peripheral proteins. All of these proteins will be used to form new Residual groups (e.g., OG6r2_xxxxxx).</li>
-	    <li>For each subsequent version, a new set of Core species will be defined, leading to the formation of new Core groups (e.g., OG7_xxxxxx) and Residual groups (e.g., OG7r1_xxxxxx).</li>
+	    <li>The OrthoMCL algorithm (see below) is employed on proteins from a set of 150 <b>Core</b> species to form <b>Core</b> ortholog groups. These species were carefully chosen based on proteome quality and widespread placement across the tree of life. Each Core protein is placed by the algorithm into a <b>Core</b> ortholog group consisting of one or more proteins. Core group names have the format OG6_xxxxxx (e.g., OG6_101327). OG6 refers to OrthoMCL release 6; for each sub-release (e.g., 6.1, 6.2, etc), the Core species and the Core ortholog group names will remain constant.</li>
+	    <li>The proteins from hundreds of additional organisms, termed <b>Peripheral</b> organisms, are mapped into the Core groups. To do this, NCBI BLASTP is used to compare each Peripheral protein to each Core protein in the Core groups. (Note that Peripheral proteins that were previously added to the Core group are NOT used in the BLASTP.) Then, each <b>Peripheral</b> protein is assigned to the Core group containing the Core protein with the best BLAST score, but only if the E-Value is &lt;1e-5 and the percent match length is &gt;=50%.</li>
+	    <li>All Peripheral proteins that fail to map to a Core group are collected and subjected to independent OrthoMCL analysis, forming <b>Residual</b> groups consisting of one or more proteins. Residual group names have the format OG6r1_xxxxxx (e.g., OG6r1_101327), where OG6 refers to release 6 and r1 refers to sub-release 1.</li>
+	    <li>For each subsequent sub-release (which will occur every ~3 months along with other VEuPathDB sites), proteomes from additional <b>Peripheral</b> organisms will be processed as in steps 2 and 3 above. However, step 3 will differ slightly because the previous set of Residual groups will be disassembled, leaving the previous unmapped Peripheral proteins to be combined with the new unmapped Peripheral proteins. All of these proteins will be used to form new Residual groups (e.g., OG6r2_xxxxxx).</li>
+	    <li>On occasion, the set of Core species will be re-defined, as more appropriate proteomes become available. In this case, new Core groups (e.g., OG7_xxxxxx) and Residual groups (e.g., OG7r1_xxxxxx) will be formed.</li>
 	  </ol>
 	  </p>
 	  <p>
-	    This design allows for the addition of proteomes at every release (~3 months). Note that <b>Core</b> groups (e.g., OG6_101327) will remain between releases, though these groups will expand as Peripheral proteins are mapped in. In contrast, <b>Residual</b> groups will exist only for that release (~3 months); thus, Residual groups are useful in allowing the user to find proteins related to their protein(s) of interest, but are not stable groups.
+	    This design allows for the addition of proteomes at every sub-release (e.g., 6.1, 6.2, etc). Note that <b>Core</b> groups (e.g., OG6_101327) will remain between sub-releases, though these groups will expand as Peripheral proteins are mapped in. In contrast, <b>Residual</b> groups will exist only for that sub-release; thus, Residual groups are useful in allowing the user to find proteins related to their protein(s) of interest, but are not stable groups.
 	  </p>
 
         </div>
@@ -78,7 +79,7 @@
         </div>
         <div class="section-content">
           <p>
-            See the <b><a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub">OrthoMCL Algorithm Document</a></b> for a detailed description of the OrthoMCL algorithm.
+            See the <b><a href="https://docs.google.com/document/d/1RB-SqCjBmcpNq-YbOYdFxotHGuU7RK_wqxqDAMjyP_w/pub" target="_blank">OrthoMCL Algorithm Document</a></b> for a detailed description of the OrthoMCL algorithm.
             
           </p>
            In overview:
@@ -93,7 +94,7 @@
            </li>
            <li>Apply thresholds to blast result.  Keep matches with E-Value &lt; 1e-5 percent match length &gt;= 50%</li>
            <li>Find potential inparalog, ortholog and co-ortholog <i>pairs</i> using the Orthomcl Pairs program.  (These are the pairs that are counted to form the <i>Average % Connectivity</i> statistic per group.)</li>
-           <li>Use the <a href="http://micans.org/mcl/">MCL</a> program to cluster the pairs into groups</li>
+           <li>Use the <a href="http://micans.org/mcl/" target="_blank">MCL</a> program to cluster the pairs into groups</li>
            </ul>
         </div>
 
@@ -104,34 +105,33 @@
           <p>
             Orthologs are homologs seperated by speciation events.  Paralogs are homologs separated
             by duplication events. Detection of orthologs is becoming much more important with the
-            rapid progress in genome sequencing.
+            rapid progress in genome sequencing (<a href="https://academic.oup.com/mbe/article/36/10/2157/5523206" target="_blank">Glover et al. 2019</a>).
           </p>
           <p>
             OrthoMCL is a genome-scale algorithm for grouping orthologous protein sequences. It
             provides not only groups shared by two or more species/genomes, but also groups
-            representing species-specific gene expansion families.  So it serves as an important
+            representing species-specific gene expansion families. Thus, it serves as an important
             utility for automated eukaryotic genome annotation. OrthoMCL starts with reciprocal best
             hits within each genome as potential in-paralog/recent paralog pairs and reciprocal best
             hits across any two genomes as potential ortholog pairs.  Related proteins are interlinked
-            in a similarity graph. Then MCL (Markov Clustering algorithm,Van Dongen 2000;
-            <a href="http://micans.org/mcl/">www.micans.org/mcl</a>) is invoked to split mega-clusters.
+            in a similarity graph. Then, MCL (Markov Clustering algorithm; <a href="https://dspace.library.uu.nl/handle/1874/848" target="_blank">Dongen 2000</a>;
+            <a href="http://micans.org/mcl/" target="_blank">www.micans.org/mcl</a>) is invoked to split mega-clusters.
             This process is analogous to the manual review in COG construction.  MCL clustering is
             based on weights between each pair of proteins, so to correct for differences in
             evolutionary distance the weights are normalized before running MCL.
           </p>
           <p>
-            OrthoMCL is similar to the INPARANOID algorithm (Remm, Storm et al. 2001), but is extended
+            OrthoMCL is similar to the INPARANOID algorithm (<a href="https://www.sciencedirect.com/science/article/abs/pii/S0022283600951970?via%3Dihub" target="_blank">Remm et al. 2001</a>), but is extended
             to cluster orthologs from multiple species. OrthoMCL clusters are coherent with groups
-            identified by EGO (Lee, Sultana et al. 2002), and an analysis using EC number suggests a
-            high degree of reliability (Li, Stoeckert et al. 2003).
+            identified by EGO (<a href="https://genome.cshlp.org/content/12/3/493.long" target="_blank">Lee et al. 2002</a>), and an analysis using EC number suggests a
+            high degree of reliability (<a href="http://www.genome.org/cgi/content/abstract/13/9/2178" target="_blank">Li et al. 2003</a>).
           </p>
           <p>
-            In a recent assessment (Chen, et al. 2007), the performance of seven widely used orthology
-            detection algorithms, representing three kinds of strategies (phylogeny-based, evolutionary
-            distance-based and BLAST-based), are evaluated using the statistical technique Latent Class
-            Analysis (LCA). LCA is useful when there are large data sets available but no gold standard.
-            The results show an overall trade-off between sensitivity and specificity among these
-            algorithms, with INPARANOID and OrthoMCL as the two best methods having both False Positive
+            We evaluated the performance of seven widely-used orthology detection algorithms that use three general
+	    prediction strategies: phylogeny-based, evolutionary distance-based and BLAST-based (<a href="http://www.plosone.org/article/info:doi%2F10.1371%2Fjournal.pone.0000383" target="_blank">Chen, et al. 2007</a>).
+	    Specifically, we used Latent Class Analysis (LCA), a statistical technique appropriate for testing large data
+	    sets when no gold standard is available. Our results show an overall trade-off between sensitivity and
+	    specificity among these algorithms, with INPARANOID and OrthoMCL performing best with False Positive
             (FP) and False Negative (FN) error rates lower than 20%.
           </p>
         </div>
@@ -141,37 +141,57 @@
         <div class="section-content">
           <ol>
             <li>
+              <span class="question">What is the difference between a Core group and a Residual group?</span>
+              <p>
+                <ul>
+                  <li>A <b>Core</b> group is initially formed using all of the proteins from 150 Core species. As proteins from Peripheral species are added to the site, each protein is mapped to its most closely-related Core group. Thus, many Core groups contain proteins from Core and Peripheral species. These groups are stable across sub-releases (e.g., 6.1, 6.2, etc), though the groups may expand as Peripheral species are added to the site. The Core group names have the format OG6_xxxxxx.</li>
+                  <li>A <b>Residual</b> group is formed at every sub-release (e.g., 6.1, 6.2, etc) using all of the proteins from Peripheral species that did not meet the thresholds necessary to map into a Core group. These groups contain proteins only from Peripheral species. The Residual group names have the format OG6r1_xxxxxx.</li>
+                </ul>
+              </p>
+            </li>
+
+            <li>
               <span class="question">What group information is provided?</span>
               <p>
-                For each ortholog group, we provide basic information and other useful data about the group:
-                <ol>
-                  <li>Size of the group, in terms of both number of sequences and number of taxa.</li>
-                  <li>Sequence similarity info, indicating the degree of conservation within the group: % Match Pairs (percentage of all possible pairs within the group that are matched through BLAST under the default cutoff, and the rest of similarity info is calculated based on these matched pairs only), Average E-value, Average % Coverage, and Average % Identity.</li>
-                  <li>Phyletic profile, displaying #sequences from each species that belong to this ortholog group; black box indicates presence (with the number below the genome abbreviation representing #sequences) while white box stands for absence.</li>
-                  <li>Keywords: the most frequently occurring keywords in the annotations of the member sequences.</li>
-                  <li>Pfam domains: the most frequently occurring Pfam domains in the member sequences.</li>
-                  <li>Pfam domain architecture: useful to compare among group members and to identify outliers (due to evolution or sequencing/gene model errors).</li>
-                  <li>BioLayout graph, displaying the sequence similarity relationship between group members together with OrthoMCL edge information (in the SVG version of the graph).</li>
-                  <li>Multiple Sequence Alignment of the ortholog group.</li>
-                </ol>
+                For each ortholog group, the following information and analyses are provided:
+                <ul>
+                  <li><b>Phyletic Distribution</b> The number of proteins from each species that belong to this ortholog group. The black box indicates presence (with the number below the genome abbreviation representing number of proteins) while the white box indicates absence.</li>
+		  <li><b>Group Statistics</b>  A Core group may contain proteins from Core species only; in this case, statistics are provided for 'Core only'. Alternatively, a Core group may contain proteins from Core species as well as proteins from Peripheral species (that been mapped into the group); in this case, two sets of statistics are provided ('Core only' and 'Core+Peripheral'). A Residual group contains proteins from Peripheral species only; in this case, statistics are provided for 'Peripheral only'.</li>
+                  <li><b>EC Number</b>  A list of all EC numbers assigned to the proteins in the group (Core and Peripheral proteins).</li>
+                  <li><b>List of All Sequences</b>  The proteins in the group, along with their Core/Peripheral status and other useful information. All of the sequences can be downloaded by pressing the 'As Fasta file' or 'As new strategy' buttons.</li>
+                  <li><b>PFam domains (graphic)</b>  The list of PFam domains in the group, along with a graphical representation of the domain within the context of each protein sequence. This representation is useful in comparing the overall structure of each protein and thus identify outliers (that are caused by evolution or sequencing/gene model errors).</li>
+		  <li><b>PFam domains (details)</b>  The start and end location of each PFam domain within each protein sequence. In addition, this page offers a link-out to the PFam web page for each PFam domain.</li>
+                  <li><b>MSA</b>  Multiple Sequence Alignment of the proteins within an ortholog group, using MUSCLE 3.8. For groups consisting of more than 100 protein sequences, 100 random proteins were chosen from the group for alignment. To align a different set of proteins from this group, we recommend downloading sequences (see 'List of All Sequences' above) and using the <a href="https://www.ebi.ac.uk/Tools/msa/muscle/" target="_blank">MUSCLE website</a> or your favorite MSA program.</li>
+                  <li><b>Cluster graph</b>  Displays the sequence similarity between proteins in the group, using software first developed by Leon Goldovsky, EBI. This is useful in identifying a set of proteins that have diverged from the others, because this diverged set will cluster together in the graph. Graphs of 500 or more proteins cannot be created here; contact us at <a href="mailto:help@orthomcl.org" target="_blank">help@orthomcl.org</a> to request the Cluster layout data that can be used with other clustering software.</li>
+                </ul>
               </p>
             </li>
+
             <li>
-              <span class="question">Which software was used to generate the MSAs (multiple sequence alignments) and BioLayout graphs?</span>
+              <span class="question">How are the Group Statistics calculated?</span>
               <p>
-                MUSCLE (3.52), and a special version of BioLayout (from Leon Goldovsky, EBI) which can generate PNG figures.
+		<ul>
+                  <li><b>Avg % Match</b>  The % Match is calculated between two proteins by determining the percentage of the shorter protein sequence that is part of a High-scoring Segment Pair (HSP) with the other protein. The Avg % Match takes the average of all % Match results in the group.</li>
+		  <li><b>Avg % Identity</b>  The % Identity is calculated between two proteins by determining the percentage of residues within the best High-scoring Segment Pair (HSP) that are identical. The Avg % Identity takes the average of all % Identity results in the group.</li>
+		  <li><b>Num Pairs With Similarity</b>  The total number of protein pairs where the NCBI BLASTP E-Value is &lt; 1e-5 and the percent match length is &gt;= 50%.</li>
+		  <li><b>Max Possible Pairs</b>  The maximum number of unique protein pairs that are possible in the group, equal to n*(n-1)/2, where n = number of proteins in the group.</li>
+		  <li><b>% Protein Pairs With Similarity</b>  The percentage of proteins pairs where the two proteins are considered similar, equal to 100*actual/possible, where actual = Num Pairs With Similarity and possible = Max Possible Pairs.</li>
+		  <li><b>Avg % Homology</b>  The percentage of all possible protein pairs where the two proteins are orthologs, co-orthologs, or inparalogs.</li>
+		  <li><b>Avg Blast E-value</b>  The average Blast E-value for protein pairs, considering only pairs where the two proteins are considered similar (E-Value &lt; 1e-5 and percent match length &gt;= 50%).</li>
+		</ul>
               </p>
             </li>
+
             <li>
-              <span class="question">Why do some groups have no links to an MSA or BioLayout graph?</span>
-              <p>
-                For big groups (size>100), we don't provide them because there are difficulties running MSA and BioLayout softwares for big groups. However, you can still download fasta sequences from our database and run alignment by yourself. As for BioLayout graph, you can contact us at help@orthomcl.org to request BioLayout input files.
+              <span class="question">I recently sequenced a genome and want to use OrthoMCL to assign the proteins to ortholog groups. Can I do this?</span>
+              <p>Yes. You can map your set of proteins to OrthoMCL Groups at the <a href="http://veupathdb.globusgenomics.org/" target="_blank">VEuPathDB Galaxy server</a>. To get started, visit our page: <a href="https://beta.orthomcl.org/orthomcl.beta/proteomeUpload.do" target="_blank">Map your proteins to OrthoMCL groups</a>
               </p>
             </li>
+
             <li>
               <span class="question">How can I find all <i>E. coli</i> genes (protein sequences) which have human orthologs?</span>
               <p>
-                OrthoMCL-DB includes the <a href="http://code.google.com/p/strategies-wdk/">StrategiesWDK</a> system to allow you to form complex search strategies. In this case, several steps are required to find the answer:
+                OrthoMCL-DB includes the <a href="http://code.google.com/p/strategies-wdk/" target="_blank">StrategiesWDK</a> system to allow you to form complex search strategies. In this case, several steps are required to find the answer:
                 <ol>
                   <li>Find all ortholog groups that contain both human and <i>E. coli</i> sequences.  To do this, on the OrthoMCL home page select the "Phyletic Pattern" search under the "Identify Ortholog Groups" heading.  On that search's page, follow these steps</li>
                   <ol>
@@ -195,10 +215,10 @@
             OrthoMCL was originally implemented by Li Li.  The software was not available for download.
           </p>
           <p>
-            <a href="/common/downloads/software">Version 1.4</a> was developed as publicly available software by Feng Chen (This version is now not supported).
+            <a href="/common/downloads/software" target="_blank">Version 1.4</a> was developed as publicly available software by Feng Chen (This version is now not supported).
           </p>
           <p>
-            <a href="/common/downloads/software">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau
+            <a href="/common/downloads/software" target="_blank">Version 2.0</a> was re-engineered to handle large-scale datasets (hundreds of genomes) by Steve Fischer, Mark Heiges, John Iodice, and Ryan Thibodeau
           </p>
         </div>
         <div id="pubs" class="section-title">
@@ -210,28 +230,28 @@
               Li Li, Christian J. Stoeckert, Jr., and David S. Roos<br/>
               OrthoMCL: Identification of Ortholog Groups for Eukaryotic Genomes<br/>
               Genome Res. 2003 13: 2178-2189.
-                <a href="http://www.genome.org/cgi/content/abstract/13/9/2178">[Abstract]</a>
-                <a href="http://www.genome.org/cgi/content/full/13/9/2178">[Full Text]</a>
+                <a href="http://www.genome.org/cgi/content/abstract/13/9/2178" target="_blank">[Abstract]</a>
+                <a href="http://www.genome.org/cgi/content/full/13/9/2178" target="_blank">[Full Text]</a>
             </li>
             <li>
               Feng Chen, Aaron J. Mackey, Christian J. Stoeckert, Jr., and David S. Roos<br/>
               OrthoMCL-DB: querying a comprehensive multi-species collection of ortholog groups <br/>
               Nucleic Acids Res. 2006 34: D363-8.
-                <a href="http://nar.oxfordjournals.org/cgi/content/full/34/suppl_1/D363">[Full Text]</a><br/>
+                <a href="http://nar.oxfordjournals.org/cgi/content/full/34/suppl_1/D363" target="_blank">[Full Text]</a><br/>
                 * Please cite this paper if you publish research results benefited from OrthoMCL-DB.
             </li>
             <li>
               Feng Chen, Aaron J. Mackey, Jeroen K. Vermunt, and David S. Roos <br/>
               Assessing Performance of Orthology Detection Strategies Applied to Eukaryotic Genomes<br/>
               PLoS ONE 2007 2(4): e383.
-                <a href="http://www.plosone.org/article/info:doi%2F10.1371%2Fjournal.pone.0000383">[Full Text]</a><br/>
-                * Recommended in <a href="http://www.f1000biology.com/article/id/1092076">Faculty1000</a>
+                <a href="http://www.plosone.org/article/info:doi%2F10.1371%2Fjournal.pone.0000383" target="_blank">[Full Text]</a><br/>
+                * Recommended in <a href="http://www.f1000biology.com/article/id/1092076" target="_blank">Faculty1000</a>
             </li>
             <li>
             Fischer, S., Brunk, B. P., Chen, F., Gao, X., Harb, O. S., Iodice, J. B., Shanmugam, D., Roos, D. S. and Stoeckert, C. J.<br/>
             Using OrthoMCL to Assign Proteins to OrthoMCL-DB Groups or to Cluster Proteomes Into New Ortholog Groups<br/>
             Current Protocols in Bioinformatics. 2011 35:6.12.1–6.12.19.
-              <a href="http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi0612s35/full">[Full Text]</a>
+              <a href="http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi0612s35/full" target="_blank">[Full Text]</a>
             </li>
           </ol>
         </div>
@@ -261,7 +281,7 @@
           <p>
             Feel free to contact us with comments or questions by filling out the
             <a href="${pageContext.request.contextPath}/contact.do" class="open-window-contact-us">Contact Us</a>
-            form, or emailing us at <a href="mailto:help@orthomcl.org">help@orthomcl.org</a>.
+            form, or emailing us at <a href="mailto:help@orthomcl.org" target="_blank">help@orthomcl.org</a>.
           </p>
         </div>
       </div>

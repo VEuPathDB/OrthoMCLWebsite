@@ -11,8 +11,8 @@ import org.gusdb.wdk.model.answer.factory.AnswerValueFactory;
 import org.gusdb.wdk.model.user.Step;
 import org.gusdb.wdk.model.user.User;
 import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.orthomcl.web.model.layout.GeneSetLayoutManager;
 import org.orthomcl.web.model.layout.GroupLayout;
 
@@ -38,12 +38,11 @@ public class GeneSetLayoutTest {
             "Step with ID " + stepId + " is not runnable. " + step.getValidationBundle().toString()));
     GeneSetLayoutManager layoutManager = InstanceManager.getInstance(GeneSetLayoutManager.class, projectId);
     GroupLayout layout = layoutManager.getLayout(AnswerValueFactory.makeAnswer(runnableStep), getLayoutJson().toString());
-    Assert.assertEquals(6, layout.getNodes().size());
+    Assertions.assertEquals(6, layout.getNodes().size());
   }
 
   // FIXME: configure layout to fix this test!!!
   private JSONObject getLayoutJson() {
-    JSONObject json = new JSONObject();
-    return json;
+    return new JSONObject();
   }
 }

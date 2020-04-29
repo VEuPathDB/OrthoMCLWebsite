@@ -13,22 +13,22 @@
   <packaging>jar</packaging>
 
   <dependencies>
-  
+
     <dependency>
       <groupId>org.orthomcl</groupId>
       <artifactId>orthomcl-website-model</artifactId>
     </dependency>
-  
+
     <dependency>
       <groupId>org.orthomcl</groupId>
       <artifactId>orthomcl-model-model</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.gusdb</groupId>
       <artifactId>wdk-model</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.gusdb</groupId>
       <artifactId>fgputil-util</artifactId>
@@ -38,10 +38,11 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
     </dependency>
-    
+
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>

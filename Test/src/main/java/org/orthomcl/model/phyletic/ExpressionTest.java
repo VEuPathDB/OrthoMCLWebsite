@@ -1,14 +1,13 @@
 package org.orthomcl.model.phyletic;
 
 import org.gusdb.wdk.model.WdkModelException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ExpressionTest {
 
-  private ExpressionParser parser;
+  private final ExpressionParser parser;
 
   public ExpressionTest() {
     parser = new ExpressionParser();
@@ -73,7 +72,7 @@ public class ExpressionTest {
 
   private void testExpression(String exp) throws WdkModelException {
     System.out.println("Expression: " + exp);
-    ExpressionNode node = parser.parse(exp);
+    var node = parser.parse(exp);
     System.out.println("Result: " + node);
   }
 }

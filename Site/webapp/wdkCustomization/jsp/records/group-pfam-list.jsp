@@ -63,7 +63,7 @@
           <c:set var="previous_id" value="${''}" />
           <c:forEach items="${proteins.iterator}" var="row">
             <c:set var="source_id" value="${row['full_id'].value}" />
-            <c:set var="protein_length" value="${row['protein_length'].value}" />
+            <c:set var="length" value="${row['protein_length'].value}" />
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}" />
             <tr class="protein ${rowClass}">
@@ -71,7 +71,7 @@
                 <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${source_id}">${source_id}</a>
               </td>
               <td>${row['core_peripheral']}</td>
-              <td>${protein_length}</td>
+              <td>${length}</td>
               <td>${row['accession'].value}</td>
               <td>${row['start_min']}</td>
               <td>${row['end_max']}</td>

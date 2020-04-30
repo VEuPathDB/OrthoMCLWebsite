@@ -38,7 +38,7 @@
           <c:set var="odd" value="${not odd}" />
           <tr id="${domain['accession']}" class="domain ${rowClass}" 
               data-index="${domain['domain_index']}" data-max="${domain['max_index']}">
-            <td>${domain["accession"]}</td>
+            <td><a href="http://pfam.xfam.org/family/${domain['accession']}">${domain["accession"]}</a></td>
             <td>${domain["symbol"]}</td>
             <td>${domain["description"]}</td>
             <td>${domain["occurrences"]}</td>
@@ -65,7 +65,6 @@
           <c:set var="odd" value="${true}"/>
           <c:forEach items="${proteinGroups}" var="proteinGroup">
             <c:set var="sourceId" value="${proteinGroup[0]['full_id'].value}"/>
-            <c:set var="protein_length" value="${proteinGroup[0]['protein_length'].value}"/>
             <c:set var="rowClass" value="${odd ? 'rowLight' : 'rowMedium'}" />
             <c:set var="odd" value="${!odd}"/>
             <tr class="protein ${rowClass}">
@@ -73,7 +72,7 @@
                 <a href="${pageContext.request.contextPath}/showRecord.do?name=SequenceRecordClasses.SequenceRecordClass&amp;full_id=${sourceId}">${sourceId}</a>
               </td>
               <td class="core_peripheral">${proteinGroup[0]['core_peripheral'].value}</td>
-              <td class="protein_length">${protein_length}</td>
+              <td class="length">${proteinGroup[0]['protein_length'].value}</td>
               <td>
                 <div class="domains">
                   <div class="protein-graph"><jsp:text/></div>

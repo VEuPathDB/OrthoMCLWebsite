@@ -26,7 +26,7 @@ modelprop:
   TWITTER_WIDGET_ID: 344817818073714691
   USE_LEGACY_RECORD_PAGE: 'true'
   WEBAPP_BASE_URL: "{{ modelconfig_webAppUrl|regex_replace('/+$', '') }}/app"
-  WEBSERVICEMIRROR: /eupath/data/apiSiteFiles/webServices/OrthoMCL
+  WEBSERVICEMIRROR: /var/www/Common/apiSiteFilesMirror/webServices/OrthoMCL
   YOUTUBE_URL: https://youtube.com/user/EuPathDB/videos?sort=dd&flow=list&view=1
 
 orthomclproteomesvcserverprop_resultBaseUrl: '{{ _self_url_scheme }}://{{ hostname|swap_hostname(_host_frontends) }}/orthomcl/proteomeDownload.do?jobId='

@@ -68,7 +68,7 @@ export default function mainMenuItems(props, defaultMenuItems) {
         {
           id: 'twitter',
           text: 'Follow us on Twitter!',
-          url: 'https://twitter.com/EuPathDB',
+          url: 'https://twitter.com/VEuPathDB',
           target: '_blank'
         },
         {

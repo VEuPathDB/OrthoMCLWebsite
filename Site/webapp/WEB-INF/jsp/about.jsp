@@ -30,15 +30,11 @@
       <div class="about-body">
 
         <div id="release" class="section-title">
-          <h2>Current Release 6.1</h2>
+          <h2>Current Release 6.2</h2>
         </div>
         <div class="section-content">
           <p>
-	    This release contains two substantial changes:
-	    <ol>
-	      <li>All proteins from a new set of 150 <b>Core</b> species were used to form <b>Core</b> ortholog groups.</li>
-	      <li>All proteins from 394 additional species, termed <b>Peripheral</b> species, are mapped into the Core ortholog groups. Proteins that fail to map are used to create <b>Residual</b> groups. This design will allow us to map new proteomes at each new release (~3 months).</li>
-	    </ol>
+	    In this release, 19 <b>Peripheral</b> species were added. Thus, OrthoMCL now predicts orthology for a total of 563 organisms (413 <b>Peripheral</b> and 150 <b>Core</b>) organisms). Proteins from the 19 new species were mapped into <b>Core</b> ortholog groups. Then, a new set of <b>Residual</b> ortholog groups (e.g. OG6r2_101799) were formed from the collection of all unmapped <b>Peripheral</b> proteins. See below for the methods.
 	  </p>
 	  <p>
 	    To see the current set of organisms, their taxonomic category, their Core/Peripheral status, their abbreviation

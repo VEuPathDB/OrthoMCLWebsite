@@ -7,7 +7,7 @@ export default function smallMenuItems(props, defaultMenuItems) {
       children: [
         {
           id: 'release',
-          text: 'Current Release 6.1',
+          text: 'Current Release',
           webAppUrl: '/about.do#release'
         },
         {

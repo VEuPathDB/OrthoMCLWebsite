@@ -16,6 +16,18 @@
 --> 
 
    <record>
+       <attribute name="headline">OrthoMCL 6.2 released</attribute>
+       <attribute name="date">30 Oct 2020 09:00</attribute>
+       <attribute name="tag">ortho-6-2</attribute>
+       <attribute name="category">release</attribute>
+       <attribute name="item">           
+         <![CDATA[
+OrthoMCL Version 6.2 is released. In this release, 19 <b>Peripheral</b> species were added. Thus, OrthoMCL now predicts orthology for a total of 563 organisms (413 <b>Peripheral</b> and 150 <b>Core</b> organisms). Proteins from the 19 new species were mapped into <b>Core</b> ortholog groups. Then, a new set of <b>Residual</b> ortholog groups (e.g. OG6r2_101799) were formed from the collection of all unmapped <b>Peripheral</b> proteins. See the About page for the methods.
+          ]]>
+       </attribute>
+    </record>
+
+   <record>
        <attribute name="headline">OrthoMCL 6.1 released (beta)</attribute>
        <attribute name="date">27 May 2020 09:00</attribute>
        <attribute name="tag">ortho-6-1</attribute>

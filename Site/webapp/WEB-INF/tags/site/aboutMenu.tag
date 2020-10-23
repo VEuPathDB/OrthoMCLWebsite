@@ -9,7 +9,7 @@
   <c:set var="base" value="${pageContext.request.contextPath}"/>
   <c:set var="project" value="${applicationScope.wdkModel.displayName}"/>
 
-  <li><a href="${base}/about.do#release">Current Release 6.1</a></li>
+  <li><a href="${base}/about.do#release">Current Release</a></li>
   <li><a href="${base}/about.do#forming_groups">Method for Forming and Expanding Ortholog Groups</a></li>
   <li><a href="${base}/about.do#orthomcl_algorithm">The OrthoMCL Algorithm</a></li>
   <li><a href="${base}/about.do#background">Background on Orthology and Prediction</a></li>

@@ -89,7 +89,7 @@ public class GeneSetLayoutGenerator {
     // contruct an SQL to get blast scores
     String idSql = answer.getIdSql();
     String sql = "WITH sequences AS (SELECT * FROM (" + idSql + ")) " +
-        " SELECT query_id, subject_id, evalue_mant, evalue_exp FROM apidb.SimilarSequences " +
+        " SELECT query_id, subject_id, evalue_mant, evalue_exp FROM apidb.SimilarSequencesSelfBlast " +
         " WHERE query_id IN (SELECT full_id FROM sequences) " +
         "  AND subject_id IN (SELECT full_id FROM sequences) ";
     WdkModel wdkModel = answer.getQuestion().getWdkModel();
@@ -135,11 +135,9 @@ public class GeneSetLayoutGenerator {
   }
 
   private void loadEdgeTypes(GroupLayout layout, AnswerValue answer) throws WdkModelException, WdkUserException {
-    loadEdgeTypes(layout, EdgeType.Ortholog, answer, "Ortholog");
-    loadEdgeTypes(layout, EdgeType.Coortholog, answer, "Coortholog");
-    loadEdgeTypes(layout, EdgeType.Inparalog, answer, "Inparalog");
-    loadEdgeTypes(layout, EdgeType.PeripheralCore, answer, "PeripheralCore");
-    loadEdgeTypes(layout, EdgeType.PeripheralPeripheral, answer, "PeripheralPeripheral");
+    loadEdgeTypes(layout, EdgeType.Ortholog, answer, "OrthologCore");
+    loadEdgeTypes(layout, EdgeType.Coortholog, answer, "CoorthologCore");
+    loadEdgeTypes(layout, EdgeType.Inparalog, answer, "InparalogCore");
   }
 
   private void loadEdgeTypes(GroupLayout layout, EdgeType type, AnswerValue answer, String tableName)

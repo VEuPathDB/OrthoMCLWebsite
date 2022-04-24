@@ -1,15 +1,12 @@
 # OrthoMCLWebsite
-Frontend pages (js, css, images, html) in [OrthoMCL.org](https://orthomcl.org). 
+
+Top-level project for [OrthoMCL.org](https://orthomcl.org) websites.
 
 ## Description
 
-This code still reflects our old frontend, a Struts based framework (jsx pages). Soon a new website using the new REST-based infrastructure will be released, frontend code in [OrthoMCLClient](https://github.com/VEuPathDB/OrthoMCLClient)
+OrthoMCLWebsites have two sides: Client and Service.  This project, joins them together with a single build step and the configuration needed to run both.
 
 ## Installation and Usage
 
 Presently, `OrthoMCLWebsite` should be installed following the [Strategies WDK
 Documentation](https://docs.google.com/document/u/1/d/1nZayjR-0Hj3YeukjfwoWZ3TzokuuuWvSwnhw_q41oeE/pub).
-
-Dependencies are managed with [yarn](https://yarnpkg.com/).
-
-Tests are written for the [jest](https://jestjs.io/) testing framework.

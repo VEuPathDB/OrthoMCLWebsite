@@ -21,7 +21,7 @@
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLModel-Installation,
+  <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebsite-Installation,
                                                           OrthoMCLService-WebInstallation,
                                                           OrthoMCLClient-WebInstallation"/>
 

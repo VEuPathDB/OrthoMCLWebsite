@@ -1,4 +1,4 @@
-<project name="OrthoMCLWebsite" default="Installation" basedir=".">
+<project name="OrthoMCLWebsite" basedir=".">
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Dependencies  oooooooooooooooooooooooooo -->
@@ -8,14 +8,12 @@
   <import file="${projectsDir}/OrthoMCLService/build.xml" />
   <import file="${projectsDir}/OrthoMCLClient/build.xml" />
 
-
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="OrthoMCLWebsite-Installation" depends="OrthoMCLModel-Installation,
                                                        OrthoMCLService-Installation"/>
-
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooo  Web Installation  oooooooooooooooooooooooo -->

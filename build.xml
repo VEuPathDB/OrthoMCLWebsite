@@ -20,7 +20,14 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebsite-Installation,
-                                                          OrthoMCLService-WebInstallation,
-                                                          OrthoMCLClient-WebInstallation"/>
+                                                          OrthoMCLService-WebInstallation">
+    <ant target="defaultWebComponentInstall">
+      <property name="project" value="OrthoMCLWebsite" />
+      <property name="component" value="Site" />
+    </ant>
+    <copy todir="${webappTargetDir}/bundles">
+      <fileset dir="${projectsDir}/OrthoMCLWebsite/Site/node_modules/@veupathdb/ortho-site/dist" />
+    </copy>
+  </target>
 
 </project>

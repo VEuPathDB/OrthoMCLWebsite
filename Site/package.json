@@ -1,0 +1,7 @@
+{
+  "name": "ortho-site-deployer",
+  "private": true,
+  "dependencies": {
+    "@veupathdb/ortho-site": "^1.0.0"
+  }
+}

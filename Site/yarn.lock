@@ -3,6 +3,6 @@
 
 
 "@veupathdb/ortho-site@^1.0.0":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.0.7.tgz#4284756e61496a5ecdd5587682dd9634f5a98f03"
-  integrity sha512-NnRyN/Txu8iK+zeG4MoWCRs1nGGw7geZVW0h4BI4+KZulWoiARzMbjWZEa9B9zpJAbgMchHlsbFDBvC77Ors6Q==
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.0.8.tgz#00061eed2b9892f80fac7214d5ce918deb1b3753"
+  integrity sha512-FatYUjNw2RVl1686NmqV6+hXmgXWqrDdcHEmSh/8p/wq8DQvsJkVylzF+nkERHPdFNrh87Q2Z2uYGhAgvqTSOg==

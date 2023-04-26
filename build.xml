@@ -6,7 +6,6 @@
 
   <import file="${projectsDir}/OrthoMCLModel/build.xml" />
   <import file="${projectsDir}/OrthoMCLService/build.xml" />
-  <import file="${projectsDir}/OrthoMCLClient/build.xml" />
 
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
   <!-- oooooooooooooooooooooooooo  Installation  oooooooooooooooooooooooooo -->

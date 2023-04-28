@@ -25,9 +25,6 @@
       <property name="component" value="Site" />
     </ant>
     <copy todir="${webappTargetDir}">
-      <fileset dir="${projectsDir}/OrthoMCLWebsite/Site/node_modules/@veupathdb/ortho-site/webapp" />
-    </copy>
-    <copy todir="${webappTargetDir}/bundles">
       <fileset dir="${projectsDir}/OrthoMCLWebsite/Site/node_modules/@veupathdb/ortho-site/dist" />
     </copy>
   </target>

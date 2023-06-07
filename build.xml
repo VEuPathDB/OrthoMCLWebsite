@@ -24,9 +24,11 @@
       <property name="project" value="OrthoMCLWebsite" />
       <property name="component" value="Site" />
     </ant>
-    <copy todir="${webappTargetDir}">
-      <fileset dir="${projectsDir}/OrthoMCLWebsite/Site/node_modules/@veupathdb/ortho-site/dist" />
-    </copy>
+
+    <ant target="installWebAssets">
+      <property name="project" value="OrthoMCLWebsite" />
+      <property name="sitePackageName" value="ortho-site"/>
+    </ant>
   </target>
 
 </project>

@@ -2,6 +2,10 @@
   "name": "ortho-site-deployer",
   "private": true,
   "dependencies": {
-    "@veupathdb/ortho-site": "^1.0.16-patch.1"
+    "@veupathdb/ortho-site": "1.0.16-patch.2"
+  },
+  "volta": {
+    "node": "18.16.1",
+    "yarn": "1.22.19"
   }
 }

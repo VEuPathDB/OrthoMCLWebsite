@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@veupathdb/ortho-site@^1.0.49":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.1.7.tgz#e70ebd433e8c3b62462016d4a4a8d44c44fa95d4"
-  integrity sha512-8/iHIGHr3eg6Lq8eXzNjtG52DhPCblphRav6KN7jBrzqmcGvVpFblNodfFq7KKv+fd4lV9WxLxdk7lfEtbC2NQ==
+"@veupathdb/ortho-site@^1.1.7-patch.1":
+  version "1.1.7-patch.1"
+  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.1.7-patch.1.tgz#7f1995703c380d115ca3679fc9cd8e90e7949c4d"
+  integrity sha512-gJGcbW5SmlmUNYZGaaA0hK0H5V9ZPqCNkMDBsRvtNCqXzn3O1FuNmAWTwZ5vzu9LWg2jJzNTm9Dk+vLHsL3Cuw==

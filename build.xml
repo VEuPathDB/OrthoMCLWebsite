@@ -19,7 +19,9 @@
   <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
   <target name="OrthoMCLWebsite-WebInstallation" depends="OrthoMCLWebsite-Installation,
-                                                          OrthoMCLService-WebInstallation">
+                                                          OrthoMCLService-WebInstallation,
+                                                          OrthoMCLWebsite/Site-WebInstallation"/>
+  <target name="OrthoMCLWebsite/Site-WebInstallation">
     <ant target="defaultWebComponentInstall">
       <property name="project" value="OrthoMCLWebsite" />
       <property name="component" value="Site" />

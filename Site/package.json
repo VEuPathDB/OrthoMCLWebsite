@@ -2,6 +2,7 @@
   "name": "ortho-site-deployer",
   "private": true,
   "dependencies": {
+
     "@veupathdb/ortho-site": "1.1.10-orthotree.11"
   }
 }

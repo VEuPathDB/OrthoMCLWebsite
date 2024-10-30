@@ -3,6 +3,6 @@
   "private": true,
   "dependencies": {
 
-    "@veupathdb/ortho-site": "1.1.10-orthotree.13"
+    "@veupathdb/ortho-site": "1.1.10-orthotree.14"
   }
 }

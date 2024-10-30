@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@veupathdb/ortho-site@1.1.10-orthotree.13":
-  version "1.1.10-orthotree.13"
-  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.1.10-orthotree.13.tgz#ba3abff77d983828f722072cad2478f583893487"
-  integrity sha512-3etyyt//IX8ZA22rmh4egfVeVNqFIb6r/nJqA4wH6CHP1tuhaum5K0ekUcC2dydrbkR0/YBWTuYQ+sryjK7z9w==
+"@veupathdb/ortho-site@1.1.10-orthotree.14":
+  version "1.1.10-orthotree.14"
+  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.1.10-orthotree.14.tgz#d0f3b7dc008f3f39d034263d3a12af688bd0a8e1"
+  integrity sha512-fqJgiWpcRds/a80mARM/QAKUgT/tbryG+feciFdBXF93bSPyIcfiU+Vz56A4B+NL/6QmGw9f74eNdx4HIQCYRw==
   dependencies:
     patristic "^0.6.0"
 

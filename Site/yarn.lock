@@ -3,9 +3,9 @@
 
 
 "@veupathdb/ortho-site@*":
-  version "1.2.20"
-  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.2.20.tgz#6068d3f12506831dbe9ef0029bbffeefe73acac5"
-  integrity sha512-78pDJ6me4as8wZUeqHRqKermhm3eDOJn7Xv4BGGK6kJxT3R4p2vkhqd3I6RwGt2SnBFMd88aYg70//A2/kG5Yg==
+  version "1.2.22"
+  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.2.22.tgz#04f8df93b3ec65f5de534336417176542a221452"
+  integrity sha512-3iW+Q9i9ieT9wDgjRNwLFdMJiEenRwl5J35Y4X90E9xjjoTcCTdS9Y2+xZXJQSiSjrztcB7JNQta0pH4p5Jz+Q==
   dependencies:
     patristic "^0.6.0"
 

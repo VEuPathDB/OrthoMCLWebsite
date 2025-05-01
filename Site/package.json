@@ -2,6 +2,7 @@
   "name": "ortho-site-deployer",
   "private": true,
   "dependencies": {
+    "@veupathdb/genomics-site": "1.2.47",
     "@veupathdb/ortho-site": "1.2.44"
   }
 }

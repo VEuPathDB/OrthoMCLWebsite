@@ -2,15 +2,10 @@
 # yarn lockfile v1
 
 
-"@veupathdb/genomics-site@1.2.47":
+"@veupathdb/ortho-site@1.2.47":
   version "1.2.47"
-  resolved "https://registry.yarnpkg.com/@veupathdb/genomics-site/-/genomics-site-1.2.47.tgz#15646f1d0082fe776c59a251041666511d24174f"
-  integrity sha512-EE5hoagdrDGqUMQEDJ+9zUfF1tInWGyxwSxrHENIfJR0EQ5dLrzZDm4tZIA2WbkBRkwxRLhh3GIYi1XNywzZqQ==
-
-"@veupathdb/ortho-site@1.2.44":
-  version "1.2.44"
-  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.2.44.tgz#72af476cf18fa6fcd3d80a6016071f39a8bbf953"
-  integrity sha512-BfUSnzzhxVlxeYrqqA1UqYY9+e0aXOPfEFCtZ5Ei8DrbMw8bHdQJbizcZP92OHjiZ0Qs9CjF4JWfJFZmZfiOrA==
+  resolved "https://registry.yarnpkg.com/@veupathdb/ortho-site/-/ortho-site-1.2.47.tgz#c3b4ed13fbc80e11d6f19e815f80900375bae805"
+  integrity sha512-dahpBKen8Yxl+FKhSXXH4PScaO6MJAdVaRucFmlFWYJVIAFg25wPgGTg9g5LZGbGoUkr45O8SBM8SyIQAXbidg==
   dependencies:
     patristic "^0.6.0"
 

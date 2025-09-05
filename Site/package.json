@@ -2,6 +2,6 @@
   "name": "ortho-site-deployer",
   "private": true,
   "dependencies": {
-    "@veupathdb/ortho-site": "1.3.6-patch.4"
+    "@veupathdb/ortho-site": "1.3.6-patch.7"
   }
 }

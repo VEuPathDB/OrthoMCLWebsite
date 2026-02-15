@@ -21,5 +21,5 @@ community_env_map:
 # construct a prefix from hostname, like w_prefix, q_prefix
 prefix: "{{ hostname | regex_replace('^([a-z])[0-9].*','\\1_prefix') }}"
 
-
+modelconfig_queryMonitor_baseline: 0.01
 
